@@ -1,0 +1,11 @@
+framework module audio_streamer {
+  umbrella header "audio_streamer-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module audio_streamer.Swift {
+    header "audio_streamer-Swift.h"
+    requires objc
+}
