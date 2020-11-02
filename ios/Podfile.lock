@@ -11,6 +11,8 @@ PODS:
     - Flutter
   - "permission_handler (5.0.1+1)":
     - Flutter
+  - shared_preferences (0.0.1):
+    - Flutter
   - Toast (4.0.0)
 
 DEPENDENCIES:
@@ -20,6 +22,7 @@ DEPENDENCIES:
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
 
 SPEC REPOS:
   trunk:
@@ -38,6 +41,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
   audio_streamer: af49e73eb66f71c4eeabb4bbcb05f122d03a6709
@@ -46,6 +51,7 @@ SPEC CHECKSUMS:
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c

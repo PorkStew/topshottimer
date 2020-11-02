@@ -92,6 +92,12 @@
       "languageVersion": "2.10"
     },
     {
+      "name": "flutter_session",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/flutter_session-0.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.7"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///Users/donovankruger/tools/flutter/packages/flutter_test",
       "packageUri": "lib/",
@@ -108,6 +114,18 @@
       "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/fluttertoast-7.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.7"
+    },
+    {
+      "name": "http",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/http-0.12.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.4"
+    },
+    {
+      "name": "http_parser",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/http_parser-3.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.3"
     },
     {
       "name": "intl",
@@ -176,6 +194,12 @@
       "languageVersion": "2.1"
     },
     {
+      "name": "pedantic",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/pedantic-1.9.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
       "name": "permission_handler",
       "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/permission_handler-5.0.1+1",
       "packageUri": "lib/",
@@ -204,6 +228,42 @@
       "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/process-3.0.13",
       "packageUri": "lib/",
       "languageVersion": "2.0"
+    },
+    {
+      "name": "shared_preferences",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.12+2",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "shared_preferences_linux",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-0.0.2+2",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "shared_preferences_macos",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-0.0.1+10",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "shared_preferences_platform_interface",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/shared_preferences_platform_interface-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "shared_preferences_web",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-0.1.2+7",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
+    },
+    {
+      "name": "shared_preferences_windows",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-0.0.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.1"
     },
     {
       "name": "sky_engine",
@@ -284,7 +344,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-11-02T06:39:32.834579Z",
+  "generated": "2020-11-02T09:54:26.589779Z",
   "generator": "pub",
   "generatorVersion": "2.11.0-213.0.dev"
 }
