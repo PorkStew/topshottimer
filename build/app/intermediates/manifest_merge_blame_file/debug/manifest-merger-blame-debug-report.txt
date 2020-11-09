@@ -26,10 +26,10 @@
 19        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 19-->[androidx.core:core:1.1.0] /Users/donovankruger/.gradle/caches/transforms-2/files-2.1/a528b13ac93e64cafa3d0480e2c93207/core-1.1.0/AndroidManifest.xml:24:18-86
 20        android:debuggable="true"
-21        android:icon="@mipmap/ic_launcher"
-21-->/Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:8:9-43
-22        android:label="topshottimer" >
-22-->/Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:7:9-37
+21        android:icon="@mipmap/launcher_icon"
+21-->/Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:8:9-45
+22        android:label="TopShot Timer" >
+22-->/Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:7:9-38
 23        <activity
 23-->/Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:9:9-37:20
 24            android:name="com.simplx.topshottimer.MainActivity"

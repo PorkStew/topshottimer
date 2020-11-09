@@ -6,20 +6,26 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:noise_meter/noise_meter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:topshottimer/Views/Settings.dart';
 
 
 
+double timerSensitivity;
+int timerDelay;
+String timerTone;
 
 class TimerPage extends StatefulWidget {
   @override
   _TimerPageState createState() => _TimerPageState();
+
 }
 
 class _TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.white,
         //appBar: AppBar(title: Text('Timer Page')),
         body: Center(child: timerArea())
     );
@@ -28,6 +34,7 @@ class _TimerPageState extends State<TimerPage> {
 class timerArea extends StatefulWidget {
   @override
   _timerAreaState createState() => _timerAreaState();
+
 }
 
 class _timerAreaState extends State<timerArea> {
@@ -68,14 +75,12 @@ class _timerAreaState extends State<timerArea> {
   }
 
   void starttimer(){
-    isRunning = true;
     Timer(dur, keeprunning);
     bstop = true;
   }
 
   void stoptimer(){
     swatch.stop();
-    isRunning = false;
   }
 
 
@@ -87,16 +92,38 @@ class _timerAreaState extends State<timerArea> {
       stopispressed = false;
     });
     if (bstop == false){
+      isRunning = true;
       bstop = true;
       print("Going to play sound now!!!!");
-      await Future.delayed(const Duration(seconds: 2), (){});
-      audioCache.play('2100.mp3');
+      print("Before seconds duration");
+
+      obtainUserDefaults();
+      print(timerDelay);
+      if (timerDelay == 1){
+        await Future.delayed(const Duration(seconds: 1));
+      }else
+      if (timerDelay == 2){
+        await Future.delayed(const Duration(seconds: 2));
+      }else
+      if (timerDelay == 3){
+        await Future.delayed(const Duration(seconds: 3));
+      }else
+      if (timerDelay == 4){
+        await Future.delayed(const Duration(seconds: 4));
+      }else
+      if (timerDelay == 5){
+        await Future.delayed(const Duration(seconds: 5));
+      }
+      print(timerDelay.toString());
+      audioCache.play(timerTone+'.mp3');
       swatch.start();
-      starttimer();
       start();
+      starttimer();
+
       //print(bstop.toString() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
     else if (bstop == true){
+      isRunning = false;
       didReset = false;
       stoptimer();
       stopRecorder();
@@ -133,7 +160,7 @@ class _timerAreaState extends State<timerArea> {
       }
     });
 
-    if(noiseReading.maxDecibel>89.8){
+    if(noiseReading.maxDecibel>timerSensitivity){
       arrShots.add(noiseReading.maxDecibel.toString());
       arrShots.add(stoptimetodisplay);
 
@@ -159,6 +186,7 @@ class _timerAreaState extends State<timerArea> {
   @override
   void initState(){
     super.initState();
+    obtainUserDefaults();
     initPlayer();
   }
   void initPlayer(){
@@ -234,6 +262,7 @@ class _timerAreaState extends State<timerArea> {
               height: 250,
               shape: CircleBorder(side: BorderSide(color: Colors.black, width: 4)),
               onPressed: () {
+                obtainUserDefaults();
                 if (didReset == true){
                   print("Got into pressed method");
                   if (startispressed = true){
@@ -290,21 +319,7 @@ class _timerAreaState extends State<timerArea> {
             ),)
 
         ),
-        Container(
-          child: Slider(
-            min: 0.0,
-            max: 5.0,
-            divisions: 5,
-            value: sliderValue,
-            activeColor: Colors.red,
-            inactiveColor: Colors.black,
-            onChanged: (newValue){
-              sliderValue = newValue;
 
-            },
-            label: "$sliderValue",
-          ),
-        )
 
       ],
     );
@@ -312,6 +327,42 @@ class _timerAreaState extends State<timerArea> {
 
 }
 
+obtainUserDefaults() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  double dDelay = await prefs.getDouble('userDelay');
+  double dSensitivity = await prefs.getDouble('userSensitivity');
+  String sTone = await prefs.getString('userTone');
+  print("Delay Before ifs" + dDelay.toString());
+  print("Sensitivity Before ifs" + dSensitivity.toString());
+
+
+  if (dSensitivity == 0.0){
+    timerSensitivity = 89.8;
+  } else
+  if (dSensitivity == 25.0){
+    timerSensitivity = 80.0;
+  } else
+  if (dSensitivity == 50.0){
+    timerSensitivity = 70.0;
+  } else
+  if (dSensitivity == 75.0){
+    timerSensitivity = 60.0;
+  } else
+  if (dSensitivity == 100.0){
+    timerSensitivity = 50.0;
+  }
+  else {
+    print("No User Defaults set");
+  }
+  double dTime;
+  dTime = await double.parse(dDelay.toStringAsFixed(0));
+  timerDelay = dDelay.round();
+  timerTone = sTone;
+  print("USER DEFAULTS: SENSITIVITY- " + timerSensitivity.toString());
+  print("USER DEFAULTS: DELAY- " + timerDelay.toString());
+  print("USER DEFAULTS: TONE- " + sTone);
+
+}
 
 
 

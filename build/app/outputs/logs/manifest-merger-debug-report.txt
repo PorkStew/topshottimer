@@ -6,6 +6,7 @@ INJECTED from /Users/donovankruger/Documents/GithubProjects/topshottimer/android
 INJECTED from /Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:2:1-44:12
 MERGED from /Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:2:1-44:12
 MERGED from [:fluttertoast] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/fluttertoast/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
+MERGED from [:shared_preferences] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/shared_preferences/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:audio_streamer] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/audio_streamer/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:permission_handler] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/permission_handler/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:audioplayers] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/audioplayers/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-9:12
@@ -57,9 +58,9 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/dono
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.1.0] /Users/donovankruger/.gradle/caches/transforms-2/files-2.1/a528b13ac93e64cafa3d0480e2c93207/core-1.1.0/AndroidManifest.xml:24:18-86
 	android:label
-		ADDED from /Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:7:9-37
+		ADDED from /Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:7:9-38
 	android:icon
-		ADDED from /Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:8:9-43
+		ADDED from /Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:8:9-45
 activity#com.simplx.topshottimer.MainActivity
 ADDED from /Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml:9:9-37:20
 	android:launchMode
@@ -108,6 +109,8 @@ INJECTED from /Users/donovankruger/Documents/GithubProjects/topshottimer/android
 INJECTED from /Users/donovankruger/Documents/GithubProjects/topshottimer/android/app/src/main/AndroidManifest.xml
 MERGED from [:fluttertoast] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/fluttertoast/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:fluttertoast] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/fluttertoast/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/shared_preferences/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/shared_preferences/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:audio_streamer] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/audio_streamer/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:audio_streamer] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/audio_streamer/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:permission_handler] /Users/donovankruger/Documents/GithubProjects/topshottimer/build/permission_handler/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
