@@ -195,8 +195,6 @@ class FormScreenState extends  State<FormScreen> {
             "lastName": lastName,
             "emailAddress": email,
             "password": hashedPassword,
-            "country": "delete",
-            "contactNumber": "delete",
           }
       );
       print("account created");
