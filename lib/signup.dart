@@ -30,7 +30,7 @@ class FormScreenState extends  State<FormScreen> {
 
   Widget _buildFirstName() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'First name here'),
+      decoration: InputDecoration(labelText: emailFromLogin),
       validator: (String value) {
         if (value.isEmpty) {
           saveData(context);
@@ -187,7 +187,7 @@ class FormScreenState extends  State<FormScreen> {
     var de = utf8.decode(bytes);
     print(de);
     try{
-      var url = 'https://nutant-ratings.000webhostapp.com/create.php';
+      var url = 'https://www.topshottimer.co.za/create.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
           body: {
@@ -197,7 +197,15 @@ class FormScreenState extends  State<FormScreen> {
             "password": hashedPassword,
           }
       );
-      print("account created");
+      var data = json.decode(res.body);
+
+      print(data);
+      if(data == false){
+        print("not a user so account will be created");
+      } else if(data == true){
+        print("Already a User");
+      }
+      //print("account created");
     }catch (error) {
       print(error.toString());
     }
