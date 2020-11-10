@@ -187,7 +187,7 @@ class FormScreenState extends  State<FormScreen> {
     var de = utf8.decode(bytes);
     print(de);
     try{
-      var url = 'https://nutant-ratings.000webhostapp.com/create.php';
+      var url = 'https://www.topshottimer.co.za/create.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
           body: {
@@ -195,11 +195,17 @@ class FormScreenState extends  State<FormScreen> {
             "lastName": lastName,
             "emailAddress": email,
             "password": hashedPassword,
-            "country": "delete",
-            "contactNumber": "delete",
           }
       );
-      print("account created");
+      var data = json.decode(res.body);
+
+      print(data);
+      if(data == false){
+        print("not a user so account will be created");
+      } else if(data == true){
+        print("Already a User");
+      }
+      //print("account created");
     }catch (error) {
       print(error.toString());
     }

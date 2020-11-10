@@ -18,15 +18,15 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		0hJ9II0NnYnVe/+MbQKqFZ2y4rw=
+		2YVdh0uwuyGVkdFazu2TNp2+MXY=
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo</key>
 		<data>
-		OBqks6Bzn2jZYPJ5IGKzh+qSjEM=
+		BQaTi2bDvqPab+dx3G5wbGg2Jmo=
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/Project/x86_64.swiftsourceinfo</key>
 		<data>
-		OBqks6Bzn2jZYPJ5IGKzh+qSjEM=
+		BQaTi2bDvqPab+dx3G5wbGg2Jmo=
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -34,7 +34,7 @@
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		TEcM1DC7TMpzZykvfz/Q5TdYVqM=
+		e/1EX4jU86ha2eZZiaPXB/AtY30=
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/x86_64.swiftdoc</key>
 		<data>
@@ -42,7 +42,7 @@
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		TEcM1DC7TMpzZykvfz/Q5TdYVqM=
+		e/1EX4jU86ha2eZZiaPXB/AtY30=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -88,22 +88,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			OBqks6Bzn2jZYPJ5IGKzh+qSjEM=
+			BQaTi2bDvqPab+dx3G5wbGg2Jmo=
 			</data>
 			<key>hash2</key>
 			<data>
-			gQxSXxRGKzsSjnj1VhqHWR7qb0Ye/EmYMW+JPUCG3oU=
+			tJFYkjRsm0HP5ijrVu9B0pbuxWAgoTOAQ1bvJmuI8/Q=
 			</data>
 		</dict>
 		<key>Modules/audio_streamer.swiftmodule/Project/x86_64.swiftsourceinfo</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			OBqks6Bzn2jZYPJ5IGKzh+qSjEM=
+			BQaTi2bDvqPab+dx3G5wbGg2Jmo=
 			</data>
 			<key>hash2</key>
 			<data>
-			gQxSXxRGKzsSjnj1VhqHWR7qb0Ye/EmYMW+JPUCG3oU=
+			tJFYkjRsm0HP5ijrVu9B0pbuxWAgoTOAQ1bvJmuI8/Q=
 			</data>
 		</dict>
 		<key>Modules/audio_streamer.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
@@ -121,11 +121,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			TEcM1DC7TMpzZykvfz/Q5TdYVqM=
+			e/1EX4jU86ha2eZZiaPXB/AtY30=
 			</data>
 			<key>hash2</key>
 			<data>
-			kNsFKM0RT0ZTnqXKa758M7TH6vcNsyGKRqBRLfRhets=
+			crG7/8wtnORbvh3OGws/vJvHqvhCB7wtg+MoxSPyEUM=
 			</data>
 		</dict>
 		<key>Modules/audio_streamer.swiftmodule/x86_64.swiftdoc</key>
@@ -143,11 +143,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			TEcM1DC7TMpzZykvfz/Q5TdYVqM=
+			e/1EX4jU86ha2eZZiaPXB/AtY30=
 			</data>
 			<key>hash2</key>
 			<data>
-			kNsFKM0RT0ZTnqXKa758M7TH6vcNsyGKRqBRLfRhets=
+			crG7/8wtnORbvh3OGws/vJvHqvhCB7wtg+MoxSPyEUM=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

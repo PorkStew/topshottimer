@@ -145,7 +145,7 @@ class LoginState extends  State<Login> {
     if (data != false) {
       print("Success the details provided are correct");
       // go to home screen
-      Navigator.push(context, MaterialPageRoute(builder: (context) => TimerPage.TimerPage()));
+     // Navigator.push(context, MaterialPageRoute(builder: (context) => TimerPage.TimerPage()));
     } else {
       //print a message if details are incorrect
       print("incorrect details! Please Try Again");
@@ -158,6 +158,10 @@ class LoginState extends  State<Login> {
     dynamic token = await FlutterSession().get("id");
     print("printing token for you");
     print(token);
+    print("calling text");
+
     //Navigator.push(context, MaterialPageRoute(builder: (context) => signup.FormScreen("something good")));
   }
+
+
 }
