@@ -30,7 +30,7 @@ class FormScreenState extends  State<FormScreen> {
 
   Widget _buildFirstName() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'First name here'),
+      decoration: InputDecoration(labelText: emailFromLogin),
       validator: (String value) {
         if (value.isEmpty) {
           saveData(context);
