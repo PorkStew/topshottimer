@@ -8,6 +8,7 @@ import 'package:noise_meter/noise_meter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/Settings.dart';
+import 'package:topshottimer/Views/splits.dart';
 
 
 
@@ -161,7 +162,7 @@ class _timerAreaState extends State<timerArea> {
     });
 
     if(noiseReading.maxDecibel>timerSensitivity){
-      arrShots.add(noiseReading.maxDecibel.toString());
+      //arrShots.add(noiseReading.maxDecibel.toString());
       arrShots.add(stoptimetodisplay);
 
       print("Gun Shot Captured!!!!!!!!!!!!!!!!" + noiseReading.maxDecibel.toString());
@@ -210,48 +211,62 @@ class _timerAreaState extends State<timerArea> {
     return Column(
       children: [
         Container(
-            padding: EdgeInsets.only(top: 35,bottom: 0,left: 0, right: 0),
+            padding: EdgeInsets.only(top: 35,bottom: 15,left: 0, right: 0),
             child: Text('TopShot Timer', style: TextStyle(fontSize: 60, fontWeight: FontWeight.w700, fontFamily: 'Digital-7'))
 
         ),
-        Container(
-            padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-            child:
-            FlatButton(
-                color: Colors.red,
-                minWidth: 80,
-                height: 80,
-                shape: CircleBorder(side: BorderSide(color: Colors.black, width: 4)),
-                child: Text("Reset", style: TextStyle(fontSize: 25, fontFamily: 'Digital-7')),
-                onPressed: () {
-                  if (isRunning == false){
-                    arrShots.clear();
-                    arrShots.add("00:00:00");
-                    iCountShots = 0;
-                    swatch.reset();
-                    stopRecorder();
-                    stoptimer();
-                    reset();
-                    //startstopwatch();
-                    didReset = true;
-                  } else{
-                    Fluttertoast.showToast(
-                        msg: "Please stop the timer before tapping reset",
-                        //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 3,
-                        backgroundColor: Colors.red,
+        Row(
 
-                        textColor: Colors.black,
-                        fontSize: 24.0
-                    );
+            children: <Widget>[
+
+              FlatButton(
+                  color: Colors.red,
+                  minWidth: 150,
+                  height: 50,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 4, color: Colors.black),),
+                  child: Text("Reset", style: TextStyle(fontSize: 25, fontFamily: 'Digital-7')),
+                  onPressed: () {
+                    if (isRunning == false){
+                      arrShots.clear();
+                      arrShots.add("00:00:00");
+                      iCountShots = 0;
+                      swatch.reset();
+                      stopRecorder();
+                      stoptimer();
+                      reset();
+                      //startstopwatch();
+                      didReset = true;
+                    } else{
+                      Fluttertoast.showToast(
+                          msg: "Please stop the timer before tapping reset",
+                          //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 3,
+                          backgroundColor: Colors.red,
+
+                          textColor: Colors.black,
+                          fontSize: 24.0
+                      );
+                    }
+
+
+
                   }
+              ),
+              Spacer(),
+              FlatButton(
+                  color: Colors.blue,
+                  minWidth: 150,
+                  height: 50,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 4, color: Colors.black),),
+                  child: Text("View String", style: TextStyle(fontSize: 25, fontFamily: 'Digital-7')),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
+                  }
+              )
+            ]
 
-
-
-                }
-            )
         ),
         Container(
             padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
