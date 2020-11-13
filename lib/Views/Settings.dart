@@ -2,6 +2,8 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:topshottimer/login.dart';
+import 'package:topshottimer/main.dart';
 
 
 class Settings extends StatefulWidget {
@@ -93,7 +95,7 @@ class _SettingsState extends State<Settings> {
                               value: sliderValue1,
                               min: 0,
                               max: 100,
-                              activeColor: Colors.blue,
+                              activeColor: Colors.red,
                               inactiveColor: Colors.black,
                               divisions: 4,
                               label: sliderValue1.toString(),
@@ -148,7 +150,7 @@ class _SettingsState extends State<Settings> {
                               value: sliderValue2,
                               min: 1,
                               max: 5,
-                              activeColor: Colors.blue,
+                              activeColor: Colors.red,
                               inactiveColor: Colors.black,
                               divisions: 4,
                               label: sliderValue2.toString(),
@@ -298,6 +300,7 @@ class _SettingsState extends State<Settings> {
                     onPressed: () async {
                       SharedPreferences preferences = await SharedPreferences.getInstance();
                       await preferences.clear();
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
                       print("Signed Out");
                     },
 
