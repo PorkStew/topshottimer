@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:topshottimer/Views/PageSelector.dart';
 import 'package:topshottimer/signup.dart' as signup;
 import 'package:topshottimer/resetPassword.dart' as resetPassword;
 import 'package:flutter_session/flutter_session.dart';
@@ -177,7 +178,7 @@ class LoginState extends  State<Login> {
     } else if (status == "verified" && id != null) {
       print("user details is all in order");
       saveUserInformation(id, email, hashedPassword);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => TimerPage.TimerPage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
     } else{
  // Navigator.push(
  // context, MaterialPageRoute(builder: (context) => login.Login()));
