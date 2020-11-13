@@ -290,6 +290,19 @@ class _SettingsState extends State<Settings> {
                     },
 
                   ),
+                  FlatButton(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
+                    height: 35,
+                    minWidth: 35,
+                    child: Text("Sign Out",style: TextStyle(fontSize: 20, color: Colors.black),),
+                    onPressed: () async {
+                      SharedPreferences preferences = await SharedPreferences.getInstance();
+                      await preferences.clear();
+                      print("Signed Out");
+                    },
+
+
+                  ),
 
 
                 ])

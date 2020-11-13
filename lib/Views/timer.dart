@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:noise_meter/noise_meter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/Settings.dart';
+import 'package:topshottimer/Views/splits.dart';
 
 
 
@@ -43,10 +43,18 @@ class _timerAreaState extends State<timerArea> {
   StreamSubscription<NoiseReading> _noiseSubscription;
   NoiseMeter _noiseMeter = new NoiseMeter();
   List<String> arrShots = List<String>();
+  List<int> arrMinutes = List<int>();
+  List<int> arrSeconds = List<int>();
+  List<int> arrMilliseconds = List<int>();
+
   bool bstop = false;
   bool startispressed = true;
   bool stopispressed = true;
   String stoptimetodisplay = "00:00:00";
+  int iMinutes;
+  int iSeconds;
+  int iMilliseconds;
+
   var swatch = Stopwatch();
   final dur = const Duration(milliseconds: 1);
   int iCountShots = 0;
@@ -71,6 +79,16 @@ class _timerAreaState extends State<timerArea> {
     }
     setState(() {
       stoptimetodisplay = (swatch.elapsed.inMinutes%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inSeconds%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inMilliseconds%1000).toString().padLeft(2,"0");
+      iMinutes = swatch.elapsed.inMinutes%60;
+      iSeconds = swatch.elapsed.inSeconds%60;
+      iMilliseconds = swatch.elapsed.inMilliseconds%1000;
+
+      print("In Minutes: " + iMinutes.toString());
+      print("In Seconds: "+ iSeconds.toString());
+      print("In Milliseconds: " + iMilliseconds.toString());
+      print("-------------------------");
+
+
     });
   }
 
@@ -129,6 +147,10 @@ class _timerAreaState extends State<timerArea> {
       stopRecorder();
       //stoptimer();
       reset();
+      print("Total Minutes: "+arrMinutes[arrMinutes.length-1].toString());
+      print("Total Seconds: "+arrSeconds[arrSeconds.length-1].toString());
+      print("Total Milliseconds: "+arrMilliseconds[arrMilliseconds.length-1].toString());
+      print(arrMinutes[arrMinutes.length-1].toString() + ":" + arrSeconds[arrSeconds.length-1].toString()+ ":" + arrMilliseconds[arrMilliseconds.length-1].toString());
       // iCountShots = 0;
       for (var i = 0; i <= arrShots.length-1; i++) {
         print(arrShots[i]);
@@ -161,8 +183,11 @@ class _timerAreaState extends State<timerArea> {
     });
 
     if(noiseReading.maxDecibel>timerSensitivity){
-      arrShots.add(noiseReading.maxDecibel.toString());
+      //arrShots.add(noiseReading.maxDecibel.toString());
       arrShots.add(stoptimetodisplay);
+      arrMinutes.add(iMinutes);
+      arrSeconds.add(iSeconds);
+      arrMilliseconds.add(iMilliseconds);
 
       print("Gun Shot Captured!!!!!!!!!!!!!!!!" + noiseReading.maxDecibel.toString());
       iCountShots = iCountShots + 1;
@@ -189,6 +214,8 @@ class _timerAreaState extends State<timerArea> {
     obtainUserDefaults();
     initPlayer();
   }
+
+
   void initPlayer(){
     arrShots.add("00:00:00");
     advancedPlayer = AudioPlayer();
@@ -210,48 +237,65 @@ class _timerAreaState extends State<timerArea> {
     return Column(
       children: [
         Container(
-            padding: EdgeInsets.only(top: 35,bottom: 0,left: 0, right: 0),
+            padding: EdgeInsets.only(top: 35,bottom: 15,left: 0, right: 0),
             child: Text('TopShot Timer', style: TextStyle(fontSize: 60, fontWeight: FontWeight.w700, fontFamily: 'Digital-7'))
 
         ),
-        Container(
-            padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-            child:
-            FlatButton(
-                color: Colors.red,
-                minWidth: 80,
-                height: 80,
-                shape: CircleBorder(side: BorderSide(color: Colors.black, width: 4)),
-                child: Text("Reset", style: TextStyle(fontSize: 25, fontFamily: 'Digital-7')),
-                onPressed: () {
-                  if (isRunning == false){
-                    arrShots.clear();
-                    arrShots.add("00:00:00");
-                    iCountShots = 0;
-                    swatch.reset();
-                    stopRecorder();
-                    stoptimer();
-                    reset();
-                    //startstopwatch();
-                    didReset = true;
-                  } else{
-                    Fluttertoast.showToast(
-                        msg: "Please stop the timer before tapping reset",
-                        //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 3,
-                        backgroundColor: Colors.red,
+        Row(
 
-                        textColor: Colors.black,
-                        fontSize: 24.0
-                    );
+            children: <Widget>[
+              Spacer(),
+
+              FlatButton(
+                  color: Colors.red,
+                  minWidth: 150,
+                  height: 50,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 4, color: Colors.black),),
+                  child: Text("Reset", style: TextStyle(fontSize: 25, fontFamily: 'Digital-7')),
+                  onPressed: () {
+                    if (isRunning == false){
+                      arrShots.clear();
+                      arrShots.add("00:00:00");
+                      iCountShots = 0;
+                      swatch.reset();
+                      stopRecorder();
+                      stoptimer();
+                      reset();
+                      //startstopwatch();
+                      didReset = true;
+                    } else{
+                      Fluttertoast.showToast(
+                          msg: "Please stop the timer before tapping reset",
+                          //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 3,
+                          backgroundColor: Colors.red,
+
+                          textColor: Colors.black,
+                          fontSize: 24.0
+                      );
+                    }
+
+
+
                   }
+              ),
+              Spacer(),
+              FlatButton(
+                  color: Colors.blue,
+                  minWidth: 150,
+                  height: 50,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 4, color: Colors.black),),
+                  child: Text("View String", style: TextStyle(fontSize: 25, fontFamily: 'Digital-7')),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
+                  }
+              ),
+              Spacer(),
 
+            ]
 
-
-                }
-            )
         ),
         Container(
             padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
@@ -335,6 +379,23 @@ obtainUserDefaults() async{
   print("Delay Before ifs" + dDelay.toString());
   print("Sensitivity Before ifs" + dSensitivity.toString());
 
+  if (dDelay == "")
+    {
+      await prefs.setDouble('userDelay',3);
+      dDelay = await prefs.getDouble('userDelay');
+    }
+
+  if (dSensitivity == "")
+    {
+      await prefs.setDouble('userSensitivity',50.0);
+      dSensitivity = await prefs.getDouble('userSensitivity');
+    }
+
+  if (sTone == ""){
+    await prefs.setString('userTone',"2100");
+    sTone = await prefs.getString('userTone');
+
+  }
 
   if (dSensitivity == 0.0){
     timerSensitivity = 89.8;
