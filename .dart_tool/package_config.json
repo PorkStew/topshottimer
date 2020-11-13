@@ -75,9 +75,9 @@
     },
     {
       "name": "cupertino_icons",
-      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.0",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.1",
       "packageUri": "lib/",
-      "languageVersion": "2.0"
+      "languageVersion": "2.12"
     },
     {
       "name": "fake_async",
@@ -153,7 +153,7 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/image-2.1.18",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/image-2.1.19",
       "packageUri": "lib/",
       "languageVersion": "2.0"
     },
@@ -392,7 +392,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-11-13T07:16:24.194683Z",
+  "generated": "2020-11-13T08:11:52.569157Z",
   "generator": "pub",
   "generatorVersion": "2.12.0-31.0.dev"
 }

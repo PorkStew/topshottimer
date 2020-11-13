@@ -83,7 +83,7 @@ class LoginState extends  State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
+
       backgroundColor: Colors.blueGrey,
       body: Container(
         margin: EdgeInsets.all(24),
