@@ -110,7 +110,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		mqN91b/a9Ek54V5CRoUUXA4CccU=
+		hRwLOyeC9EwzrX+JRpPgjbIn1MM=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -118,7 +118,7 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		zM4cMY25OJUm8ppO10aCM3XfTC4=
+		myBeazvI1i1Yrj2LMESUwz+U7DQ=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<data>
@@ -190,7 +190,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		9+94d0X28CUcZsckLrY01I9Gudo=
+		GXPQ4xD2e2uHg0tjHD86cZeWSYk=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -238,7 +238,7 @@
 		</data>
 		<key>Frameworks/audio_streamer.framework/audio_streamer</key>
 		<data>
-		tzn+1fbfkJIdYI/7iBfPPH7b4W8=
+		UQgXd7d11M3DAyTTNnlU5JXrOqM=
 		</data>
 		<key>Frameworks/audioplayers.framework/Info.plist</key>
 		<data>
@@ -250,7 +250,7 @@
 		</data>
 		<key>Frameworks/audioplayers.framework/audioplayers</key>
 		<data>
-		DXG5jkxaG7RvXYPmEjdeJjRpwQA=
+		kJo20L6JuAzbTJsxfELR/+eDOF0=
 		</data>
 		<key>Frameworks/fluttertoast.framework/Info.plist</key>
 		<data>
@@ -262,7 +262,7 @@
 		</data>
 		<key>Frameworks/fluttertoast.framework/fluttertoast</key>
 		<data>
-		yRjf7hUPJmKid1TN5i2cBlZYMak=
+		mb+EyD8cnkfBqAU++OmAi+iBIyU=
 		</data>
 		<key>Frameworks/libswiftAVFoundation.dylib</key>
 		<data>
@@ -338,7 +338,7 @@
 		</data>
 		<key>Frameworks/path_provider.framework/path_provider</key>
 		<data>
-		8WVkIsKnLN2+2dCTp2SJEvbDhmw=
+		JCV5fBllJkFXVrFm1wcN0y9hk9s=
 		</data>
 		<key>Frameworks/shared_preferences.framework/Info.plist</key>
 		<data>
@@ -350,7 +350,7 @@
 		</data>
 		<key>Frameworks/shared_preferences.framework/shared_preferences</key>
 		<data>
-		f9zqc2TDoJ3n8EXmwxNvGpw6gfo=
+		NSAktPN2y454SxCrSR/wDFrQons=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -653,11 +653,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			mqN91b/a9Ek54V5CRoUUXA4CccU=
+			hRwLOyeC9EwzrX+JRpPgjbIn1MM=
 			</data>
 			<key>hash2</key>
 			<data>
-			8kZqIQGWe3vNIgNjG/QaPM1+rEAyQ7NjQ+cnHDFKuvM=
+			osfCIWh0ZoFU1BrKd2yE9MyHftyDUHuCnF4Z3EnWXw8=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -675,11 +675,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			zM4cMY25OJUm8ppO10aCM3XfTC4=
+			myBeazvI1i1Yrj2LMESUwz+U7DQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			+gLOJPf4i3sPIu4qU5aMZSYOHMK2AX5o4nkIEgVxfXU=
+			VWH+CeuoCQlV3AqJd/e073TNv0b/0KENtgu3/iDaU1w=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
@@ -873,11 +873,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			9+94d0X28CUcZsckLrY01I9Gudo=
+			GXPQ4xD2e2uHg0tjHD86cZeWSYk=
 			</data>
 			<key>hash2</key>
 			<data>
-			Pt1hApRH2P/vKCmha0h8cimTcBvLJD5dkrR0UVDZMYc=
+			GzA+djaDh6HDhz+J+z2Hzx3eXNbWLfTsOQSpbogljuU=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -1005,11 +1005,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			tzn+1fbfkJIdYI/7iBfPPH7b4W8=
+			UQgXd7d11M3DAyTTNnlU5JXrOqM=
 			</data>
 			<key>hash2</key>
 			<data>
-			OiYmhscdrYkOANuJohtztlAT4mdjeEqtJc2f2PkYGp0=
+			jA2oQ1PNSqaIl88ZtWLrlic72CClKyO2SFUiXpDK/WQ=
 			</data>
 		</dict>
 		<key>Frameworks/audioplayers.framework/Info.plist</key>
@@ -1038,11 +1038,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			DXG5jkxaG7RvXYPmEjdeJjRpwQA=
+			kJo20L6JuAzbTJsxfELR/+eDOF0=
 			</data>
 			<key>hash2</key>
 			<data>
-			C/ClhaldxyYfp2+8LSnpEIAYSaC9vmpoDsA7YyY66Jg=
+			9YjH3ADSpCtxJjz1xEUUhfGOsXK7jkkFwsbMDatp1Xw=
 			</data>
 		</dict>
 		<key>Frameworks/fluttertoast.framework/Info.plist</key>
@@ -1071,11 +1071,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			yRjf7hUPJmKid1TN5i2cBlZYMak=
+			mb+EyD8cnkfBqAU++OmAi+iBIyU=
 			</data>
 			<key>hash2</key>
 			<data>
-			sYCl3MdEZ1JrbyK4ZZH6FEplulVrpbQMyfwKE6ncX6k=
+			klIC8+zwiMeU+kBtpWH13vKJHAeeEN+SgiudVrN4smw=
 			</data>
 		</dict>
 		<key>Frameworks/libswiftAVFoundation.dylib</key>
@@ -1280,11 +1280,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			8WVkIsKnLN2+2dCTp2SJEvbDhmw=
+			JCV5fBllJkFXVrFm1wcN0y9hk9s=
 			</data>
 			<key>hash2</key>
 			<data>
-			05RbQTYptdPtZTlYXIueVdPlifm8n+PPmdcBhAYDVFI=
+			n2pn5H0O0NOYs5c+Q0B/AtAF75C8x+3ANiIVc6xoc1U=
 			</data>
 		</dict>
 		<key>Frameworks/shared_preferences.framework/Info.plist</key>
@@ -1313,11 +1313,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			f9zqc2TDoJ3n8EXmwxNvGpw6gfo=
+			NSAktPN2y454SxCrSR/wDFrQons=
 			</data>
 			<key>hash2</key>
 			<data>
-			VnYB7g47nCGccWd5b4LAy+3wfpnkgn9elrM91DYKr50=
+			ORpBR/mG2xajCHquuO3t4pDZDycvtwF4U3mDeD7PBqI=
 			</data>
 		</dict>
 	</dict>
