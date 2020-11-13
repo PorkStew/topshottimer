@@ -6,29 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/PageSelector.dart';
 import 'package:topshottimer/signup.dart' as signup;
 import 'package:topshottimer/resetPassword.dart' as resetPassword;
-import 'package:flutter_session/flutter_session.dart';
 import 'package:http/http.dart' as http;
-import 'package:topshottimer/views/timer.dart' as TimerPage;
 import 'package:topshottimer/verifyEmail.dart' as verify;
-
-//
-// void main() {
-//   runApp(MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   //root widget
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Top Shot Timer',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: Login() ,
-//     );
-//   }
-// }
 
 class Login extends StatefulWidget {
   @override
@@ -79,7 +58,6 @@ class LoginState extends  State<Login> {
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,8 +146,6 @@ class LoginState extends  State<Login> {
     print("dddd");
     if (status == "notuser") {
       print("we don't have this user");
-      //Navigator.push(
-      //    context, MaterialPageRoute(builder: (context) => login.Login()));
     }
     else if (status == "nonverified" && id != null) {
       print("we have this user but they are not verified");
@@ -180,17 +156,14 @@ class LoginState extends  State<Login> {
       saveUserInformation(id, email, hashedPassword);
       Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
     } else{
- // Navigator.push(
- // context, MaterialPageRoute(builder: (context) => login.Login()));
   }
 }
-
+//takes the users information and stores it in shared preferences
 saveUserInformation(var id, String email, String hashedPassword) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('id', id);
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => signup.FormScreen("something good")));
   }
 
 }
