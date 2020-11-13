@@ -6,6 +6,8 @@ import 'package:topshottimer/Views/timer.dart' as TimerPage;
 import 'package:topshottimer/verifyEmail.dart' as verify;
 import 'package:http/http.dart' as http;
 
+import 'Views/PageSelector.dart';
+
 
 
 void main() {
@@ -81,7 +83,7 @@ updateData(context) async {
       } else if (status == "verified" && id != null) {
         print("User ID: " + id);
         print("user details is all in order");
-        Navigator.push(context, MaterialPageRoute(builder: (context) => TimerPage.TimerPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
       }
     }else
       {

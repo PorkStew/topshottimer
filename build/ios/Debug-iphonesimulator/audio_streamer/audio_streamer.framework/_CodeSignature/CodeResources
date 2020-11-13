@@ -10,7 +10,7 @@
 		</data>
 		<key>Headers/audio_streamer-Swift.h</key>
 		<data>
-		yWnHNfC4EZ5AmWLedJCDzDrsJGk=
+		GD0VU6/tCncgWjoKsZ1YycYMuqc=
 		</data>
 		<key>Headers/audio_streamer-umbrella.h</key>
 		<data>
@@ -18,31 +18,31 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		o3TMTSRwdYRv/F5GFv0aNqPDibc=
+		0hJ9II0NnYnVe/+MbQKqFZ2y4rw=
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo</key>
 		<data>
-		9ZFeUyrB0hh4k1cBLa98oyIERM0=
+		OBqks6Bzn2jZYPJ5IGKzh+qSjEM=
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/Project/x86_64.swiftsourceinfo</key>
 		<data>
-		9ZFeUyrB0hh4k1cBLa98oyIERM0=
+		OBqks6Bzn2jZYPJ5IGKzh+qSjEM=
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		QJN/qT15pNi11uaZCqiZpjTDMtM=
+		uepl3l1YU3iQOQtxZLlaFIxi6aw=
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		SPhmIyHc9m960eweALgAcP5tNiE=
+		TEcM1DC7TMpzZykvfz/Q5TdYVqM=
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/x86_64.swiftdoc</key>
 		<data>
-		QJN/qT15pNi11uaZCqiZpjTDMtM=
+		uepl3l1YU3iQOQtxZLlaFIxi6aw=
 		</data>
 		<key>Modules/audio_streamer.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		SPhmIyHc9m960eweALgAcP5tNiE=
+		TEcM1DC7TMpzZykvfz/Q5TdYVqM=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -66,11 +66,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			yWnHNfC4EZ5AmWLedJCDzDrsJGk=
+			GD0VU6/tCncgWjoKsZ1YycYMuqc=
 			</data>
 			<key>hash2</key>
 			<data>
-			gFeGt9n5FjWjQkD+/JT592Ct429g6D3plbl1hKwgIvY=
+			vcKBdnPJQoiiJOEwzcGQ119lmyOblAKN6Z0Q8MFw56s=
 			</data>
 		</dict>
 		<key>Headers/audio_streamer-umbrella.h</key>
@@ -88,66 +88,66 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			9ZFeUyrB0hh4k1cBLa98oyIERM0=
+			OBqks6Bzn2jZYPJ5IGKzh+qSjEM=
 			</data>
 			<key>hash2</key>
 			<data>
-			OIt6QMO9SAV5K7aHIkDJiNGH56M7JrK7zXQMpgSnRy8=
+			gQxSXxRGKzsSjnj1VhqHWR7qb0Ye/EmYMW+JPUCG3oU=
 			</data>
 		</dict>
 		<key>Modules/audio_streamer.swiftmodule/Project/x86_64.swiftsourceinfo</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			9ZFeUyrB0hh4k1cBLa98oyIERM0=
+			OBqks6Bzn2jZYPJ5IGKzh+qSjEM=
 			</data>
 			<key>hash2</key>
 			<data>
-			OIt6QMO9SAV5K7aHIkDJiNGH56M7JrK7zXQMpgSnRy8=
+			gQxSXxRGKzsSjnj1VhqHWR7qb0Ye/EmYMW+JPUCG3oU=
 			</data>
 		</dict>
 		<key>Modules/audio_streamer.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			QJN/qT15pNi11uaZCqiZpjTDMtM=
+			uepl3l1YU3iQOQtxZLlaFIxi6aw=
 			</data>
 			<key>hash2</key>
 			<data>
-			rYdxcjIgJVDzNJQuDlxXn5qsjlewgaxdFNS9s4uHba0=
+			kEP8+xhYWvXtUjAP4Ymwgj44UkE+NJQ6s32WCaaGTtc=
 			</data>
 		</dict>
 		<key>Modules/audio_streamer.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			SPhmIyHc9m960eweALgAcP5tNiE=
+			TEcM1DC7TMpzZykvfz/Q5TdYVqM=
 			</data>
 			<key>hash2</key>
 			<data>
-			Dd9mK/zYMzM1AE0cIV1Ycn8pCc4qKRniTbmmN790T28=
+			kNsFKM0RT0ZTnqXKa758M7TH6vcNsyGKRqBRLfRhets=
 			</data>
 		</dict>
 		<key>Modules/audio_streamer.swiftmodule/x86_64.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			QJN/qT15pNi11uaZCqiZpjTDMtM=
+			uepl3l1YU3iQOQtxZLlaFIxi6aw=
 			</data>
 			<key>hash2</key>
 			<data>
-			rYdxcjIgJVDzNJQuDlxXn5qsjlewgaxdFNS9s4uHba0=
+			kEP8+xhYWvXtUjAP4Ymwgj44UkE+NJQ6s32WCaaGTtc=
 			</data>
 		</dict>
 		<key>Modules/audio_streamer.swiftmodule/x86_64.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			SPhmIyHc9m960eweALgAcP5tNiE=
+			TEcM1DC7TMpzZykvfz/Q5TdYVqM=
 			</data>
 			<key>hash2</key>
 			<data>
-			Dd9mK/zYMzM1AE0cIV1Ycn8pCc4qKRniTbmmN790T28=
+			kNsFKM0RT0ZTnqXKa758M7TH6vcNsyGKRqBRLfRhets=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
