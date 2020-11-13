@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:flutter_session/flutter_session.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class FormScreen extends StatefulWidget {
   //allows the accepting of data from another view
   String something;
@@ -33,7 +34,7 @@ class FormScreenState extends  State<FormScreen> {
       decoration: InputDecoration(labelText: emailFromLogin),
       validator: (String value) {
         if (value.isEmpty) {
-          saveData(context);
+          //saveData(context);
           return 'First name is Required';
         }
 
@@ -202,6 +203,7 @@ class FormScreenState extends  State<FormScreen> {
       print(data);
       if(data == false){
         print("not a user so account will be created");
+        print("once sent to the verify email page then go to login and get the id there");
       } else if(data == true){
         print("Already a User");
       }
@@ -209,10 +211,5 @@ class FormScreenState extends  State<FormScreen> {
     }catch (error) {
       print(error.toString());
     }
-  }
-  Future<void> saveData(context) async {
-    dynamic token = await FlutterSession().get("id");
-    print(token);
-
   }
 }
