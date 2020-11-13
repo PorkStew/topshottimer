@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
@@ -44,10 +43,18 @@ class _timerAreaState extends State<timerArea> {
   StreamSubscription<NoiseReading> _noiseSubscription;
   NoiseMeter _noiseMeter = new NoiseMeter();
   List<String> arrShots = List<String>();
+  List<int> arrMinutes = List<int>();
+  List<int> arrSeconds = List<int>();
+  List<int> arrMilliseconds = List<int>();
+
   bool bstop = false;
   bool startispressed = true;
   bool stopispressed = true;
   String stoptimetodisplay = "00:00:00";
+  int iMinutes;
+  int iSeconds;
+  int iMilliseconds;
+
   var swatch = Stopwatch();
   final dur = const Duration(milliseconds: 1);
   int iCountShots = 0;
@@ -72,6 +79,16 @@ class _timerAreaState extends State<timerArea> {
     }
     setState(() {
       stoptimetodisplay = (swatch.elapsed.inMinutes%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inSeconds%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inMilliseconds%1000).toString().padLeft(2,"0");
+      iMinutes = swatch.elapsed.inMinutes%60;
+      iSeconds = swatch.elapsed.inSeconds%60;
+      iMilliseconds = swatch.elapsed.inMilliseconds%1000;
+
+      print("In Minutes: " + iMinutes.toString());
+      print("In Seconds: "+ iSeconds.toString());
+      print("In Milliseconds: " + iMilliseconds.toString());
+      print("-------------------------");
+
+
     });
   }
 
@@ -130,6 +147,10 @@ class _timerAreaState extends State<timerArea> {
       stopRecorder();
       //stoptimer();
       reset();
+      print("Total Minutes: "+arrMinutes[arrMinutes.length-1].toString());
+      print("Total Seconds: "+arrSeconds[arrSeconds.length-1].toString());
+      print("Total Milliseconds: "+arrMilliseconds[arrMilliseconds.length-1].toString());
+      print(arrMinutes[arrMinutes.length-1].toString() + ":" + arrSeconds[arrSeconds.length-1].toString()+ ":" + arrMilliseconds[arrMilliseconds.length-1].toString());
       // iCountShots = 0;
       for (var i = 0; i <= arrShots.length-1; i++) {
         print(arrShots[i]);
@@ -164,6 +185,9 @@ class _timerAreaState extends State<timerArea> {
     if(noiseReading.maxDecibel>timerSensitivity){
       //arrShots.add(noiseReading.maxDecibel.toString());
       arrShots.add(stoptimetodisplay);
+      arrMinutes.add(iMinutes);
+      arrSeconds.add(iSeconds);
+      arrMilliseconds.add(iMilliseconds);
 
       print("Gun Shot Captured!!!!!!!!!!!!!!!!" + noiseReading.maxDecibel.toString());
       iCountShots = iCountShots + 1;
@@ -190,6 +214,8 @@ class _timerAreaState extends State<timerArea> {
     obtainUserDefaults();
     initPlayer();
   }
+
+
   void initPlayer(){
     arrShots.add("00:00:00");
     advancedPlayer = AudioPlayer();
@@ -218,6 +244,7 @@ class _timerAreaState extends State<timerArea> {
         Row(
 
             children: <Widget>[
+              Spacer(),
 
               FlatButton(
                   color: Colors.red,
@@ -264,7 +291,9 @@ class _timerAreaState extends State<timerArea> {
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
                   }
-              )
+              ),
+              Spacer(),
+
             ]
 
         ),
@@ -350,6 +379,23 @@ obtainUserDefaults() async{
   print("Delay Before ifs" + dDelay.toString());
   print("Sensitivity Before ifs" + dSensitivity.toString());
 
+  if (dDelay == "")
+    {
+      await prefs.setDouble('userDelay',3);
+      dDelay = await prefs.getDouble('userDelay');
+    }
+
+  if (dSensitivity == "")
+    {
+      await prefs.setDouble('userSensitivity',50.0);
+      dSensitivity = await prefs.getDouble('userSensitivity');
+    }
+
+  if (sTone == ""){
+    await prefs.setString('userTone',"2100");
+    sTone = await prefs.getString('userTone');
+
+  }
 
   if (dSensitivity == 0.0){
     timerSensitivity = 89.8;

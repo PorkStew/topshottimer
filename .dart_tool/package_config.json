@@ -101,7 +101,7 @@
       "name": "flutter",
       "rootUri": "file:///Users/donovankruger/tools/flutter/packages/flutter",
       "packageUri": "lib/",
-      "languageVersion": "2.10"
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_launcher_icons",
@@ -125,13 +125,13 @@
       "name": "flutter_test",
       "rootUri": "file:///Users/donovankruger/tools/flutter/packages/flutter_test",
       "packageUri": "lib/",
-      "languageVersion": "2.10"
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_web_plugins",
       "rootUri": "file:///Users/donovankruger/tools/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
-      "languageVersion": "2.0"
+      "languageVersion": "2.12"
     },
     {
       "name": "fluttertoast",
@@ -305,13 +305,13 @@
       "name": "sky_engine",
       "rootUri": "file:///Users/donovankruger/tools/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
-      "languageVersion": "1.11"
+      "languageVersion": "2.12"
     },
     {
       "name": "source_span",
-      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/source_span-1.8.0-nullsafety.3",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/source_span-1.8.0-nullsafety.4",
       "packageUri": "lib/",
-      "languageVersion": "2.11"
+      "languageVersion": "2.12"
     },
     {
       "name": "stack_trace",
@@ -339,7 +339,7 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/test_api-0.2.19-nullsafety.5",
+      "rootUri": "file:///Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/test_api-0.2.19-nullsafety.6",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -392,7 +392,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-11-11T13:41:15.060482Z",
+  "generated": "2020-11-12T09:29:22.691207Z",
   "generator": "pub",
-  "generatorVersion": "2.12.0-21.0.dev"
+  "generatorVersion": "2.12.0-31.0.dev"
 }
