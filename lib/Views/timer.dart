@@ -6,8 +6,10 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:noise_meter/noise_meter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:topshottimer/Views/Settings.dart';
 import 'package:topshottimer/Views/splits.dart';
+//import 'package:firebase_admob/firebase_admob.dart';
+
+const String testDevice = '';
 
 
 
@@ -22,6 +24,16 @@ class TimerPage extends StatefulWidget {
 }
 
 class _TimerPageState extends State<TimerPage> {
+
+
+
+  @override
+  void initState(){
+
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +50,22 @@ class timerArea extends StatefulWidget {
 }
 
 class _timerAreaState extends State<timerArea> {
+
+  // static final MobileAdTargetingInfo targetInfo = new MobileAdTargetingInfo(
+  //   testDevices: testDevice != null? <String>[testDevice]: null,
+  //   keywords: <String>['guns', 'ammunition','insurance', 'banking','shooting', 'idpa','ipsc'],
+  //   birthday: new DateTime.now(),
+  //   childDirected: true,
+  // );
+
+  // BannerAd _bannerAd;
+  // InterstitialAd _interstitialAd;
+  //
+  // BannerAd createBannerAd(){
+  //   return new BannerAd(adUnitId: BannerAd.testAdUnitId, size: AdSize.banner, targetingInfo: targetInfo, listener: (MobileAdEvent event){
+  //     print("Banner event: $event");
+  //   });
+  // }
 
   bool _isRecording = false;
   StreamSubscription<NoiseReading> _noiseSubscription;
@@ -211,6 +239,8 @@ class _timerAreaState extends State<timerArea> {
   @override
   void initState(){
     super.initState();
+    // FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    // _bannerAd = createBannerAd()..load()..show();
     obtainUserDefaults();
     initPlayer();
   }
@@ -237,74 +267,18 @@ class _timerAreaState extends State<timerArea> {
     return Column(
       children: [
         Container(
-            padding: EdgeInsets.only(top: 35,bottom: 15,left: 0, right: 0),
-            child: Text('TopShot Timer', style: TextStyle(fontSize: 60, fontWeight: FontWeight.w700, fontFamily: 'Digital-7'))
-
-        ),
-        Row(
-
-            children: <Widget>[
-              Spacer(),
-
-              FlatButton(
-                  color: Colors.red,
-                  minWidth: 150,
-                  height: 50,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 4, color: Colors.black),),
-                  child: Text("Reset", style: TextStyle(fontSize: 25, fontFamily: 'Digital-7')),
-                  onPressed: () {
-                    if (isRunning == false){
-                      arrShots.clear();
-                      arrShots.add("00:00:00");
-                      iCountShots = 0;
-                      swatch.reset();
-                      stopRecorder();
-                      stoptimer();
-                      reset();
-                      //startstopwatch();
-                      didReset = true;
-                    } else{
-                      Fluttertoast.showToast(
-                          msg: "Please stop the timer before tapping reset",
-                          //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 3,
-                          backgroundColor: Colors.red,
-
-                          textColor: Colors.black,
-                          fontSize: 24.0
-                      );
-                    }
-
-
-
-                  }
-              ),
-              Spacer(),
-              FlatButton(
-                  color: Colors.blue,
-                  minWidth: 150,
-                  height: 50,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 4, color: Colors.black),),
-                  child: Text("View String", style: TextStyle(fontSize: 25, fontFamily: 'Digital-7')),
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
-                  }
-              ),
-              Spacer(),
-
-            ]
+          padding: EdgeInsets.only(top: 35,bottom: 15,left: 0, right: 0),
+          //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
         ),
         Container(
             padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
             child:
             FlatButton(
-              color: btnColor,
+              //color: btnColor,
               minWidth: 250,
               height: 250,
-              shape: CircleBorder(side: BorderSide(color: Colors.black, width: 4)),
+              shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
               onPressed: () {
                 obtainUserDefaults();
                 if (didReset == true){
@@ -344,7 +318,7 @@ class _timerAreaState extends State<timerArea> {
             )
         ),
         Container(
-            padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+            padding: EdgeInsets.only(top: 20,bottom: 0,left: 0, right: 0),
             child:
             Text(arrShots[arrShots.length-1], style: TextStyle(
                 fontSize: 80,
@@ -354,13 +328,107 @@ class _timerAreaState extends State<timerArea> {
 
         ),
         Container(
-            padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+            padding: EdgeInsets.only(top: 10,bottom: 30,left: 0, right: 0),
             child:
             Text((iCountShots).toString(), style: TextStyle(
                 fontSize: 80,
                 fontWeight: FontWeight.w700,
                 fontFamily: 'Digital-7'
             ),)
+
+        ),
+
+        Row(
+
+            children: <Widget>[
+              Spacer(),
+
+              FlatButton(
+                //color: Colors.red,
+                  minWidth: 170,
+                  height: 50,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Colors.black),),
+                  child: Text("Reset", style: TextStyle(fontSize: 25)),
+
+                  onPressed: () {
+                    if (isRunning == false){
+                      arrShots.clear();
+                      arrShots.add("00:00:00");
+                      iCountShots = 0;
+                      swatch.reset();
+                      stopRecorder();
+                      stoptimer();
+                      reset();
+                      //startstopwatch();
+                      didReset = true;
+                    } else{
+                      Fluttertoast.showToast(
+                          msg: "Please stop the timer before tapping reset",
+                          //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 3,
+                          backgroundColor: Colors.red,
+
+                          textColor: Colors.black,
+                          fontSize: 24.0
+                      );
+                    }
+
+
+
+                  }
+              ),
+              Spacer(),
+              FlatButton(
+                //color: Colors.blue,
+                  minWidth: 170,
+                  height: 50,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Colors.black),),
+                  child: Text("View String", style: TextStyle(fontSize: 25, )),
+                  onPressed: () {
+                    if(arrShots.length <= 1 ){
+                      print("Should get into alert");
+
+                      AlertDialog alert = AlertDialog(
+                        title: Text("Warning!"),
+                        content: Text("No shots registered. Please shoot a string of shots before viewing the string."),
+                        actions: [
+                          FlatButton(child: Text("Ok"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },),                        ],
+                      );
+
+                      return showDialog(
+                          context: context,
+                          builder: (BuildContext context){
+                            return alert;
+                          }
+                      );
+                      return AlertDialog(
+                        title: Text("No shots registered. Please shoot a string of shots before viewing the string."),
+                        content: TextField(
+                          decoration: InputDecoration(labelText: 'String Name',),
+                        ),
+                        actions:[
+
+
+                          FlatButton(child: Text("Ok"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },),
+
+                        ],
+                      );
+                    }
+                    else
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
+                  }
+              ),
+              Spacer(),
+
+            ]
 
         ),
 
@@ -380,16 +448,16 @@ obtainUserDefaults() async{
   print("Sensitivity Before ifs" + dSensitivity.toString());
 
   if (dDelay == "")
-    {
-      await prefs.setDouble('userDelay',3);
-      dDelay = await prefs.getDouble('userDelay');
-    }
+  {
+    await prefs.setDouble('userDelay',3);
+    dDelay = await prefs.getDouble('userDelay');
+  }
 
   if (dSensitivity == "")
-    {
-      await prefs.setDouble('userSensitivity',50.0);
-      dSensitivity = await prefs.getDouble('userSensitivity');
-    }
+  {
+    await prefs.setDouble('userSensitivity',50.0);
+    dSensitivity = await prefs.getDouble('userSensitivity');
+  }
 
   if (sTone == ""){
     await prefs.setString('userTone',"2100");
