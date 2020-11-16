@@ -2,7 +2,6 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:topshottimer/login.dart';
 import 'package:topshottimer/main.dart';
 
 
@@ -63,7 +62,7 @@ class _SettingsState extends State<Settings> {
   void initPlayer(){
     advancedPlayer = AudioPlayer();
     audioCache = AudioCache(fixedPlayer: advancedPlayer);
-}
+  }
 
 
   @override
@@ -292,20 +291,25 @@ class _SettingsState extends State<Settings> {
                     },
 
                   ),
-                  FlatButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
-                    height: 35,
-                    minWidth: 35,
-                    child: Text("Sign Out",style: TextStyle(fontSize: 20, color: Colors.black),),
-                    onPressed: () async {
-                      SharedPreferences preferences = await SharedPreferences.getInstance();
-                      await preferences.clear();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
-                      print("Signed Out");
-                    },
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: FlatButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
+                      height: 35,
+                      minWidth: 150,
+                      child: Text("Sign Out",style: TextStyle(fontSize: 20, color: Colors.black),),
+                      onPressed: () async {
+                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                        await preferences.clear();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+                        print("Signed Out");
+                      },
 
 
+                    ),
                   ),
+
+
 
 
                 ])
