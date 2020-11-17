@@ -7,7 +7,6 @@ import 'package:noise_meter/noise_meter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/splits.dart';
-//import 'package:firebase_admob/firebase_admob.dart';
 
 const String testDevice = '';
 
@@ -51,21 +50,6 @@ class timerArea extends StatefulWidget {
 
 class _timerAreaState extends State<timerArea> {
 
-  // static final MobileAdTargetingInfo targetInfo = new MobileAdTargetingInfo(
-  //   testDevices: testDevice != null? <String>[testDevice]: null,
-  //   keywords: <String>['guns', 'ammunition','insurance', 'banking','shooting', 'idpa','ipsc'],
-  //   birthday: new DateTime.now(),
-  //   childDirected: true,
-  // );
-
-  // BannerAd _bannerAd;
-  // InterstitialAd _interstitialAd;
-  //
-  // BannerAd createBannerAd(){
-  //   return new BannerAd(adUnitId: BannerAd.testAdUnitId, size: AdSize.banner, targetingInfo: targetInfo, listener: (MobileAdEvent event){
-  //     print("Banner event: $event");
-  //   });
-  // }
 
   bool _isRecording = false;
   StreamSubscription<NoiseReading> _noiseSubscription;
@@ -239,8 +223,6 @@ class _timerAreaState extends State<timerArea> {
   @override
   void initState(){
     super.initState();
-    // FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
-    // _bannerAd = createBannerAd()..load()..show();
     obtainUserDefaults();
     initPlayer();
   }
@@ -406,21 +388,7 @@ class _timerAreaState extends State<timerArea> {
                             return alert;
                           }
                       );
-                      return AlertDialog(
-                        title: Text("No shots registered. Please shoot a string of shots before viewing the string."),
-                        content: TextField(
-                          decoration: InputDecoration(labelText: 'String Name',),
-                        ),
-                        actions:[
 
-
-                          FlatButton(child: Text("Ok"),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },),
-
-                        ],
-                      );
                     }
                     else
                       Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
