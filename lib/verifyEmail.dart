@@ -19,18 +19,45 @@ class _verifyEmailState extends State<verifyEmail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-      child: Center(
-        child: RaisedButton(
-          onPressed: (){
-            getUserInfo();
-          },
-          child: Text('Enabled Button', style: TextStyle(fontSize: 20)),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          //
+          Container(
+            padding: EdgeInsets.only(top: 50, bottom: 15, left: 0, right: 0),
+            child: Column(
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: () {
+                    print("hello world!");
+                  },
+                  child: const Text('Enabled Button', style: TextStyle(fontSize: 20)),
+                )
+              ],
+            ),
           ),
-        )
+          //
+          //
+          Container(
+            padding: EdgeInsets.only(top: 150, bottom: 15, left: 0, right: 0),
+            child: Column(
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: () {
+                    print("hello world!");
+                  },
+                  child: const Text('Enabled Button', style: TextStyle(fontSize: 20)),
+                )
+              ],
+            ),
+          )
+          //
+        ],
       )
     );
   }
+  //this called auto on page oad or when user clicks button
   getUserInfo() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
