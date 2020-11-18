@@ -25,9 +25,10 @@ dependencies:
     sdk: flutter
   http:
   crypto: ^2.1.2
+  flutter_session: ^0.1.1
   shared_preferences: ^0.5.2
   audioplayers: ^0.16.2
-  noise_meter: ^1.2.0+1
+  noise_meter: ^2.0.0
   fluttertoast: ^7.1.1
   flutter_launcher_icons: ^0.8.1
   flutter_launcher_name: ^0.0.1

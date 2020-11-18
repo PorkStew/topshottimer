@@ -82,7 +82,7 @@ checkUserInformation(context) async {
       } else if (status == "verified" && id != null) {
         print("User ID: " + id);
         print("user details is all in order");
-        Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
+       // Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
       }
       //no shared preference data is found
     }else

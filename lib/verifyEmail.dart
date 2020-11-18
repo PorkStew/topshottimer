@@ -18,14 +18,16 @@ class _verifyEmailState extends State<verifyEmail> {
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+      body: Container(
       child: Center(
         child: RaisedButton(
           onPressed: (){
             getUserInfo();
           },
           child: Text('Enabled Button', style: TextStyle(fontSize: 20)),
-        ),
+          ),
+        )
       )
     );
   }

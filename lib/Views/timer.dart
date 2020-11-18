@@ -53,7 +53,7 @@ class _timerAreaState extends State<timerArea> {
 
   bool _isRecording = false;
   StreamSubscription<NoiseReading> _noiseSubscription;
-  NoiseMeter _noiseMeter = new NoiseMeter();
+  //NoiseMeter _noiseMeter = new NoiseMeter();
   List<String> arrShots = List<String>();
   List<int> arrMinutes = List<int>();
   List<int> arrSeconds = List<int>();
@@ -181,7 +181,7 @@ class _timerAreaState extends State<timerArea> {
   }
   void start() async {
     try {
-      _noiseSubscription = _noiseMeter.noiseStream.listen(onData);
+      //_noiseSubscription = _noiseMeter.noiseStream.listen(onData);
     } on NoiseMeter catch (exception) {
       print(exception);
     }
