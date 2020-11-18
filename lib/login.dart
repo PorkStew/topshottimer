@@ -81,7 +81,7 @@ class LoginState extends  State<Login> {
                         ..onTap = () {
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) =>
-                                  resetPassword.resetPassword()));
+                                  resetPassword.resetPassword(email.text)));
                         }
                   )
               ),
@@ -111,7 +111,7 @@ class LoginState extends  State<Login> {
                   ),
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => signup.FormScreen(email.text)));
+                        builder: (context) => signup.FormScreen("my name is jeff")));
                   }
               )
             ],
@@ -144,18 +144,24 @@ class LoginState extends  State<Login> {
     print(id);
     print(status);
     print("dddd");
+    //display message because they are not a user
     if (status == "notuser") {
       print("we don't have this user");
+      createError();
     }
+    //is a user but they haven't verified their email address
     else if (status == "nonverified" && id != null) {
       print("we have this user but they are not verified");
       saveUserInformation(id, email, hashedPassword);
       Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail()));
-    } else if (status == "verified" && id != null) {
+    }
+    //is a user and is veried email so they can use the app
+    else if (status == "verified" && id != null) {
       print("user details is all in order");
       saveUserInformation(id, email, hashedPassword);
       Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
     } else{
+
   }
 }
 //takes the users information and stores it in shared preferences
@@ -165,5 +171,25 @@ saveUserInformation(var id, String email, String hashedPassword) async{
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
   }
+  Future createError(){
 
+    AlertDialog alert = AlertDialog(
+      title: Text("Inccorrect details!"),
+      actions:[
+        FlatButton(child: Text("okay"),
+          onPressed: () {
+            Navigator.pop(context);
+          },),
+      ],
+    );
+    return showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return alert;
+        }
+    );
+    //saveUserInformation(id, email, hashedPassword);
+    //go to login screen
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => ));
+  }
 }

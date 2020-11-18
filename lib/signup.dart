@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:topshottimer/verifyEmail.dart' as verify;
+import 'package:topshottimer/login.dart' as Login;
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FormScreen extends StatefulWidget {
   //accepts email from the login if they have entered one
@@ -190,6 +194,7 @@ class FormScreenState extends  State<FormScreen> {
     var bytes = utf8.encode(password);
     var digest = sha256.convert(bytes);
     hashedPassword = digest.toString();
+    print(hashedPassword);
     //this decodes the hashed password
     //var de = utf8.decode(bytes);
     //print(de);
@@ -205,18 +210,60 @@ class FormScreenState extends  State<FormScreen> {
             "password": hashedPassword,
           }
       );
+     // saveUserInformation(id, email, hashedPassword);
       //decodes incoming php data
-      var data = json.decode(res.body);
-      print(data);
-      if(data == false){
-        print("not a user so account will be created");
-        print("once sent to the verify email page then go to login and get the id there");
-      } else if(data == true){
-        print("Already a User");
+      Map<String, dynamic> data = json.decode(res.body);
+      String id = data['id'];
+      String status = data["status"];
+      print(id);
+      print(status);
+      if(id != "" || status == "notuser")
+      {
+         print("is not a user and isnt verified");
+         saveUserInformation(id, email, hashedPassword);
+         Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail()));
+
+      } else if(id != "" || status == "user"){
+        print("this is a user and is verified");
+        //should print like an error saying user already exists with that email.
+        AlertDialog alert = AlertDialog(
+          title: Text("Account already exits with this email address!"),
+          actions:[
+            FlatButton(child: Text("okay"),
+              onPressed: () {
+                Navigator.pop(context);
+              },),
+          ],
+        );
+        return showDialog(
+          context: context,
+          builder: (BuildContext context){
+            return alert;
+          }
+        );
+        //saveUserInformation(id, email, hashedPassword);
+        //go to login screen
+       // Navigator.push(context, MaterialPageRoute(builder: (context) => ));
       }
+      //var data = json.decode(res.body);
+      //print(data);
+      // if(data == false){
+      //   print("not a user so account will be created");
+      //   print("once sent to the verify email page then go to login and get the id there");
+      // } else if(data == true){
+      //   print("Already a User");
+      // }
       //print("account created");
     }catch (error) {
       print(error.toString());
     }
+  }
+
+  //takes the users information and stores it in shared preferences
+  saveUserInformation(var id, String email, String hashedPassword) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('id', id);
+    await prefs.setString('email', email);
+    await prefs.setString('password', hashedPassword);
   }
 }
