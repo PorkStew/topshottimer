@@ -160,27 +160,32 @@ class FormScreenState extends  State<FormScreen> {
               _buildEmail(),
               _buildPassword(),
               _buildConPassword(),
-              SizedBox(height: 100),
-              RaisedButton(
-                child: Text(
-                  'Submit',
-                  style: TextStyle(color: Colors.blue, fontSize: 16),
-                ),
-                onPressed: () {
-                  if (!_formKey.currentState.validate()) {
-                    return;
-                  }
-                  _formKey.currentState.save();
-                  print(_firstName);
-                  print(_lastName);
-                  print(_email);
-                  print(_password);
-                  print(_conPassword);
-                  //Send to API
-                  //send user information to the database
-                  sendData(_firstName, _lastName, _email, _password);
-                },
-              )
+              SizedBox(height: 30),
+              SizedBox(
+                  width: 250,
+                  height: 40,
+                 child: RaisedButton(
+                    child: Text(
+                      'Submit',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    onPressed: () {
+                      if (!_formKey.currentState.validate()) {
+                        return;
+                      }
+                      _formKey.currentState.save();
+                      print(_firstName);
+                      print(_lastName);
+                      print(_email);
+                      print(_password);
+                      print(_conPassword);
+                      //Send to API
+                      //send user information to the database
+                      sendData(_firstName, _lastName, _email, _password);
+                    },
+                   color: Colors.red,
+                  )
+              ),
             ],
           ),
         ),
@@ -220,11 +225,12 @@ class FormScreenState extends  State<FormScreen> {
       if(id != "" || status == "notuser")
       {
          print("is not a user and isnt verified");
-         saveUserInformation(id, email, hashedPassword);
+         saveUserInformation(id, email, hashedPassword, "false");
          Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail()));
 
       } else if(id != "" || status == "user"){
         print("this is a user and is verified");
+        saveUserInformation(id, email, hashedPassword, "true");
         //should print like an error saying user already exists with that email.
         AlertDialog alert = AlertDialog(
           title: Text("Account already exits with this email address!"),
@@ -260,10 +266,11 @@ class FormScreenState extends  State<FormScreen> {
   }
 
   //takes the users information and stores it in shared preferences
-  saveUserInformation(var id, String email, String hashedPassword) async{
+  saveUserInformation(var id, String email, String hashedPassword, String status) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('id', id);
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
+    await prefs.setString('verfiy', status);
   }
 }
