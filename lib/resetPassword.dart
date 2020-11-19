@@ -44,6 +44,7 @@ class _resetPasswordState extends State<resetPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(title: Text("Password Reset")),
       body: Column(
         children: [
           Container(
@@ -80,15 +81,21 @@ class _resetPasswordState extends State<resetPassword> {
                     padding: EdgeInsets.only(top: 15),
                     child: Column(
                       children: <Widget>[
-                        RaisedButton(
+                        SizedBox(height: 20,),
+                        SizedBox(
+                          width: 250,
+                          height: 40,
+                        child: RaisedButton(
                           child: Text('Submit',
-                            style: TextStyle(color: Colors.blue, fontSize: 16),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                           onPressed: () {
                             print("email below");
                             print(email.text);
                             resetPassword(email.text);
                           },
+                          color: Colors.red,
+                        ),
                         ),
                       ],
                     ),

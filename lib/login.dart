@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:topshottimer/Views/PageSelector.dart';
+import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 import 'package:topshottimer/signup.dart' as signup;
 import 'package:topshottimer/resetPassword.dart' as resetPassword;
 import 'package:http/http.dart' as http;
@@ -20,7 +20,7 @@ class LoginState extends  State<Login> {
   String _email;
   String _password;
   final email = TextEditingController();
-  final passwords = TextEditingController();
+  final password = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -36,7 +36,7 @@ class LoginState extends  State<Login> {
         return null;
       },
       onSaved: (String value) {
-        _email = value;
+        email.text = value;
       },
     );
   }
@@ -46,6 +46,7 @@ class LoginState extends  State<Login> {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Password'),
       obscureText: true,
+      controller: password,
       // maxLength: 10,
       validator: (String value) {
         if (value.isEmpty) {
@@ -54,15 +55,13 @@ class LoginState extends  State<Login> {
         return null;
       },
       onSaved: (String value) {
-        _password = value;
+        password.text = value;
       },
     );
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      backgroundColor: Colors.blueGrey,
       body: Container(
         margin: EdgeInsets.all(24),
         child: Form(
@@ -70,50 +69,90 @@ class LoginState extends  State<Login> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(35.0),
+              child: Image.asset("assets/icon.png",)
+              ),
+              SizedBox(height: 30),
               _buildEmail(),
               _buildPassword(),
               SizedBox(height: 30),
-              RichText(
-                  text: TextSpan(
-                      text: "Forgot Password?",
-                      style: TextStyle(color: Colors.black),
-                      recognizer: new TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) =>
-                                  resetPassword.resetPassword(email.text)));
-                        }
+              Row(
+                children: [
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+              child: Divider(
+              color: Colors.black,
+                thickness: 2,
+              )
+              ),
+              ),
+                  RichText(
+                      text: TextSpan(
+                          text: "Forgot Password?",
+                          style: TextStyle(color: Colors.blue),
+                          recognizer: new TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) =>
+                                      resetPassword.resetPassword(email.text)));
+                            }
+                      )
+                  ),
+                  Expanded(
+                    child: Container(
+                        margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                  child: Divider(
+                    color: Colors.black,
+                    thickness: 2,
                   )
+                    )
+                  ),
+                ],
               ),
               SizedBox(height: 30),
-              RaisedButton(
-                child: Text('Submit',
-                  style: TextStyle(color: Colors.blue, fontSize: 16),
-
-                ),
-                onPressed: () {
-                  if (!_formKey.currentState.validate()) {
-                    return;
-                  }
-                  _formKey.currentState.save();
-                  print(_email);
-                  print(_password);
-                  print("Hello World");
-                  //saveData(context);
-                  //Send to API
-                  updateData(_email, _password);
-                },
-              ),
-              RaisedButton(
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(color: Colors.blue, fontSize: 16),
+              SizedBox(
+                width: 250,
+               height: 40,
+               child: RaisedButton(
+                  child: Text('Sign In',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => signup.FormScreen("my name is jeff")));
-                  }
-              )
+                    if (!_formKey.currentState.validate()) {
+                      return;
+                    }
+                    _formKey.currentState.save();
+                    print("fuck fuck");
+                    print(email.text);
+                    print(password.text);
+                    print("Hello World");
+                    //saveData(context);
+                    //Send to API
+                    updateData(email.text, password.text);
+                  },
+                 color: Colors.red,
+                ),
+              ),
+              SizedBox(height: 20,),
+              SizedBox(
+                width: 250,
+                height: 40,
+                child: RaisedButton(
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      onPressed: () {
+                        print("email hererererererere");
+                        print(email.text);
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => signup.FormScreen(email.text)));
+                      },
+                    color: Colors.red,
+                  )
+              ),
             ],
           ),
         ),
@@ -152,24 +191,25 @@ class LoginState extends  State<Login> {
     //is a user but they haven't verified their email address
     else if (status == "nonverified" && id != null) {
       print("we have this user but they are not verified");
-      saveUserInformation(id, email, hashedPassword);
+      saveUserInformation(id, email, hashedPassword, "false");
       Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail()));
     }
-    //is a user and is veried email so they can use the app
+    //is a user and is verified email so they can use the app
     else if (status == "verified" && id != null) {
       print("user details is all in order");
-      saveUserInformation(id, email, hashedPassword);
-      //Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
+      saveUserInformation(id, email, hashedPassword, "true");
+      Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
     } else{
 
   }
 }
 //takes the users information and stores it in shared preferences
-saveUserInformation(var id, String email, String hashedPassword) async{
+saveUserInformation(var id, String email, String hashedPassword, String status) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('id', id);
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
+    await prefs.setString('verfiy', status);
   }
   Future createError(){
 
