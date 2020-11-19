@@ -6,29 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/PageSelector.dart';
 import 'package:topshottimer/signup.dart' as signup;
 import 'package:topshottimer/resetPassword.dart' as resetPassword;
-import 'package:flutter_session/flutter_session.dart';
 import 'package:http/http.dart' as http;
-import 'package:topshottimer/views/timer.dart' as TimerPage;
 import 'package:topshottimer/verifyEmail.dart' as verify;
-
-//
-// void main() {
-//   runApp(MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   //root widget
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Top Shot Timer',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: Login() ,
-//     );
-//   }
-// }
 
 class Login extends StatefulWidget {
   @override
@@ -79,7 +58,6 @@ class LoginState extends  State<Login> {
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +81,7 @@ class LoginState extends  State<Login> {
                         ..onTap = () {
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) =>
-                                  resetPassword.resetPassword()));
+                                  resetPassword.resetPassword(email.text)));
                         }
                   )
               ),
@@ -133,7 +111,7 @@ class LoginState extends  State<Login> {
                   ),
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => signup.FormScreen(email.text)));
+                        builder: (context) => signup.FormScreen("my name is jeff")));
                   }
               )
             ],
@@ -166,31 +144,52 @@ class LoginState extends  State<Login> {
     print(id);
     print(status);
     print("dddd");
+    //display message because they are not a user
     if (status == "notuser") {
       print("we don't have this user");
-      //Navigator.push(
-      //    context, MaterialPageRoute(builder: (context) => login.Login()));
+      createError();
     }
+    //is a user but they haven't verified their email address
     else if (status == "nonverified" && id != null) {
       print("we have this user but they are not verified");
       saveUserInformation(id, email, hashedPassword);
       Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail()));
-    } else if (status == "verified" && id != null) {
+    }
+    //is a user and is veried email so they can use the app
+    else if (status == "verified" && id != null) {
       print("user details is all in order");
       saveUserInformation(id, email, hashedPassword);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
+      //Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
     } else{
- // Navigator.push(
- // context, MaterialPageRoute(builder: (context) => login.Login()));
+
   }
 }
-
+//takes the users information and stores it in shared preferences
 saveUserInformation(var id, String email, String hashedPassword) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('id', id);
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => signup.FormScreen("something good")));
   }
+  Future createError(){
 
+    AlertDialog alert = AlertDialog(
+      title: Text("Inccorrect details!"),
+      actions:[
+        FlatButton(child: Text("okay"),
+          onPressed: () {
+            Navigator.pop(context);
+          },),
+      ],
+    );
+    return showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return alert;
+        }
+    );
+    //saveUserInformation(id, email, hashedPassword);
+    //go to login screen
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => ));
+  }
 }
