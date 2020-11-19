@@ -39,7 +39,23 @@ class _checkUserState extends State<checkUser> {
   }
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+
+            Center(
+              child:
+              CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color> (Colors.red),
+            ),),
+
+          ],
+        ),
+      ),
+    );
   }
 }
 //acts like a auto login system that will check if shared preferences has user information and will show a screen depending on that information
@@ -82,7 +98,7 @@ checkUserInformation(context) async {
       } else if (status == "verified" && id != null) {
         print("User ID: " + id);
         print("user details is all in order");
-       // Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
       }
       //no shared preference data is found
     }else

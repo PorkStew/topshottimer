@@ -159,7 +159,7 @@ class LoginState extends  State<Login> {
     else if (status == "verified" && id != null) {
       print("user details is all in order");
       saveUserInformation(id, email, hashedPassword);
-      //Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
     } else{
 
   }

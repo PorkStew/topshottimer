@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   http:
+  permission_handler: ^5.0.1+1
   crypto: ^2.1.2
   flutter_session: ^0.1.1
   shared_preferences: ^0.5.2
