@@ -185,8 +185,10 @@ class LoginState extends  State<Login> {
     print("dddd");
     //display message because they are not a user
     if (status == "notuser") {
+      //saveUserInformation("1", "donovan@simplx.co.za", "e1a7b8ad45f95c9d0f401381236891d369ca80790393e307805e1dd700f8ecca", "true");
       print("we don't have this user");
-      createError();
+      //Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+      //createError();
     }
     //is a user but they haven't verified their email address
     else if (status == "nonverified" && id != null) {

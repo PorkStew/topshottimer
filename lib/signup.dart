@@ -199,7 +199,7 @@ class FormScreenState extends  State<FormScreen> {
     var bytes = utf8.encode(password);
     var digest = sha256.convert(bytes);
     hashedPassword = digest.toString();
-    print(hashedPassword);
+    print("*****************-" + hashedPassword);
     //this decodes the hashed password
     //var de = utf8.decode(bytes);
     //print(de);
