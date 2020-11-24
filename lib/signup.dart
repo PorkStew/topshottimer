@@ -7,6 +7,9 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+//TODO better handling of errors when they click the wrong link
+//TODO if they are verified then the system must send a different file to display that they are already verified.
+//have a count here or login and display already a user as a thing or not a user
 class FormScreen extends StatefulWidget {
   //accepts email from the login if they have entered one
   String something = "First Name";
@@ -153,7 +156,7 @@ class FormScreenState extends  State<FormScreen> {
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               _buildFirstName(),
               _buildLastName(),
@@ -199,6 +202,7 @@ class FormScreenState extends  State<FormScreen> {
     var bytes = utf8.encode(password);
     var digest = sha256.convert(bytes);
     hashedPassword = digest.toString();
+    print("this is the hashed password");
     print(hashedPassword);
     //this decodes the hashed password
     //var de = utf8.decode(bytes);
@@ -215,20 +219,18 @@ class FormScreenState extends  State<FormScreen> {
             "password": hashedPassword,
           }
       );
-     // saveUserInformation(id, email, hashedPassword);
-      //decodes incoming php data
       Map<String, dynamic> data = json.decode(res.body);
       String id = data['id'];
       String status = data["status"];
       print(id);
       print(status);
-      if(id != "" || status == "notuser")
+      if(id == "" || status == "notuser")
       {
          print("is not a user and isnt verified");
          saveUserInformation(id, email, hashedPassword, "false");
          Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail()));
 
-      } else if(id != "" || status == "user"){
+      } else if(id != "" && status == "user"){
         print("this is a user and is verified");
         saveUserInformation(id, email, hashedPassword, "true");
         //should print like an error saying user already exists with that email.
@@ -247,19 +249,7 @@ class FormScreenState extends  State<FormScreen> {
             return alert;
           }
         );
-        //saveUserInformation(id, email, hashedPassword);
-        //go to login screen
-       // Navigator.push(context, MaterialPageRoute(builder: (context) => ));
       }
-      //var data = json.decode(res.body);
-      //print(data);
-      // if(data == false){
-      //   print("not a user so account will be created");
-      //   print("once sent to the verify email page then go to login and get the id there");
-      // } else if(data == true){
-      //   print("Already a User");
-      // }
-      //print("account created");
     }catch (error) {
       print(error.toString());
     }

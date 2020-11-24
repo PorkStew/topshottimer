@@ -16,12 +16,12 @@ class Login extends StatefulWidget {
   }
 }
 
-class LoginState extends  State<Login> {
-  String _email;
-  String _password;
+class LoginState extends State<Login> {
+  //variable declarations
+  int count = 0;
+  int displayNoAccount = 0;
   final email = TextEditingController();
   final password = TextEditingController();
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   //email widget
@@ -59,11 +59,12 @@ class LoginState extends  State<Login> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.all(24),
+        margin: EdgeInsets.all(20),
         child: Form(
           key: _formKey,
           child: Column(
@@ -71,88 +72,111 @@ class LoginState extends  State<Login> {
             children: <Widget>[
               ClipRRect(
                   borderRadius: BorderRadius.circular(35.0),
-              child: Image.asset("assets/icon.png",)
-              ),
+                  child: Image.asset(
+                    "assets/icon.png",
+                  )),
               SizedBox(height: 30),
-              _buildEmail(),
-              _buildPassword(),
+              Container(
+                margin: EdgeInsets.only(left: 10, right: 20),
+                child: Container(
+                  child: Column(
+                    children: [
+                      _buildEmail(),
+                      _buildPassword(),
+                    ],
+                  ),
+                ),
+              ),
               SizedBox(height: 30),
               Row(
                 children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 10.0, right: 20.0),
-              child: Divider(
-              color: Colors.black,
-                thickness: 2,
-              )
-              ),
-              ),
+                  Expanded(
+                    child: Container(
+                        margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                        child: Divider(
+                          color: Colors.black,
+                          thickness: 2,
+                        )),
+                  ),
                   RichText(
                       text: TextSpan(
                           text: "Forgot Password?",
                           style: TextStyle(color: Colors.blue),
                           recognizer: new TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) =>
-                                      resetPassword.resetPassword(email.text)));
-                            }
-                      )
-                  ),
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => resetPassword
+                                          .resetPassword(email.text)));
+                            })),
                   Expanded(
-                    child: Container(
-                        margin: const EdgeInsets.only(left: 10.0, right: 20.0),
-                  child: Divider(
-                    color: Colors.black,
-                    thickness: 2,
-                  )
-                    )
-                  ),
+                      child: Container(
+                          margin:
+                              const EdgeInsets.only(left: 10.0, right: 20.0),
+                          child: Divider(
+                            color: Colors.black,
+                            thickness: 2,
+                          ))),
                 ],
               ),
               SizedBox(height: 30),
               SizedBox(
                 width: 250,
-               height: 40,
-               child: RaisedButton(
-                  child: Text('Sign In',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                  onPressed: () {
-                    if (!_formKey.currentState.validate()) {
-                      return;
-                    }
-                    _formKey.currentState.save();
-                    print("fuck fuck");
-                    print(email.text);
-                    print(password.text);
-                    print("Hello World");
-                    //saveData(context);
-                    //Send to API
-                    updateData(email.text, password.text);
-                  },
-                 color: Colors.red,
-                ),
-              ),
-              SizedBox(height: 20,),
-              SizedBox(
-                width: 250,
                 height: 40,
                 child: RaisedButton(
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      onPressed: () {
-                        print("email hererererererere");
-                        print(email.text);
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => signup.FormScreen(email.text)));
-                      },
+                    child: Text(
+                      'Sign In',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    onPressed: () {
+                      if (!_formKey.currentState.validate()) {
+                        return;
+                      }
+                      _formKey.currentState.save();
+                      print("fuck fuck");
+                      print(email.text);
+                      print(password.text);
+                      print("Hello World");
+                      //saveData(context);
+                      //Send to API
+                      updateData(email.text, password.text);
+                      print("count here:");
+                      print(count);
+                      if (count > displayNoAccount) {
+                        createAccount();
+                      }
+                      count++;
+                    },
                     color: Colors.red,
-                  )
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: BorderSide(color: Colors.red))),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                  width: 250,
+                  height: 40,
+                  child: RaisedButton(
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    onPressed: () {
+                      print(email.text);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  signup.FormScreen(email.text)));
+                    },
+                    color: Colors.red,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: BorderSide(color: Colors.red)),
+                  )),
             ],
           ),
         ),
@@ -167,14 +191,13 @@ class LoginState extends  State<Login> {
     hashedPassword = digest.toString();
 
     var url = 'https://www.topshottimer.co.za/login.php';
-    var res = await http.post(
-        Uri.encodeFull(url), headers: {"Accept": "application/jason"},
-        body: {
-          //get this information from user defaults
-          "emailAddress": email,
-          "password": hashedPassword,
-        }
-    );
+    var res = await http.post(Uri.encodeFull(url), headers: {
+      "Accept": "application/jason"
+    }, body: {
+      //get this information from user defaults
+      "emailAddress": email,
+      "password": hashedPassword,
+    });
     print("before res.body");
     Map<String, dynamic> data = json.decode(res.body);
     String id = data['id'];
@@ -186,48 +209,120 @@ class LoginState extends  State<Login> {
     //display message because they are not a user
     if (status == "notuser") {
       print("we don't have this user");
-      createError();
+      if (count <= displayNoAccount) {
+        incorrectDetails();
+      }
     }
     //is a user but they haven't verified their email address
     else if (status == "nonverified" && id != null) {
       print("we have this user but they are not verified");
       saveUserInformation(id, email, hashedPassword, "false");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => verify.verifyEmail()));
     }
     //is a user and is verified email so they can use the app
     else if (status == "verified" && id != null) {
       print("user details is all in order");
       saveUserInformation(id, email, hashedPassword, "true");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
-    } else{
-
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+    } else {}
   }
-}
+
 //takes the users information and stores it in shared preferences
-saveUserInformation(var id, String email, String hashedPassword, String status) async{
+  saveUserInformation(
+      var id, String email, String hashedPassword, String status) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('id', id);
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
     await prefs.setString('verfiy', status);
   }
-  Future createError(){
 
+  Future incorrectDetails() {
     AlertDialog alert = AlertDialog(
       title: Text("Inccorrect details!"),
-      actions:[
-        FlatButton(child: Text("okay"),
+      actions: [
+        FlatButton(
+          child: Text("okay"),
           onPressed: () {
             Navigator.pop(context);
-          },),
+          },
+        ),
       ],
     );
     return showDialog(
         context: context,
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return alert;
-        }
+        });
+    //saveUserInformation(id, email, hashedPassword);
+    //go to login screen
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => ));
+  }
+
+  Future createAccount() {
+    SimpleDialog carDialog = SimpleDialog(
+      contentPadding: EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            SizedBox(
+              height: 100,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: InkWell(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(6)),
+                        color: Colors.lightBlueAccent,
+                      ),
+                      height: 45,
+                      child: Center(
+                        child: Text("ssss"
+                          //allTranslations.text('wait_enroute').toUpperCase(),
+                        //  textAlign: TextAlign.center,
+                         // style: Fonts.appFont(context,
+                            //  bold: true, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(),
+                Expanded(
+                  child: InkWell(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(6)),
+                        color: Colors.lightBlueAccent,
+                      ),
+                      height: 45,
+                      child: Center(
+                        child: Text(
+                          allTranslations.text('wait_enroute').toUpperCase(),
+                          textAlign: TextAlign.center,
+                          style: Fonts.appFont(context,
+                              bold: true, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
+
+    showDialog(context: context, builder: (context) => carDialog);
     //saveUserInformation(id, email, hashedPassword);
     //go to login screen
     // Navigator.push(context, MaterialPageRoute(builder: (context) => ));
