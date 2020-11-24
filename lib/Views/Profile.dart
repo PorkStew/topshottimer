@@ -12,14 +12,20 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
     Future fUSerID;
+    Future fDataRetrieved;
+
 
     String sID;
+
+    List<String> arrStringID = List<String>();
+    List<String> arrStringName = List<String>();
+    List<String> arrTotalShots = List<String>();
+    List<String> arrTotalTime = List<String>();
 
     @override
     void initState() {
       super.initState();
       fUSerID = _getID();
-
     }
 
 
@@ -33,10 +39,43 @@ class _ProfileState extends State<Profile> {
     }
     _getID() async{
     sID = await userID();
+    var url = 'https://www.topshottimer.co.za/viewStrings.php';
+    var res = await http.post(
+        Uri.encodeFull(url), headers: {"Accept": "application/jason"},
+        body: {
+          //get this information from user defaults
+          "userID": sID,
+        }
+    );
+    //print(json.decode(res.body));
+
+
+    print("before res.body");
+
+    List<dynamic> data = json.decode(res.body);
+    int iLength = data.length;
+    print("Length of list: " + iLength.toString());
+    var id = data;
+    print(id);
+    print(id[0]['userID']);
+
+    for(int iPopulate = 0; iPopulate<=iLength-1; iPopulate++)
+    {
+      arrStringID.add(id[iPopulate]['stringId']);
+      arrStringName.add(id[iPopulate]['stringName']);
+      arrTotalShots.add(id[iPopulate]['totalShots']);
+      arrTotalTime.add(id[iPopulate]['totalTime']);
+    }
+
+    //print(arrStringName[0].toString());
+    for(int iPrint = 0; iPrint<=iLength-1; iPrint++)
+    {
+      //print(arrStringName[iPrint]);
+      print("String ID: " + arrStringID[iPrint]+ ", String Name: " + arrStringName[iPrint]+ ", Total Shots: " + arrTotalShots[iPrint].toString() + ", Total Time: " + arrTotalTime[iPrint]);
+    }
 
     return userID();
   }
-
 
 
   @override
@@ -49,13 +88,72 @@ class _ProfileState extends State<Profile> {
       switch (snapshot.connectionState) {
         case ConnectionState.active:
         case ConnectionState.waiting:
-          return Text(''); //or a placeholder
+        //updateData(sID);
+        return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: SizedBox(
+                height: 100,
+                width: 100,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color> (Colors.red),
+                  strokeWidth: 5.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
         case ConnectionState.done:
           if (snapshot.hasError) {
             return Text('Error Here: ${snapshot.error}');
           } else {
+            print("Got into widget");
             updateData(sID);
-            return Text(sID, style: TextStyle(fontSize: 35),);
+            return Column(
+                children: <Widget> [
+                  Flexible(
+                    child:
+                    new ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: arrStringID.length,
+                      itemBuilder: (BuildContext context, int index){
+                        return Container(
+                            child:Column(
+                              children: <Widget>[
+                                Card(
+                                  child: Row(
+                                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                    children: <Widget>[
+
+                                      Text(arrStringName[index],style: TextStyle(fontSize: 30, color: Colors.black)),
+                                      Spacer(),
+                                      Text(arrTotalShots[index],style: TextStyle(fontSize: 30)),
+                                      Spacer(),
+                                      Text(arrTotalTime[index],style: TextStyle(fontSize: 30)),
+                                      Spacer(),
+
+                                    ],
+                                  ),
+                                ),
+
+                              ],
+                            )
+
+
+
+                        );
+                      },
+                    ),
+                  ),
+
+                ]
+            );
           }
       }
         },
@@ -63,7 +161,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-    updateData(String sID) async {
+    Future updateData(String sID) async {
       var url = 'https://www.topshottimer.co.za/viewStrings.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
@@ -78,9 +176,28 @@ class _ProfileState extends State<Profile> {
       print("before res.body");
 
       List<dynamic> data = json.decode(res.body);
+      int iLength = data.length;
+      print("Length of list: " + iLength.toString());
       var id = data;
       print(id);
-      print(id[1]['userID']);
+      print(id[0]['userID']);
+
+      for(int iPopulate = 0; iPopulate<=iLength-1; iPopulate++)
+        {
+          arrStringID.add(id[iPopulate]['stringId']);
+          arrStringName.add(id[iPopulate]['stringName']);
+          arrTotalShots.add(id[iPopulate]['totalShots']);
+          arrTotalTime.add(id[iPopulate]['totalTime']);
+        }
+
+      //print(arrStringName[0].toString());
+      for(int iPrint = 0; iPrint<=iLength-1; iPrint++)
+      {
+        //print(arrStringName[iPrint]);
+        print("String ID: " + arrStringID[iPrint]+ ", String Name: " + arrStringName[iPrint]+ ", Total Shots: " + arrTotalShots[iPrint].toString() + ", Total Time: " + arrTotalTime[iPrint]);
+      }
+
+      return "True";
       //print(id['userID']);
 
       //   print("failed");

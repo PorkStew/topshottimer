@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:noise_meter/noise_meter.dart';
+import 'package:topshottimer/Views/Playground.dart';
 import './timer.dart';
 import './Profile.dart';
 import './Settings.dart';
