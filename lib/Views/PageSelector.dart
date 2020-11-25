@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:noise_meter/noise_meter.dart';
+import 'package:topshottimer/Views/Playground.dart';
 import './timer.dart';
 import './Profile.dart';
 import './Settings.dart';
@@ -16,6 +20,9 @@ class _pageSelectorState extends State<pageSelector> {
     Settings(),
   ];
 
+  StreamSubscription<NoiseReading> _noiseSubscription;
+  NoiseMeter _noiseMeter;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +32,9 @@ class _pageSelectorState extends State<pageSelector> {
         onTap: (int index) {
           setState(() {
             _selectedPage = index;
+
+
+
           });
 
         },
@@ -35,7 +45,7 @@ class _pageSelectorState extends State<pageSelector> {
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_outlined),
-              title: Text('Profile')
+              title: Text('Scores')
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings),
