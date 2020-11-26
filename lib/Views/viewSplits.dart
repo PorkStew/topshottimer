@@ -83,6 +83,7 @@ class viewSplitsState extends State<viewSplits> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(title: Text("View Splits")),
         body: Container(
           child: FutureBuilder(
             future: fUSerID,
