@@ -273,164 +273,168 @@ class _timerAreaState extends State<timerArea> {
   @override
   Widget build(BuildContext context) {
     var sliderValue = 0.0;
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.only(top: 35,bottom: 15,left: 0, right: 0),
-          //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
-        ),
-        Container(
-            padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-            child:
-            FlatButton(
-              //color: btnColor,
-              minWidth: 250,
-              height: 250,
-              shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
-              onPressed: () {
-                obtainUserDefaults();
-                if (didReset == true){
-                  print("Got into pressed method");
-                  if (startispressed = true){
-                    // startispressed = false;
-                    startstopwatch();
-                    isChanged = !isChanged;
-                    colorisChanged = !colorisChanged;
-                    setState(() {
-                      colorisChanged == true ? btnColor = new Color.fromRGBO(0, 255, 26, 100) : btnColor = Colors.red;
-                      isChanged == true ? buttonText = "Start" : buttonText = "Stop";
-                    });
-                  }
+    return Scaffold(
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 35,bottom: 15,left: 0, right: 0),
+            //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
-
-                }
-                else
-                {
-                  Fluttertoast.showToast(
-                      msg: "Please reset before starting another string",
-
-                      //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 3,
-                      backgroundColor: Colors.red,
-
-                      textColor: Colors.black,
-                      fontSize: 24.0
-                  );
-                  print("You need to reset");
-                }
-
-                //startispressed ? startstopwatch: null;
-              },
-              child: Text(buttonText, style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
-            )
-        ),
-        Container(
-            padding: EdgeInsets.only(top: 20,bottom: 0,left: 0, right: 0),
-            child:
-            Text(arrShots[arrShots.length-1], style: TextStyle(
-                fontSize: 80,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Digital-7'
-            ),)
-
-        ),
-        Container(
-            padding: EdgeInsets.only(top: 10,bottom: 30,left: 0, right: 0),
-            child:
-            Text((iCountShots).toString(), style: TextStyle(
-                fontSize: 80,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Digital-7'
-            ),)
-
-        ),
-
-        Row(
-
-            children: <Widget>[
-              Spacer(),
-
+          ),
+          Container(
+              padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+              child:
               FlatButton(
-                //color: Colors.red,
-                  minWidth: 170,
-                  height: 50,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Colors.black),),
-                  child: Text("Reset", style: TextStyle(fontSize: 25)),
-
-                  onPressed: () {
-                    if (isRunning == false){
-                      arrShots.clear();
-                      arrShots.add("00:00:00");
-                      iCountShots = 0;
-                      swatch.reset();
-                      stopRecorder();
-                      stoptimer();
-                      reset();
-                      //startstopwatch();
-                      didReset = true;
-                    } else{
-                      Fluttertoast.showToast(
-                          msg: "Please stop the timer before tapping reset",
-                          //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 3,
-                          backgroundColor: Colors.red,
-
-                          textColor: Colors.black,
-                          fontSize: 24.0
-                      );
+                //color: btnColor,
+                minWidth: 250,
+                height: 250,
+                shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
+                onPressed: () {
+                  obtainUserDefaults();
+                  if (didReset == true){
+                    print("Got into pressed method");
+                    if (startispressed = true){
+                      // startispressed = false;
+                      startstopwatch();
+                      isChanged = !isChanged;
+                      colorisChanged = !colorisChanged;
+                      setState(() {
+                        colorisChanged == true ? btnColor = new Color.fromRGBO(0, 255, 26, 100) : btnColor = Colors.red;
+                        isChanged == true ? buttonText = "Start" : buttonText = "Stop";
+                      });
                     }
 
 
-
                   }
-              ),
-              Spacer(),
-              FlatButton(
-                //color: Colors.blue,
-                  minWidth: 170,
-                  height: 50,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Colors.black),),
-                  child: Text("View String", style: TextStyle(fontSize: 25, )),
-                  onPressed: () {
-                    if(arrShots.length <= 1 ){
-                      print("Should get into alert");
+                  else
+                  {
+                    Fluttertoast.showToast(
+                        msg: "Please reset before starting another string",
 
-                      AlertDialog alert = AlertDialog(
-                        title: Text("Warning!"),
-                        content: Text("No shots registered. Please shoot a string of shots before viewing the string."),
-                        actions: [
-                          FlatButton(child: Text("Ok"),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },),                        ],
-                      );
+                        //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 3,
+                        backgroundColor: Colors.red,
 
-                      return showDialog(
-                          context: context,
-                          builder: (BuildContext context){
-                            return alert;
-                          }
-                      );
+                        textColor: Colors.black,
+                        fontSize: 24.0
+                    );
+                    print("You need to reset");
+                  }
+
+                  //startispressed ? startstopwatch: null;
+                },
+                child: Text(buttonText, style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
+              )
+          ),
+          Container(
+              padding: EdgeInsets.only(top: 20,bottom: 0,left: 0, right: 0),
+              child:
+              Text(arrShots[arrShots.length-1], style: TextStyle(
+                  fontSize: 80,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Digital-7'
+              ),)
+
+          ),
+          Container(
+              padding: EdgeInsets.only(top: 10,bottom: 30,left: 0, right: 0),
+              child:
+              Text((iCountShots).toString(), style: TextStyle(
+                  fontSize: 80,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Digital-7'
+              ),)
+
+          ),
+
+          Row(
+
+              children: <Widget>[
+                Spacer(),
+
+                FlatButton(
+                  //color: Colors.red,
+                    minWidth: 170,
+                    height: 50,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Colors.black),),
+                    child: Text("Reset", style: TextStyle(fontSize: 25)),
+
+                    onPressed: () {
+                      if (isRunning == false){
+                        arrShots.clear();
+                        arrShots.add("00:00:00");
+                        iCountShots = 0;
+                        swatch.reset();
+                        stopRecorder();
+                        stoptimer();
+                        reset();
+                        //startstopwatch();
+                        didReset = true;
+                      } else{
+                        Fluttertoast.showToast(
+                            msg: "Please stop the timer before tapping reset",
+                            //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 3,
+                            backgroundColor: Colors.red,
+
+                            textColor: Colors.black,
+                            fontSize: 24.0
+                        );
+                      }
+
+
 
                     }
-                    else
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
-                  }
-              ),
-              Spacer(),
+                ),
+                Spacer(),
+                FlatButton(
+                  //color: Colors.blue,
+                    minWidth: 170,
+                    height: 50,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Colors.black),),
+                    child: Text("View String", style: TextStyle(fontSize: 25, )),
+                    onPressed: () {
+                      if(arrShots.length <= 1 ){
+                        print("Should get into alert");
 
-            ]
+                        AlertDialog alert = AlertDialog(
+                          title: Text("Warning!"),
+                          content: Text("No shots registered. Please shoot a string of shots before viewing the string."),
+                          actions: [
+                            FlatButton(child: Text("Ok"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },),                        ],
+                        );
 
-        ),
+                        return showDialog(
+                            context: context,
+                            builder: (BuildContext context){
+                              return alert;
+                            }
+                        );
+
+                      }
+                      else
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
+                    }
+                ),
+                Spacer(),
+
+              ]
+
+          ),
 
 
-      ],
+        ],
+      )
     );
+
   }
 
 }
