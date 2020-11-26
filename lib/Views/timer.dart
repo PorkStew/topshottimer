@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/splits.dart';
+import 'package:topshottimer/Views/viewSplits.dart';
 
 const String testDevice = '';
 
