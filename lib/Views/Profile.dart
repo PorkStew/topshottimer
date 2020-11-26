@@ -133,20 +133,39 @@ class _ProfileState extends State<Profile> {
                             child:Column(
                               children: <Widget>[
                                 Card(
-                                  child: Row(
-                                     //mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-                                    children: <Widget>[
+                                  child: Container(
+                                    padding: new EdgeInsets.only(left: 10.0),
+                                    child: Column(
 
-                                      Text(arrStringName[index],style: TextStyle(fontSize: 30, color: Colors.black)),
-                                      Spacer(),
-                                      Text(arrTotalShots[index],style: TextStyle(fontSize: 30)),
-                                      Spacer(),
-                                      Text(arrTotalTime[index],style: TextStyle(fontSize: 30)),
-                                      Spacer(),
+                                      children: <Widget>[
+                                        Row(
+                                      children: <Widget>[
+
+                                      Text(arrStringName[index],style: TextStyle(fontSize: 24, color: Colors.red)),
+
+                                        ]),
+                                        Row(
+
+                                            children: <Widget>[
+
+                                              Text("Total Time: " + arrTotalTime[index],style: TextStyle(fontSize: 17)),
+                                              Spacer(),
+
+                                            ]),
+                                        Row(
+
+                                            children: <Widget>[
+
+
+                                              Text("Total Shots: " + arrTotalShots[index],style: TextStyle(fontSize: 17)),
+                                              Spacer(),
+                                            ]),
+
+
 
                                     ],
-                                  ),
+                                  ),)
                                 ),
 
                               ],
