@@ -25,8 +25,6 @@ class viewSplitsState extends State<viewSplits> {
   List<String> arrSplits = List<String>();
   String sID;
   Future fUSerID;
-  bool bVerfied;
-
   String sStringID;
 
   viewSplitsState(this.sStringID);
@@ -74,9 +72,6 @@ class viewSplitsState extends State<viewSplits> {
   }
 
   Future<String> userID() async {
-    while (bVerfied){
-
-    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.setDouble('userSensitivity', 50.00);
     String sUserID = await prefs.getString('id');
@@ -136,23 +131,29 @@ class viewSplitsState extends State<viewSplits> {
                                     child: Column(
                                       children: <Widget>[
                                         Card(
-                                          child: Row(
+                                          child: Container(
+                                              padding: new EdgeInsets.only(left: 10.0),
+                                              child: Column(
+
                                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                                             children: <Widget>[
 
+                                              Row(
+                                              children: <Widget>[
+                                              Text("Shot: "+(index + 1).toString(), style: TextStyle(fontSize: 24, color: Colors.red),),
+                                            ]
 
-                                              Text((index + 1).toString(),
-                                                style: TextStyle(fontSize: 30,
-                                                    color: Colors.black),),
-                                              Spacer(),
-                                              Text(arrSplits[index],
-                                                  style: TextStyle(fontSize: 30,
-                                                      color: Colors.black),
-                                                  textAlign: TextAlign.right),
-                                              Spacer(),
+                                            ),
+                                            Row(
+                                            children: <Widget>[
+                                              Text("Split Time: "+arrSplits[index],style: TextStyle(fontSize: 20,color: Colors.black),textAlign: TextAlign.right),
+                                            ]
+                                            )
+
 
                                             ],
+                                            )
                                           ),
                                         ),
 
