@@ -20,6 +20,8 @@ class LoginState extends State<Login> {
   //variable declarations
   int count = 0;
   int displayNoAccount = 0;
+  //TODO set this to six when release
+  int whenToDisplay = 4;
   final email = TextEditingController();
   final password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -138,21 +140,14 @@ class LoginState extends State<Login> {
                       print(email.text);
                       print(password.text);
                       print("Hello World");
-                      //saveData(context);
-                      //Send to API
                       updateData(email.text, password.text);
-                      print("count here:");
-                      print(count);
-                      if (count > displayNoAccount) {
-                        createAccount();
-                      }
-                      count++;
                     },
                     color: Colors.red,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.red))),
-              ),
+                       borderRadius: BorderRadius.circular(20),
+                    ),
+                        //side: BorderSide(color: Colors.red))),
+                )),
               SizedBox(
                 height: 20,
               ),
@@ -162,7 +157,7 @@ class LoginState extends State<Login> {
                   child: RaisedButton(
                     child: Text(
                       'Sign Up',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
                     onPressed: () {
                       print(email.text);
@@ -172,10 +167,10 @@ class LoginState extends State<Login> {
                               builder: (context) =>
                                   signup.FormScreen(email.text)));
                     },
-                    color: Colors.red,
+                    color: Colors.blueAccent,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.red)),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   )),
             ],
           ),
@@ -185,10 +180,13 @@ class LoginState extends State<Login> {
   }
 
   updateData(String email, String password) async {
+    print(email);
+    print(password);
     String hashedPassword = "";
     var bytes = utf8.encode(password);
     var digest = sha256.convert(bytes);
     hashedPassword = digest.toString();
+    print("update Datae");
 
     var url = 'https://www.topshottimer.co.za/login.php';
     var res = await http.post(Uri.encodeFull(url), headers: {
@@ -198,6 +196,7 @@ class LoginState extends State<Login> {
       "emailAddress": email,
       "password": hashedPassword,
     });
+
     print("before res.body");
     Map<String, dynamic> data = json.decode(res.body);
     String id = data['id'];
@@ -205,12 +204,23 @@ class LoginState extends State<Login> {
     print("ss");
     print(id);
     print(status);
+    print("jnsdfjndsfjnfds");
     print("dddd");
     //display message because they are not a user
     if (status == "notuser") {
-      print("we don't have this user");
-      if (count <= displayNoAccount) {
+      print("we don't have this usersss");
+      print("dssssssssssssssssssssssssssssss");
+      print(count);
+      print("hello worldjkl");
+      count++;
+      if(count < whenToDisplay){
         incorrectDetails();
+        print("2222222");
+        return;
+      } else {
+        createAccount();
+          count = 0;
+        return;
       }
     }
     //is a user but they haven't verified their email address
@@ -226,7 +236,9 @@ class LoginState extends State<Login> {
       saveUserInformation(id, email, hashedPassword, "true");
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
-    } else {}
+    } else {
+
+    }
   }
 
 //takes the users information and stores it in shared preferences
@@ -240,25 +252,8 @@ class LoginState extends State<Login> {
   }
 
   Future incorrectDetails() {
-    AlertDialog alert = AlertDialog(
-      title: Text("Inccorrect details!"),
-      actions: [
-        FlatButton(
-          child: Text("okay"),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ],
-    );
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
-    //saveUserInformation(id, email, hashedPassword);
-    //go to login screen
-    // Navigator.push(context, MaterialPageRoute(builder: (context) => ));
+
+
   }
 
   Future createAccount() {
@@ -284,7 +279,7 @@ class LoginState extends State<Login> {
                       ),
                       height: 45,
                       child: Center(
-                        child: Text("ssss"
+                        child: Text("TRY AGAIN"
                           //allTranslations.text('wait_enroute').toUpperCase(),
                         //  textAlign: TextAlign.center,
                          // style: Fonts.appFont(context,
@@ -305,11 +300,11 @@ class LoginState extends State<Login> {
                       ),
                       height: 45,
                       child: Center(
-                        child: Text(
-                          allTranslations.text('wait_enroute').toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: Fonts.appFont(context,
-                              bold: true, color: Colors.white),
+                        child: Text( "SIGN UP",
+                         // allTranslations.text('wait_enroute').toUpperCase(),
+                         // textAlign: TextAlign.center,
+                          //style: Fonts.appFont(context,
+                            //  bold: true, color: Colors.white),
                         ),
                       ),
                     ),
