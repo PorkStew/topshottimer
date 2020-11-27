@@ -21,7 +21,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
+      darkTheme: ThemeData.dark(),
       home: checkUser(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -65,6 +67,7 @@ class _checkUserState extends State<checkUser> {
 }
 //acts like a auto login system that will check if shared preferences has user information and will show a screen depending on that information
 checkUserInformation(context) async {
+  print("naais");
   //getting user information
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String id = await prefs.getString('id');
@@ -72,6 +75,7 @@ checkUserInformation(context) async {
   String hashedPassword = await prefs.getString('password');
   String verified = await prefs.get('verify');
   //checking that the shared preference information is not empty, then will try login
+
     if(id != null && email != null && hashedPassword != null) {
       var url = 'https://www.topshottimer.co.za/login.php';
       var res = await http.post(
@@ -90,8 +94,7 @@ checkUserInformation(context) async {
       //not a user at all
       if (status == "notuser") {
         print("we don't have this user");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => login.Login()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
       }
       //is a user but has not verified their email yet
       else if (status == "nonverified" && id != null) {
@@ -109,10 +112,8 @@ checkUserInformation(context) async {
         Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
       }
       //no shared preference data is found
-    }else
-      {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => login.Login()));
-      }
+    } else{
+      Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
+    }
 }
 

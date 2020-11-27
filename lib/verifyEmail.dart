@@ -103,6 +103,7 @@ class _verifyEmailState extends State<verifyEmail> {
             "emailAddress": email,
           }
       );
+      Map<String, dynamic> data = json.decode(res.body);
       // saveUserInformation(id, email, hashedPassword);
       //decodes incoming php data
       // Map<String, dynamic> data = json.decode(res.body);
@@ -126,6 +127,7 @@ class _verifyEmailState extends State<verifyEmail> {
     String verified = await prefs.getString('verify');
     if(verified == 'true'){
     //TODO: go to home page
+      Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
     }
     var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
     var res = await http.post(
