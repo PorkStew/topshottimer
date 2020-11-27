@@ -167,6 +167,56 @@ class viewSplitsState extends State<viewSplits> {
 
                             ),
                           ),
+                          FlatButton(
+                            child: Text("Delete String", style: TextStyle(color: Colors.red),),
+                            onPressed: () {
+                                showDialog(
+                                context: context,
+                                builder: (BuildContext context){
+                                  return AlertDialog(
+                                    title: Text("Delete String and Splits"),
+                                    content: Text("Are you sure you would like to delete this string?"),
+                                    actions: [
+                                      FlatButton(
+                                        child: Text("Cancel"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      FlatButton(
+                                        child: Text("Delete"),
+                                        onPressed: () {
+                                          deleteStringSplits();
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
+                                          showDialog(
+                                      context: context,
+                                      builder: (BuildContext context){
+                                        return AlertDialog(
+                                          title: Text("String Deleted"),
+                                          content: Text("Your string was deleted succesfully"),
+                                          actions: [
+                                            FlatButton(child: Text("Ok"),
+                                              onPressed: () {
+                                              Navigator.pop(context);
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                           },
+                                      )
+                                    ],
+                                  );
+
+                                }
+
+                                );
+
+                                    }
+                                                )            //deleteStringSplits();
+
+
+
 
                         ]
                     );
@@ -176,6 +226,18 @@ class viewSplitsState extends State<viewSplits> {
           ),
         ));
     //
+
+  }
+
+  deleteStringSplits() async{
+    var url = 'https://www.topshottimer.co.za/deleteStringSplits.php';
+    var res = await http.post(
+        Uri.encodeFull(url), headers: {"Accept": "application/jason"},
+        body: {
+          //get this information from user defaults
+          "stringId": sStringID,
+        }
+    );
 
   }
 
