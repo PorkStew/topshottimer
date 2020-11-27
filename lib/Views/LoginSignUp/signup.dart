@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:topshottimer/verifyEmail.dart' as verify;
-import 'package:topshottimer/login.dart' as Login;
+import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
+import 'package:topshottimer/Views/LoginSignUp/login.dart' as Login;
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:topshottimer/login.dart' as login;
-import 'package:topshottimer/verifyEmail.dart' as verify;
+import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
+import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 
