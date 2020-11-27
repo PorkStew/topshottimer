@@ -110,7 +110,7 @@ class _ProfileState extends State<Profile> {
       );
         case ConnectionState.done:
           if (snapshot.hasError) {
-            return Text('Error Here: ${snapshot.error}');
+            return Text('');
           } else {
             print("Got into widget");
             retrieveData(sID);
