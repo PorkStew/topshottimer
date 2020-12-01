@@ -5,6 +5,7 @@ import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
+import 'package:topshottimer/Themes.dart';
 
 
 //TODO: verified for shared preferences
@@ -18,10 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Top Shot Timer',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-      darkTheme: ThemeData.dark(),
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
+      //darkTheme:
       home: checkUser(),
       debugShowCheckedModeBanner: false,
     );
@@ -102,7 +102,7 @@ checkUserInformation(context) async {
         await prefs.setString('verify', 'false');
         print("User ID: " + id);
         print("we have this user but they are not verified");
-        Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
         //if details are correct and in the database then they can use the app.
       } else if (status == "verified" && id != null) {
         await prefs.setString('id', id);

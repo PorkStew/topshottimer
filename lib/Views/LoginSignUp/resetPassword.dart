@@ -86,8 +86,8 @@ class _resetPasswordState extends State<resetPassword> {
                           width: 250,
                           height: 40,
                         child: RaisedButton(
-                          child: Text('Submit',
-                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          child: Text('SUBMIT',
+                            style: TextStyle(color: Colors.black, fontSize: 20),
                           ),
                           onPressed: () {
                             print("email below");
@@ -95,6 +95,9 @@ class _resetPasswordState extends State<resetPassword> {
                             resetPassword(email.text);
                           },
                           color: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
                         ),
                       ],
