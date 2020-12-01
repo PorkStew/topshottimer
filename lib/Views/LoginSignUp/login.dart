@@ -22,7 +22,7 @@ class LoginState extends State<Login> {
   int count = 0;
   int displayNoAccount = 0;
   //TODO set this to six when release
-  int whenToDisplay = 1;
+  int whenToDisplay = 4;
   final email = TextEditingController();
   final password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -30,7 +30,9 @@ class LoginState extends State<Login> {
   //email widget
   Widget _buildEmail() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Email'),
+      decoration: InputDecoration(
+          labelText: 'Email',
+      ),
       controller: email,
       validator: (String value) {
         if (value.isEmpty) {
@@ -141,7 +143,9 @@ class LoginState extends State<Login> {
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
-                        _formKey.currentState.save();
+                        //_buildPassword();
+                       // _formKey.currentState.validate();
+                       // _formKey.currentState.save();
                         print("fuck fuck");
                         print(email.text);
                         print(password.text);
@@ -216,7 +220,6 @@ class LoginState extends State<Login> {
     //display message because they are not a user
     if (status == "notuser") {
       print("we don't have this usersss");
-      print("dssssssssssssssssssssssssssssss");
       print(count);
       print("hello worldjkl");
       count++;
@@ -235,7 +238,7 @@ class LoginState extends State<Login> {
       print("we have this user but they are not verified");
       saveUserInformation(id, email, hashedPassword, "false");
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => verify.verifyEmail()));
+          MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
     }
     //is a user and is verified email so they can use the app
     else if (status == "verified" && id != null) {
@@ -258,12 +261,11 @@ class LoginState extends State<Login> {
     await prefs.setString('verfiy', status);
   }
 
-  Future incorrectDetails() {
-
+incorrectDetails() {
 
   }
 
-  Future createAccount() {
+createAccount() {
     SimpleDialog carDialog = SimpleDialog(
       contentPadding: EdgeInsets.all(0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),

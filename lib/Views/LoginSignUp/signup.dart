@@ -169,9 +169,12 @@ class FormScreenState extends  State<FormScreen> {
                   height: 40,
                  child: RaisedButton(
                     child: Text(
-                      'Submit',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      'SUBMIT',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
+                   shape: RoundedRectangleBorder(
+                     borderRadius: BorderRadius.circular(20),
+                   ),
                     onPressed: () {
                       if (!_formKey.currentState.validate()) {
                         return;
@@ -186,6 +189,7 @@ class FormScreenState extends  State<FormScreen> {
                       //send user information to the database
                       sendData(_firstName, _lastName, _email, _password);
                     },
+
                    color: Colors.red,
                   )
               ),
@@ -228,27 +232,13 @@ class FormScreenState extends  State<FormScreen> {
       {
          print("is not a user and isnt verified");
          saveUserInformation(id, email, hashedPassword, "false");
-         Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail()));
+         Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
 
       } else if(id != "" && status == "user"){
         print("this is a user and is verified");
         saveUserInformation(id, email, hashedPassword, "true");
         //should print like an error saying user already exists with that email.
-        AlertDialog alert = AlertDialog(
-          title: Text("Account already exits with this email address!"),
-          actions:[
-            FlatButton(child: Text("okay"),
-              onPressed: () {
-                Navigator.pop(context);
-              },),
-          ],
-        );
-        return showDialog(
-          context: context,
-          builder: (BuildContext context){
-            return alert;
-          }
-        );
+        accountInUse();
       }
     }catch (error) {
       print(error.toString());
@@ -262,5 +252,51 @@ class FormScreenState extends  State<FormScreen> {
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
     await prefs.setString('verfiy', status);
+  }
+  accountInUse(){
+    SimpleDialog carDialog = SimpleDialog(
+      contentPadding: EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            Text("Account already in use!", style: TextStyle(fontSize: 20),),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: InkWell(
+                    onTap: (){
+                      print("CONFIRM");
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(6), bottomRight:  Radius.circular(6)),
+                        color: Colors.red,
+                      ),
+                      height: 45,
+                      child: Center(
+                        child: Text("CONFIRM",
+                            style: TextStyle(color: Colors.black, fontSize: 20)),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+
+    showDialog(context: context, builder: (context) => carDialog);
   }
 }
