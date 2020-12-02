@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart' as con;
 class resetPassword extends StatefulWidget {
   String something = "First Name";
   resetPassword(this.something);
@@ -15,12 +16,14 @@ class _resetPasswordState extends State<resetPassword> {
 
   String _email;
   String emailFromLogin;
-  final email = TextEditingController();
   _resetPasswordState(this.emailFromLogin);
+  final email = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Widget _buildEmail() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Email'),
-      controller: email,
+      initialValue: emailFromLogin,
+      //controller: email,
 
       validator: (String value) {
         if (value.isEmpty) {
@@ -35,6 +38,7 @@ class _resetPasswordState extends State<resetPassword> {
 
         return null;
       },
+      //controller: email,
       onSaved: (String value) {
         _email = value;
       },
@@ -74,7 +78,9 @@ class _resetPasswordState extends State<resetPassword> {
           ),
           Container(
             padding: EdgeInsets.only(top: 150,bottom: 15,left: 35, right: 35),
-              child: Column(
+              child: Form(
+                key: _formKey,
+                child: Column(
                 children: <Widget>[
                   _buildEmail(),
                   Container(
@@ -90,9 +96,12 @@ class _resetPasswordState extends State<resetPassword> {
                             style: TextStyle(color: Colors.black, fontSize: 20),
                           ),
                           onPressed: () {
+                            _formKey.currentState.save();
+                            print("EMAIL EAMIL resetPassword: " + emailFromLogin);
+                            print(emailFromLogin);
                             print("email below");
-                            print(email.text);
-                            resetPassword(email.text);
+                            print(_email);
+                            resetPassword(_email);
                           },
                           color: Colors.red,
                           shape: RoundedRectangleBorder(
@@ -104,6 +113,7 @@ class _resetPasswordState extends State<resetPassword> {
                     ),
                   )
                 ]
+                  ),
               )
           ),
         ],
@@ -143,6 +153,7 @@ class _resetPasswordState extends State<resetPassword> {
             "emailAddress": email,
           }
       );
+      Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
       // saveUserInformation(id, email, hashedPassword);
       //decodes incoming php data
       // Map<String, dynamic> data = json.decode(res.body);

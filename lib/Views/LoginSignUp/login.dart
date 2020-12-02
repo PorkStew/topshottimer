@@ -114,6 +114,7 @@ class LoginState extends State<Login> {
                             style: TextStyle(color: Colors.blueAccent),
                             recognizer: new TapGestureRecognizer()
                               ..onTap = () {
+                              print("EMAIL EMAIL: "  + email.text);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -312,6 +313,7 @@ createAccount() {
                   child: InkWell(
                     onTap: (){
                       print("SIGN UP");
+                      Navigator.pop(context);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => signup.FormScreen(email.text)));
                     },

@@ -49,7 +49,7 @@ class Themes {
 
   static final TextTheme _lightTextTheme = TextTheme(
     //bodyText1: TextStyle(color: Colors.red),
-    //bodyText2: TextStyle(color: Colors.red),
+    bodyText2: TextStyle(color: Colors.white),
     //button: TextStyle(color: Colors.red),
     //caption: TextStyle(color: Colors.red),
     //for text input color
