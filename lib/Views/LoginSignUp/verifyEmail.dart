@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
+import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:http/http.dart' as http;
 
 class verifyEmail extends StatefulWidget {
@@ -19,10 +20,10 @@ class verifyEmail extends StatefulWidget {
 
 class _verifyEmailState extends State<verifyEmail> {
   //variable declaration
-  String emailAddress = '';
-  int count = 0;
+  String _emailAddress = '';
+  int _count = 0;
   //get incoming variable
-  _verifyEmailState(this.emailAddress);
+  _verifyEmailState(this._emailAddress);
 
   @override
   void initState(){
@@ -58,7 +59,7 @@ class _verifyEmailState extends State<verifyEmail> {
                           Text("An email has been sent to:", textAlign: TextAlign.center, style:  TextStyle(
                               fontSize: 17,
                           ),),
-                          Text(emailAddress, style:  TextStyle(
+                          Text(_emailAddress, style:  TextStyle(
                               fontSize: 17,
                           ),),
                           SizedBox(
@@ -80,7 +81,6 @@ class _verifyEmailState extends State<verifyEmail> {
                                   style: TextStyle(color: Colors.blue),
                                   recognizer: new TapGestureRecognizer()
                                     ..onTap = () {
-                                        print("resend email here");
                                         getUserInfo();
                                     }
                               )
@@ -100,7 +100,6 @@ class _verifyEmailState extends State<verifyEmail> {
                         height: 40,
                        child: RaisedButton(
                           onPressed: (){
-                            print("df");
                             checkUserVerified();
                           },
                           child: Text(
@@ -126,7 +125,6 @@ class _verifyEmailState extends State<verifyEmail> {
   getUserInfo() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
-    print("email here");
     print(email);
     try{
       var url = 'https://www.topshottimer.co.za/mailerVerifyEmail.php';
@@ -139,34 +137,20 @@ class _verifyEmailState extends State<verifyEmail> {
       );
       Map<String, dynamic> data = json.decode(res.body);
       String status = data["status"];
-      print("the following is the users status: " + status);
-      if(status == "nonverified" && count != 0) {
+      if(status == "non-verified" && _count != 0) {
         emailSent();
       }
-      count++;
-      // saveUserInformation(id, email, hashedPassword);
-      //decodes incoming php data
-      // Map<String, dynamic> data = json.decode(res.body);
-      // String id = data['id'];
-      // String status = data["status"];
-      // print(id);
-      // print(status);
-
+      _count++;
     }catch (error) {
       print(error.toString());
     }
   }
   checkUserVerified() async{
-    //String hashedPassword = "";
-   // var bytes = utf8.encode(password);
-   // var digest = sha256.convert(bytes);
-   // hashedPassword = digest.toString();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
     String password = await prefs.getString('password');
     String verified = await prefs.getString('verify');
     if(verified == 'true'){
-    //TODO: go to home page
       Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
     }
     var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
@@ -178,32 +162,22 @@ class _verifyEmailState extends State<verifyEmail> {
           "password": password,
         }
     );
-    print("before res.body");
     Map<String, dynamic> data = json.decode(res.body);
     //String id = data['id'];
     String status = data["verified"];
-    //print("ss");
-    //print(id);
-    print(status);
-    //print("dddd");
     //display message because they are not a user
     if (status == "error") {
-      print("we don't have this user");
       //TODO should we not just return to login if there is no user
+      Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
     }
     //is a user but they haven't verified their email address
-    else if (status == "false") {
-      await prefs.setString('verify', "false");
-      print("we have this user but they are not verified");
-      print("email not verified");
+    else if (status == "non-verified") {
+      await prefs.setString('verify', "non-verified");
       notVerifiedError();
-      //saveUserInformation(id, email, hashedPassword);
-     // Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail()));
     }
     //is a user and is veried email so they can use the app
-    else if (status == "true") {
-      print("user details is all in order");
-      await prefs.setString('verify', "true");
+    else if (status == "verified") {
+      await prefs.setString('verify', "verified");
       //saveUserInformation(id, email, hashedPassword);
       Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
     } else{
@@ -214,7 +188,7 @@ class _verifyEmailState extends State<verifyEmail> {
   getEmail() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
-    emailAddress = email;
+    _emailAddress = email;
   }
   emailSent(){
     SimpleDialog carDialog = SimpleDialog(
@@ -236,7 +210,6 @@ class _verifyEmailState extends State<verifyEmail> {
                 Expanded(
                   child: InkWell(
                     onTap: (){
-                      print("OKAY");
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -282,7 +255,6 @@ class _verifyEmailState extends State<verifyEmail> {
                 Expanded(
                   child: InkWell(
                     onTap: (){
-                      print("CONFIRM");
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -302,8 +274,8 @@ class _verifyEmailState extends State<verifyEmail> {
                 Expanded(
                   child: InkWell(
                     onTap: (){
-                      print("SIGN UP");
-               getUserInfo();
+                      Navigator.pop(context);
+                      getUserInfo();
                     },
                     child: Container(
                       decoration: BoxDecoration(

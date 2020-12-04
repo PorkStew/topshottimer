@@ -19,12 +19,21 @@ class _resetPasswordState extends State<resetPassword> {
   _resetPasswordState(this.emailFromLogin);
   final email = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  //email input and validation
   Widget _buildEmail() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Email'),
-      initialValue: emailFromLogin,
-      //controller: email,
+      decoration: InputDecoration(
+        labelText: 'Email',
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+        prefixIcon: Icon(Icons.email),
 
+      ),
+      initialValue: emailFromLogin,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Email is Required';
@@ -38,7 +47,6 @@ class _resetPasswordState extends State<resetPassword> {
 
         return null;
       },
-      //controller: email,
       onSaved: (String value) {
         _email = value;
       },
@@ -55,6 +63,15 @@ class _resetPasswordState extends State<resetPassword> {
               padding: EdgeInsets.only(top: 50,bottom: 15,left: 0, right: 0),
            child: Column(
              children: <Widget>[
+               Container(
+                 alignment: Alignment.center,
+                 child: ClipRRect(
+                     child: Image.asset(
+                       "assets/lock.png",
+                       width: 180,
+                     )),
+               ),
+               SizedBox(height: 10),
                Text("Forgot your password?", style: TextStyle(
                  fontSize: 25
                ),),
@@ -70,14 +87,9 @@ class _resetPasswordState extends State<resetPassword> {
                )
              ],
            )
-
-           // child: Text("Password Reset!", style: TextStyle(
-           //   fontSize: 40,
-           // ),)
-
           ),
           Container(
-            padding: EdgeInsets.only(top: 150,bottom: 15,left: 35, right: 35),
+            padding: EdgeInsets.only(top: 13,bottom: 15,left: 35, right: 35),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -105,7 +117,7 @@ class _resetPasswordState extends State<resetPassword> {
                           },
                           color: Colors.red,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                         ),
@@ -145,7 +157,6 @@ class _resetPasswordState extends State<resetPassword> {
    // String email = await prefs.getString('email');
     //String email = 'stewartclay166@gmail.com';
     try{
-      print(email);
       var url = 'https://www.topshottimer.co.za/mailer2.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
@@ -154,37 +165,9 @@ class _resetPasswordState extends State<resetPassword> {
           }
       );
       Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
-      // saveUserInformation(id, email, hashedPassword);
-      //decodes incoming php data
-      // Map<String, dynamic> data = json.decode(res.body);
-      // String id = data['id'];
-      // String status = data["status"];
-      // print(id);
-      // print(status);
 
     }catch (error) {
       print(error.toString());
     }
-  }
-  Future createMessage(){
-
-    AlertDialog alert = AlertDialog(
-      title: Text("Email with instructions has been sent!"),
-      actions:[
-        FlatButton(child: Text("okay"),
-          onPressed: () {
-            Navigator.pop(context);
-          },),
-      ],
-    );
-    return showDialog(
-        context: context,
-        builder: (BuildContext context){
-          return alert;
-        }
-    );
-    //saveUserInformation(id, email, hashedPassword);
-    //go to login screen
-    // Navigator.push(context, MaterialPageRoute(builder: (context) => ));
   }
 }

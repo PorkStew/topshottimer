@@ -1,45 +1,43 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
-import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
+import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
+import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:topshottimer/Themes.dart';
 
-
-//TODO: verified for shared preferences
+//TODO: check shared preferences and the naming
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  //root widget
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Top Shot Timer',
       theme: Themes.lightTheme,
       darkTheme: Themes.darkTheme,
-      //darkTheme:
-      home: checkUser(),
+      home: checkUserDetails(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class checkUser extends StatefulWidget {
+class checkUserDetails extends StatefulWidget {
   @override
-  _checkUserState createState() => _checkUserState();
+  _checkUserDetailsState createState() => _checkUserDetailsState();
 }
 
-class _checkUserState extends State<checkUser> {
+class _checkUserDetailsState extends State<checkUserDetails> {
   @override
   void initState() {
     //checks if shared preferences has user information and show a screen depending on that information
     checkUserInformation(context);
     super.initState();
   }
+  //loading screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,27 +54,25 @@ class _checkUserState extends State<checkUser> {
                 valueColor: AlwaysStoppedAnimation<Color> (Colors.red),
                 strokeWidth: 5.0,
               ),
-            ),
+              ),
             ),
           ],
         ),
       ),
     );
   }
-
 }
 //acts like a auto login system that will check if shared preferences has user information and will show a screen depending on that information
 checkUserInformation(context) async {
-  print("naais");
-  //getting user information
+  //get user information
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String id = await prefs.getString('id');
-  String email = await prefs.getString('email');
-  String hashedPassword = await prefs.getString('password');
-  String verified = await prefs.get('verify');
-  //checking that the shared preference information is not empty, then will try login
+  String id = prefs.getString('id');
+  String email =  prefs.getString('email');
+  String hashedPassword = prefs.getString('password');
+  String verified = prefs.getString('verify');
 
-    if(id != null && email != null && hashedPassword != null) {
+  //checking that the shared preference information is not empty, then will try login
+    if(id != null && email != null && hashedPassword != null && verified != null) {
       var url = 'https://www.topshottimer.co.za/login.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
@@ -86,32 +82,28 @@ checkUserInformation(context) async {
             "password": hashedPassword,
           }
       );
+
       //data is then received from the php file indicating user state
+      //status can either be verified / non-verified or not-user
       Map<String, dynamic> data = json.decode(res.body);
       String id = data['id'];
       String status = data["status"];
-      print("status: " + status);
-      //not a user at all
-      if (status == "notuser") {
-        print("we don't have this user");
+      //not a user
+      if (status == "not-user") {
         Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
       }
       //is a user but has not verified their email yet
-      else if (status == "nonverified" && id != null) {
+      else if (status == "non-verified" && id != null) {
         await prefs.setString('id', id);
         await prefs.setString('verify', 'false');
-        print("User ID: " + id);
-        print("we have this user but they are not verified");
         Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
-        //if details are correct and in the database then they can use the app.
+        //if details are in the database and user account is verified
       } else if (status == "verified" && id != null) {
         await prefs.setString('id', id);
         await prefs.setString('verify', 'true');
-        print("User ID: " + id);
-        print("user details is all in order");
         Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
       }
-      //no shared preference data is found
+      //no shared preference data is found go to login
     } else{
       Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
     }

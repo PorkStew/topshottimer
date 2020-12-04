@@ -2,14 +2,13 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
-import 'package:topshottimer/Views/LoginSignUp/signup.dart' as signup;
-import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart' as resetPassword;
 import 'package:http/http.dart' as http;
+import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
+import 'package:topshottimer/Views/LoginSignUp/signup.dart' as signUp;
+import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart' as resetPassword;
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
-
+//TODO we don't need controllers any mroe
 class Login extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -19,21 +18,29 @@ class Login extends StatefulWidget {
 
 class LoginState extends State<Login> {
   //variable declarations
-  int count = 0;
-  int displayNoAccount = 0;
-  //TODO set this to six when release
-  int whenToDisplay = 4;
-  final email = TextEditingController();
-  final password = TextEditingController();
+  int _count = 0;
+  int _displayNoAccount = 0;
+  int _whenToDisplay = 6;
+  bool _passwordVisible = false;
+  final _email = TextEditingController();
+  final _password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   //email widget
   Widget _buildEmail() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'Email',
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide( width: 2.0),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 2.0),
+          ),
+          prefixIcon: Icon(Icons.email),
+        //labelText: 'Email',
+          labelText: 'Email'
       ),
-      controller: email,
+      controller: _email,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Email is Required';
@@ -41,17 +48,44 @@ class LoginState extends State<Login> {
         return null;
       },
       onSaved: (String value) {
-        email.text = value;
+        _email.text = value;
       },
+
     );
   }
 
   //password widget
   Widget _buildPassword() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Password'),
-      obscureText: true,
-      controller: password,
+
+      decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 2.0),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 2.0),
+          ),
+        prefixIcon: Icon(Icons.lock),
+          labelText: 'Password',
+
+      //contentPadding: EdgeInsets.zero,
+      //prefix: Icon(Icons.lock),
+      suffixIcon: IconButton(
+        icon: Icon(
+          // Based on passwordVisible state choose the icon
+          _passwordVisible
+              ? Icons.visibility
+              : Icons.visibility_off,
+        ),
+        onPressed: () {
+          // Update the state i.e. toogle the state of passwordVisible variable
+          setState(() {
+            _passwordVisible = !_passwordVisible;
+          });
+        },
+      )),
+      obscureText: !_passwordVisible,
+      controller: _password,
       // maxLength: 10,
       validator: (String value) {
         if (value.isEmpty) {
@@ -60,7 +94,7 @@ class LoginState extends State<Login> {
         return null;
       },
       onSaved: (String value) {
-        password.text = value;
+        _password.text = value;
       },
     );
   }
@@ -69,7 +103,7 @@ class LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: NeverScrollableScrollPhysics(),
 
         //margin: EdgeInsets.all(20),
         child: Form(
@@ -92,6 +126,7 @@ class LoginState extends State<Login> {
                     child: Column(
                       children: [
                         _buildEmail(),
+                        SizedBox(height: 15),
                         _buildPassword(),
                       ],
                     ),
@@ -114,12 +149,11 @@ class LoginState extends State<Login> {
                             style: TextStyle(color: Colors.blueAccent),
                             recognizer: new TapGestureRecognizer()
                               ..onTap = () {
-                              print("EMAIL EMAIL: "  + email.text);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => resetPassword
-                                            .resetPassword(email.text)));
+                                            .resetPassword(_email.text)));
                               })),
                     Expanded(
                         child: Container(
@@ -144,18 +178,11 @@ class LoginState extends State<Login> {
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
-                        //_buildPassword();
-                       // _formKey.currentState.validate();
-                       // _formKey.currentState.save();
-                        print("fuck fuck");
-                        print(email.text);
-                        print(password.text);
-                        print("Hello World");
-                        updateData(email.text, password.text);
+                        updateData(_email.text, _password.text);
                       },
                       color: Colors.red,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       //side: BorderSide(color: Colors.red))),
                     )),
@@ -171,16 +198,15 @@ class LoginState extends State<Login> {
                         style: TextStyle(color: Colors.black, fontSize: 20),
                       ),
                       onPressed: () {
-                        print(email.text);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    signup.FormScreen(email.text)));
+                                    signUp.FormScreen(_email.text)));
                       },
                       color: Colors.blueAccent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     )),
               ],
@@ -192,14 +218,10 @@ class LoginState extends State<Login> {
   }
 
   updateData(String email, String password) async {
-    print(email);
-    print(password);
     String hashedPassword = "";
     var bytes = utf8.encode(password);
     var digest = sha256.convert(bytes);
     hashedPassword = digest.toString();
-    print("update Datae");
-
     var url = 'https://www.topshottimer.co.za/login.php';
     var res = await http.post(Uri.encodeFull(url), headers: {
       "Accept": "application/jason"
@@ -208,43 +230,30 @@ class LoginState extends State<Login> {
       "emailAddress": email,
       "password": hashedPassword,
     });
-
-    print("before res.body");
     Map<String, dynamic> data = json.decode(res.body);
     String id = data['id'];
     String status = data["status"];
-    print("ss");
-    print(id);
-    print(status);
-    print("jnsdfjndsfjnfds");
-    print("dddd");
     //display message because they are not a user
-    if (status == "notuser") {
-      print("we don't have this usersss");
-      print(count);
-      print("hello worldjkl");
-      count++;
-      if(count < whenToDisplay){
-        incorrectDetails();
-        print("2222222");
+    if (status == "not-user") {
+      _count++;
+      if(_count < _whenToDisplay){
+        incorrectDetailsDialog();
         return;
       } else {
-        createAccount();
-          count = 0;
+        createAccountDialog();
+        _count = 0;
         return;
       }
     }
     //is a user but they haven't verified their email address
-    else if (status == "nonverified" && id != null) {
-      print("we have this user but they are not verified");
-      saveUserInformation(id, email, hashedPassword, "false");
+    else if (status == "non-verified" && id != null) {
+      saveUserInformation(id, email, hashedPassword, "non-verified");
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
     }
     //is a user and is verified email so they can use the app
     else if (status == "verified" && id != null) {
-      print("user details is all in order");
-      saveUserInformation(id, email, hashedPassword, "true");
+      saveUserInformation(id, email, hashedPassword, "verified");
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
     } else {
@@ -253,20 +262,62 @@ class LoginState extends State<Login> {
   }
 
 //takes the users information and stores it in shared preferences
-  saveUserInformation(
-      var id, String email, String hashedPassword, String status) async {
+  saveUserInformation(var id, String email, String hashedPassword, String status) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('id', id);
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
-    await prefs.setString('verfiy', status);
+    await prefs.setString('verify', status);
   }
 
-incorrectDetails() {
+  incorrectDetailsDialog(){
+      SimpleDialog carDialog = SimpleDialog(
+        contentPadding: EdgeInsets.all(0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              SizedBox(
+                height: 20,
+              ),
+              Text("Incorrect Details!", style: TextStyle(fontSize: 20),),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Expanded(
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                          BorderRadius.only(bottomLeft: Radius.circular(6), bottomRight:  Radius.circular(6)),
+                          color: Colors.red,
+                        ),
+                        height: 45,
+                        child: Center(
+                          child: Text("TRY AGAIN",
+                              style: TextStyle(color: Colors.black, fontSize: 20)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
 
-  }
+      showDialog(context: context, builder: (context) => carDialog);
+    }
 
-createAccount() {
+
+  createAccountDialog() {
     SimpleDialog carDialog = SimpleDialog(
       contentPadding: EdgeInsets.all(0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -292,7 +343,6 @@ createAccount() {
                 Expanded(
                   child: InkWell(
                     onTap: (){
-                      print("TRY AGAIN");
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -302,20 +352,19 @@ createAccount() {
                         color: Colors.blueAccent,
                       ),
                       height: 45,
-                          child: Center(
-                              child: Text("TRY AGAIN",
-                              style: TextStyle(color: Colors.black, fontSize: 20)),
-                          ),
+                      child: Center(
+                        child: Text("TRY AGAIN",
+                            style: TextStyle(color: Colors.black, fontSize: 20)),
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
                   child: InkWell(
                     onTap: (){
-                      print("SIGN UP");
                       Navigator.pop(context);
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => signup.FormScreen(email.text)));
+                          MaterialPageRoute(builder: (context) => signUp.FormScreen(_email.text)));
                     },
                     child: Container(
                       decoration: BoxDecoration(

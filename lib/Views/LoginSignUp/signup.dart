@@ -30,6 +30,7 @@ class FormScreenState extends  State<FormScreen> {
   String _password;
   String _conPassword;
   String emailFromLogin;
+  bool _passwordVisible = false;
   //text editing controllers
   final passwords = TextEditingController();
   final conPasswords = TextEditingController();
@@ -41,7 +42,16 @@ class FormScreenState extends  State<FormScreen> {
   //first name input and validation
   Widget _buildFirstName() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'First Name'),
+      decoration: InputDecoration(
+          labelText: 'First Name',
+        prefixIcon: Icon(Icons.perm_identity),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+      ),
       validator: (String value) {
         if (value.isEmpty) {
           //saveData(context);
@@ -57,7 +67,16 @@ class FormScreenState extends  State<FormScreen> {
   //last name input and validation
   Widget _buildLastName() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Last Name'),
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.perm_identity),
+          labelText: 'Last Name',
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+      ),
       validator: (String value) {
         if (value.isEmpty) {
           return 'Last name is Required';
@@ -73,7 +92,17 @@ class FormScreenState extends  State<FormScreen> {
   //email input and validation
   Widget _buildEmail() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Email'),
+      decoration: InputDecoration(
+        labelText: 'Email',
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+          prefixIcon: Icon(Icons.email),
+
+      ),
       initialValue: emailFromLogin,
       validator: (String value) {
         if (value.isEmpty) {
@@ -96,9 +125,31 @@ class FormScreenState extends  State<FormScreen> {
   //password input and validation
   Widget _buildPassword() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Password'),
-      obscureText: true,
-      controller: this.passwords,
+      decoration: InputDecoration(
+          labelText: 'Password',
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+        prefixIcon: Icon(Icons.lock),
+          suffixIcon: IconButton(
+            icon: Icon(
+              // Based on passwordVisible state choose the icon
+              _passwordVisible
+                  ? Icons.visibility
+                  : Icons.visibility_off,
+            ),
+            onPressed: () {
+              // Update the state i.e. toogle the state of passwordVisible variable
+              setState(() {
+                _passwordVisible = !_passwordVisible;
+              });
+            },
+      ),
+      ),
+      obscureText: !_passwordVisible,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Last name is Required';
@@ -120,8 +171,31 @@ class FormScreenState extends  State<FormScreen> {
   ////confirm passwor input and validation
   Widget _buildConPassword() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Password'),
-      obscureText: true,
+      decoration: InputDecoration(
+          labelText: 'Confirm Password',
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white10, width: 2.0),
+        ),
+        prefixIcon: Icon(Icons.lock),
+        suffixIcon: IconButton(
+          icon: Icon(
+            // Based on passwordVisible state choose the icon
+            _passwordVisible
+                ? Icons.visibility
+                : Icons.visibility_off,
+          ),
+          onPressed: () {
+            // Update the state i.e. toogle the state of passwordVisible variable
+            setState(() {
+              _passwordVisible = !_passwordVisible;
+            });
+          },
+        ),
+      ),
+      obscureText: !_passwordVisible,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Password cant be empty';
@@ -159,9 +233,13 @@ class FormScreenState extends  State<FormScreen> {
             //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               _buildFirstName(),
+              SizedBox(height: 15),
               _buildLastName(),
+              SizedBox(height: 15),
               _buildEmail(),
+              SizedBox(height: 15),
               _buildPassword(),
+              SizedBox(height: 15),
               _buildConPassword(),
               SizedBox(height: 30),
               SizedBox(
@@ -173,7 +251,7 @@ class FormScreenState extends  State<FormScreen> {
                       style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
                    shape: RoundedRectangleBorder(
-                     borderRadius: BorderRadius.circular(20),
+                     borderRadius: BorderRadius.circular(10),
                    ),
                     onPressed: () {
                       if (!_formKey.currentState.validate()) {
@@ -228,7 +306,8 @@ class FormScreenState extends  State<FormScreen> {
       String status = data["status"];
       print(id);
       print(status);
-      if(id == "" || status == "notuser")
+      //TODO we need to add a loading screen when verifiying email
+      if(id == "" || status == "not-user")
       {
          print("is not a user and isnt verified");
          saveUserInformation(id, email, hashedPassword, "false");
@@ -238,7 +317,7 @@ class FormScreenState extends  State<FormScreen> {
         print("this is a user and is verified");
         saveUserInformation(id, email, hashedPassword, "true");
         //should print like an error saying user already exists with that email.
-        accountInUse();
+        accountInUseDialog();
       }
     }catch (error) {
       print(error.toString());
@@ -251,9 +330,9 @@ class FormScreenState extends  State<FormScreen> {
     await prefs.setString('id', id);
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
-    await prefs.setString('verfiy', status);
+    await prefs.setString('verify', status);
   }
-  accountInUse(){
+  accountInUseDialog(){
     SimpleDialog carDialog = SimpleDialog(
       contentPadding: EdgeInsets.all(0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
