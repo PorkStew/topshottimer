@@ -19,33 +19,44 @@ class Themes {
           fontSize: 25,
         )
     ),
-
-    dialogBackgroundColor: Colors.orange,
+    //dialogBackgroundColor: new Color(int.parse("0xff404040")),
 
     inputDecorationTheme: InputDecorationTheme(
-      labelStyle: TextStyle(color: Colors.black),
-      //hintStyle: TextStyle(color: Colors.red),
-      // enabledBorder: UnderlineInputBorder(
-      //   borderSide: BorderSide(color: Colors.red),
-      // ),
-      // focusedBorder: UnderlineInputBorder(
-      //   borderSide: BorderSide(color: Colors.red),
-      // ),
-      // border: UnderlineInputBorder(
-      //   borderSide: BorderSide(color: Colors.red),
-      // ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(4)),
+        borderSide: BorderSide(width: 1,color: Colors.red),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(4)),
+        borderSide: BorderSide(width: 1,color: Colors.orange),
+      ),
+      //sets the border outline color
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(4)),
+        borderSide: BorderSide(width: 1,color: Colors.black12),
+      ),
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(width: 1,)
+      ),
+      errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(width: 1,color: Colors.black)
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(width: 1,color: Colors.yellowAccent)
+      ),
     ),
-    textTheme: _darkTextTheme,
+    textTheme: _lightTextTheme,
   );
 
   static final ThemeData darkTheme = ThemeData(
-    scaffoldBackgroundColor: new Color(int.parse("0xff404040")),
+    scaffoldBackgroundColor: new Color(int.parse("0xff242424")),
     primarySwatch: Colors.red,
+
     appBarTheme: AppBarTheme(
       color: Colors.red,
-      iconTheme: IconThemeData(
-        color: Colors.black,
-      ),
     ),
     primaryTextTheme: TextTheme(
       headline6: TextStyle(
@@ -53,20 +64,41 @@ class Themes {
         fontSize: 25,
       )
     ),
-    dialogBackgroundColor: new Color(int.parse("0xff404040")),
+    iconTheme: IconThemeData(
+      color: Colors.red,
+    ),
+    //dialogBackgroundColor: new Color(int.parse("0xff404040")),
+    dividerColor:  Colors.white,
+      inputDecorationTheme: InputDecorationTheme(
+        labelStyle: TextStyle(
+          color: Colors.white,
+        ),
+       focusedBorder: OutlineInputBorder(
+         borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(width: 1,color: Colors.white),
+       ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+         // borderSide: BorderSide(width: 1,color: Colors.orange),
+        ),
+        //sets the border outline color for the textfield
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(width: 1,color: Colors.white),
+        ),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(4)),
+            borderSide: BorderSide(color: Colors.green, width: 1,)
+        ),
+        errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(4)),
+            borderSide: BorderSide(width: 1,color: Colors.black)
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(4)),
+            borderSide: BorderSide(width: 1,color: Colors.yellowAccent)
+        ),
 
-    inputDecorationTheme: InputDecorationTheme(
-      labelStyle: TextStyle(color: Colors.white),
-      //hintStyle: TextStyle(color: Colors.red),
-      enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.red),
-      ),
-      focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.red),
-      ),
-      border: UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.red),
-      ),
     ),
     textTheme: _lightTextTheme,
     // Divider(

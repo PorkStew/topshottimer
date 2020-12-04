@@ -30,13 +30,7 @@ class LoginState extends State<Login> {
   Widget _buildEmail() {
     return TextFormField(
       decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide( width: 2.0),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 2.0),
-          ),
-          prefixIcon: Icon(Icons.email),
+          prefixIcon: Icon(Icons.email,color: Colors.white,),
         //labelText: 'Email',
           labelText: 'Email'
       ),
@@ -59,18 +53,12 @@ class LoginState extends State<Login> {
     return TextFormField(
 
       decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 2.0),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 2.0),
-          ),
-        prefixIcon: Icon(Icons.lock),
+        prefixIcon: Icon(Icons.lock, color: Colors.white,),
           labelText: 'Password',
 
       //contentPadding: EdgeInsets.zero,
       //prefix: Icon(Icons.lock),
-      suffixIcon: IconButton(
+      suffixIcon: IconButton(color: Colors.white,
         icon: Icon(
           // Based on passwordVisible state choose the icon
           _passwordVisible
@@ -102,6 +90,7 @@ class LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: SingleChildScrollView(
         //physics: NeverScrollableScrollPhysics(),
 
@@ -109,19 +98,26 @@ class LoginState extends State<Login> {
         child: Form(
           key: _formKey,
           child: Container(
-            margin: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/hizir-kaya-ExxuYNsViC4-unsplash.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            //margin: EdgeInsets.all(20),
             height: MediaQuery.of(context).size.height,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(35.0),
-                    child: Image.asset(
-                      "assets/icon.png",
-                    )),
+                // ClipRRect(
+                //     borderRadius: BorderRadius.circular(35.0),
+                //     child: Image.asset(
+                //       "assets/icon.png",
+                //     )),
                 SizedBox(height: 30),
                 Container(
-                  margin: EdgeInsets.only(left: 10, right: 20),
+
+                  margin: EdgeInsets.only(left: 40, right: 40),
                   child: Container(
                     child: Column(
                       children: [
@@ -137,9 +133,8 @@ class LoginState extends State<Login> {
                   children: [
                     Expanded(
                       child: Container(
-                          margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                          margin: const EdgeInsets.only(left: 40.0, right: 10.0),
                           child: Divider(
-                            color: Colors.black,
                             thickness: 2,
                           )),
                     ),
@@ -158,9 +153,8 @@ class LoginState extends State<Login> {
                     Expanded(
                         child: Container(
                             margin:
-                            const EdgeInsets.only(left: 10.0, right: 20.0),
+                            const EdgeInsets.only(left: 10.0, right: 40.0),
                             child: Divider(
-                              color: Colors.black,
                               thickness: 2,
                             ))),
                   ],

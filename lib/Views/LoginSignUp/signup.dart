@@ -45,12 +45,6 @@ class FormScreenState extends  State<FormScreen> {
       decoration: InputDecoration(
           labelText: 'First Name',
         prefixIcon: Icon(Icons.perm_identity),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
       ),
       validator: (String value) {
         if (value.isEmpty) {
@@ -70,12 +64,6 @@ class FormScreenState extends  State<FormScreen> {
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.perm_identity),
           labelText: 'Last Name',
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
       ),
       validator: (String value) {
         if (value.isEmpty) {
@@ -94,12 +82,6 @@ class FormScreenState extends  State<FormScreen> {
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'Email',
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
           prefixIcon: Icon(Icons.email),
 
       ),
@@ -127,12 +109,6 @@ class FormScreenState extends  State<FormScreen> {
     return TextFormField(
       decoration: InputDecoration(
           labelText: 'Password',
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
         prefixIcon: Icon(Icons.lock),
           suffixIcon: IconButton(
             icon: Icon(
@@ -173,12 +149,6 @@ class FormScreenState extends  State<FormScreen> {
     return TextFormField(
       decoration: InputDecoration(
           labelText: 'Confirm Password',
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
         prefixIcon: Icon(Icons.lock),
         suffixIcon: IconButton(
           icon: Icon(
