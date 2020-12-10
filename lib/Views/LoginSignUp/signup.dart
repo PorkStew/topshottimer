@@ -4,7 +4,7 @@ import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as Login;
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-
+import 'package:topshottimer/Themes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //TODO better handling of errors when they click the wrong link
@@ -43,8 +43,8 @@ class FormScreenState extends  State<FormScreen> {
   Widget _buildFirstName() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'First Name',
-        prefixIcon: Icon(Icons.perm_identity),
+          labelText: 'FIRST NAME',
+        prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color),
       ),
       validator: (String value) {
         if (value.isEmpty) {
@@ -62,8 +62,8 @@ class FormScreenState extends  State<FormScreen> {
   Widget _buildLastName() {
     return TextFormField(
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.perm_identity),
-          labelText: 'Last Name',
+        prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color),
+          labelText: 'LAST NAME',
       ),
       validator: (String value) {
         if (value.isEmpty) {
@@ -81,8 +81,8 @@ class FormScreenState extends  State<FormScreen> {
   Widget _buildEmail() {
     return TextFormField(
       decoration: InputDecoration(
-        labelText: 'Email',
-          prefixIcon: Icon(Icons.email),
+        labelText: 'EMAIL',
+          prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color),
 
       ),
       initialValue: emailFromLogin,
@@ -108,9 +108,9 @@ class FormScreenState extends  State<FormScreen> {
   Widget _buildPassword() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'Password',
-        prefixIcon: Icon(Icons.lock),
-          suffixIcon: IconButton(
+          labelText: 'PASSWORD',
+        prefixIcon: Icon(Icons.lock, color: Theme.of(context).iconTheme.color),
+          suffixIcon: IconButton(color: Theme.of(context).iconTheme.color,
             icon: Icon(
               // Based on passwordVisible state choose the icon
               _passwordVisible
@@ -148,9 +148,9 @@ class FormScreenState extends  State<FormScreen> {
   Widget _buildConPassword() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'Confirm Password',
-        prefixIcon: Icon(Icons.lock),
-        suffixIcon: IconButton(
+          labelText: 'CONFIRM PASSWORD',
+        prefixIcon: Icon(Icons.lock, color: Theme.of(context).iconTheme.color),
+        suffixIcon: IconButton(color: Theme.of(context).iconTheme.color,
           icon: Icon(
             // Based on passwordVisible state choose the icon
             _passwordVisible
@@ -194,7 +194,7 @@ class FormScreenState extends  State<FormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Sign Up")),
+      appBar: AppBar(title: Text("SIGN UP")),
       body: Container(
         margin: EdgeInsets.all(24),
         child: Form(
@@ -218,7 +218,7 @@ class FormScreenState extends  State<FormScreen> {
                  child: RaisedButton(
                     child: Text(
                       'SUBMIT',
-                      style: TextStyle(color: Colors.black, fontSize: 20),
+                      style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                     ),
                    shape: RoundedRectangleBorder(
                      borderRadius: BorderRadius.circular(10),
@@ -238,7 +238,7 @@ class FormScreenState extends  State<FormScreen> {
                       sendData(_firstName, _lastName, _email, _password);
                     },
 
-                   color: Colors.red,
+                   color: Themes.PrimaryColorRed,
                   )
               ),
             ],

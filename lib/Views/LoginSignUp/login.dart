@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 import 'package:topshottimer/Views/LoginSignUp/signup.dart' as signUp;
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart' as resetPassword;
@@ -30,9 +31,9 @@ class LoginState extends State<Login> {
   Widget _buildEmail() {
     return TextFormField(
       decoration: InputDecoration(
-          prefixIcon: Icon(Icons.email,color: Colors.white,),
+          prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color),
         //labelText: 'Email',
-          labelText: 'Email'
+          labelText: 'EMAIL'
       ),
       controller: _email,
       validator: (String value) {
@@ -53,12 +54,12 @@ class LoginState extends State<Login> {
     return TextFormField(
 
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.lock, color: Colors.white,),
-          labelText: 'Password',
+        prefixIcon: Icon(Icons.lock, color: Theme.of(context).iconTheme.color),
+          labelText: 'PASSWORD',
 
       //contentPadding: EdgeInsets.zero,
       //prefix: Icon(Icons.lock),
-      suffixIcon: IconButton(color: Colors.white,
+      suffixIcon: IconButton(color: Theme.of(context).iconTheme.color,
         icon: Icon(
           // Based on passwordVisible state choose the icon
           _passwordVisible
@@ -98,22 +99,22 @@ class LoginState extends State<Login> {
         child: Form(
           key: _formKey,
           child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/hizir-kaya-ExxuYNsViC4-unsplash.jpg"),
-                fit: BoxFit.cover,
-              ),
-            ),
+           // decoration: BoxDecoration(
+            //  image: DecorationImage(
+                //image: AssetImage("assets/hizir-kaya-ExxuYNsViC4-unsplash.jpg"),
+             //   fit: BoxFit.cover,
+           //   ),
+           // ),
             //margin: EdgeInsets.all(20),
             height: MediaQuery.of(context).size.height,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // ClipRRect(
-                //     borderRadius: BorderRadius.circular(35.0),
-                //     child: Image.asset(
-                //       "assets/icon.png",
-                //     )),
+                 ClipRRect(
+                     borderRadius: BorderRadius.circular(35.0),
+                     child: Image.asset(
+                       "assets/target-red.png",
+                     )),
                 SizedBox(height: 30),
                 Container(
 
@@ -121,6 +122,29 @@ class LoginState extends State<Login> {
                   child: Container(
                     child: Column(
                       children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            children: [
+                              Text("Login", style: TextStyle(
+                                fontSize: 24,
+                              ),),
+                            ],
+                          )
+                        ),
+                        SizedBox(height: 5),
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              children: [
+                                Text("Please sign in to continue", style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey
+                                ),),
+                              ],
+                            )
+                        ),
+                        SizedBox(height: 5),
                         _buildEmail(),
                         SizedBox(height: 15),
                         _buildPassword(),
@@ -166,7 +190,7 @@ class LoginState extends State<Login> {
                     child: RaisedButton(
                       child: Text(
                         'SIGN IN',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                       ),
                       onPressed: () {
                         if (!_formKey.currentState.validate()) {
@@ -174,7 +198,7 @@ class LoginState extends State<Login> {
                         }
                         updateData(_email.text, _password.text);
                       },
-                      color: Colors.red,
+                      color: Themes.PrimaryColorRed,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -189,7 +213,7 @@ class LoginState extends State<Login> {
                     child: RaisedButton(
                       child: Text(
                         'SIGN UP',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -290,7 +314,7 @@ class LoginState extends State<Login> {
                         decoration: BoxDecoration(
                           borderRadius:
                           BorderRadius.only(bottomLeft: Radius.circular(6), bottomRight:  Radius.circular(6)),
-                          color: Colors.red,
+                          color: Themes.PrimaryColorRed,
                         ),
                         height: 45,
                         child: Center(

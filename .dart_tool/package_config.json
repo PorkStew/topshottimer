@@ -63,7 +63,7 @@
     },
     {
       "name": "build",
-      "rootUri": "file:///Users/stewartclay/.pub-cache/hosted/pub.dartlang.org/build-1.5.1",
+      "rootUri": "file:///Users/stewartclay/.pub-cache/hosted/pub.dartlang.org/build-1.5.2",
       "packageUri": "lib/",
       "languageVersion": "2.9"
     },
@@ -231,7 +231,7 @@
     },
     {
       "name": "fluttertoast",
-      "rootUri": "file:///Users/stewartclay/.pub-cache/hosted/pub.dartlang.org/fluttertoast-7.1.1",
+      "rootUri": "file:///Users/stewartclay/.pub-cache/hosted/pub.dartlang.org/fluttertoast-7.1.5",
       "packageUri": "lib/",
       "languageVersion": "2.7"
     },
@@ -441,7 +441,7 @@
     },
     {
       "name": "provider",
-      "rootUri": "file:///Users/stewartclay/.pub-cache/hosted/pub.dartlang.org/provider-4.3.2+2",
+      "rootUri": "file:///Users/stewartclay/.pub-cache/hosted/pub.dartlang.org/provider-4.3.2+3",
       "packageUri": "lib/",
       "languageVersion": "2.7"
     },
@@ -531,7 +531,7 @@
     },
     {
       "name": "source_gen",
-      "rootUri": "file:///Users/stewartclay/.pub-cache/hosted/pub.dartlang.org/source_gen-0.9.8",
+      "rootUri": "file:///Users/stewartclay/.pub-cache/hosted/pub.dartlang.org/source_gen-0.9.10",
       "packageUri": "lib/",
       "languageVersion": "2.10"
     },
@@ -668,7 +668,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-11-30T10:04:55.277476Z",
+  "generated": "2020-12-09T16:30:13.116711Z",
   "generator": "pub",
   "generatorVersion": "2.10.4"
 }
