@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
+import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart' as resetPasswordConfirm;
 import 'package:topshottimer/Themes.dart';
 
 //TODO: check shared preferences and the naming
@@ -21,6 +22,12 @@ class MyApp extends StatelessWidget {
       darkTheme: Themes.darkTheme,
       home: checkUserDetails(),
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/LoginSignUp/login': (context) => login.Login(),
+        '/PageSelector': (context) => pageSelector.pageSelector(),
+        '/LoginSignUp/resetPasswordConfirm': (context) => resetPasswordConfirm.resetPasswordConfirm(""),
+        /*Here's where you receive your routes, and it is also the main widget*/
+      },
     );
   }
 }
@@ -90,7 +97,9 @@ checkUserInformation(context) async {
       String status = data["status"];
       //not a user
       if (status == "not-user") {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
+        print("da fuck");
+        //Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
+        Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
       }
       //is a user but has not verified their email yet
       else if (status == "non-verified" && id != null) {
@@ -105,7 +114,8 @@ checkUserInformation(context) async {
       }
       //no shared preference data is found go to login
     } else{
-      Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
+      //Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
+      Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
     }
 }
 

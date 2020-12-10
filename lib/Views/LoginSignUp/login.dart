@@ -272,8 +272,11 @@ class LoginState extends State<Login> {
     //is a user and is verified email so they can use the app
     else if (status == "verified" && id != null) {
       saveUserInformation(id, email, hashedPassword, "verified");
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+      //Navigator.of(context).pushReplacementNamed('/PageSelector');
+      print("where do i go from here");
+      Navigator.pushReplacementNamed(context, '/PageSelector');
+      //Navigator.push(context,
+          //MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
     } else {
 
     }
@@ -319,7 +322,7 @@ class LoginState extends State<Login> {
                         height: 45,
                         child: Center(
                           child: Text("TRY AGAIN",
-                              style: TextStyle(color: Colors.black, fontSize: 20)),
+                              style: TextStyle(fontSize: 20)),
                         ),
                       ),
                     ),
@@ -372,7 +375,7 @@ class LoginState extends State<Login> {
                       height: 45,
                       child: Center(
                         child: Text("TRY AGAIN",
-                            style: TextStyle(color: Colors.black, fontSize: 20)),
+                            style: TextStyle(fontSize: 20)),
                       ),
                     ),
                   ),
@@ -388,12 +391,12 @@ class LoginState extends State<Login> {
                       decoration: BoxDecoration(
                         borderRadius:
                         BorderRadius.only(bottomRight: Radius.circular(6)),
-                        color: Colors.red,
+                        color: Themes.PrimaryColorRed,
                       ),
                       height: 45,
                       child: Center(
                         child: Text("SIGN UP",
-                            style: TextStyle(color: Colors.black, fontSize: 20)),
+                            style: TextStyle(fontSize: 20)),
                       ),
                     ),
                   ),

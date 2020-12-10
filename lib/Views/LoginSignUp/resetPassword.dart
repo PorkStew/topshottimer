@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart' as con;
+import 'package:topshottimer/Themes.dart';
 class resetPassword extends StatefulWidget {
   String something = "First Name";
   resetPassword(this.something);
@@ -23,14 +24,8 @@ class _resetPasswordState extends State<resetPassword> {
   Widget _buildEmail() {
     return TextFormField(
       decoration: InputDecoration(
-        labelText: 'Email',
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white10, width: 2.0),
-        ),
-        prefixIcon: Icon(Icons.email),
+        labelText: 'EMAIL',
+        prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color,),
 
       ),
       initialValue: emailFromLogin,
@@ -105,17 +100,21 @@ class _resetPasswordState extends State<resetPassword> {
                           height: 40,
                         child: RaisedButton(
                           child: Text('SUBMIT',
-                            style: TextStyle(color: Colors.black, fontSize: 20),
+                            style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                           ),
                           onPressed: () {
-                            _formKey.currentState.save();
-                            print("EMAIL EAMIL resetPassword: " + emailFromLogin);
-                            print(emailFromLogin);
-                            print("email below");
-                            print(_email);
-                            resetPassword(_email);
+                            if (!_formKey.currentState.validate()) {
+                              return;
+                            } else {
+                              _formKey.currentState.save();
+                              print("EMAIL EAMIL resetPassword: " + emailFromLogin);
+                              print(emailFromLogin);
+                              print("email below");
+                              print(_email);
+                              resetPassword(_email);
+                            }
                           },
-                          color: Colors.red,
+                          color: Themes.PrimaryColorRed,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -164,7 +163,9 @@ class _resetPasswordState extends State<resetPassword> {
             "emailAddress": email,
           }
       );
-      Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
+      //Navigator.of(context).pop();
+      //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
+      Navigator.pushReplacementNamed(context, '/LoginSignUp/resetPasswordConfirm');
 
     }catch (error) {
       print(error.toString());

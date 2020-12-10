@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
+import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
 
 class resetPasswordConfirm extends StatefulWidget {
   String something = "First Name";
@@ -63,7 +64,9 @@ class _resetPasswordConfirmState extends State<resetPasswordConfirm> {
                               recognizer: new TapGestureRecognizer()
                                 ..onTap = () {
                                   print("resend email here");
-                                  resetPassword(emailFromLogin);
+                                 //resetPassword(emailFromLogin);
+                                  Navigator.pop(context);
+                                  
                                   //getUserInfo();
                                 }
                           )

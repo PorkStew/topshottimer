@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as Login;
+import 'package:topshottimer/Themes.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:topshottimer/Themes.dart';
@@ -329,12 +330,12 @@ class FormScreenState extends  State<FormScreen> {
                       decoration: BoxDecoration(
                         borderRadius:
                         BorderRadius.only(bottomLeft: Radius.circular(6), bottomRight:  Radius.circular(6)),
-                        color: Colors.red,
+                        color: Themes.PrimaryColorRed,
                       ),
                       height: 45,
                       child: Center(
-                        child: Text("CONFIRM",
-                            style: TextStyle(color: Colors.black, fontSize: 20)),
+                        child: Text("OKAY",
+                            style: TextStyle(fontSize: 20)),
                       ),
                     ),
                   ),

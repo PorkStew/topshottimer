@@ -54,7 +54,19 @@ class Themes {
 
   static final ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: new Color(int.parse("0xf000000")),
-    primarySwatch: Colors.green,
+    //all values need to be defined to work
+    primarySwatch: MaterialColor(0xFF70000, {
+    50:  Color(0xFF70000),
+    100: Color(0xFF70000),
+    200: Color(0xFF70000),
+    300: Color(0xFF70000),
+    400: Color(0xFF70000),
+    500: Color(0xFF70000),
+    600: Color(0xFF70000),
+    700: Color(0xFF70000),
+    800: Color(0xFF70000),
+    900: Color(0xFF70000),
+  }),
 
     appBarTheme: AppBarTheme(
       color: PrimaryColorRed,
@@ -80,6 +92,7 @@ class Themes {
       labelStyle: TextStyle(color: Colors.grey),
     ),
     buttonColor: Colors.white,
+    dialogBackgroundColor: new Color(int.parse("0xff373737")),
     //   inputDecorationTheme: InputDecorationTheme(
     //     labelStyle: TextStyle(
     //       color: Colors.white,
