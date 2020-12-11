@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
-import 'package:topshottimer/Views/LoginSignUp/signup.dart' as signup;
-import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart' as resetPassword;
 import 'package:http/http.dart' as http;
+import 'package:topshottimer/Themes.dart';
+import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
+import 'package:topshottimer/Views/LoginSignUp/signup.dart' as signUp;
+import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart' as resetPassword;
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
-
+//TODO we don't need controllers any mroe
 class Login extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -19,21 +19,23 @@ class Login extends StatefulWidget {
 
 class LoginState extends State<Login> {
   //variable declarations
-  int count = 0;
-  int displayNoAccount = 0;
-  //TODO set this to six when release
-  int whenToDisplay = 4;
-  final email = TextEditingController();
-  final password = TextEditingController();
+  int _count = 0;
+  int _displayNoAccount = 0;
+  int _whenToDisplay = 6;
+  bool _passwordVisible = false;
+  final _email = TextEditingController();
+  final _password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   //email widget
   Widget _buildEmail() {
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'Email',
+          prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color),
+        //labelText: 'Email',
+          labelText: 'EMAIL'
       ),
-      controller: email,
+      controller: _email,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Email is Required';
@@ -41,17 +43,38 @@ class LoginState extends State<Login> {
         return null;
       },
       onSaved: (String value) {
-        email.text = value;
+        _email.text = value;
       },
+
     );
   }
 
   //password widget
   Widget _buildPassword() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Password'),
-      obscureText: true,
-      controller: password,
+
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.lock, color: Theme.of(context).iconTheme.color),
+          labelText: 'PASSWORD',
+
+      //contentPadding: EdgeInsets.zero,
+      //prefix: Icon(Icons.lock),
+      suffixIcon: IconButton(color: Theme.of(context).iconTheme.color,
+        icon: Icon(
+          // Based on passwordVisible state choose the icon
+          _passwordVisible
+              ? Icons.visibility
+              : Icons.visibility_off,
+        ),
+        onPressed: () {
+          // Update the state i.e. toogle the state of passwordVisible variable
+          setState(() {
+            _passwordVisible = !_passwordVisible;
+          });
+        },
+      )),
+      obscureText: !_passwordVisible,
+      controller: _password,
       // maxLength: 10,
       validator: (String value) {
         if (value.isEmpty) {
@@ -60,7 +83,7 @@ class LoginState extends State<Login> {
         return null;
       },
       onSaved: (String value) {
-        password.text = value;
+        _password.text = value;
       },
     );
   }
@@ -68,30 +91,62 @@ class LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: NeverScrollableScrollPhysics(),
 
         //margin: EdgeInsets.all(20),
         child: Form(
           key: _formKey,
           child: Container(
-            margin: EdgeInsets.all(20),
+           // decoration: BoxDecoration(
+            //  image: DecorationImage(
+                //image: AssetImage("assets/hizir-kaya-ExxuYNsViC4-unsplash.jpg"),
+             //   fit: BoxFit.cover,
+           //   ),
+           // ),
+            //margin: EdgeInsets.all(20),
             height: MediaQuery.of(context).size.height,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(35.0),
-                    child: Image.asset(
-                      "assets/icon.png",
-                    )),
+                 ClipRRect(
+                     borderRadius: BorderRadius.circular(35.0),
+                     child: Image.asset(
+                       "assets/target-red.png",
+                     )),
                 SizedBox(height: 30),
                 Container(
-                  margin: EdgeInsets.only(left: 10, right: 20),
+
+                  margin: EdgeInsets.only(left: 40, right: 40),
                   child: Container(
                     child: Column(
                       children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            children: [
+                              Text("Login", style: TextStyle(
+                                fontSize: 24,
+                              ),),
+                            ],
+                          )
+                        ),
+                        SizedBox(height: 5),
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              children: [
+                                Text("Please sign in to continue", style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey
+                                ),),
+                              ],
+                            )
+                        ),
+                        SizedBox(height: 5),
                         _buildEmail(),
+                        SizedBox(height: 15),
                         _buildPassword(),
                       ],
                     ),
@@ -102,9 +157,8 @@ class LoginState extends State<Login> {
                   children: [
                     Expanded(
                       child: Container(
-                          margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+                          margin: const EdgeInsets.only(left: 40.0, right: 10.0),
                           child: Divider(
-                            color: Colors.black,
                             thickness: 2,
                           )),
                     ),
@@ -118,14 +172,13 @@ class LoginState extends State<Login> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => resetPassword
-                                            .resetPassword(email.text)));
+                                            .resetPassword(_email.text)));
                               })),
                     Expanded(
                         child: Container(
                             margin:
-                            const EdgeInsets.only(left: 10.0, right: 20.0),
+                            const EdgeInsets.only(left: 10.0, right: 40.0),
                             child: Divider(
-                              color: Colors.black,
                               thickness: 2,
                             ))),
                   ],
@@ -137,24 +190,17 @@ class LoginState extends State<Login> {
                     child: RaisedButton(
                       child: Text(
                         'SIGN IN',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                       ),
                       onPressed: () {
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
-                        //_buildPassword();
-                       // _formKey.currentState.validate();
-                       // _formKey.currentState.save();
-                        print("fuck fuck");
-                        print(email.text);
-                        print(password.text);
-                        print("Hello World");
-                        updateData(email.text, password.text);
+                        updateData(_email.text, _password.text);
                       },
-                      color: Colors.red,
+                      color: Themes.PrimaryColorRed,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       //side: BorderSide(color: Colors.red))),
                     )),
@@ -167,19 +213,18 @@ class LoginState extends State<Login> {
                     child: RaisedButton(
                       child: Text(
                         'SIGN UP',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                       ),
                       onPressed: () {
-                        print(email.text);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    signup.FormScreen(email.text)));
+                                    signUp.FormScreen(_email.text)));
                       },
-                      color: Colors.blueAccent,
+                      color: Themes.PrimaryColorBlue,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     )),
               ],
@@ -191,14 +236,10 @@ class LoginState extends State<Login> {
   }
 
   updateData(String email, String password) async {
-    print(email);
-    print(password);
     String hashedPassword = "";
     var bytes = utf8.encode(password);
     var digest = sha256.convert(bytes);
     hashedPassword = digest.toString();
-    print("update Datae");
-
     var url = 'https://www.topshottimer.co.za/login.php';
     var res = await http.post(Uri.encodeFull(url), headers: {
       "Accept": "application/jason"
@@ -207,65 +248,98 @@ class LoginState extends State<Login> {
       "emailAddress": email,
       "password": hashedPassword,
     });
-
-    print("before res.body");
     Map<String, dynamic> data = json.decode(res.body);
     String id = data['id'];
     String status = data["status"];
-    print("ss");
-    print(id);
-    print(status);
-    print("jnsdfjndsfjnfds");
-    print("dddd");
     //display message because they are not a user
-    if (status == "notuser") {
-      print("we don't have this usersss");
-      print(count);
-      print("hello worldjkl");
-      count++;
-      if(count < whenToDisplay){
-        incorrectDetails();
-        print("2222222");
+    if (status == "not-user") {
+      _count++;
+      if(_count < _whenToDisplay){
+        incorrectDetailsDialog();
         return;
       } else {
-        createAccount();
-          count = 0;
+        createAccountDialog();
+        _count = 0;
         return;
       }
     }
     //is a user but they haven't verified their email address
-    else if (status == "nonverified" && id != null) {
-      print("we have this user but they are not verified");
-      saveUserInformation(id, email, hashedPassword, "false");
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
+    else if (status == "non-verified" && id != null) {
+      saveUserInformation(id, email, hashedPassword, "non-verified");
+      // Navigator.push(context,
+      //     MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
+      Navigator.pushReplacementNamed(context, '/LoginSignUp/verifyEmail', arguments: {'email': email});
     }
     //is a user and is verified email so they can use the app
     else if (status == "verified" && id != null) {
-      print("user details is all in order");
-      saveUserInformation(id, email, hashedPassword, "true");
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+      saveUserInformation(id, email, hashedPassword, "verified");
+      //Navigator.of(context).pushReplacementNamed('/PageSelector');
+      print("where do i go from here");
+      Navigator.pushReplacementNamed(context, '/PageSelector');
+      //Navigator.push(context,
+          //MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
     } else {
 
     }
   }
 
 //takes the users information and stores it in shared preferences
-  saveUserInformation(
-      var id, String email, String hashedPassword, String status) async {
+  saveUserInformation(var id, String email, String hashedPassword, String status) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('id', id);
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
-    await prefs.setString('verfiy', status);
+    await prefs.setString('verify', status);
   }
 
-incorrectDetails() {
+  incorrectDetailsDialog(){
+      SimpleDialog carDialog = SimpleDialog(
+        contentPadding: EdgeInsets.all(0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              SizedBox(
+                height: 20,
+              ),
+              Text("Incorrect Details!", style: TextStyle(fontSize: 20),),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Expanded(
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                          BorderRadius.only(bottomLeft: Radius.circular(6), bottomRight:  Radius.circular(6)),
+                          color: Themes.PrimaryColorRed,
+                        ),
+                        height: 45,
+                        child: Center(
+                          child: Text("TRY AGAIN",
+                              style: TextStyle(fontSize: 20)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
 
-  }
+      showDialog(context: context, builder: (context) => carDialog);
+    }
 
-createAccount() {
+
+  createAccountDialog() {
     SimpleDialog carDialog = SimpleDialog(
       contentPadding: EdgeInsets.all(0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -291,7 +365,6 @@ createAccount() {
                 Expanded(
                   child: InkWell(
                     onTap: (){
-                      print("TRY AGAIN");
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -301,30 +374,30 @@ createAccount() {
                         color: Colors.blueAccent,
                       ),
                       height: 45,
-                          child: Center(
-                              child: Text("TRY AGAIN",
-                              style: TextStyle(color: Colors.black, fontSize: 20)),
-                          ),
+                      child: Center(
+                        child: Text("TRY AGAIN",
+                            style: TextStyle(fontSize: 20)),
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
                   child: InkWell(
                     onTap: (){
-                      print("SIGN UP");
+                      Navigator.pop(context);
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => signup.FormScreen(email.text)));
+                          MaterialPageRoute(builder: (context) => signUp.FormScreen(_email.text)));
                     },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius:
                         BorderRadius.only(bottomRight: Radius.circular(6)),
-                        color: Colors.red,
+                        color: Themes.PrimaryColorRed,
                       ),
                       height: 45,
                       child: Center(
                         child: Text("SIGN UP",
-                            style: TextStyle(color: Colors.black, fontSize: 20)),
+                            style: TextStyle(fontSize: 20)),
                       ),
                     ),
                   ),
