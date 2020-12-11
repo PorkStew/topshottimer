@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Themes {
   //Color background = new Color.fromRGBO(0, 46, 47, 47);
   static const PrimaryColorRed =  Color(0xFFF70000);
+  static const PrimaryColorBlue =  Color(0xFF507EFF);
   Themes._();
 
   static final ThemeData lightTheme = ThemeData(

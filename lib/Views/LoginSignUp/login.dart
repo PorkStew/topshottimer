@@ -222,7 +222,7 @@ class LoginState extends State<Login> {
                                 builder: (context) =>
                                     signUp.FormScreen(_email.text)));
                       },
-                      color: Colors.blueAccent,
+                      color: Themes.PrimaryColorBlue,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -266,8 +266,9 @@ class LoginState extends State<Login> {
     //is a user but they haven't verified their email address
     else if (status == "non-verified" && id != null) {
       saveUserInformation(id, email, hashedPassword, "non-verified");
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
+      // Navigator.push(context,
+      //     MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
+      Navigator.pushReplacementNamed(context, '/LoginSignUp/verifyEmail', arguments: {'email': email});
     }
     //is a user and is verified email so they can use the app
     else if (status == "verified" && id != null) {

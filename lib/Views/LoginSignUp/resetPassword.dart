@@ -165,7 +165,7 @@ class _resetPasswordState extends State<resetPassword> {
       );
       //Navigator.of(context).pop();
       //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
-      Navigator.pushReplacementNamed(context, '/LoginSignUp/resetPasswordConfirm');
+      Navigator.pushReplacementNamed(context, '/LoginSignUp/resetPasswordConfirm', arguments: {'email': email});
 
     }catch (error) {
       print(error.toString());

@@ -4,26 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
+import 'package:topshottimer/Themes.dart';
 import 'package:http/http.dart' as http;
 
 class verifyEmail extends StatefulWidget {
 
-  String incomingEmail = '';
-  verifyEmail(this.incomingEmail);
-
+  // String incomingEmail = '';
+  // verifyEmail(this.incomingEmail);
   @override
-  State<StatefulWidget> createState() {
-    //accepts email argument to display as text to user
-    return _verifyEmailState(this.incomingEmail);
-  }
+  _verifyEmailState createState() => _verifyEmailState();
 }
 
 class _verifyEmailState extends State<verifyEmail> {
   //variable declaration
-  String _emailAddress = '';
+  // String _emailAddress = '';
   int _count = 0;
   //get incoming variable
-  _verifyEmailState(this._emailAddress);
+  // _verifyEmailState(this._emailAddress);
 
   @override
   void initState(){
@@ -33,6 +30,7 @@ class _verifyEmailState extends State<verifyEmail> {
   }
   @override
   Widget build(BuildContext context) {
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     return Scaffold(
         body: Center(
           child: Column(
@@ -59,13 +57,13 @@ class _verifyEmailState extends State<verifyEmail> {
                           Text("An email has been sent to:", textAlign: TextAlign.center, style:  TextStyle(
                               fontSize: 17,
                           ),),
-                          Text(_emailAddress, style:  TextStyle(
+                          Text(arguments['email'], style:  TextStyle(
                               fontSize: 17,
                           ),),
                           SizedBox(
                             height: 30,
                           ),
-                          Text("Please follow the instructions in the verification email to finish creating your Top Shot Timer account.", textAlign: TextAlign.center, style:  TextStyle(
+                          Text("Please follow the instructions in the verification email to finish creating your Top Shot Timer account. Once it's done you will be able to login and start shooting", textAlign: TextAlign.center, style:  TextStyle(
                               fontSize: 17,
                           ),),
                         ],
@@ -100,14 +98,16 @@ class _verifyEmailState extends State<verifyEmail> {
                         height: 40,
                        child: RaisedButton(
                           onPressed: (){
-                            checkUserVerified();
+                            //checkUserVerified();
+                            //TODO we need to clear the user details because it will take them to verificcation if they close the app
+                            Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
                           },
                           child: Text(
-                              'CHECK ACCOUNT STATUS',
-                            style: TextStyle(color: Colors.black, fontSize: 15),
+                              'LOGIN',
+                            style: TextStyle(fontSize: 15),
 
                           ),
-                          color: Colors.red,
+                          color: Themes.PrimaryColorRed,
                           shape: RoundedRectangleBorder(
                            borderRadius: BorderRadius.circular(20),
                          ),
@@ -185,11 +185,11 @@ class _verifyEmailState extends State<verifyEmail> {
     }
   }
 
-  getEmail() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String email = await prefs.getString('email');
-    _emailAddress = email;
-  }
+  // getEmail() async{
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String email = await prefs.getString('email');
+  //   _emailAddress = email;
+  // }
   emailSent(){
     SimpleDialog carDialog = SimpleDialog(
       contentPadding: EdgeInsets.all(0),

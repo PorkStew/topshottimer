@@ -5,21 +5,23 @@ import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
 
 class resetPasswordConfirm extends StatefulWidget {
-  String something = "First Name";
-  resetPasswordConfirm(this.something);
+  //String something = "First Name";
+  //resetPasswordConfirm(this.something);
 
-  @override
-  State<StatefulWidget> createState() {
-    //need to accept a aurgement
-    return _resetPasswordConfirmState(this.something);
-  }
+  // @override
+  // State<StatefulWidget> createState() {
+  //   //need to accept a aurgement
+  //   return _resetPasswordConfirmState(this.something);
+  // }
+  _resetPasswordConfirmState createState() => _resetPasswordConfirmState();
 }
 
 class _resetPasswordConfirmState extends State<resetPasswordConfirm> {
-  String emailFromLogin;
-  _resetPasswordConfirmState(this.emailFromLogin);
+  //String emailFromLogin;
+  //_resetPasswordConfirmState(this.emailFromLogin);
   @override
   Widget build(BuildContext context) {
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     return Scaffold(
       body: Center(
         child: Column(
@@ -41,7 +43,7 @@ class _resetPasswordConfirmState extends State<resetPasswordConfirm> {
                       //Text(emailAddress, style:  TextStyle(
                        // fontSize: 17,
                       //),),
-                      Text(emailFromLogin, style:  TextStyle(
+                      Text(arguments['email'], style:  TextStyle(
                         fontSize: 17,
                       ),),
                       SizedBox(
@@ -66,7 +68,7 @@ class _resetPasswordConfirmState extends State<resetPasswordConfirm> {
                                   print("resend email here");
                                  //resetPassword(emailFromLogin);
                                   Navigator.pop(context);
-                                  
+                                  //print(emailFromLogin);
                                   //getUserInfo();
                                 }
                           )

@@ -6,9 +6,11 @@ import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart' as resetPasswordConfirm;
+import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verifyEmail;
 import 'package:topshottimer/Themes.dart';
 
 //TODO: check shared preferences and the naming
+//TODO: add a loading screen to the sign up when going to verifyemail
 void main() {
   runApp(MyApp());
 }
@@ -25,7 +27,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/LoginSignUp/login': (context) => login.Login(),
         '/PageSelector': (context) => pageSelector.pageSelector(),
-        '/LoginSignUp/resetPasswordConfirm': (context) => resetPasswordConfirm.resetPasswordConfirm(""),
+        '/LoginSignUp/resetPasswordConfirm': (context) => resetPasswordConfirm.resetPasswordConfirm(),
+        '/LoginSignUp/verifyEmail': (context) => verifyEmail.verifyEmail(),
         /*Here's where you receive your routes, and it is also the main widget*/
       },
     );
@@ -58,7 +61,7 @@ class _checkUserDetailsState extends State<checkUserDetails> {
           height: 100,
           width: 100,
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color> (Colors.red),
+                valueColor: AlwaysStoppedAnimation<Color> (Themes.PrimaryColorRed),
                 strokeWidth: 5.0,
               ),
               ),
@@ -105,12 +108,14 @@ checkUserInformation(context) async {
       else if (status == "non-verified" && id != null) {
         await prefs.setString('id', id);
         await prefs.setString('verify', 'false');
-        Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
+        //Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
+        Navigator.pushReplacementNamed(context, '/LoginSignUp/verifyEmail', arguments: {'email': email});
         //if details are in the database and user account is verified
       } else if (status == "verified" && id != null) {
         await prefs.setString('id', id);
         await prefs.setString('verify', 'true');
-        Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+        //Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+        Navigator.pushReplacementNamed(context, '/PageSelector');
       }
       //no shared preference data is found go to login
     } else{

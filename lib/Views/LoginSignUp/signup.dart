@@ -32,6 +32,7 @@ class FormScreenState extends  State<FormScreen> {
   String _conPassword;
   String emailFromLogin;
   bool _passwordVisible = false;
+  double _initial;
   //text editing controllers
   final passwords = TextEditingController();
   final conPasswords = TextEditingController();
@@ -144,6 +145,11 @@ class FormScreenState extends  State<FormScreen> {
       },
     );
   }
+  Widget _progress(){
+    return CircularProgressIndicator(
+      value: _initial,
+    );
+  }
 
   ////confirm passwor input and validation
   Widget _buildConPassword() {
@@ -249,7 +255,7 @@ class FormScreenState extends  State<FormScreen> {
     );
   }
   //sends user input to php file where it's inserted into the db
-  Future sendData(String firstName, String lastName, String email, String password) async {
+  sendData(String firstName, String lastName, String email, String password) async {
     //hashes user password
     String hashedPassword = "";
     var bytes = utf8.encode(password);
@@ -261,6 +267,7 @@ class FormScreenState extends  State<FormScreen> {
     //var de = utf8.decode(bytes);
     //print(de);
     //inserts the user data and recives a true or false based on if the user already is in db or not
+    //here at 50%
     try{
       var url = 'https://www.topshottimer.co.za/create.php';
       var res = await http.post(
@@ -272,17 +279,20 @@ class FormScreenState extends  State<FormScreen> {
             "password": hashedPassword,
           }
       );
+      // then 100% then display
       Map<String, dynamic> data = json.decode(res.body);
       String id = data['id'];
       String status = data["status"];
       print(id);
       print(status);
+      print("we are goinbg to space and back");
       //TODO we need to add a loading screen when verifiying email
       if(id == "" || status == "not-user")
       {
          print("is not a user and isnt verified");
          saveUserInformation(id, email, hashedPassword, "false");
-         Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
+         //Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
+         Navigator.pushReplacementNamed(context, '/LoginSignUp/verifyEmail', arguments: {'email': email});
 
       } else if(id != "" && status == "user"){
         print("this is a user and is verified");
