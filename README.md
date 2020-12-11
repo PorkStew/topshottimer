@@ -1,2 +1,0 @@
-# topshottimer
-TopShot Timer Flutter
