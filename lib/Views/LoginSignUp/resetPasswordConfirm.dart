@@ -1,24 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
-import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
+import 'package:http/http.dart';
+import 'package:topshottimer/Views/LoginSignUp/login.dart';
 
-class resetPasswordConfirm extends StatefulWidget {
-  //String something = "First Name";
-  //resetPasswordConfirm(this.something);
-
-  // @override
-  // State<StatefulWidget> createState() {
-  //   //need to accept a aurgement
-  //   return _resetPasswordConfirmState(this.something);
-  // }
-  _resetPasswordConfirmState createState() => _resetPasswordConfirmState();
+class ResetPasswordConfirm extends StatefulWidget {
+  _ResetPasswordConfirmState createState() => _ResetPasswordConfirmState();
 }
 
-class _resetPasswordConfirmState extends State<resetPasswordConfirm> {
-  //String emailFromLogin;
-  //_resetPasswordConfirmState(this.emailFromLogin);
+class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
@@ -66,10 +55,7 @@ class _resetPasswordConfirmState extends State<resetPasswordConfirm> {
                               recognizer: new TapGestureRecognizer()
                                 ..onTap = () {
                                   print("resend email here");
-                                 //resetPassword(emailFromLogin);
                                   Navigator.pop(context);
-                                  //print(emailFromLogin);
-                                  //getUserInfo();
                                 }
                           )
                       ),
@@ -91,7 +77,7 @@ class _resetPasswordConfirmState extends State<resetPasswordConfirm> {
                           print("HELO CONFIRM FOR ME PEASE");
                           //checkUserVerified();
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => login.Login()));
+                              MaterialPageRoute(builder: (context) => Login()));
                         },
                         child: Text(
                           'RETURN TO LOGIN',
@@ -113,26 +99,15 @@ class _resetPasswordConfirmState extends State<resetPasswordConfirm> {
   }
 
   resetPassword(String email) async{
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String email = await prefs.getString('email');
-    //String email = 'stewartclay166@gmail.com';
     try{
       print(email);
       var url = 'https://www.topshottimer.co.za/mailer2.php';
-      var res = await http.post(
+      var res = await post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
           body: {
             "emailAddress": email,
           }
       );
-      // saveUserInformation(id, email, hashedPassword);
-      //decodes incoming php data
-      // Map<String, dynamic> data = json.decode(res.body);
-      // String id = data['id'];
-      // String status = data["status"];
-      // print(id);
-      // print(status);
-
     }catch (error) {
       print(error.toString());
     }

@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart' as con;
 import 'package:topshottimer/Themes.dart';
-class resetPassword extends StatefulWidget {
-  String something = "First Name";
-  resetPassword(this.something);
+class ResetPassword extends StatefulWidget {
+  String something = "";
+  ResetPassword(this.something);
 
   @override
   State<StatefulWidget> createState() {
     //need to accept a aurgement
-    return _resetPasswordState(this.something);
+    return _ResetPasswordState(this.something);
   }
 }
 
-class _resetPasswordState extends State<resetPassword> {
+class _ResetPasswordState extends State<ResetPassword> {
 
   String _email;
-  String emailFromLogin;
-  _resetPasswordState(this.emailFromLogin);
+  String _emailFromLogin;
+  _ResetPasswordState(this._emailFromLogin);
   final email = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //email input and validation
@@ -26,9 +26,8 @@ class _resetPasswordState extends State<resetPassword> {
       decoration: InputDecoration(
         labelText: 'EMAIL',
         prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color,),
-
       ),
-      initialValue: emailFromLogin,
+      initialValue: _emailFromLogin,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Email is Required';
@@ -51,7 +50,7 @@ class _resetPasswordState extends State<resetPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Password Reset")),
+        appBar: AppBar(title: Text("Password Reset"), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color)),
       body: Column(
         children: [
           Container(
@@ -107,8 +106,8 @@ class _resetPasswordState extends State<resetPassword> {
                               return;
                             } else {
                               _formKey.currentState.save();
-                              print("EMAIL EAMIL resetPassword: " + emailFromLogin);
-                              print(emailFromLogin);
+                              print("EMAIL EAMIL resetPassword: " + _emailFromLogin);
+                              print(_emailFromLogin);
                               print("email below");
                               print(_email);
                               resetPassword(_email);
@@ -165,7 +164,7 @@ class _resetPasswordState extends State<resetPassword> {
       );
       //Navigator.of(context).pop();
       //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
-      Navigator.pushReplacementNamed(context, '/LoginSignUp/resetPasswordConfirm', arguments: {'email': email});
+      Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': email});
 
     }catch (error) {
       print(error.toString());

@@ -1,45 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
-import 'package:topshottimer/Views/LoginSignUp/login.dart' as Login;
 import 'package:topshottimer/Themes.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:topshottimer/Themes.dart';
+import 'package:topshottimer/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 //TODO better handling of errors when they click the wrong link
 //TODO if they are verified then the system must send a different file to display that they are already verified.
-//have a count here or login and display already a user as a thing or not a user
-class FormScreen extends StatefulWidget {
+class SignUp extends StatefulWidget {
   //accepts email from the login if they have entered one
-  String something = "First Name";
-  FormScreen(this.something);
+  String something = "";
+  SignUp(this.something);
 
   @override
   State<StatefulWidget> createState() {
-    //need to accept a aurgement
-    return FormScreenState(this.something);
+    //accepts value from previous view
+    return SignUpState(this.something);
   }
 }
 
-class FormScreenState extends  State<FormScreen> {
+class SignUpState extends  State<SignUp> {
   //variable declarations
   String _firstName;
   String _lastName;
   String _email;
   String _password;
   String _conPassword;
-  String emailFromLogin;
+  String _emailFromLogin;
   bool _passwordVisible = false;
-  double _initial;
-  //text editing controllers
-  final passwords = TextEditingController();
-  final conPasswords = TextEditingController();
+  bool _loading = false;
   //form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //allows the accepting of data from another view
-  FormScreenState(this.emailFromLogin);
+  SignUpState(this._emailFromLogin);
   //following 5 widgets are inputs for user information with validation
   //first name input and validation
   Widget _buildFirstName() {
@@ -71,7 +65,6 @@ class FormScreenState extends  State<FormScreen> {
         if (value.isEmpty) {
           return 'Last name is Required';
         }
-
         return null;
       },
       onSaved: (String value) {
@@ -87,7 +80,7 @@ class FormScreenState extends  State<FormScreen> {
           prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color),
 
       ),
-      initialValue: emailFromLogin,
+      initialValue: _emailFromLogin,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Email is Required';
@@ -98,7 +91,6 @@ class FormScreenState extends  State<FormScreen> {
             .hasMatch(value)) {
           return 'Please enter a valid email Address';
         }
-
         return null;
       },
       onSaved: (String value) {
@@ -145,13 +137,7 @@ class FormScreenState extends  State<FormScreen> {
       },
     );
   }
-  Widget _progress(){
-    return CircularProgressIndicator(
-      value: _initial,
-    );
-  }
-
-  ////confirm passwor input and validation
+  ////confirm password input and validation
   Widget _buildConPassword() {
     return TextFormField(
       decoration: InputDecoration(
@@ -178,18 +164,15 @@ class FormScreenState extends  State<FormScreen> {
           return 'Password cant be empty';
         }
         //checks if passwords are matching
-        if(value != passwords.text){
-          print("passwords dont match");
-          print(value);
-          print(passwords.text);
+        if(value != _password){
+          print("passwords don't match");
+          return "passwords don't match";
         }
-
         if (!RegExp(
             r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$")
             .hasMatch(value)) {
           return 'Password not strong';
         }
-
         return null;
       },
       onSaved: (String value) {
@@ -197,58 +180,61 @@ class FormScreenState extends  State<FormScreen> {
       },
     );
   }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("SIGN UP")),
-      body: Container(
-        margin: EdgeInsets.all(24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _buildFirstName(),
-              SizedBox(height: 15),
-              _buildLastName(),
-              SizedBox(height: 15),
-              _buildEmail(),
-              SizedBox(height: 15),
-              _buildPassword(),
-              SizedBox(height: 15),
-              _buildConPassword(),
-              SizedBox(height: 30),
-              SizedBox(
-                  width: 250,
-                  height: 40,
-                 child: RaisedButton(
-                    child: Text(
-                      'SUBMIT',
-                      style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
-                    ),
-                   shape: RoundedRectangleBorder(
-                     borderRadius: BorderRadius.circular(10),
-                   ),
-                    onPressed: () {
-                      if (!_formKey.currentState.validate()) {
-                        return;
-                      }
-                      _formKey.currentState.save();
-                      print(_firstName);
-                      print(_lastName);
-                      print(_email);
-                      print(_password);
-                      print(_conPassword);
-                      //Send to API
-                      //send user information to the database
-                      sendData(_firstName, _lastName, _email, _password);
-                    },
-
-                   color: Themes.PrimaryColorRed,
-                  )
-              ),
-            ],
+    //dsiplays loading screen when set state is true
+    return _loading ? Loading() : Scaffold(
+      appBar: AppBar(title: Text("SIGN UP"), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
+      //allows for the movement of widget to not be blocked by the keyboard
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.all(24),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                _buildFirstName(),
+                SizedBox(height: 15),
+                _buildLastName(),
+                SizedBox(height: 15),
+                _buildEmail(),
+                SizedBox(height: 15),
+                _buildPassword(),
+                SizedBox(height: 15),
+                _buildConPassword(),
+                SizedBox(height: 30),
+                SizedBox(
+                    width: 250,
+                    height: 40,
+                    child: RaisedButton(
+                      child: Text(
+                        'SUBMIT',
+                        style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      onPressed: () {
+                        if (!_formKey.currentState.validate()) {
+                          return;
+                        }
+                        _formKey.currentState.save();
+                        print(_firstName);
+                        print(_lastName);
+                        print(_email);
+                        print(_password);
+                        print(_conPassword);
+                        //Send to API
+                        //send user information to the database
+                        setState(() => _loading = true);
+                        sendData(_firstName, _lastName, _email, _password);
+                      },
+                      color: Themes.PrimaryColorRed,
+                    )
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -261,13 +247,7 @@ class FormScreenState extends  State<FormScreen> {
     var bytes = utf8.encode(password);
     var digest = sha256.convert(bytes);
     hashedPassword = digest.toString();
-    print("this is the hashed password");
-    print(hashedPassword);
-    //this decodes the hashed password
-    //var de = utf8.decode(bytes);
-    //print(de);
-    //inserts the user data and recives a true or false based on if the user already is in db or not
-    //here at 50%
+    //inserts the user data and receives a true or false based on if the user already is in db or not
     try{
       var url = 'https://www.topshottimer.co.za/create.php';
       var res = await http.post(
@@ -279,28 +259,23 @@ class FormScreenState extends  State<FormScreen> {
             "password": hashedPassword,
           }
       );
-      // then 100% then display
       Map<String, dynamic> data = json.decode(res.body);
       String id = data['id'];
       String status = data["status"];
-      print(id);
-      print(status);
-      print("we are goinbg to space and back");
-      //TODO we need to add a loading screen when verifiying email
       if(id == "" || status == "not-user")
       {
-         print("is not a user and isnt verified");
+        print("this is not a user");
          saveUserInformation(id, email, hashedPassword, "false");
-         //Navigator.push(context, MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
-         Navigator.pushReplacementNamed(context, '/LoginSignUp/verifyEmail', arguments: {'email': email});
-
+         Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/verifyEmail', (r) => false ,arguments: {'email': email});
       } else if(id != "" && status == "user"){
-        print("this is a user and is verified");
+        print("this is a user");
+        setState(() => _loading = false);
         saveUserInformation(id, email, hashedPassword, "true");
-        //should print like an error saying user already exists with that email.
+        //show dialog
         accountInUseDialog();
       }
     }catch (error) {
+      setState(() => _loading = false);
       print(error.toString());
     }
   }
@@ -313,6 +288,7 @@ class FormScreenState extends  State<FormScreen> {
     await prefs.setString('password', hashedPassword);
     await prefs.setString('verify', status);
   }
+  //account email is already used
   accountInUseDialog(){
     SimpleDialog carDialog = SimpleDialog(
       contentPadding: EdgeInsets.all(0),
@@ -356,7 +332,6 @@ class FormScreenState extends  State<FormScreen> {
         ),
       ],
     );
-
     showDialog(context: context, builder: (context) => carDialog);
   }
 }

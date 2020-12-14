@@ -1,27 +1,20 @@
-import 'dart:convert';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:topshottimer/Themes.dart';
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/gestures.dart';
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
-import 'package:topshottimer/Themes.dart';
 import 'package:http/http.dart' as http;
 
 class verifyEmail extends StatefulWidget {
-
-  // String incomingEmail = '';
-  // verifyEmail(this.incomingEmail);
   @override
   _verifyEmailState createState() => _verifyEmailState();
 }
 
 class _verifyEmailState extends State<verifyEmail> {
   //variable declaration
-  // String _emailAddress = '';
   int _count = 0;
-  //get incoming variable
-  // _verifyEmailState(this._emailAddress);
-
   @override
   void initState(){
     super.initState();
@@ -44,7 +37,7 @@ class _verifyEmailState extends State<verifyEmail> {
                       child: ClipRRect(
                           child: Image.asset(
                             "assets/mail-1454734_1920.png",
-                            width: 180,
+                            width: 140,
                           )),
                     ),
                     Text("Email Verification Required", textAlign: TextAlign.center, style:  TextStyle(

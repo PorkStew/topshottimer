@@ -5,10 +5,8 @@ import 'package:crypto/crypto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Themes.dart';
-import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
-import 'package:topshottimer/Views/LoginSignUp/signup.dart' as signUp;
-import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart' as resetPassword;
-import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
+import 'package:topshottimer/Views/LoginSignUp/signup.dart';
+import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
 import 'package:topshottimer/loading.dart';
 //TODO we don't need controllers any mroe
 class Login extends StatefulWidget {
@@ -21,7 +19,7 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   //variable declarations
   int _count = 0;
-  int _displayNoAccount = 0;
+  //amount should be 6 for when user should be asked if they don't have an account to sign up
   int _whenToDisplay = 6;
   bool _passwordVisible = false;
   bool loading = false;
@@ -93,7 +91,7 @@ class LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return loading? Loading() :  Scaffold(
-
+      resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         //physics: NeverScrollableScrollPhysics(),
 
@@ -112,6 +110,7 @@ class LoginState extends State<Login> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+
                  ClipRRect(
                      borderRadius: BorderRadius.circular(35.0),
                      child: Image.asset(
@@ -173,8 +172,7 @@ class LoginState extends State<Login> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => resetPassword
-                                            .resetPassword(_email.text)));
+                                        builder: (context) => ResetPassword(_email.text)));
                               })),
                     Expanded(
                         child: Container(
@@ -222,8 +220,7 @@ class LoginState extends State<Login> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    signUp.FormScreen(_email.text)));
+                                builder: (context) => SignUp(_email.text)));
                       },
                       color: Themes.PrimaryColorBlue,
                       shape: RoundedRectangleBorder(
@@ -390,7 +387,7 @@ class LoginState extends State<Login> {
                     onTap: (){
                       Navigator.pop(context);
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => signUp.FormScreen(_email.text)));
+                          MaterialPageRoute(builder: (context) => SignUp(_email.text)));
                     },
                     child: Container(
                       decoration: BoxDecoration(
