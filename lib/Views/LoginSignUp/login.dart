@@ -9,6 +9,7 @@ import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 import 'package:topshottimer/Views/LoginSignUp/signup.dart' as signUp;
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart' as resetPassword;
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verify;
+import 'package:topshottimer/loading.dart';
 //TODO we don't need controllers any mroe
 class Login extends StatefulWidget {
   @override
@@ -23,6 +24,7 @@ class LoginState extends State<Login> {
   int _displayNoAccount = 0;
   int _whenToDisplay = 6;
   bool _passwordVisible = false;
+  bool loading = false;
   final _email = TextEditingController();
   final _password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -90,7 +92,7 @@ class LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading? Loading() :  Scaffold(
 
       body: SingleChildScrollView(
         //physics: NeverScrollableScrollPhysics(),
@@ -196,6 +198,7 @@ class LoginState extends State<Login> {
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
+                        setState(() => loading = true);
                         updateData(_email.text, _password.text);
                       },
                       color: Themes.PrimaryColorRed,
@@ -253,6 +256,7 @@ class LoginState extends State<Login> {
     String status = data["status"];
     //display message because they are not a user
     if (status == "not-user") {
+      setState(() => loading = false);
       _count++;
       if(_count < _whenToDisplay){
         incorrectDetailsDialog();

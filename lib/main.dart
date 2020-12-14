@@ -8,6 +8,7 @@ import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart' as resetPasswordConfirm;
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart' as verifyEmail;
 import 'package:topshottimer/Themes.dart';
+import 'package:topshottimer/loading.dart';
 
 //TODO: check shared preferences and the naming
 //TODO: add a loading screen to the sign up when going to verifyemail
@@ -41,35 +42,18 @@ class checkUserDetails extends StatefulWidget {
 }
 
 class _checkUserDetailsState extends State<checkUserDetails> {
+  bool loading = true;
   @override
   void initState() {
     //checks if shared preferences has user information and show a screen depending on that information
+    //setState(() => loading() =true);
     checkUserInformation(context);
     super.initState();
   }
   //loading screen
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-          child: SizedBox(
-          height: 100,
-          width: 100,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color> (Themes.PrimaryColorRed),
-                strokeWidth: 5.0,
-              ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return loading ? Loading() : Container();
   }
 }
 //acts like a auto login system that will check if shared preferences has user information and will show a screen depending on that information
