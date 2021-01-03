@@ -115,12 +115,13 @@ class _verifyEmailState extends State<verifyEmail> {
     );
   }
   //this called auto on page oad or when user clicks button
+  //TODO REMOVE mailerVerifyEmail.php from server
   getUserInfo() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
     print(email);
     try{
-      var url = 'https://www.topshottimer.co.za/mailerVerifyEmail.php';
+      var url = 'https://www.topshottimer.co.za/createAccountVerifyEmailMailer.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
           body: {
@@ -138,45 +139,46 @@ class _verifyEmailState extends State<verifyEmail> {
       print(error.toString());
     }
   }
-  checkUserVerified() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String email = await prefs.getString('email');
-    String password = await prefs.getString('password');
-    String verified = await prefs.getString('verify');
-    if(verified == 'true'){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
-    }
-    var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
-    var res = await http.post(
-        Uri.encodeFull(url), headers: {"Accept": "application/jason"},
-        body: {
-          //get this information from user defaults
-          "emailAddress": email,
-          "password": password,
-        }
-    );
-    Map<String, dynamic> data = json.decode(res.body);
-    //String id = data['id'];
-    String status = data["verified"];
-    //display message because they are not a user
-    if (status == "error") {
-      //TODO should we not just return to login if there is no user
-      Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
-    }
-    //is a user but they haven't verified their email address
-    else if (status == "non-verified") {
-      await prefs.setString('verify', "non-verified");
-      notVerifiedError();
-    }
-    //is a user and is veried email so they can use the app
-    else if (status == "verified") {
-      await prefs.setString('verify', "verified");
-      //saveUserInformation(id, email, hashedPassword);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
-    } else{
-
-    }
-  }
+  //TODO REMOVE BELOW METHOD and checkUserIsVerified.php from server
+  // checkUserVerified() async{
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String email = await prefs.getString('email');
+  //   String password = await prefs.getString('password');
+  //   String verified = await prefs.getString('verify');
+  //   if(verified == 'true'){
+  //     Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+  //   }
+  //   var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
+  //   var res = await http.post(
+  //       Uri.encodeFull(url), headers: {"Accept": "application/jason"},
+  //       body: {
+  //         //get this information from user defaults
+  //         "emailAddress": email,
+  //         "password": password,
+  //       }
+  //   );
+  //   Map<String, dynamic> data = json.decode(res.body);
+  //   //String id = data['id'];
+  //   String status = data["verified"];
+  //   //display message because they are not a user
+  //   if (status == "error") {
+  //     //TODO should we not just return to login if there is no user
+  //     Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
+  //   }
+  //   //is a user but they haven't verified their email address
+  //   else if (status == "non-verified") {
+  //     await prefs.setString('verify', "non-verified");
+  //     notVerifiedError();
+  //   }
+  //   //is a user and is veried email so they can use the app
+  //   else if (status == "verified") {
+  //     await prefs.setString('verify', "verified");
+  //     //saveUserInformation(id, email, hashedPassword);
+  //     Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+  //   } else{
+  //
+  //   }
+  // }
 
   // getEmail() async{
   //   SharedPreferences prefs = await SharedPreferences.getInstance();

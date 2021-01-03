@@ -155,7 +155,7 @@ class _ResetPasswordState extends State<ResetPassword> {
    // String email = await prefs.getString('email');
     //String email = 'stewartclay166@gmail.com';
     try{
-      var url = 'https://www.topshottimer.co.za/mailer2.php';
+      var url = 'https://www.topshottimer.co.za/resetPasswordMailer.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
           body: {

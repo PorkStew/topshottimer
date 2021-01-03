@@ -128,9 +128,12 @@ class SignUpState extends  State<SignUp> {
         if (!RegExp(
             r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$")
             .hasMatch(value)) {
-          return 'Please enter a valid password';
+          return 'Password not strong';
         }
         return null;
+      },
+      onChanged: (String value){
+        _password = value;
       },
       onSaved: (String value) {
         _password = value;
