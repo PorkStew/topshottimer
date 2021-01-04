@@ -129,11 +129,12 @@ class _verifyEmailState extends State<verifyEmail> {
             "emailAddress": email,
           }
       );
-      Map<String, dynamic> data = json.decode(res.body);
-      String status = data["status"];
-      if(status == "non-verified" && _count != 0) {
-        emailSent();
-      }
+      //MAYBE WE NEED THIS?????
+      // Map<String, dynamic> data = json.decode(res.body);
+      // String status = data["status"];
+      // if(status == "non-verified" && _count != 0) {
+      //   emailSent();
+      // }
       _count++;
     }catch (error) {
       print(error.toString());

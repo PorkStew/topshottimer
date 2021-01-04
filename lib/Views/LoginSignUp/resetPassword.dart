@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart' as con;
 import 'package:topshottimer/Themes.dart';
+import 'package:topshottimer/loading.dart';
 class ResetPassword extends StatefulWidget {
   String something = "";
   ResetPassword(this.something);
@@ -17,6 +18,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   String _email;
   String _emailFromLogin;
+  bool loading = false;
   _ResetPasswordState(this._emailFromLogin);
   final email = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -49,7 +51,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading? Loading() : Scaffold(
         appBar: AppBar(title: Text("Password Reset"), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color)),
       body: Column(
         children: [
@@ -101,10 +103,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                           child: Text('SUBMIT',
                             style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                           ),
+
                           onPressed: () {
                             if (!_formKey.currentState.validate()) {
                               return;
                             } else {
+                              setState(() => loading = true);
                               _formKey.currentState.save();
                               print("EMAIL EAMIL resetPassword: " + _emailFromLogin);
                               print(_emailFromLogin);
@@ -151,9 +155,6 @@ class _ResetPasswordState extends State<ResetPassword> {
     );
   }
   resetPassword(String email) async{
-   // SharedPreferences prefs = await SharedPreferences.getInstance();
-   // String email = await prefs.getString('email');
-    //String email = 'stewartclay166@gmail.com';
     try{
       var url = 'https://www.topshottimer.co.za/resetPasswordMailer.php';
       var res = await http.post(
@@ -168,6 +169,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
     }catch (error) {
       print(error.toString());
+      setState(() => loading = false);
     }
   }
 }
