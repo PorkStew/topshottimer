@@ -2,22 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart' as con;
 import 'package:topshottimer/Themes.dart';
-class resetPassword extends StatefulWidget {
-  String something = "First Name";
-  resetPassword(this.something);
+import 'package:topshottimer/loading.dart';
+class ResetPassword extends StatefulWidget {
+  String something = "";
+  ResetPassword(this.something);
 
   @override
   State<StatefulWidget> createState() {
     //need to accept a aurgement
-    return _resetPasswordState(this.something);
+    return _ResetPasswordState(this.something);
   }
 }
 
-class _resetPasswordState extends State<resetPassword> {
+class _ResetPasswordState extends State<ResetPassword> {
 
   String _email;
-  String emailFromLogin;
-  _resetPasswordState(this.emailFromLogin);
+  String _emailFromLogin;
+  bool loading = false;
+  _ResetPasswordState(this._emailFromLogin);
   final email = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //email input and validation
@@ -26,9 +28,8 @@ class _resetPasswordState extends State<resetPassword> {
       decoration: InputDecoration(
         labelText: 'EMAIL',
         prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color,),
-
       ),
-      initialValue: emailFromLogin,
+      initialValue: _emailFromLogin,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Email is Required';
@@ -39,7 +40,9 @@ class _resetPasswordState extends State<resetPassword> {
             .hasMatch(value)) {
           return 'Please enter a valid email Address';
         }
-
+        if(RegExp(r"\s+").hasMatch(value)){
+          return 'White Spaces not Allowed';
+        }
         return null;
       },
       onSaved: (String value) {
@@ -50,8 +53,8 @@ class _resetPasswordState extends State<resetPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text("Password Reset")),
+    return loading? Loading() : Scaffold(
+        appBar: AppBar(title: Text("Password Reset"), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color)),
       body: Column(
         children: [
           Container(
@@ -102,16 +105,18 @@ class _resetPasswordState extends State<resetPassword> {
                           child: Text('SUBMIT',
                             style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                           ),
+
                           onPressed: () {
                             if (!_formKey.currentState.validate()) {
                               return;
                             } else {
+                              setState(() => loading = true);
                               _formKey.currentState.save();
-                              print("EMAIL EAMIL resetPassword: " + emailFromLogin);
-                              print(emailFromLogin);
+                              print("EMAIL EAMIL resetPassword: " + _emailFromLogin);
+                              print(_emailFromLogin);
                               print("email below");
                               print(_email);
-                              resetPassword(_email);
+                              resetPassword(_email.toLowerCase());
                             }
                           },
                           color: Themes.PrimaryColorRed,
@@ -152,11 +157,8 @@ class _resetPasswordState extends State<resetPassword> {
     );
   }
   resetPassword(String email) async{
-   // SharedPreferences prefs = await SharedPreferences.getInstance();
-   // String email = await prefs.getString('email');
-    //String email = 'stewartclay166@gmail.com';
     try{
-      var url = 'https://www.topshottimer.co.za/mailer2.php';
+      var url = 'https://www.topshottimer.co.za/resetPasswordMailer.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
           body: {
@@ -165,10 +167,11 @@ class _resetPasswordState extends State<resetPassword> {
       );
       //Navigator.of(context).pop();
       //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
-      Navigator.pushReplacementNamed(context, '/LoginSignUp/resetPasswordConfirm', arguments: {'email': email});
+      Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': email});
 
     }catch (error) {
       print(error.toString());
+      setState(() => loading = false);
     }
   }
 }

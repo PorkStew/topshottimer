@@ -1,37 +1,42 @@
-import 'dart:convert';
-import 'package:flutter/gestures.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:topshottimer/Themes.dart';
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/gestures.dart';
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
-import 'package:topshottimer/Themes.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:topshottimer/loading.dart';
+//TODO WHAT SOULD WE DO IF THEY VERIFY AND ARE STILL ON THIS PAGE SHOULD WE CHECK
+//TODO can still get email if verified issue issue
+//TODO password cant be less than 6
 class verifyEmail extends StatefulWidget {
 
-  // String incomingEmail = '';
-  // verifyEmail(this.incomingEmail);
   @override
   _verifyEmailState createState() => _verifyEmailState();
 }
 
 class _verifyEmailState extends State<verifyEmail> {
   //variable declaration
-  // String _emailAddress = '';
   int _count = 0;
-  //get incoming variable
-  // _verifyEmailState(this._emailAddress);
-
+  Timer timer;
+  bool loading = false;
   @override
   void initState(){
     super.initState();
     //check if user is verified or send email verification link
     getUserInfo();
+    timer = Timer.periodic(Duration(seconds: 5), (Timer t) => areTheyVerified());
+    //timer?.cancel();
+    //super.dispose();
+
   }
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    return Scaffold(
+    return loading? Loading() :  Scaffold(
         body: Center(
           child: Column(
             children: [
@@ -44,7 +49,7 @@ class _verifyEmailState extends State<verifyEmail> {
                       child: ClipRRect(
                           child: Image.asset(
                             "assets/mail-1454734_1920.png",
-                            width: 180,
+                            width: 140,
                           )),
                     ),
                     Text("Email Verification Required", textAlign: TextAlign.center, style:  TextStyle(
@@ -121,13 +126,59 @@ class _verifyEmailState extends State<verifyEmail> {
         )
     );
   }
+  areTheyVerified() async{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String email = await prefs.getString('email');
+      String password = await prefs.getString('password');
+      String verified = await prefs.getString('verify');
+      if(verified == 'true'){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+      }
+      var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
+      var res = await http.post(
+          Uri.encodeFull(url), headers: {"Accept": "application/jason"},
+          body: {
+            //get this information from user defaults
+            "emailAddress": email,
+            "password": password,
+          }
+      );
+      Map<String, dynamic> data = json.decode(res.body);
+      //String id = data['id'];
+      String status = data["verified"];
+      //display message because they are not a user
+      if (status == "error") {
+        timer.cancel();
+        super.dispose();
+        setState(() => loading = true);
+        //TODO should we not just return to login if there is no user
+        Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
+      }
+      //is a user but they haven't verified their email address
+      else if (status == "non-verified") {
+        //await prefs.setString('verify', "non-verified");
+
+      }
+      //is a user and is veried email so they can use the app
+      else if (status == "verified") {
+        await prefs.setString('verify', "verified");
+        //saveUserInformation(id, email, hashedPassword);
+        timer.cancel();
+        super.dispose();
+        setState(() => loading = true);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+      } else{
+
+      }
+  }
   //this called auto on page oad or when user clicks button
+  //TODO REMOVE mailerVerifyEmail.php from server
   getUserInfo() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
     print(email);
     try{
-      var url = 'https://www.topshottimer.co.za/mailerVerifyEmail.php';
+      var url = 'https://www.topshottimer.co.za/createAccountVerifyEmailMailer.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
           body: {
@@ -135,55 +186,57 @@ class _verifyEmailState extends State<verifyEmail> {
             "emailAddress": email,
           }
       );
-      Map<String, dynamic> data = json.decode(res.body);
-      String status = data["status"];
-      if(status == "non-verified" && _count != 0) {
-        emailSent();
-      }
+      //MAYBE WE NEED THIS?????
+      // Map<String, dynamic> data = json.decode(res.body);
+      // String status = data["status"];
+      // if(status == "non-verified" && _count != 0) {
+      //   emailSent();
+      // }
       _count++;
     }catch (error) {
       print(error.toString());
     }
   }
-  checkUserVerified() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String email = await prefs.getString('email');
-    String password = await prefs.getString('password');
-    String verified = await prefs.getString('verify');
-    if(verified == 'true'){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
-    }
-    var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
-    var res = await http.post(
-        Uri.encodeFull(url), headers: {"Accept": "application/jason"},
-        body: {
-          //get this information from user defaults
-          "emailAddress": email,
-          "password": password,
-        }
-    );
-    Map<String, dynamic> data = json.decode(res.body);
-    //String id = data['id'];
-    String status = data["verified"];
-    //display message because they are not a user
-    if (status == "error") {
-      //TODO should we not just return to login if there is no user
-      Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
-    }
-    //is a user but they haven't verified their email address
-    else if (status == "non-verified") {
-      await prefs.setString('verify', "non-verified");
-      notVerifiedError();
-    }
-    //is a user and is veried email so they can use the app
-    else if (status == "verified") {
-      await prefs.setString('verify', "verified");
-      //saveUserInformation(id, email, hashedPassword);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
-    } else{
-
-    }
-  }
+  //TODO REMOVE BELOW METHOD and checkUserIsVerified.php from server
+  // checkUserVerified() async{
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String email = await prefs.getString('email');
+  //   String password = await prefs.getString('password');
+  //   String verified = await prefs.getString('verify');
+  //   if(verified == 'true'){
+  //     Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+  //   }
+  //   var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
+  //   var res = await http.post(
+  //       Uri.encodeFull(url), headers: {"Accept": "application/jason"},
+  //       body: {
+  //         //get this information from user defaults
+  //         "emailAddress": email,
+  //         "password": password,
+  //       }
+  //   );
+  //   Map<String, dynamic> data = json.decode(res.body);
+  //   //String id = data['id'];
+  //   String status = data["verified"];
+  //   //display message because they are not a user
+  //   if (status == "error") {
+  //     //TODO should we not just return to login if there is no user
+  //     Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
+  //   }
+  //   //is a user but they haven't verified their email address
+  //   else if (status == "non-verified") {
+  //     await prefs.setString('verify', "non-verified");
+  //     notVerifiedError();
+  //   }
+  //   //is a user and is veried email so they can use the app
+  //   else if (status == "verified") {
+  //     await prefs.setString('verify', "verified");
+  //     //saveUserInformation(id, email, hashedPassword);
+  //     Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+  //   } else{
+  //
+  //   }
+  // }
 
   // getEmail() async{
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
