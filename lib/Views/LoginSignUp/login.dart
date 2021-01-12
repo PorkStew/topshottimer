@@ -17,6 +17,8 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
+   String test = "s";
+
   //variable declarations
   int _count = 0;
   //amount should be 6 for when user should be asked if they don't have an account to sign up
@@ -411,5 +413,7 @@ class LoginState extends State<Login> {
     );
 
     showDialog(context: context, builder: (context) => carDialog);
+
   }
+
 }

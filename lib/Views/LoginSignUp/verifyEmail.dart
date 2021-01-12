@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:topshottimer/Themes.dart';
 import 'dart:convert';
@@ -6,8 +8,12 @@ import 'package:flutter/gestures.dart';
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:http/http.dart' as http;
-
+import 'package:topshottimer/loading.dart';
+//TODO WHAT SOULD WE DO IF THEY VERIFY AND ARE STILL ON THIS PAGE SHOULD WE CHECK
+//TODO can still get email if verified issue issue
+//TODO password cant be less than 6
 class verifyEmail extends StatefulWidget {
+
   @override
   _verifyEmailState createState() => _verifyEmailState();
 }
@@ -15,16 +21,22 @@ class verifyEmail extends StatefulWidget {
 class _verifyEmailState extends State<verifyEmail> {
   //variable declaration
   int _count = 0;
+  Timer timer;
+  bool loading = false;
   @override
   void initState(){
     super.initState();
     //check if user is verified or send email verification link
     getUserInfo();
+    timer = Timer.periodic(Duration(seconds: 5), (Timer t) => areTheyVerified());
+    //timer?.cancel();
+    //super.dispose();
+
   }
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    return Scaffold(
+    return loading? Loading() :  Scaffold(
         body: Center(
           child: Column(
             children: [
@@ -113,6 +125,51 @@ class _verifyEmailState extends State<verifyEmail> {
           ),
         )
     );
+  }
+  areTheyVerified() async{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String email = await prefs.getString('email');
+      String password = await prefs.getString('password');
+      String verified = await prefs.getString('verify');
+      if(verified == 'true'){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+      }
+      var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
+      var res = await http.post(
+          Uri.encodeFull(url), headers: {"Accept": "application/jason"},
+          body: {
+            //get this information from user defaults
+            "emailAddress": email,
+            "password": password,
+          }
+      );
+      Map<String, dynamic> data = json.decode(res.body);
+      //String id = data['id'];
+      String status = data["verified"];
+      //display message because they are not a user
+      if (status == "error") {
+        timer.cancel();
+        super.dispose();
+        setState(() => loading = true);
+        //TODO should we not just return to login if there is no user
+        Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
+      }
+      //is a user but they haven't verified their email address
+      else if (status == "non-verified") {
+        //await prefs.setString('verify', "non-verified");
+
+      }
+      //is a user and is veried email so they can use the app
+      else if (status == "verified") {
+        await prefs.setString('verify', "verified");
+        //saveUserInformation(id, email, hashedPassword);
+        timer.cancel();
+        super.dispose();
+        setState(() => loading = true);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+      } else{
+
+      }
   }
   //this called auto on page oad or when user clicks button
   //TODO REMOVE mailerVerifyEmail.php from server

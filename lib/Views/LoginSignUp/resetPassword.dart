@@ -40,7 +40,9 @@ class _ResetPasswordState extends State<ResetPassword> {
             .hasMatch(value)) {
           return 'Please enter a valid email Address';
         }
-
+        if(RegExp(r"\s+").hasMatch(value)){
+          return 'White Spaces not Allowed';
+        }
         return null;
       },
       onSaved: (String value) {
@@ -114,7 +116,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                               print(_emailFromLogin);
                               print("email below");
                               print(_email);
-                              resetPassword(_email);
+                              resetPassword(_email.toLowerCase());
                             }
                           },
                           color: Themes.PrimaryColorRed,

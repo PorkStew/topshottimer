@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:topshottimer/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:basic_utils/basic_utils.dart';
 //TODO better handling of errors when they click the wrong link
 //TODO if they are verified then the system must send a different file to display that they are already verified.
 class SignUp extends StatefulWidget {
@@ -31,11 +31,21 @@ class SignUpState extends  State<SignUp> {
   bool _passwordVisible = false;
   bool _loading = false;
   //form key
+  final _focusNode = FocusNode();
+  var _prefixTapped = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //allows the accepting of data from another view
   SignUpState(this._emailFromLogin);
   //following 5 widgets are inputs for user information with validation
   //first name input and validation
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus & _prefixTapped) _focusNode.unfocus();
+      _prefixTapped = false;
+    });
+  }
   Widget _buildFirstName() {
     return TextFormField(
       decoration: InputDecoration(
@@ -46,6 +56,14 @@ class SignUpState extends  State<SignUp> {
         if (value.isEmpty) {
           //saveData(context);
           return 'First name is Required';
+        }
+        if(RegExp(r"\s+").hasMatch(value)){
+          return 'White Spaces not Allowed';
+        }
+        if (!RegExp(
+            r"^([a-zA-Z]+?)$")
+            .hasMatch(value)) {
+          return 'Invalid first name';
         }
         return null;
       },
@@ -64,6 +82,14 @@ class SignUpState extends  State<SignUp> {
       validator: (String value) {
         if (value.isEmpty) {
           return 'Last name is Required';
+        }
+        if(RegExp(r"\s+").hasMatch(value)){
+          return 'White Spaces not Allowed';
+        }
+        if (!RegExp(
+            r"^([a-zA-Z]+?)$")
+            .hasMatch(value)) {
+          return 'Invalid last name';
         }
         return null;
       },
@@ -89,7 +115,10 @@ class SignUpState extends  State<SignUp> {
         if (!RegExp(
             r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
             .hasMatch(value)) {
-          return 'Please enter a valid email Address';
+          return 'Invalid email address';
+        }
+        if(RegExp(r"\s+").hasMatch(value)){
+          return 'White Spaces not Allowed';
         }
         return null;
       },
@@ -112,6 +141,9 @@ class SignUpState extends  State<SignUp> {
                   : Icons.visibility_off,
             ),
             onPressed: () {
+              _prefixTapped = true;
+              _focusNode.unfocus();
+              print("prefix tapped");
               // Update the state i.e. toogle the state of passwordVisible variable
               setState(() {
                 _passwordVisible = !_passwordVisible;
@@ -122,13 +154,16 @@ class SignUpState extends  State<SignUp> {
       obscureText: !_passwordVisible,
       validator: (String value) {
         if (value.isEmpty) {
-          return 'Last name is Required';
+          return 'Password is Required';
         }
         //regex to check strength of password
         if (!RegExp(
             r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$")
             .hasMatch(value)) {
           return 'Password not strong';
+        }
+        if(RegExp(r"\s+").hasMatch(value)){
+          return 'White Spaces not Allowed';
         }
         return null;
       },
@@ -154,6 +189,8 @@ class SignUpState extends  State<SignUp> {
                 : Icons.visibility_off,
           ),
           onPressed: () {
+            _prefixTapped = true;
+            _focusNode.unfocus();
             // Update the state i.e. toogle the state of passwordVisible variable
             setState(() {
               _passwordVisible = !_passwordVisible;
@@ -175,6 +212,9 @@ class SignUpState extends  State<SignUp> {
             r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$")
             .hasMatch(value)) {
           return 'Password not strong';
+        }
+        if(RegExp(r"\s+").hasMatch(value)){
+          return 'White Spaces not Allowed';
         }
         return null;
       },
@@ -222,16 +262,22 @@ class SignUpState extends  State<SignUp> {
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
+
                         _formKey.currentState.save();
-                        print(_firstName);
+                        _firstName = StringUtils.capitalize(_firstName);
+                        _lastName = StringUtils.capitalize(_lastName);
+
+                        print(_firstName.replaceAll(new RegExp(r"\s+"), ""));
                         print(_lastName);
-                        print(_email);
+                        print(_email.toLowerCase());
                         print(_password);
                         print(_conPassword);
+
+                       // _email = _email.toLowerCase();
                         //Send to API
                         //send user information to the database
-                        setState(() => _loading = true);
-                        sendData(_firstName, _lastName, _email, _password);
+                        //setState(() => _loading = true);
+                        sendData(_firstName.replaceAll(new RegExp(r"\s+"), ""), _lastName.replaceAll(new RegExp(r"\s+"), ""), _email.replaceAll(new RegExp(r"\s+"), "").toLowerCase(), _password.replaceAll(new RegExp(r"\s+"), ""));
                       },
                       color: Themes.PrimaryColorRed,
                     )
@@ -243,6 +289,7 @@ class SignUpState extends  State<SignUp> {
       ),
     );
   }
+
   //sends user input to php file where it's inserted into the db
   sendData(String firstName, String lastName, String email, String password) async {
     //hashes user password

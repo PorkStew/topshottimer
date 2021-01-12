@@ -58,13 +58,19 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
 }
 //acts like a auto login system that will check if shared preferences has user information and will show a screen depending on that information
 checkUserInformation(context) async {
+  String name = '4 ever 1 k g @@ @';
+  print(name.replaceAll(new RegExp(r"\s+"), ""));
   //get user information
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String id = prefs.getString('id');
   String email =  prefs.getString('email');
   String hashedPassword = prefs.getString('password');
   String verified = prefs.getString('verify');
-
+  print("The Following is user details");
+  print(id);
+  print(email);
+  print(hashedPassword);
+  print(verified);
   //checks the validity shared preference information is not empty, then will try login
     if(id != null && email != null && hashedPassword != null && verified != null) {
       var url = 'https://www.topshottimer.co.za/login.php';
@@ -82,6 +88,9 @@ checkUserInformation(context) async {
       Map<String, dynamic> data = json.decode(res.body);
       String id = data['id'];
       String status = data["status"];
+      print("this iis recived data");
+      print(id);
+      print(status);
       //not a user
       if (status == "not-user") {
         Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
