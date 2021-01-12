@@ -160,10 +160,10 @@ class Themes {
       color: PrimaryColorRed,
     ),
     primaryTextTheme: TextTheme(
-      headline6: TextStyle(
-        color: Colors.black,
-        fontSize: 25,
-      )
+        headline6: TextStyle(
+          color: Colors.black,
+          fontSize: 25,
+        )
     ),
     iconTheme: IconThemeData(
       color: Colors.black,
@@ -179,6 +179,17 @@ class Themes {
       ),
       labelStyle: TextStyle(color: Colors.grey),
     ),
+
+    // bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    //   backgroundColor: Colors.blue,
+    //   selectedItemColor: Colors.black,
+    //   unselectedItemColor: Colors.white,
+    //   type: BottomNavigationBarType.fixed,
+    // ),
+
+
+
+
     buttonColor: Colors.black,
     dialogBackgroundColor: Colors.white,
     //theme colors for text
@@ -187,7 +198,6 @@ class Themes {
 
   static final ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: Colors.black,
-
     //all values need to be defined to work
     primarySwatch: MaterialColor(0xFFF70000, {
       50:  Color(0xFFF70000),
@@ -204,6 +214,18 @@ class Themes {
 
     appBarTheme: AppBarTheme(
       color: PrimaryColorRed,
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Colors.black87,
+      unselectedItemColor: Colors.red,
+      selectedItemColor: Colors.green,
+
+    ),
+
+    cardTheme: CardTheme(
+      color: Colors.black,
+
+
     ),
     // primaryTextTheme: TextTheme(
     //   headline6: TextStyle(
