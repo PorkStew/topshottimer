@@ -148,7 +148,7 @@ class viewSplitsState extends State<viewSplits> {
                                             ),
                                             Row(
                                             children: <Widget>[
-                                              Text("Split Time: "+arrSplits[index],style: TextStyle(fontSize: 20,color: Colors.black),textAlign: TextAlign.right),
+                                              Text("Split Time: "+arrSplits[index],style: TextStyle(fontSize: 20,),textAlign: TextAlign.right),
                                             ]
                                             )
 

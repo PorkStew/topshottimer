@@ -28,6 +28,7 @@ class _pageSelectorState extends State<pageSelector> {
     return Scaffold(
       body: _pageOptions[_selectedPage],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
         currentIndex: _selectedPage,
         onTap: (int index) {
           setState(() {

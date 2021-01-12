@@ -411,7 +411,7 @@ class _timerAreaState extends State<timerArea> {
 
                     //startispressed ? startstopwatch: null;
                   },
-                  child: Text(buttonText, style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
+                  child: Text(buttonText, style: TextStyle(fontSize: 80, fontFamily: 'Digital-7', color: Theme.of(context).buttonColor)),
                 )
             ),
             Container(
@@ -484,8 +484,8 @@ class _timerAreaState extends State<timerArea> {
                     //color: Colors.blue,
                       minWidth: 170,
                       height: 50,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Colors.black),),
-                      child: Text("View String", style: TextStyle(fontSize: 25, )),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Colors.red),),
+                      child: Text("View String", style: TextStyle(fontSize: 25, color: Theme.of(context).buttonColor )),
                       onPressed: () {
                         if(arrShots.length <= 1 ){
                           print("Should get into alert");
