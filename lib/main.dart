@@ -88,9 +88,13 @@ checkUserInformation(context) async {
       Map<String, dynamic> data = json.decode(res.body);
       String id = data['id'];
       String status = data["status"];
+      String firstName = data["firstName"];
+      String lastName = data["lastName"];
       print("this iis recived data");
       print(id);
       print(status);
+      print(firstName);
+      print(lastName);
       //not a user
       if (status == "not-user") {
         Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
@@ -99,11 +103,15 @@ checkUserInformation(context) async {
       else if (status == "non-verified" && id != null) {
         await prefs.setString('id', id);
         await prefs.setString('verify', 'false');
+        await prefs.setString('firstName', firstName);
+        await prefs.setString('lastName', lastName);
         Navigator.pushReplacementNamed(context, '/LoginSignUp/verifyEmail', arguments: {'email': email});
         //if details are in the database and user email is verified
       } else if (status == "verified" && id != null) {
         await prefs.setString('id', id);
         await prefs.setString('verify', 'true');
+        await prefs.setString('firstName', firstName);
+        await prefs.setString('lastName', lastName);
         Navigator.pushReplacementNamed(context, '/PageSelector');
       }
       //no shared preference data is found go to login

@@ -198,7 +198,6 @@ class LoginState extends State<Login> {
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
-                        setState(() => loading = true);
                         updateData(_email.text, _password.text);
                       },
                       color: Themes.PrimaryColorRed,
@@ -238,6 +237,8 @@ class LoginState extends State<Login> {
   }
 
   updateData(String email, String password) async {
+    print("hello");
+    setState(() => loading = true);
     String hashedPassword = "";
     var bytes = utf8.encode(password);
     var digest = sha256.convert(bytes);
@@ -250,17 +251,25 @@ class LoginState extends State<Login> {
       "emailAddress": email,
       "password": hashedPassword,
     });
+    print("hello123");
     Map<String, dynamic> data = json.decode(res.body);
     String id = data['id'];
     String status = data["status"];
+    String firstName = data["firstName"];
+    String lastName = data["lastName"];
+
     //display message because they are not a user
     if (status == "not-user") {
       setState(() => loading = false);
       _count++;
       if(_count < _whenToDisplay){
+        print("hello1");
+        setState(() => loading = false);
         incorrectDetailsDialog();
         return;
       } else {
+        print("hello2");
+        setState(() => loading = false);
         createAccountDialog();
         _count = 0;
         return;
@@ -268,31 +277,38 @@ class LoginState extends State<Login> {
     }
     //is a user but they haven't verified their email address
     else if (status == "non-verified" && id != null) {
-      saveUserInformation(id, email, hashedPassword, "non-verified");
+      print("helloasdasdasdasasdasdasdasdasdasd");
+      saveUserInformation(id, email, hashedPassword, "non-verified", firstName, lastName);
       // Navigator.push(context,
       //     MaterialPageRoute(builder: (context) => verify.verifyEmail(email)));
       Navigator.pushReplacementNamed(context, '/LoginSignUp/verifyEmail', arguments: {'email': email});
     }
     //is a user and is verified email so they can use the app
     else if (status == "verified" && id != null) {
-      saveUserInformation(id, email, hashedPassword, "verified");
+      saveUserInformation(id, email, hashedPassword, "verified", firstName, lastName);
       //Navigator.of(context).pushReplacementNamed('/PageSelector');
       print("where do i go from here");
       Navigator.pushReplacementNamed(context, '/PageSelector');
       //Navigator.push(context,
           //MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
     } else {
-
+      print("hello3");
+      setState(() => loading = false);
     }
   }
 
 //takes the users information and stores it in shared preferences
-  saveUserInformation(var id, String email, String hashedPassword, String status) async {
+  saveUserInformation(var id, String email, String hashedPassword, String status, String firstName, String lastName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('id', id);
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
     await prefs.setString('verify', status);
+    await prefs.setString('firstName', firstName);
+    await prefs.setString('lastName', lastName);
+    print(firstName);
+    print(lastName);
+
   }
 
   incorrectDetailsDialog(){
