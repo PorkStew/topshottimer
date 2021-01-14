@@ -35,7 +35,8 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.0-nullsafety.3"
+
+    version: "2.5.0-nullsafety.1"
   audio_session:
     dependency: "direct main"
     description:
