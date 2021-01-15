@@ -95,7 +95,7 @@ class SplitsState extends State<Splits> {
 
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      //backgroundColor: Colors.white,
       body: Container(
 
         child: Column(
@@ -149,8 +149,8 @@ class SplitsState extends State<Splits> {
                 ),
               ),
 
-              Text("Total Time: "+arrShots[arrShots.length - 1],style: TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold,),),
-              Text("Total Shots: "+(arrShots.length).toString(),style: TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold,),),
+              Text("Total Time: "+arrShots[arrShots.length - 1],style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,),),
+              Text("Total Shots: "+(arrShots.length).toString(),style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,),),
 
 
               Row(
@@ -160,7 +160,7 @@ class SplitsState extends State<Splits> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
                     height: 35,
                     minWidth: 35,
-                    child: Text("Close String",style: TextStyle(fontSize: 20, color: Colors.black),),
+                    child: Text("Close String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -172,7 +172,7 @@ class SplitsState extends State<Splits> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.green)),
                     height: 35,
                     minWidth: 35,
-                    child: Text("Save String",style: TextStyle(fontSize: 20, color: Colors.black),),
+                    child: Text("Save String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
                     onPressed: () {
                       showDialog(
                           context: context,
