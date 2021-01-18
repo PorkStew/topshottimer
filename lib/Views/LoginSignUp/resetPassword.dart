@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart' as con;
+import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/loading.dart';
 class ResetPassword extends StatefulWidget {
@@ -58,51 +60,52 @@ class _ResetPasswordState extends State<ResetPassword> {
       body: Column(
         children: [
           Container(
-              padding: EdgeInsets.only(top: 50,bottom: 15,left: 0, right: 0),
+              //padding: EdgeInsets.only(top: 50,bottom: 15,left: 0, right: 0),
            child: Column(
              children: <Widget>[
                Container(
                  alignment: Alignment.center,
                  child: ClipRRect(
                      child: Image.asset(
-                       "assets/lock.png",
-                       width: 180,
+                       "assets/padlock@3x.png",
+                       width: 130,
                      )),
                ),
                SizedBox(height: 10),
                Text("Forgot your password?", style: TextStyle(
                  fontSize: 25
                ),),
-               Container(
-                 padding: EdgeInsets.only(top: 15),
-                child: Column(
-                  children: <Widget> [
-                    Text("Confirm your email and we'll send the instructions.", style:  TextStyle(
-                        fontSize: 15
-                    ),),
-                  ],
-                ),
-               )
+               Center(child: Container(
+                 padding: EdgeInsets.only(top: 15, right: 25, left: 25),
+                 child: Column(
+                   children: <Widget> [
+                     Text("Confirm your email and we'll send the instructions.", textAlign: TextAlign.center, style:  TextStyle(
+                         fontSize: 17
+                     ),),
+                   ],
+                 ),
+               ),),
+
              ],
            )
           ),
-          Container(
-            padding: EdgeInsets.only(top: 13,bottom: 15,left: 35, right: 35),
+          Expanded(
               child: Form(
                 key: _formKey,
                 child: Column(
                 children: <Widget>[
-                  _buildEmail(),
                   Container(
-                    padding: EdgeInsets.only(top: 15),
+                    padding: EdgeInsets.all(25),
+                    //padding: EdgeInsets.only(top: 15),
                     child: Column(
                       children: <Widget>[
+                        _buildEmail(),
                         SizedBox(height: 20,),
                         SizedBox(
-                          width: 250,
-                          height: 40,
+                          width: 268,
+                          height: 61,
                         child: RaisedButton(
-                          child: Text('SUBMIT',
+                          child: Text('Submit',
                             style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                           ),
 
@@ -127,7 +130,34 @@ class _ResetPasswordState extends State<ResetPassword> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+                  Expanded(child:
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(children: <TextSpan>[
+                        TextSpan(
+                            text: "Already have an account?",
+                            style: TextStyle(color: Colors.white)),
+                        TextSpan(
+                            text: " Login",
+                            recognizer: new TapGestureRecognizer()..onTap = () =>
+                            {
+                              print("testing one two three"),
+                              //setState(() => loading = true),
+                              //setUserPreferencesNull(),
+                            Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/login', (r) => false)
+                            },
+                            style: TextStyle(
+                                color: Colors.deepPurple,
+                                fontWeight: FontWeight.bold)),
+                      ]),
+                    ),
+                  )),
+                  SizedBox(
+                    height: 30,
+                  ),
                 ]
                   ),
               )

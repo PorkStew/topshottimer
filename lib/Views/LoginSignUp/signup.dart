@@ -315,12 +315,12 @@ class SignUpState extends  State<SignUp> {
       if(id == "" || status == "not-user")
       {
         print("this is not a user");
-         saveUserInformation(id, email, hashedPassword, "false");
+         saveUserInformation(id, email, hashedPassword, "false", firstName, lastName);
          Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/verifyEmail', (r) => false ,arguments: {'email': email});
       } else if(id != "" && status == "user"){
         print("this is a user");
         setState(() => _loading = false);
-        saveUserInformation(id, email, hashedPassword, "true");
+        saveUserInformation(id, email, hashedPassword, "true", firstName, lastName);
         //show dialog
         accountInUseDialog();
       }
@@ -331,12 +331,15 @@ class SignUpState extends  State<SignUp> {
   }
 
   //takes the users information and stores it in shared preferences
-  saveUserInformation(var id, String email, String hashedPassword, String status) async{
+  saveUserInformation(var id, String email, String hashedPassword, String status, String firstName, String lastName) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('id', id);
     await prefs.setString('email', email);
     await prefs.setString('password', hashedPassword);
     await prefs.setString('verify', status);
+    await prefs.setString('firstName', firstName);
+    await prefs.setString('lastName', lastName);
+
   }
   //account email is already used
   accountInUseDialog(){

@@ -103,7 +103,7 @@ class LoginState extends State<Login> {
           child: Container(
            // decoration: BoxDecoration(
             //  image: DecorationImage(
-                //image: AssetImage("assets/hizir-kaya-ExxuYNsViC4-unsplash.jpg"),
+
              //   fit: BoxFit.cover,
            //   ),
            // ),
@@ -116,7 +116,8 @@ class LoginState extends State<Login> {
                  ClipRRect(
                      borderRadius: BorderRadius.circular(35.0),
                      child: Image.asset(
-                       "assets/target-red.png",
+                       "assets/target-green@3x.png",
+                       width: 130,
                      )),
                 SizedBox(height: 30),
                 Container(
@@ -155,43 +156,30 @@ class LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                SizedBox(height: 30),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                          margin: const EdgeInsets.only(left: 40.0, right: 10.0),
-                          child: Divider(
-                            thickness: 2,
-                          )),
-                    ),
-                    RichText(
+                SizedBox(height: 20),
+                Center(
+
+                  child:  RichText(
                         text: TextSpan(
-                            text: "Forgot Password?",
+                            text: "Forgot your password?",
                             style: TextStyle(color: Colors.blueAccent),
                             recognizer: new TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ResetPassword(_email.text)));
+                                       builder: (context) => ResetPassword(_email.text))
+                                );
                               })),
-                    Expanded(
-                        child: Container(
-                            margin:
-                            const EdgeInsets.only(left: 10.0, right: 40.0),
-                            child: Divider(
-                              thickness: 2,
-                            ))),
-                  ],
+
                 ),
                 SizedBox(height: 30),
                 SizedBox(
-                    width: 250,
-                    height: 40,
+                    width: 268,
+                    height: 60,
                     child: RaisedButton(
                       child: Text(
-                        'SIGN IN',
+                        'Login',
                         style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                       ),
                       onPressed: () {
@@ -207,14 +195,14 @@ class LoginState extends State<Login> {
                       //side: BorderSide(color: Colors.red))),
                     )),
                 SizedBox(
-                  height: 20,
+                  height: 26,
                 ),
                 SizedBox(
-                    width: 250,
-                    height: 40,
+                    width: 268,
+                    height: 60,
                     child: RaisedButton(
                       child: Text(
-                        'SIGN UP',
+                        'Sign Up',
                         style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                       ),
                       onPressed: () {
