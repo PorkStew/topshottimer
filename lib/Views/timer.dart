@@ -553,7 +553,7 @@ obtainUserDefaults() async{
   }
 
   if (dSensitivity == 0.0){
-    timerSensitivity = 89.8;
+    timerSensitivity = 89.4;
   } else
   if (dSensitivity == 25.0){
     timerSensitivity = 80.0;
