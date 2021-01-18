@@ -103,7 +103,7 @@ class viewSplitsState extends State<viewSplits> {
                             width: 100,
                             child: CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.red),
+                                  Color(0xFFA2C11C)),
                               strokeWidth: 5.0,
                             ),
                           ),
@@ -142,7 +142,7 @@ class viewSplitsState extends State<viewSplits> {
 
                                               Row(
                                               children: <Widget>[
-                                              Text("Shot: "+(index + 1).toString(), style: TextStyle(fontSize: 24, color: Colors.red),),
+                                              Text("Shot: "+(index + 1).toString(), style: TextStyle(fontSize: 24, color: Color(0xFFA2C11C)),),
                                             ]
 
                                             ),
@@ -168,7 +168,7 @@ class viewSplitsState extends State<viewSplits> {
                             ),
                           ),
                           FlatButton(
-                            child: Text("Delete String", style: TextStyle(color: Colors.red),),
+                            child: Text("Delete String", style: TextStyle(color: Color(0xFFA2C11C)),),
                             onPressed: () {
                                 showDialog(
                                 context: context,

@@ -100,7 +100,7 @@ class _ProfileState extends State<Profile> {
                 height: 100,
                 width: 100,
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color> (Colors.red),
+                  valueColor: AlwaysStoppedAnimation<Color> (Color(0xFFA2C11C)),
                   strokeWidth: 5.0,
                 ),
               ),
@@ -142,7 +142,7 @@ class _ProfileState extends State<Profile> {
                                         Row(
                                       children: <Widget>[
 
-                                      Text(arrStringName[index],style: TextStyle(fontSize: 24, color: Colors.red)),
+                                      Text(arrStringName[index],style: TextStyle(fontSize: 24, color: Color(0xFFA2C11C))),
 
                                         ]),
                                         Row(
