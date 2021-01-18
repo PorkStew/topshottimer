@@ -2,6 +2,7 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/main.dart';
 
 
@@ -134,19 +135,30 @@ class _SettingsState extends State<Settings> {
                       print(FirstName);
 
                       return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Text('First Name: ' + FirstName.toString(), style: TextStyle(
+                          Text('First Name: ', style: TextStyle(
+                              fontSize: 28.0, color: Themes.darkButton2Color),),
+                          Text(FirstName.toString(), style: TextStyle(
                               fontSize: 20.0
                           ),),
-                          Text('Last Name: ' + LastName.toString(), style: TextStyle(
+                          Text('Last Name: ', style: TextStyle(
+                              fontSize: 28.0, color: Themes.darkButton2Color
+                          ),),
+                          Text(LastName.toString(), style: TextStyle(
                               fontSize: 20.0
                           ),),
-                          Text('Email: ' + Email.toString(), style: TextStyle(
+                          Text('Email: ', style: TextStyle(
+                              fontSize: 28.0, color: Themes.darkButton2Color
+                          ),),
+                          Text(Email.toString(), style: TextStyle(
                               fontSize: 20.0
                           ),),
                           FlatButton(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
-                            height: 35,
+                            color: Themes.darkButton1Color,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
+                            height: 50,
                             minWidth: 150,
                             child: Text("Edit Details",style: TextStyle(fontSize: 20,color: Theme.of(context).buttonColor ),),
                             onPressed: () async {
@@ -163,8 +175,8 @@ class _SettingsState extends State<Settings> {
                             value: sliderValue1,
                             min: 0,
                             max: 100,
-                            activeColor: Colors.red,
-                            inactiveColor: Colors.black,
+                            activeColor: Color(0xFFA2C11C),
+                            inactiveColor: Color(0xFF2C5D63),
                             divisions: 4,
                             label: sliderValue1.toString(),
                             onChanged: (double newValue) {
@@ -199,8 +211,8 @@ class _SettingsState extends State<Settings> {
                             value: sliderValue2,
                             min: 1,
                             max: 5,
-                            activeColor: Colors.red,
-                            inactiveColor: Colors.black,
+                            activeColor: Color(0xFFA2C11C),
+                            inactiveColor: Color(0xFF2C5D63),
                             divisions: 4,
                             label: sliderValue2.toString(),
                             onChanged: (double newValue) {
@@ -319,8 +331,9 @@ class _SettingsState extends State<Settings> {
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: FlatButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
-                              height: 35,
+                              color: Themes.darkButton1Color,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
+                              height: 50,
                               minWidth: 150,
                               child: Text("Sign Out",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor ),),
                               onPressed: () async {

@@ -162,7 +162,7 @@ class SplitsState extends State<Splits> {
                   Spacer(),
                   FlatButton(
                     color: Color(0xFF2C5D63),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Color(0xFF2C5D63))),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFF2C5D63))),
                     height: 50,
                     minWidth: 35,
                     child: Text("Close String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
@@ -175,7 +175,7 @@ class SplitsState extends State<Splits> {
                   Spacer(),
                   FlatButton(
                     color: Color(0xFFA2C11C),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Color(0xFFA2C11C))),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFFA2C11C))),
                     height: 50,
                     minWidth: 35,
                     child: Text("Save String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
