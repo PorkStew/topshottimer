@@ -196,6 +196,7 @@ class Themes {
     textTheme: _lightTextTheme,
   );
 
+
   static const darkBackgoundColor = const Color(0xFF283739);
   static const darkTextColor = const Color(0xFFFFFFFF);
   static const darkParagraphColor = const Color(0xFF949494);
@@ -203,9 +204,6 @@ class Themes {
   static const darkButton2Color = const Color(0xFFA2C11C);
   static const darkUnselectedIconColor = const Color(0xFFA2C11C);
   static const darkSelectedIconColor = const Color(0xFFFFFFFF);
-
-
-
 
   static final ThemeData darkTheme = ThemeData(
 
@@ -260,7 +258,7 @@ class Themes {
       labelStyle: TextStyle(color: Colors.grey),
     ),
     buttonColor: Colors.white,
-    dialogBackgroundColor: new Color(int.parse("0xff373737")),
+    dialogBackgroundColor: darkButton1Color,
     //theme colors for text
     textTheme: _darkTextTheme,
     // Divider(
@@ -286,6 +284,7 @@ class Themes {
   static final TextTheme _darkTextTheme = TextTheme(
 
     //bodyText1: TextStyle(color: Colors.white),
+
     bodyText2: TextStyle(color: darkTextColor),
     //button: TextStyle(color: Colors.red),
     //caption: TextStyle(color: Colors.red),

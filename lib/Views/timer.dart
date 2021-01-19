@@ -482,7 +482,7 @@ class _timerAreaState extends State<timerArea> {
                       minWidth: 200,
                       height: 50,
                       color: Color(0xFF2C5D63),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Color(0xFF2C5D63)),),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(width: 2, color: Color(0xFF2C5D63)),),
                       child: Text("View String", style: TextStyle(fontSize: 25, color: Theme.of(context).buttonColor )),
                       onPressed: () {
                         if(arrShots.length <= 1 ){
