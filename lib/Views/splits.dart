@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -91,9 +91,6 @@ class SplitsState extends State<Splits> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       //backgroundColor: Colors.white,
       body: Container(
@@ -180,34 +177,35 @@ class SplitsState extends State<Splits> {
                     minWidth: 35,
                     child: Text("Save String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
                     onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context){
-                            return AlertDialog(
-                              title: Text("Please enter a name for this string below:"),
-                              content: TextField(
-                                controller: sUserInput,
-                                decoration: InputDecoration(labelText: 'String Name',),
-
-                              ),
-                              actions:[
-
-
-                                FlatButton(child: Text("Cancel"),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },),
-                                FlatButton(child: Text("Save"),
-                                  onPressed: () {
-                                  print("******************" + sUserInput.text);
-                                  sendData(sUserInput.text, 10, 10.2);
-
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
-                                  },),
-                              ],
-                            );
-                          }
-                      );
+                      incorrectDetailsDialog();
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (BuildContext context){
+                      //       return AlertDialog(
+                      //         title: Text("Please enter a name for this string below:"),
+                      //         content: TextField(
+                      //           controller: sUserInput,
+                      //           decoration: InputDecoration(labelText: 'String Name',),
+                      //
+                      //         ),
+                      //         actions:[
+                      //
+                      //
+                      //           FlatButton(child: Text("Cancel"),
+                      //             onPressed: () {
+                      //               Navigator.pop(context);
+                      //             },),
+                      //           FlatButton(child: Text("Save"),
+                      //             onPressed: () {
+                      //             print("******************" + sUserInput.text);
+                      //             sendData(sUserInput.text, 10, 10.2);
+                      //
+                      //               Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
+                      //             },),
+                      //         ],
+                      //       );
+                      //     }
+                      // );
                     },
 
 
@@ -227,6 +225,120 @@ class SplitsState extends State<Splits> {
     );
     //
 
+  }
+  incorrectDetailsDialog(){
+    final _StringName = TextEditingController();
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+    Dialog dialog = new Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 215,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Please enter a name for this string!", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20), textAlign: TextAlign.center,),
+
+                    Padding(padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                      child: Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            //labelText: 'Email',
+                              labelText: 'String Name'
+                          ),
+                          controller: _StringName,
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return 'String Name is required';
+                            }
+                            return null;
+                          },
+                          onSaved: (String value) {
+                            _StringName.text = value;
+                          },
+
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10)),
+                                color: Colors.blueAccent,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Cancel",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              if (!_formKey.currentState.validate()) {
+                                return;
+                              }
+                              _formKey.currentState.save();
+                              print("here is my input from the dialog");
+                              print(_StringName.text);
+                              sendData(_StringName.text, 10, 10.2);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomRight: Radius.circular(10)),
+                                color: Colors.amberAccent,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Save",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Colors.redAccent,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
+            ),
+          ],
+        )
+    );
+    showDialog(context: context, builder: (context) => dialog);
   }
 }
 obtainUserDefaults() async{

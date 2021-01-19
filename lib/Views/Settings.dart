@@ -300,43 +300,43 @@ class _SettingsState extends State<Settings> {
                               dropdownColor: Colors.green,
                               items: [
                                 DropdownMenuItem(
-                                  child: Text("1500Hz"),
+                                  child: Text("Tone 1"),
                                   value: 1,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("1700Hz"),
+                                  child: Text("Tone 2"),
                                   value: 2,
                                 ),
                                 DropdownMenuItem(
-                                    child: Text("1900Hz"),
+                                    child: Text("Tone 3"),
                                     value: 3
                                 ),
                                 DropdownMenuItem(
-                                    child: Text("2100Hz"),
+                                    child: Text("Tone 4"),
                                     value: 4
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("2300Hz"),
+                                  child: Text("Tone 5"),
                                   value: 5,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("2500Hz"),
+                                  child: Text("Tone 6"),
                                   value: 6,
                                 ),
                                 DropdownMenuItem(
-                                    child: Text("2700Hz"),
+                                    child: Text("Tone 7"),
                                     value: 7
                                 ),
                                 DropdownMenuItem(
-                                    child: Text("2900Hz"),
+                                    child: Text("Tone 8"),
                                     value: 8
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("3100Hz"),
+                                  child: Text("Tone 9"),
                                   value: 9,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("3300Hz"),
+                                  child: Text("Tone 10"),
                                   value: 10,
                                 )
                               ],
