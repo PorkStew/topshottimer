@@ -1,8 +1,14 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:audio_session/audio_session.dart';
 import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
+//import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
+import 'package:topshottimer/Views/editUserDetails.dart';
 import 'package:topshottimer/main.dart';
 
 
@@ -18,12 +24,16 @@ class _SettingsState extends State<Settings> {
   Future fLastName;
   Future fEmail;
 
+  AudioPlayer player = AudioPlayer();
+
+
 
 
   @override
   void initState(){
     super.initState();
-    initPlayer();
+    //initPlayer();
+    _setSession();
     fFirstName = _getFirstName();
     fLastName = _getLastName();
     fEmail = _getEmail();
@@ -78,8 +88,8 @@ class _SettingsState extends State<Settings> {
   String Email = "";
 
   int dropDownValue = 1;
-  AudioPlayer advancedPlayer;
-  AudioCache audioCache;
+  // AudioPlayer advancedPlayer;
+  // AudioCache audioCache;
   String localPathFile;
 
   //var sHello = await userSensitivity(context);
@@ -89,11 +99,20 @@ class _SettingsState extends State<Settings> {
   var arrSensititvity = ['Extremely Not Sensitive','Not Sensitive','Normal','Sensitive','Extremely Sensitive'];
   String timerSensitivity = 'Normal';
 
+  _setSession() async {
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
+      avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.defaultToSpeaker,
 
-  void initPlayer(){
-    advancedPlayer = AudioPlayer();
-    audioCache = AudioCache(fixedPlayer: advancedPlayer);
+    ));
+
   }
+
+  // void initPlayer(){
+  //   advancedPlayer = AudioPlayer();
+  //   audioCache = AudioCache(fixedPlayer: advancedPlayer);
+  // }
 
 
   @override
@@ -135,26 +154,51 @@ class _SettingsState extends State<Settings> {
                       print(FirstName);
 
                       return Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        //mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(top: 20,bottom: 0,left: 0, right: 0),
+                            //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                          ),
                           Text('First Name: ', style: TextStyle(
                               fontSize: 28.0, color: Themes.darkButton2Color),),
                           Text(FirstName.toString(), style: TextStyle(
                               fontSize: 20.0
                           ),),
+                          Container(
+                            padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
+                            //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                          ),
                           Text('Last Name: ', style: TextStyle(
                               fontSize: 28.0, color: Themes.darkButton2Color
                           ),),
                           Text(LastName.toString(), style: TextStyle(
                               fontSize: 20.0
                           ),),
+                          Container(
+                            padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
+                            //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                          ),
                           Text('Email: ', style: TextStyle(
                               fontSize: 28.0, color: Themes.darkButton2Color
                           ),),
                           Text(Email.toString(), style: TextStyle(
                               fontSize: 20.0
                           ),),
+                          Container(
+                            padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
+                            //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+                            //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                          ),
                           FlatButton(
                             color: Themes.darkButton1Color,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
@@ -162,10 +206,17 @@ class _SettingsState extends State<Settings> {
                             minWidth: 150,
                             child: Text("Edit Details",style: TextStyle(fontSize: 20,color: Theme.of(context).buttonColor ),),
                             onPressed: () async {
-                              Navigator.pushReplacementNamed(context, '/editUserDetails');
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => editUserDetails()));
+
+                              //Navigator.pushReplacementNamed(context, '/editUserDetails');
                               print("Going to edit details");
                             },
 
+
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+                            //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                           ),
                           Text('Timer Sensitivity', style: TextStyle(
@@ -246,6 +297,7 @@ class _SettingsState extends State<Settings> {
 
                           DropdownButton(
                               value: dropDownValue,
+                              dropdownColor: Colors.green,
                               items: [
                                 DropdownMenuItem(
                                   child: Text("1500Hz"),
@@ -323,15 +375,36 @@ class _SettingsState extends State<Settings> {
                                   if (value == 10){
                                     sAudioString = "3300";
                                   }
-                                  audioCache.play(sAudioString+'.mp3');
+                                  player.stop();
+                                  var duration = player.setAsset("assets/audios/"+ sAudioString + ".mp3");
+                                  player.setVolume(1.0);
+                                  player.seek(Duration(milliseconds: 0));
+                                  player.play();
+                                  //player.stop();
+
+                                  // Timer(Duration(milliseconds: 800), () {
+                                  //   //player.pause();
+                                  //     player.stop();
+                                  //     //var duration =  player.load();
+                                  //     // player.dispose();
+                                  // });
+                                  //
+                                  if (Platform.isIOS) {
+                                    _setSession();
+                                  }
+
+
+                                  //audioCache.play(sAudioString+'.mp3');
                                   setUserTone(sAudioString);
                                 });
                               }),
+                          Container(
+                            padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
+                            //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: FlatButton(
-                              color: Themes.darkButton1Color,
+                          ),
+                          FlatButton(
+                              color: Themes.darkButton2Color,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
                               height: 50,
                               minWidth: 150,
@@ -345,7 +418,7 @@ class _SettingsState extends State<Settings> {
 
 
                             ),
-                          ),
+
 
 
 

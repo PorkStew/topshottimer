@@ -2,7 +2,11 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/main.dart';
+import 'package:http/http.dart' as http;
+import 'package:basic_utils/basic_utils.dart';
+
 
 
 class editUserDetails extends StatefulWidget {
@@ -16,6 +20,8 @@ class _editUserDetailsState extends State<editUserDetails> {
   Future fFirstName;
   Future fLastName;
   Future fEmail;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 
 
 
@@ -73,7 +79,9 @@ class _editUserDetailsState extends State<editUserDetails> {
   double sliderValue1 = 0;
   double sliderValue2 = 1;
   String FirstName = "";
+  String newFirstName = "";
   String LastName = "";
+  String newLastName = "";
   String Email = "";
 
   int dropDownValue = 1;
@@ -84,9 +92,7 @@ class _editUserDetailsState extends State<editUserDetails> {
   //var sHello = await userSensitivity(context);
   //**********************************************
 
-  String secDelay = '3';
-  var arrSensititvity = ['Extremely Not Sensitive','Not Sensitive','Normal','Sensitive','Extremely Sensitive'];
-  String timerSensitivity = 'Normal';
+
 
 
   void initPlayer(){
@@ -134,207 +140,201 @@ class _editUserDetailsState extends State<editUserDetails> {
                   print(FirstName);
 
                   return Column(
+                    //mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('First Name: ' + FirstName.toString(), style: TextStyle(
-                          fontSize: 20.0
-                      ),),
-                      Text('Last Name: ' + LastName.toString(), style: TextStyle(
-                          fontSize: 20.0
-                      ),),
-                      Text('Email: ' + Email.toString(), style: TextStyle(
-                          fontSize: 20.0
-                      ),),
-                      FlatButton(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
-                        height: 35,
-                        minWidth: 150,
-                        child: Text("Edit Details",style: TextStyle(fontSize: 20,color: Theme.of(context).buttonColor ),),
-                        onPressed: () async {
-                          SharedPreferences preferences = await SharedPreferences.getInstance();
-                          await preferences.clear();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
-                          print("Signed Out");
-                        },
+
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.only(top: 20,bottom: 0,left: 0, right: 0),
+                              //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'First Name',
+                                prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color,),
+                              ),
+                              initialValue: FirstName,
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'First Name is Required';
+                                }
+                                //regex
+
+                                return null;
+                              },
+                              onSaved: (String value) {
+                                newFirstName = value;
+                              },
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'Last Name',
+                                prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color,),
+                              ),
+                              initialValue: LastName,
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'Last Name is Required';
+                                }
+                                //regex
+
+                                return null;
+                              },
+                              onSaved: (String value) {
+                                newLastName = value;
+                              },
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'Email',
+                                prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color,),
+                              ),
+                              initialValue: Email,
+                              enabled: false,
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'Email is Required';
+                                }
+                                //regex
+
+                                return null;
+                              },
+                              onSaved: (String value) {
+                                Email = value;
+                              },
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+                              //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                            ),
 
 
-                      ),
-                      Text('Timer Sensitivity', style: TextStyle(
-                          fontSize: 30.0
-                      ),),
-                      Slider(
-                        value: sliderValue1,
-                        min: 0,
-                        max: 100,
-                        activeColor: Colors.red,
-                        inactiveColor: Colors.black,
-                        divisions: 4,
-                        label: sliderValue1.toString(),
-                        onChanged: (double newValue) {
-                          setState(() {
-                            sliderValue1 = newValue;
 
-                            if (newValue == 0.0){
-                              timerSensitivity = arrSensititvity[0].toString();
-                            }
-                            if (newValue == 25.0){
-                              timerSensitivity = arrSensititvity[1].toString();
-                            }
-                            if (newValue == 50.0){
-                              timerSensitivity = arrSensititvity[2].toString();
-                            }
-                            if (newValue == 75.0){
-                              timerSensitivity = arrSensititvity[3].toString();
-                            }
-                            if (newValue == 100.0){
-                              timerSensitivity = arrSensititvity[4].toString();
-                            }
-                            return sliderValue1;
-                          });
-                          setDefaultSensitivity(newValue);
-                          print('Start: ${newValue}');
-                        },),
-                      Text('Timer Delay', style: TextStyle(
-                          fontSize: 30.0
-                      ),),
+                            FlatButton(
+                              color: Themes.darkButton1Color,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
+                              height: 50,
+                              minWidth: 220,
+                              child: Text("Reset Password",style: TextStyle(fontSize: 20,color: Theme.of(context).buttonColor ),),
+                              onPressed: () async {
+                                resetPassword(Email.toLowerCase());
+                                SharedPreferences preferences = await SharedPreferences.getInstance();
+                                await preferences.clear();
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+                                print("Signed Out");
+                                //Navigator.pushReplacementNamed(context, '/editUserDetails');
+                                print("Password Reset Sent");
+                              },
 
-                      Slider(
-                        value: sliderValue2,
-                        min: 1,
-                        max: 5,
-                        activeColor: Colors.red,
-                        inactiveColor: Colors.black,
-                        divisions: 4,
-                        label: sliderValue2.toString(),
-                        onChanged: (double newValue) {
-                          setState(() {
-                            sliderValue2 = newValue;
 
-                            if (newValue == 1){
-                              secDelay = '1';
-                            }
-                            if (newValue == 2){
-                              secDelay = '2';
-                            }
-                            if (newValue == 3){
-                              secDelay = '3';
-                            }
-                            if (newValue == 4){
-                              secDelay = '4';
-                            }
-                            if (newValue == 5){
-                              secDelay = '5';
-                            }
-                            return sliderValue2;
-                          });
-                          setDefaultDelay(newValue);
-                          print('Start: ${newValue}');
-                        },),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+                              //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
-                      Text('Timer Tone', style: TextStyle(
-                          fontSize: 30.0
-                      ),),
+                            ),
 
-                      DropdownButton(
-                          value: dropDownValue,
-                          items: [
-                            DropdownMenuItem(
-                              child: Text("1500Hz"),
-                              value: 1,
+
+                            Row(
+                              children: [
+
+                                FlatButton(
+                                  color: Themes.darkButton1Color,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFF2C5D63))),
+                                  height: 50,
+                                  minWidth: 180,
+                                  child: Text("Back",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
+                                  onPressed: () {
+                                    //resetPassword(Email.toLowerCase());
+                                    Navigator.pop(context);
+                                    //Navigator.pushReplacementNamed(context, '/Settings');
+                                    print("Back Clicked");                            },
+
+
+                                ),
+                                Spacer(),
+                                FlatButton(
+                                  color: Themes.darkButton2Color,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFFA2C11C))),
+                                  height: 50,
+                                  minWidth: 180,
+                                  child: Text("Update",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
+                                  onPressed: () {
+                                    print("Hello world");
+                                    print(newFirstName);
+
+                                    if (!_formKey.currentState.validate()) {
+                                      return;
+                                    }
+
+                                    _formKey.currentState.save();
+                                    newFirstName = StringUtils.capitalize(newFirstName);
+                                    newLastName = StringUtils.capitalize(newLastName);
+
+                                    print(newFirstName.replaceAll(new RegExp(r"\s+"), ""));
+                                    print(newLastName);
+                                    print(Email.toLowerCase());
+                                    updateUserDefaults(newFirstName, newLastName);
+                                    updateDetails(newFirstName, newLastName, Email);
+
+
+                                    //TODO Needs to navigate to Page selector and have a popup dialog
+
+                                  },
+
+
+                                ),
+
+                              ],
+
                             ),
-                            DropdownMenuItem(
-                              child: Text("1700Hz"),
-                              value: 2,
-                            ),
-                            DropdownMenuItem(
-                                child: Text("1900Hz"),
-                                value: 3
-                            ),
-                            DropdownMenuItem(
-                                child: Text("2100Hz"),
-                                value: 4
-                            ),
-                            DropdownMenuItem(
-                              child: Text("2300Hz"),
-                              value: 5,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("2500Hz"),
-                              value: 6,
-                            ),
-                            DropdownMenuItem(
-                                child: Text("2700Hz"),
-                                value: 7
-                            ),
-                            DropdownMenuItem(
-                                child: Text("2900Hz"),
-                                value: 8
-                            ),
-                            DropdownMenuItem(
-                              child: Text("3100Hz"),
-                              value: 9,
-                            ),
-                            DropdownMenuItem(
-                              child: Text("3300Hz"),
-                              value: 10,
-                            )
+
+
+
+
+
+
                           ],
-                          onChanged: (value) {
-                            setState(() {
-                              dropDownValue = value;
-                              print("Selected dropdown value: " + value.toString());
-                              String sAudioString;
-                              if (value == 1){
-                                sAudioString = "1500";
-                              } else
-                              if (value == 2){
-                                sAudioString = "1700";
-                              } else
-                              if (value == 3){
-                                sAudioString = "1900";
-                              } else
-                              if (value == 4){
-                                sAudioString = "2100";
-                              } else
-                              if (value == 5){
-                                sAudioString = "2300";
-                              } else
-                              if (value == 6){
-                                sAudioString = "2500";
-                              } else
-                              if (value == 7){
-                                sAudioString = "2700";
-                              } else
-                              if (value == 8){
-                                sAudioString = "2900";
-                              } else
-                              if (value == 9){
-                                sAudioString = "3100";
-                              } else
-                              if (value == 10){
-                                sAudioString = "3300";
-                              }
-                              audioCache.play(sAudioString+'.mp3');
-                              setUserTone(sAudioString);
-                            });
-                          }),
-
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
-                          height: 35,
-                          minWidth: 150,
-                          child: Text("Sign Out",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor ),),
-                          onPressed: () async {
-                            SharedPreferences preferences = await SharedPreferences.getInstance();
-                            await preferences.clear();
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
-                            print("Signed Out");
-                          },
-
 
                         ),
+
                       ),
+
+
+
+
+
+
+                      // Text('First Name: ', style: TextStyle(
+                      //     fontSize: 28.0, color: Themes.darkButton2Color),),
+                      // Text(FirstName.toString(), style: TextStyle(
+                      //     fontSize: 20.0
+                      // ),),
+                      //
+                      // Text('Last Name: ', style: TextStyle(
+                      //     fontSize: 28.0, color: Themes.darkButton2Color
+                      // ),),
+                      // Text(LastName.toString(), style: TextStyle(
+                      //     fontSize: 20.0
+                      // ),),
+                      // Text('Email: ', style: TextStyle(
+                      //     fontSize: 28.0, color: Themes.darkButton2Color
+                      // ),),
+                      // Text(Email.toString(), style: TextStyle(
+                      //     fontSize: 20.0
+                      // ),),
+
+
+
+
+
+
 
 
 
@@ -355,6 +355,51 @@ class _editUserDetailsState extends State<editUserDetails> {
 //   var x = await userSensitivity();
 //   return x;
 // }
+resetPassword(String email) async{
+  try{
+    var url = 'https://www.topshottimer.co.za/resetPasswordMailer.php';
+    var res = await http.post(
+        Uri.encodeFull(url), headers: {"Accept": "application/jason"},
+        body: {
+          "emailAddress": email,
+        }
+    );
+    //Navigator.of(context).pop();
+    //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
+    //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': email});
+
+  }catch (error) {
+    print(error.toString());
+    //setState(() => loading = false);
+  }
+}
+
+updateDetails(String name, String surname, String email) async{
+  try{
+    var url = 'https://www.topshottimer.co.za/updateUserDetails.php';
+    var res = await http.post(
+        Uri.encodeFull(url), headers: {"Accept": "application/jason"},
+        body: {
+          "firstName": name,
+          "lastName": surname,
+          "emailAddress": email,
+        }
+    );
+    //Navigator.of(context).pop();
+    //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
+    //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': email});
+
+  }catch (error) {
+    print(error.toString());
+    //setState(() => loading = false);
+  }
+}
+updateUserDefaults(String name, String surname) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('firstName', name);
+  await prefs.setString('lastName', surname);
+
+}
 
 Future <String> userFirstName() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
