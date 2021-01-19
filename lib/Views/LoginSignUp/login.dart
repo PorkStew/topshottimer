@@ -165,6 +165,7 @@ class LoginState extends State<Login> {
                             style: TextStyle(color: Colors.blueAccent),
                             recognizer: new TapGestureRecognizer()
                               ..onTap = () {
+                              //TODO change this i think
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -300,124 +301,157 @@ class LoginState extends State<Login> {
   }
 
   incorrectDetailsDialog(){
-      SimpleDialog carDialog = SimpleDialog(
-        contentPadding: EdgeInsets.all(0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              SizedBox(
-                height: 20,
-              ),
-              Text("Incorrect Details!", style: TextStyle(fontSize: 20),),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: InkWell(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(6), bottomRight:  Radius.circular(6)),
-                          color: Themes.PrimaryColorRed,
+    Dialog dialog = new Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 140,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Incorrect Details!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                color: Colors.blueAccent,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("TRY AGAIN",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
                         ),
-                        height: 45,
-                        child: Center(
-                          child: Text("TRY AGAIN",
-                              style: TextStyle(fontSize: 20)),
-                        ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ],
-          ),
-        ],
-      );
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Colors.redAccent,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
+            ),
+          ],
+        )
+    );
+    showDialog(context: context, builder: (context) => dialog);
+  }
 
-      showDialog(context: context, builder: (context) => carDialog);
-    }
 
 
   createAccountDialog() {
-    SimpleDialog carDialog = SimpleDialog(
-      contentPadding: EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            SizedBox(
-              height: 20,
-            ),
-            Text("Having Trouble?", style: TextStyle(fontSize: 25),),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Text("Don't feel left out, Sign up now!", textAlign: TextAlign.center, style: TextStyle(fontSize: 20),),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(
-                  child: InkWell(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(6)),
-                        color: Colors.blueAccent,
-                      ),
-                      height: 45,
-                      child: Center(
-                        child: Text("TRY AGAIN",
-                            style: TextStyle(fontSize: 20)),
-                      ),
+    Dialog dialog = new Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 160,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Having Trouble?", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(height: 5,),
+                    Text("Don't feel left out, Sign up now!", style: TextStyle(fontSize: 17),textAlign: TextAlign.center,),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10)),
+                                color: Colors.blueAccent,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("TRY AGAIN",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              // Navigator.pop(context);
+                              //Navigator.push(context,
+                              // MaterialPageRoute(builder: (context) => SignUp(_email.text)));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.only(bottomRight: Radius.circular(10)),
+                                  //color: Themes.PrimaryColorRed,
+                                  color: Colors.amber
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("SIGN UP",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  ],
                 ),
-                Expanded(
-                  child: InkWell(
-                    onTap: (){
-                      Navigator.pop(context);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignUp(_email.text)));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                        BorderRadius.only(bottomRight: Radius.circular(6)),
-                        color: Themes.PrimaryColorRed,
-                      ),
-                      height: 45,
-                      child: Center(
-                        child: Text("SIGN UP",
-                            style: TextStyle(fontSize: 20)),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Colors.redAccent,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
             ),
           ],
-        ),
-      ],
+        )
     );
-
-    showDialog(context: context, builder: (context) => carDialog);
-
+    showDialog(context: context, builder: (context) => dialog);
   }
-
 }
+

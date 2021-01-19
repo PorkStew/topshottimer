@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:topshottimer/Views/Dialog.dart';
 import 'package:topshottimer/Themes.dart';
 import 'dart:convert';
 import 'package:topshottimer/loading.dart';
@@ -97,7 +98,7 @@ checkUserInformation(context) async {
       print(lastName);
       //not a user
       if (status == "not-user") {
-        Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
+       Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
       }
       //is a user but has not verified their email yet
       else if (status == "non-verified" && id != null) {
@@ -117,6 +118,7 @@ checkUserInformation(context) async {
       //no shared preference data is found go to login
     } else{
       Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
+      //Navigator.push(context, Dialog())
     }
 }
 

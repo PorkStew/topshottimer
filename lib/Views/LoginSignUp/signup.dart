@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:crypto/crypto.dart';
@@ -230,63 +231,95 @@ class SignUpState extends  State<SignUp> {
       appBar: AppBar(title: Text("SIGN UP"), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
       //allows for the movement of widget to not be blocked by the keyboard
       resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
+      body: Column(
+          children: [
+      Expanded(
+      child: Form(
+      key: _formKey,
         child: Container(
-          margin: EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                _buildFirstName(),
-                SizedBox(height: 15),
-                _buildLastName(),
-                SizedBox(height: 15),
-                _buildEmail(),
-                SizedBox(height: 15),
-                _buildPassword(),
-                SizedBox(height: 15),
-                _buildConPassword(),
-                SizedBox(height: 30),
-                SizedBox(
-                    width: 250,
-                    height: 40,
-                    child: RaisedButton(
-                      child: Text(
-                        'SUBMIT',
-                        style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      onPressed: () {
-                        if (!_formKey.currentState.validate()) {
-                          return;
-                        }
+          padding: EdgeInsets.all(25),
+          child: Column(
+            children: [
+              _buildFirstName(),
+              SizedBox(height: 15),
+              _buildLastName(),
+              SizedBox(height: 15),
+              _buildEmail(),
+              SizedBox(height: 15),
+              _buildPassword(),
+              SizedBox(height: 15),
+              _buildConPassword(),
+              SizedBox(height: 30),
+              SizedBox(
+                  width: 268,
+                  height: 61,
+                  child: RaisedButton(
+                    child: Text(
+                      'SUBMIT',
+                      style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    onPressed: () {
+                      if (!_formKey.currentState.validate()) {
+                        return;
+                      }
 
-                        _formKey.currentState.save();
-                        _firstName = StringUtils.capitalize(_firstName);
-                        _lastName = StringUtils.capitalize(_lastName);
+                      _formKey.currentState.save();
+                      _firstName = StringUtils.capitalize(_firstName);
+                      _lastName = StringUtils.capitalize(_lastName);
 
-                        print(_firstName.replaceAll(new RegExp(r"\s+"), ""));
-                        print(_lastName);
-                        print(_email.toLowerCase());
-                        print(_password);
-                        print(_conPassword);
+                      print(_firstName.replaceAll(new RegExp(r"\s+"), ""));
+                      print(_lastName);
+                      print(_email.toLowerCase());
+                      print(_password);
+                      print(_conPassword);
 
-                       // _email = _email.toLowerCase();
-                        //Send to API
-                        //send user information to the database
-                        //setState(() => _loading = true);
-                        sendData(_firstName.replaceAll(new RegExp(r"\s+"), ""), _lastName.replaceAll(new RegExp(r"\s+"), ""), _email.replaceAll(new RegExp(r"\s+"), "").toLowerCase(), _password.replaceAll(new RegExp(r"\s+"), ""));
-                      },
-                      color: Themes.PrimaryColorRed,
-                    )
+                      // _email = _email.toLowerCase();
+                      //Send to API
+                      //send user information to the database
+                      //setState(() => _loading = true);
+                      sendData(_firstName.replaceAll(new RegExp(r"\s+"), ""), _lastName.replaceAll(new RegExp(r"\s+"), ""), _email.replaceAll(new RegExp(r"\s+"), "").toLowerCase(), _password.replaceAll(new RegExp(r"\s+"), ""));
+                    },
+                    color: Themes.PrimaryColorRed,
+                  )
+              ),
+              Expanded(child:
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(children: <TextSpan>[
+                    TextSpan(
+                        text: "Already have an account?",
+                        style: TextStyle(color: Colors.white)),
+                    TextSpan(
+                        text: " Login",
+                        recognizer: new TapGestureRecognizer()..onTap = () =>
+                        {
+                          print("testing one two three"),
+                          //setState(() => loading = true),
+                          //setUserPreferencesNull(),
+                          Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/login', (r) => false)
+                        },
+                        style: TextStyle(
+                            color: Colors.deepPurple,
+                            fontWeight: FontWeight.bold)),
+                  ]),
                 ),
-              ],
-            ),
+              )),
+              SizedBox(
+                height: 30,
+              ),
+            ],
           ),
         ),
-      ),
+
+              ),
+            ),
+
+    ]),
     );
   }
 
@@ -343,48 +376,67 @@ class SignUpState extends  State<SignUp> {
   }
   //account email is already used
   accountInUseDialog(){
-    SimpleDialog carDialog = SimpleDialog(
-      contentPadding: EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            SizedBox(
-              height: 20,
-            ),
-            Text("Account already in use!", style: TextStyle(fontSize: 20),),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(
-                  child: InkWell(
-                    onTap: (){
-                      print("CONFIRM");
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(6), bottomRight:  Radius.circular(6)),
-                        color: Themes.PrimaryColorRed,
-                      ),
-                      height: 45,
-                      child: Center(
-                        child: Text("OKAY",
-                            style: TextStyle(fontSize: 20)),
-                      ),
+    Dialog dialog = new Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 140,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Account already in user!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                color: Colors.blueAccent,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Confirm",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Colors.redAccent,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
             ),
           ],
-        ),
-      ],
+        )
     );
-    showDialog(context: context, builder: (context) => carDialog);
+    showDialog(context: context, builder: (context) => dialog);
   }
 }
+
