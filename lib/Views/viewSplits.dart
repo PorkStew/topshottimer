@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Themes.dart';
 import 'PageSelector.dart';
 
 String userGetID;
@@ -83,7 +84,6 @@ class viewSplitsState extends State<viewSplits> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("View Splits")),
         body: Container(
           child: FutureBuilder(
             future: fUSerID,
@@ -103,7 +103,7 @@ class viewSplitsState extends State<viewSplits> {
                             width: 100,
                             child: CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.red),
+                                  Color(0xFFA2C11C)),
                               strokeWidth: 5.0,
                             ),
                           ),
@@ -142,7 +142,7 @@ class viewSplitsState extends State<viewSplits> {
 
                                               Row(
                                               children: <Widget>[
-                                              Text("Shot: "+(index + 1).toString(), style: TextStyle(fontSize: 24, color: Colors.red),),
+                                              Text("Shot: "+(index + 1).toString(), style: TextStyle(fontSize: 24, color: Color(0xFFA2C11C)),),
                                             ]
 
                                             ),
@@ -167,53 +167,127 @@ class viewSplitsState extends State<viewSplits> {
 
                             ),
                           ),
-                          FlatButton(
-                            child: Text("Delete String", style: TextStyle(color: Colors.red),),
-                            onPressed: () {
-                                showDialog(
-                                context: context,
-                                builder: (BuildContext context){
-                                  return AlertDialog(
-                                    title: Text("Delete String and Splits"),
-                                    content: Text("Are you sure you would like to delete this string?"),
-                                    actions: [
-                                      FlatButton(
-                                        child: Text("Cancel"),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                      ),
-                                      FlatButton(
-                                        child: Text("Delete"),
-                                        onPressed: () {
-                                          deleteStringSplits();
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
-                                          showDialog(
+
+                          Row(
+                            children: [
+                              Spacer(),
+                              FlatButton(
+                                color: Color(0xFF2C5D63),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFF2C5D63))),
+                                height: 50,
+                                minWidth: 35,
+                                child: Text("Close String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+
+
+                              ),
+                              Spacer(),
+                              FlatButton(
+                                color: Color(0xFFA2C11C),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFFA2C11C))),
+                                height: 50,
+                                minWidth: 35,
+                                child: Text("Delete String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
+                                onPressed: () {
+                                  showDialog(
                                       context: context,
                                       builder: (BuildContext context){
                                         return AlertDialog(
-                                          title: Text("String Deleted"),
-                                          content: Text("Your string was deleted succesfully"),
+                                          title: Text("Delete String and Splits", style: TextStyle(color: Themes.darkTextColor)),
+                                          content: Text("Are you sure you would like to delete this string?"),
                                           actions: [
-                                            FlatButton(child: Text("Ok"),
+                                            FlatButton(
+                                              child: Text("Cancel"),
                                               onPressed: () {
-                                              Navigator.pop(context);
+                                                Navigator.pop(context);
                                               },
                                             ),
+                                            FlatButton(
+                                              child: Text("Delete"),
+                                              onPressed: () {
+                                                deleteStringSplits();
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext context){
+                                                      return AlertDialog(
+                                                        title: Text("String Deleted", style: TextStyle(color: Themes.darkTextColor),),
+                                                        content: Text("Your string was deleted succesfully"),
+                                                        actions: [
+                                                          FlatButton(child: Text("Ok"),
+                                                            onPressed: () {
+                                                              Navigator.pop(context);
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    });
+                                              },
+                                            )
                                           ],
                                         );
-                                      });
-                                           },
-                                      )
-                                    ],
+
+                                      }
+
                                   );
 
-                                }
+                                },
 
-                                );
 
-                                    }
-                                                )            //deleteStringSplits();
+                              ),
+                              Spacer(),
+                            ],
+
+                          ),
+                          // FlatButton(
+                          //   child: Text("Delete String", style: TextStyle(color: Color(0xFFA2C11C)),),
+                          //   onPressed: () {
+                          //       showDialog(
+                          //       context: context,
+                          //       builder: (BuildContext context){
+                          //         return AlertDialog(
+                          //           title: Text("Delete String and Splits"),
+                          //           content: Text("Are you sure you would like to delete this string?"),
+                          //           actions: [
+                          //             FlatButton(
+                          //               child: Text("Cancel"),
+                          //               onPressed: () {
+                          //                 Navigator.pop(context);
+                          //               },
+                          //             ),
+                          //             FlatButton(
+                          //               child: Text("Delete"),
+                          //               onPressed: () {
+                          //                 deleteStringSplits();
+                          //                 Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
+                          //                 showDialog(
+                          //             context: context,
+                          //             builder: (BuildContext context){
+                          //               return AlertDialog(
+                          //                 title: Text("String Deleted"),
+                          //                 content: Text("Your string was deleted succesfully"),
+                          //                 actions: [
+                          //                   FlatButton(child: Text("Ok"),
+                          //                     onPressed: () {
+                          //                     Navigator.pop(context);
+                          //                     },
+                          //                   ),
+                          //                 ],
+                          //               );
+                          //             });
+                          //                  },
+                          //             )
+                          //           ],
+                          //         );
+                          //
+                          //       }
+                          //
+                          //       );
+                          //
+                          //           }
+                          //                       )            //deleteStringSplits();
 
 
 

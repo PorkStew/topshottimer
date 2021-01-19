@@ -124,8 +124,8 @@ class SplitsState extends State<Splits> {
                                     //color: Colors.red,
                                     height: 35,
                                     minWidth: 35,
-                                    shape: CircleBorder(side: BorderSide(color: Colors.red, width: 2)),
-                                    child: Text("X",style: TextStyle(fontSize: 20, color: Colors.red),),
+                                    shape: CircleBorder(side: BorderSide(color: Color(0xFFDE561C), width: 2)),
+                                    child: Text("X",style: TextStyle(fontSize: 20, color: Color(0xFFDE561C)),),
                                     onPressed: () {
                                       setState(() {
                                         arrShots.remove(sShot);
@@ -152,13 +152,18 @@ class SplitsState extends State<Splits> {
               Text("Total Time: "+arrShots[arrShots.length - 1],style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,),),
               Text("Total Shots: "+(arrShots.length).toString(),style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,),),
 
+              Container(
+                padding: EdgeInsets.only(top: 20,bottom: 15,left: 0, right: 0),
+                //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
+              ),
               Row(
                 children: [
                   Spacer(),
                   FlatButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.red)),
-                    height: 35,
+                    color: Color(0xFF2C5D63),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFF2C5D63))),
+                    height: 50,
                     minWidth: 35,
                     child: Text("Close String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
                     onPressed: () {
@@ -169,8 +174,9 @@ class SplitsState extends State<Splits> {
                   ),
                   Spacer(),
                   FlatButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(color: Colors.green)),
-                    height: 35,
+                    color: Color(0xFFA2C11C),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFFA2C11C))),
+                    height: 50,
                     minWidth: 35,
                     child: Text("Save String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
                     onPressed: () {

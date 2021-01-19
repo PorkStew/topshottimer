@@ -89,7 +89,7 @@ class _timerAreaState extends State<timerArea> {
   bool didReset = true;
   String buttonText = "Start";
   bool isChanged = true;
-  Color btnColor = new Color.fromRGBO(0, 255, 26, 100);
+  Color btnColor = new Color(0xFFA2C11C);
   bool colorisChanged = true;
 
   //Future playSoundFuture;
@@ -355,7 +355,7 @@ class _timerAreaState extends State<timerArea> {
                   //color: btnColor,
                   minWidth: 250,
                   height: 250,
-                  shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
+                  shape: CircleBorder(side: BorderSide(color: Color(0xFFA2C11C), width: 4)),
                   onPressed: () {
                     obtainUserDefaults();
                     if(bResetOnStart == true){
@@ -383,11 +383,8 @@ class _timerAreaState extends State<timerArea> {
                         isChanged = !isChanged;
                         colorisChanged = !colorisChanged;
                         setState(() {
-                          colorisChanged == true
-                              ? btnColor = new Color.fromRGBO(0, 255, 26, 100)
-                              : btnColor = Colors.red;
-                          isChanged == true ? buttonText = "Start" : buttonText =
-                          "Stop";
+                          colorisChanged == true ? btnColor = Color(0xFFA2C11C) : btnColor = Color(0xFF2C5D63);
+                          isChanged == true ? buttonText = "Start" : buttonText = "Stop";
                         });
                         //Future.delayed(const Duration(seconds: 2));
                       }
@@ -482,9 +479,10 @@ class _timerAreaState extends State<timerArea> {
                   // Spacer(),
                   FlatButton(
                     //color: Colors.blue,
-                      minWidth: 170,
+                      minWidth: 200,
                       height: 50,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Colors.red),),
+                      color: Color(0xFF2C5D63),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(width: 2, color: Color(0xFF2C5D63)),),
                       child: Text("View String", style: TextStyle(fontSize: 25, color: Theme.of(context).buttonColor )),
                       onPressed: () {
                         if(arrShots.length <= 1 ){
@@ -553,7 +551,7 @@ obtainUserDefaults() async{
   }
 
   if (dSensitivity == 0.0){
-    timerSensitivity = 89.8;
+    timerSensitivity = 89.4;
   } else
   if (dSensitivity == 25.0){
     timerSensitivity = 80.0;

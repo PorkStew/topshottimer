@@ -196,34 +196,44 @@ class Themes {
     textTheme: _lightTextTheme,
   );
 
+
+  static const darkBackgoundColor = const Color(0xFF283739);
+  static const darkTextColor = const Color(0xFFFFFFFF);
+  static const darkParagraphColor = const Color(0xFF949494);
+  static const darkButton1Color = const Color(0xFF2C5D63);
+  static const darkButton2Color = const Color(0xFFA2C11C);
+  static const darkUnselectedIconColor = const Color(0xFFA2C11C);
+  static const darkSelectedIconColor = const Color(0xFFFFFFFF);
+
   static final ThemeData darkTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.black,
+
+    scaffoldBackgroundColor: darkBackgoundColor,
     //all values need to be defined to work
-    primarySwatch: MaterialColor(0xFFF70000, {
-      50:  Color(0xFFF70000),
-      100: Color(0xFFF70000),
-      200: Color(0xFFF70000),
-      300: Color(0xFFF70000),
-      400: Color(0xFFF70000),
-      500: Color(0xFFF70000),
-      600: Color(0xFFF70000),
-      700: Color(0xFFF70000),
-      800: Color(0xFFF70000),
-      900: Color(0xFFF70000),
+    primarySwatch: MaterialColor(0xFFA2C11C, {
+      50:  Color(0xFFA2C11C),
+      100: Color(0xFFA2C11C),
+      200: Color(0xFFA2C11C),
+      300: Color(0xFFA2C11C),
+      400: Color(0xFFA2C11C),
+      500: Color(0xFFA2C11C),
+      600: Color(0xFFA2C11C),
+      700: Color(0xFFA2C11C),
+      800: Color(0xFFA2C11C),
+      900: Color(0xFFA2C11C),
     }),
 
     appBarTheme: AppBarTheme(
-      color: PrimaryColorRed,
+      color: darkButton1Color,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Colors.black87,
-      unselectedItemColor: Colors.red,
-      selectedItemColor: Colors.green,
+      backgroundColor: darkBackgoundColor,
+      unselectedItemColor: darkUnselectedIconColor,
+      selectedItemColor: darkSelectedIconColor,
 
     ),
 
     cardTheme: CardTheme(
-      color: Colors.black,
+      color: darkBackgoundColor,
 
 
     ),
@@ -234,7 +244,7 @@ class Themes {
     //   )
     // ),
     iconTheme: IconThemeData(
-      color: Colors.white,
+      color: darkButton2Color,
     ),
     //dialogBackgroundColor: new Color(int.parse("0xff404040")),
     dividerColor:  Colors.white,
@@ -248,7 +258,7 @@ class Themes {
       labelStyle: TextStyle(color: Colors.grey),
     ),
     buttonColor: Colors.white,
-    dialogBackgroundColor: new Color(int.parse("0xff373737")),
+    dialogBackgroundColor: darkButton1Color,
     //theme colors for text
     textTheme: _darkTextTheme,
     // Divider(
@@ -274,11 +284,12 @@ class Themes {
   static final TextTheme _darkTextTheme = TextTheme(
 
     //bodyText1: TextStyle(color: Colors.white),
-    bodyText2: TextStyle(color: Colors.white),
+
+    bodyText2: TextStyle(color: darkTextColor),
     //button: TextStyle(color: Colors.red),
     //caption: TextStyle(color: Colors.red),
     //for text input color
-    subtitle1: TextStyle(color: Colors.white), // <-- that's the one
+    subtitle1: TextStyle(color: darkTextColor), // <-- that's the one
     // headline1: TextStyle(color: Colors.red),
     // headline2: TextStyle(color: Colors.red),
     // headline3: TextStyle(color: Colors.red),
