@@ -1,10 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart' as con;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/loading.dart';
+
 class ResetPassword extends StatefulWidget {
   String something = "";
   ResetPassword(this.something);
@@ -49,13 +52,15 @@ class _ResetPasswordState extends State<ResetPassword> {
       },
       onSaved: (String value) {
         _email = value;
+        print(_email);
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return loading? Loading() : Scaffold(
+    return loading? Loading() : KeyboardDismisser(
+        child: Scaffold(
         appBar: AppBar(title: Text("Password Reset"), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color)),
       body: Column(
         children: [
@@ -119,10 +124,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                               print(_emailFromLogin);
                               print("email below");
                               print(_email);
-                              resetPassword(_email.toLowerCase());
+                              resetUserPreferences(_email);
+                              Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': _email},);
+                             // resetPassword(_email.toLowerCase());
                             }
                           },
-                          color: Themes.PrimaryColorRed,
+                          color: Themes.darkButton1Color,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -150,7 +157,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                             Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/login', (r) => false)
                             },
                             style: TextStyle(
-                                color: Colors.deepPurple,
+                                color: Themes.darkButton2Color,
                                 fontWeight: FontWeight.bold)),
                       ]),
                     ),
@@ -184,24 +191,30 @@ class _ResetPasswordState extends State<ResetPassword> {
       //       ],
       //     )
       )
+    )
     );
   }
-  resetPassword(String email) async{
-    try{
-      var url = 'https://www.topshottimer.co.za/resetPasswordMailer.php';
-      var res = await http.post(
-          Uri.encodeFull(url), headers: {"Accept": "application/jason"},
-          body: {
-            "emailAddress": email,
-          }
-      );
-      //Navigator.of(context).pop();
-      //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
-      Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': email});
-
-    }catch (error) {
-      print(error.toString());
-      setState(() => loading = false);
-    }
+  resetUserPreferences(String email) async{
+    SharedPreferences  prefs = await SharedPreferences.getInstance();
+    await prefs.setString('email', email);
   }
+//REMOVE
+  // resetPassword(String email) async{
+  //   try{
+  //     var url = 'https://www.topshottimer.co.za/resetPasswordMailer.php';
+  //     var res = await http.post(
+  //         Uri.encodeFull(url), headers: {"Accept": "application/jason"},
+  //         body: {
+  //           "emailAddress": email,
+  //         }
+  //     );
+  //     //Navigator.of(context).pop();
+  //     //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
+  //     //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': email});
+  //
+  //   }catch (error) {
+  //     print(error.toString());
+  //     setState(() => loading = false);
+  //   }
+  // }
 }

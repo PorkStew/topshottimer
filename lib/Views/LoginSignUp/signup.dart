@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:topshottimer/Themes.dart';
@@ -7,6 +10,7 @@ import 'package:topshottimer/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:basic_utils/basic_utils.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 //TODO better handling of errors when they click the wrong link
 //TODO if they are verified then the system must send a different file to display that they are already verified.
 class SignUp extends StatefulWidget {
@@ -48,11 +52,14 @@ class SignUpState extends  State<SignUp> {
     });
   }
   Widget _buildFirstName() {
+    final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
           labelText: 'FIRST NAME',
         prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color),
       ),
+      onEditingComplete: () => node.nextFocus(),
+      textInputAction: TextInputAction.next,
       validator: (String value) {
         if (value.isEmpty) {
           //saveData(context);
@@ -75,11 +82,14 @@ class SignUpState extends  State<SignUp> {
   }
   //last name input and validation
   Widget _buildLastName() {
+    final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color),
           labelText: 'LAST NAME',
       ),
+      onEditingComplete: () => node.nextFocus(),
+      textInputAction: TextInputAction.next,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Last name is Required';
@@ -101,12 +111,15 @@ class SignUpState extends  State<SignUp> {
   }
   //email input and validation
   Widget _buildEmail() {
+    final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'EMAIL',
           prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color),
 
       ),
+      onEditingComplete: () => node.nextFocus(),
+      textInputAction: TextInputAction.next,
       initialValue: _emailFromLogin,
       validator: (String value) {
         if (value.isEmpty) {
@@ -130,6 +143,7 @@ class SignUpState extends  State<SignUp> {
   }
   //password input and validation
   Widget _buildPassword() {
+    final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
           labelText: 'PASSWORD',
@@ -152,6 +166,8 @@ class SignUpState extends  State<SignUp> {
             },
       ),
       ),
+      onEditingComplete: () => node.nextFocus(),
+      textInputAction: TextInputAction.next,
       obscureText: !_passwordVisible,
       validator: (String value) {
         if (value.isEmpty) {
@@ -178,6 +194,7 @@ class SignUpState extends  State<SignUp> {
   }
   ////confirm password input and validation
   Widget _buildConPassword() {
+    final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
           labelText: 'CONFIRM PASSWORD',
@@ -199,6 +216,8 @@ class SignUpState extends  State<SignUp> {
           },
         ),
       ),
+      onFieldSubmitted: (_) => node.unfocus(),
+      textInputAction: TextInputAction.done,
       obscureText: !_passwordVisible,
       validator: (String value) {
         if (value.isEmpty) {
@@ -227,7 +246,8 @@ class SignUpState extends  State<SignUp> {
   @override
   Widget build(BuildContext context) {
     //dsiplays loading screen when set state is true
-    return _loading ? Loading() : Scaffold(
+    return _loading ? Loading() : KeyboardDismisser(
+      child: Scaffold(
       appBar: AppBar(title: Text("SIGN UP"), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
       //allows for the movement of widget to not be blocked by the keyboard
       resizeToAvoidBottomInset: true,
@@ -237,7 +257,7 @@ class SignUpState extends  State<SignUp> {
       child: Form(
       key: _formKey,
         child: Container(
-          padding: EdgeInsets.all(25),
+          padding: EdgeInsets.all(30),
           child: Column(
             children: [
               _buildFirstName(),
@@ -282,7 +302,7 @@ class SignUpState extends  State<SignUp> {
                       //setState(() => _loading = true);
                       sendData(_firstName.replaceAll(new RegExp(r"\s+"), ""), _lastName.replaceAll(new RegExp(r"\s+"), ""), _email.replaceAll(new RegExp(r"\s+"), "").toLowerCase(), _password.replaceAll(new RegExp(r"\s+"), ""));
                     },
-                    color: Themes.PrimaryColorRed,
+                    color: Themes.darkButton2Color,
                   )
               ),
               Expanded(child:
@@ -304,14 +324,11 @@ class SignUpState extends  State<SignUp> {
                           Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/login', (r) => false)
                         },
                         style: TextStyle(
-                            color: Colors.deepPurple,
+                            color: Themes.darkButton2Color,
                             fontWeight: FontWeight.bold)),
                   ]),
                 ),
               )),
-              SizedBox(
-                height: 30,
-              ),
             ],
           ),
         ),
@@ -320,6 +337,7 @@ class SignUpState extends  State<SignUp> {
             ),
 
     ]),
+    )
     );
   }
 
@@ -357,10 +375,13 @@ class SignUpState extends  State<SignUp> {
         //show dialog
         accountInUseDialog();
       }
-    }catch (error) {
-      setState(() => _loading = false);
-      print(error.toString());
-    }
+    } on TimeoutException catch (e) {
+  print('Timeout Error: $e');
+  } on SocketException catch (e) {
+  print('Socket Error: $e');
+  } on Error catch (e) {
+  print('General Error: $e');
+  }
   }
 
   //takes the users information and stores it in shared preferences
@@ -409,7 +430,7 @@ class SignUpState extends  State<SignUp> {
                               decoration: BoxDecoration(
                                 borderRadius:
                                 BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                color: Colors.blueAccent,
+                                color: Themes.darkButton2Color,
                               ),
                               height: 45,
                               child: Center(

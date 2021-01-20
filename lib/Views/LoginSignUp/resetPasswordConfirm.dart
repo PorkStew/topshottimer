@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/LoginSignUp/login.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
 import 'package:topshottimer/loading.dart';
@@ -11,6 +16,16 @@ class ResetPasswordConfirm extends StatefulWidget {
 
 class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
   bool loading = false;
+  BuildContext context;
+
+  //resetPassword(arguments['email']);
+  @override
+  void initState(){
+    super.initState();
+    resetPassword();
+    print("HERE");
+    //print(arguments['email']);
+  }
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
@@ -64,10 +79,11 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                       RichText(
                           text: TextSpan(
                               text: "Wrong email address?",
-                              style: TextStyle(color: Colors.blue, fontSize: 15),
+                              style: TextStyle(color: Themes.darkButton2Color, fontSize: 15),
                               recognizer: new TapGestureRecognizer()
                                 ..onTap = () {
                                   print("wrong email!!!");
+                                  resetUserPreferences();
                                   //tests();
                                   //return to sign up because they entered the wrong information
                                   setState(() => loading = true);
@@ -98,14 +114,14 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                         onPressed: (){
                           print("return to login please!");
                           //checkUserVerified();
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Login()));
+                          resetUserPreferences();
+                          Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
                         },
                         child: Text(
                           'Login',
-                           style: TextStyle(color: Colors.black, fontSize: 20),
+                           style: TextStyle(color: Colors.white , fontSize: 20),
                         ),
-                        color: Colors.red,
+                        color: Themes.darkButton1Color,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -118,15 +134,16 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                       child: RaisedButton(
                         onPressed: (){
                           print("HELO CONFIRM FOR ME PEASE");
+                          resetPassword();
                           //checkUserVerified();
                           //Navigator.push(context,
                               //MaterialPageRoute(builder: (context) => Login()));
                         },
                         child: Text(
                           'Resend Email',
-                          style: TextStyle(color: Colors.black, fontSize: 20),
+                          style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
-                        color: Colors.red,
+                        color: Themes.darkButton2Color,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -149,14 +166,15 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                       recognizer: new TapGestureRecognizer()..onTap = () =>
                       {
                       print("wrong email!!!"),
+                        resetUserPreferences(),
                       //tests();
                       //return to sign up because they entered the wrong information
                       setState(() => loading = true),
                 //setUserPreferencesNull()
-                        Navigator.pop(context,true)
+                      Navigator.pushReplacementNamed(context, '/LoginSignUp/login')
                       },
                       style: TextStyle(
-                          color: Colors.deepPurple,
+                          color: Themes.darkButton2Color,
                           fontWeight: FontWeight.bold)),
                 ]),
               ),
@@ -169,20 +187,33 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
       ),
     );
   }
-
-  resetPassword(String email) async{
+  resetPassword() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String email = await prefs.getString('email');
+    print(email);
     try{
-      print(email);
-      var url = 'https://www.topshottimer.co.za/mailer2.php';
-      var res = await post(
+      var url = 'https://www.topshottimer.co.za/resetPasswordMailer.php';
+      var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
           body: {
             "emailAddress": email,
           }
       );
+      Map<String, dynamic> data = json.decode(res.body);
+      String status = data["success"];
+      print(status);
+      if(status == 'true'){
+        print("EMAIL SENT SUCCESSFULY");
+      } else if(status == 'false'){
+        print("EMAIL WAS NOT SENT DUE TO ERROR");
+      }
     }catch (error) {
       print(error.toString());
+      setState(() => loading = false);
     }
   }
-
+  resetUserPreferences() async{
+      SharedPreferences  prefs = await SharedPreferences.getInstance();
+      await prefs.setString('email', null);
+  }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:topshottimer/Themes.dart';
@@ -92,7 +93,7 @@ class _verifyEmailState extends State<verifyEmail> {
                           RichText(
                               text: TextSpan(
                                   text: "Wrong email address?",
-                                  style: TextStyle(color: Colors.blue, fontSize: 15),
+                                  style: TextStyle(color: Themes.darkButton2Color, fontSize: 15),
                                   recognizer: new TapGestureRecognizer()
                                     ..onTap = () {
                                       print("wrong email!!!");
@@ -133,10 +134,10 @@ class _verifyEmailState extends State<verifyEmail> {
                           },
                           child: Text(
                               'Resend Email',
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 20, color: Colors.white       ),
 
                           ),
-                          color: Themes.PrimaryColorRed,
+                          color: Themes.darkButton1Color,
                           shape: RoundedRectangleBorder(
                            borderRadius: BorderRadius.circular(10),
                          ),
@@ -163,7 +164,7 @@ class _verifyEmailState extends State<verifyEmail> {
                           Navigator.pushReplacementNamed(context, '/LoginSignUp/login'),
                         },
                         style: TextStyle(
-                            color: Colors.deepPurple,
+                            color: Themes.darkButton2Color,
                             fontWeight: FontWeight.bold)),
                   ]),
                 ),
@@ -207,6 +208,7 @@ class _verifyEmailState extends State<verifyEmail> {
       if(verified == 'true'){
         Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
       }
+      try{
       var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
@@ -221,10 +223,12 @@ class _verifyEmailState extends State<verifyEmail> {
       String status = data["verified"];
       //display message because they are not a user
       if (status == "error") {
+        print("error");
         setState(() => loading = true);
         timer.cancel();
         super.dispose();
         //TODO should we not just return to login if there is no user
+        //return to login but also display error before or after they get to login page
         Navigator.push(context, MaterialPageRoute(builder: (context) => login.Login()));
       }
       //is a user but they haven't verified their email address
@@ -243,9 +247,15 @@ class _verifyEmailState extends State<verifyEmail> {
       } else{
 
       }
+      } on TimeoutException catch (e) {
+        print('Timeout Error: $e');
+      } on Socket catch (e) {
+        print('Socket Error: $e');
+      } on Error catch (e) {
+        print('General Error: $e');
+      }
   }
-  //this called auto on page oad or when user clicks button
-  //TODO REMOVE mailerVerifyEmail.php from server
+  //this called auto on page loador when user clicks button
   getUserInfo() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
@@ -260,16 +270,28 @@ class _verifyEmailState extends State<verifyEmail> {
           }
       );
       //MAYBE WE NEED THIS?????
-      // Map<String, dynamic> data = json.decode(res.body);
-      // String status = data["status"];
+      Map<String, dynamic> data = json.decode(res.body);
+      String status = data["success"];
+      print(status);
+      //TODO show that message was sent successfully
+      if(status == 'true'){
+        print("EMAIL SENT SUCCESSFULY");
+      } else if(status == 'false'){
+        print("EMAIL WAS NOT SENT DUE TO ERROR");
+      }
       // if(status == "non-verified" && _count != 0) {
       //   emailSent();
       // }
       _count++;
-    }catch (error) {
-      print(error.toString());
+    } on TimeoutException catch (e) {
+      print('Timeout Error: $e');
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
+    } on Error catch (e) {
+      print('General Error: $e');
     }
   }
+  //delete
   emailSent(){
     SimpleDialog carDialog = SimpleDialog(
       contentPadding: EdgeInsets.all(0),
@@ -296,7 +318,7 @@ class _verifyEmailState extends State<verifyEmail> {
                       decoration: BoxDecoration(
                         borderRadius:
                         BorderRadius.only(bottomLeft: Radius.circular(6), bottomRight:  Radius.circular(6)),
-                        color: Colors.red,
+                        color: Themes.darkButton2Color,
                       ),
                       height: 45,
                       child: Center(
@@ -315,6 +337,7 @@ class _verifyEmailState extends State<verifyEmail> {
 
     showDialog(context: context, builder: (context) => carDialog);
   }
+  //delete
   notVerifiedError(){
     SimpleDialog carDialog = SimpleDialog(
       contentPadding: EdgeInsets.all(0),
