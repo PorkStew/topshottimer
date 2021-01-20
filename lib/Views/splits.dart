@@ -179,6 +179,7 @@ class SplitsState extends State<Splits> {
                     child: Text("Save String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
                     onPressed: () {
                       stringNameDialog();
+
                       // showDialog(
                       //     context: context,
                       //     builder: (BuildContext context){
@@ -262,6 +263,7 @@ class SplitsState extends State<Splits> {
                     key: _formKey,
                     child: TextFormField(
                       decoration: InputDecoration(
+
                         //labelText: 'Email',
                           labelText: 'String Name'
                       ),
@@ -312,6 +314,8 @@ class SplitsState extends State<Splits> {
                           print("here is my input from the dialog");
                           print(_StringName.text);
                           sendData(_StringName.text, 10, 10.2);
+                          Navigator.pushReplacementNamed(context, '/PageSelector');
+
                         },
                         child: Container(
                           decoration: BoxDecoration(

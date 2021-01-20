@@ -104,6 +104,7 @@ class _editUserDetailsState extends State<editUserDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text(""), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
       body: Container(
         padding: EdgeInsets.only(top: 35,bottom: 20,left: 20, right: 20),
         child: FutureBuilder(
@@ -223,13 +224,8 @@ class _editUserDetailsState extends State<editUserDetails> {
                               minWidth: 220,
                               child: Text("Reset Password",style: TextStyle(fontSize: 20,color: Theme.of(context).buttonColor ),),
                               onPressed: () async {
-                                resetPassword(Email.toLowerCase());
-                                SharedPreferences preferences = await SharedPreferences.getInstance();
-                                await preferences.clear();
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
-                                print("Signed Out");
-                                //Navigator.pushReplacementNamed(context, '/editUserDetails');
-                                print("Password Reset Sent");
+                                resetPasswordDialog();
+
                               },
 
 
@@ -349,6 +345,101 @@ class _editUserDetailsState extends State<editUserDetails> {
     );
 
   }
+
+  resetPasswordDialog(){
+    Dialog dialog = new Dialog(
+        backgroundColor: Themes.darkBackgoundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 140,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Send a password reset email?", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(height: 20,),
+
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10)),
+                                color: Themes.darkButton1Color,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Cancel",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              print("Delete Clicked");
+                              resetPassword(Email.toLowerCase());
+                              clearDefaults();
+                              //Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+                              print("Signed Out");
+                              Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
+                              // Navigator.pop(context);
+                              //Navigator.push(context,
+                              // MaterialPageRoute(builder: (context) => SignUp(_email.text)));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomRight: Radius.circular(10)),
+                                //color: Themes.PrimaryColorRed,
+                                color: Themes.darkButton2Color,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Send Email",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Themes.darkButton2Color,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
+            ),
+          ],
+        )
+    );
+    showDialog(context: context, builder: (context) => dialog);
+
+  }
 }
 
 // doStuff() async{
@@ -364,6 +455,8 @@ resetPassword(String email) async{
           "emailAddress": email,
         }
     );
+    print("Password Reset Sent");
+
     //Navigator.of(context).pop();
     //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
     //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': email});
@@ -399,6 +492,11 @@ updateUserDefaults(String name, String surname) async{
   await prefs.setString('firstName', name);
   await prefs.setString('lastName', surname);
 
+}
+
+clearDefaults() async{
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  await preferences.clear();
 }
 
 Future <String> userFirstName() async{

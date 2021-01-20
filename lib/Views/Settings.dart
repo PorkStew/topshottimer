@@ -412,7 +412,7 @@ class _SettingsState extends State<Settings> {
                               onPressed: () async {
                                 SharedPreferences preferences = await SharedPreferences.getInstance();
                                 await preferences.clear();
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+                                Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
                                 print("Signed Out");
                               },
 
