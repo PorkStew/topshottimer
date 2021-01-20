@@ -147,9 +147,10 @@ class Themes {
     ),
 
     buttonColor: Colors.white,
-    dialogBackgroundColor: darkButton1Color,
+    dialogBackgroundColor: darkBackgoundColor,
     //theme colors for text
     textTheme: _darkTextTheme,
+
     // Divider(
     //   color: Colors.white,
     // ),

@@ -1,5 +1,10 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:topshottimer/Views/Dialog.dart';
 import 'package:topshottimer/Themes.dart';
+import 'package:topshottimer/Views/LoginSignUp/signup.dart';
 import 'package:topshottimer/Views/Profile.dart';
 import 'package:topshottimer/Views/timer.dart';
 import 'dart:convert';
@@ -34,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/LoginSignUp/login': (context) => Login(),
         '/PageSelector': (context) => pageSelector(),
         '/LoginSignUp/resetPasswordConfirm': (context) => ResetPasswordConfirm(),
+        '/LoginSignUp/verifyEmail': (context) => verifyEmail(),
         '/editUserDetails': (context) => editUserDetails(),
         '/Timer': (context) => TimerPage(),
         '/Profile': (context) => Profile(),
@@ -80,6 +86,7 @@ checkUserInformation(context) async {
   print(email);
   print(hashedPassword);
   print(verified);
+  try{
   //checks the validity shared preference information is not empty, then will try login
     if(id != null && email != null && hashedPassword != null && verified != null) {
       var url = 'https://www.topshottimer.co.za/login.php';
@@ -106,7 +113,7 @@ checkUserInformation(context) async {
       print(lastName);
       //not a user
       if (status == "not-user") {
-        Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
+       Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
       }
       //is a user but has not verified their email yet
       else if (status == "non-verified" && id != null) {
@@ -121,11 +128,21 @@ checkUserInformation(context) async {
         await prefs.setString('verify', 'true');
         await prefs.setString('firstName', firstName);
         await prefs.setString('lastName', lastName);
-        Navigator.pushReplacementNamed(context, '/PageSelector');
+        //Navigator.pushReplacementNamed(context, '/PageSelector');
+        Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
       }
       //no shared preference data is found go to login
     } else{
       Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
+      //Navigator.push(context, Dialog())
     }
+  } on TimeoutException catch (e) {
+    print('Timeout Error: $e');
+  } on SocketException catch (e) {
+    print('Socket Error: $e');
+  } on Error catch (e) {
+    print('General Error: $e');
+  }
+
 }
 
