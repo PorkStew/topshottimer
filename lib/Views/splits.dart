@@ -256,7 +256,7 @@ class SplitsState extends State<Splits> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text("What should we call this string?", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20), textAlign: TextAlign.center,),
+                Text("What should we call this string?", style: TextStyle(color: Colors.white, fontSize: 20), textAlign: TextAlign.center,),
 
                 Padding(padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                   child: Form(
@@ -299,7 +299,7 @@ class SplitsState extends State<Splits> {
                           height: 45,
                           child: Center(
                             child: Text("Cancel",
-                                style: TextStyle(fontSize: 20)),
+                                style: TextStyle(fontSize: 20, color: Colors.white)),
                           ),
                         ),
                       ),
@@ -326,7 +326,7 @@ class SplitsState extends State<Splits> {
                           height: 45,
                           child: Center(
                             child: Text("Save",
-                                style: TextStyle(fontSize: 20)),
+                                style: TextStyle(fontSize: 20, color: Colors.white)),
                           ),
                         ),
                       ),
