@@ -355,6 +355,7 @@ class _timerAreaState extends State<timerArea> {
                 child:
                 FlatButton(
                   //color: btnColor,
+
                   minWidth: 250,
                   height: 250,
                   shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
@@ -410,7 +411,8 @@ class _timerAreaState extends State<timerArea> {
 
                     //startispressed ? startstopwatch: null;
                   },
-                  child: Text(buttonText, style: TextStyle(fontSize: 80, fontFamily: 'Digital-7', color: Theme.of(context).buttonColor)),
+                  child: Text(buttonText, style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
+
                 )
             ),
             Container(
@@ -528,10 +530,12 @@ class _timerAreaState extends State<timerArea> {
   errorViewingStringDialog(){
 
     Dialog dialog = new Dialog(
+      backgroundColor: Themes.darkBackgoundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10)
         ),
         child: Stack(
+
           overflow: Overflow.visible,
           alignment: Alignment.topCenter,
           children: [
@@ -539,14 +543,16 @@ class _timerAreaState extends State<timerArea> {
               //this will affect the height of the dialog
               height: 140,
               child: Padding(
+
                 //play with top padding to make items fit
                 padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                 child: Column(
+
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Please shoot a string before viewing.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    Text("You have not shot a string.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
                     SizedBox(height: 20,),
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -560,11 +566,11 @@ class _timerAreaState extends State<timerArea> {
                               decoration: BoxDecoration(
                                 borderRadius:
                                 BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                color: Colors.blueAccent,
+                                color: Themes.darkButton2Color,
                               ),
                               height: 45,
                               child: Center(
-                                child: Text("TRY AGAIN",
+                                child: Text("Shoot String",
                                     style: TextStyle(fontSize: 20)),
                               ),
                             ),
@@ -579,7 +585,7 @@ class _timerAreaState extends State<timerArea> {
             Positioned(
                 top: -40,
                 child: CircleAvatar(
-                    backgroundColor: Colors.redAccent,
+                    backgroundColor: Themes.darkButton2Color,
                     radius: 40,
                     child: Image.asset("assets/Exclamation@3x.png", height: 53,)
                 )

@@ -191,47 +191,49 @@ class viewSplitsState extends State<viewSplits> {
                                 minWidth: 35,
                                 child: Text("Delete String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
                                 onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context){
-                                        return AlertDialog(
-                                          title: Text("Delete String and Splits", style: TextStyle(color: Themes.darkTextColor)),
-                                          content: Text("Are you sure you would like to delete this string?"),
-                                          actions: [
-                                            FlatButton(
-                                              child: Text("Cancel"),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            FlatButton(
-                                              child: Text("Delete"),
-                                              onPressed: () {
-                                                deleteStringSplits();
-                                                Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (BuildContext context){
-                                                      return AlertDialog(
-                                                        title: Text("String Deleted", style: TextStyle(color: Themes.darkTextColor),),
-                                                        content: Text("Your string was deleted succesfully"),
-                                                        actions: [
-                                                          FlatButton(child: Text("Ok"),
-                                                            onPressed: () {
-                                                              Navigator.pop(context);
-                                                            },
-                                                          ),
-                                                        ],
-                                                      );
-                                                    });
-                                              },
-                                            )
-                                          ],
-                                        );
-
-                                      }
-
-                                  );
+                                  deleteStringConfirmationDialog();
+                                  // showDialog(
+                                  //     context: context,
+                                  //     builder: (BuildContext context){
+                                  //       return AlertDialog(
+                                  //         title: Text("Delete String and Splits", style: TextStyle(color: Themes.darkTextColor)),
+                                  //         content: Text("Are you sure you would like to delete this string?"),
+                                  //         actions: [
+                                  //           FlatButton(
+                                  //             child: Text("Cancel"),
+                                  //             onPressed: () {
+                                  //               Navigator.pop(context);
+                                  //             },
+                                  //           ),
+                                  //           FlatButton(
+                                  //             child: Text("Delete"),
+                                  //             onPressed: () {
+                                  //               //deleteStringSplits();
+                                  //               deleteStringConfirmationDialog();
+                                  //               // Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
+                                  //               // showDialog(
+                                  //               //     context: context,
+                                  //               //     builder: (BuildContext context){
+                                  //               //       return AlertDialog(
+                                  //               //         title: Text("String Deleted", style: TextStyle(color: Themes.darkTextColor),),
+                                  //               //         content: Text("Your string was deleted succesfully"),
+                                  //               //         actions: [
+                                  //               //           FlatButton(child: Text("Ok"),
+                                  //               //             onPressed: () {
+                                  //               //               Navigator.pop(context);
+                                  //               //             },
+                                  //               //           ),
+                                  //               //         ],
+                                  //               //       );
+                                  //               //     });
+                                  //             },
+                                  //           )
+                                  //         ],
+                                  //       );
+                                  //
+                                  //     }
+                                  //
+                                  // );
 
                                 },
 
@@ -315,6 +317,101 @@ class viewSplitsState extends State<viewSplits> {
 
   }
 
+  deleteStringConfirmationDialog(){
+    Dialog dialog = new Dialog(
+      backgroundColor: Themes.darkBackgoundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 140,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Are you sure about this?", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(height: 20,),
+
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10)),
+                                color: Themes.darkButton1Color,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Cancel",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              print("Delete Clicked");
+                              deleteStringConfirmationDialog();
+                              deleteStringSplits();
+                              Navigator.pushReplacementNamed(context, '/PageSelector');
+                              // Navigator.pop(context);
+                              //Navigator.push(context,
+                              // MaterialPageRoute(builder: (context) => SignUp(_email.text)));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.only(bottomRight: Radius.circular(10)),
+                                  //color: Themes.PrimaryColorRed,
+                                  color: Themes.darkButton2Color,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Delete String",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Themes.darkButton2Color,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
+            ),
+          ],
+        )
+    );
+    showDialog(context: context, builder: (context) => dialog);
+
+  }
+
 }
+
+
 
 
