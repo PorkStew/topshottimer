@@ -14,6 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/splits.dart';
 import 'dart:io' show Platform;
 
+import '../Themes.dart';
+
 //import 'package:isolate/isolate.dart';
 //Pushing to Merge
 
@@ -355,7 +357,7 @@ class _timerAreaState extends State<timerArea> {
                   //color: btnColor,
                   minWidth: 250,
                   height: 250,
-                  shape: CircleBorder(side: BorderSide(color: Color(0xFFA2C11C), width: 4)),
+                  shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
                   onPressed: () {
                     obtainUserDefaults();
                     if(bResetOnStart == true){
@@ -487,23 +489,24 @@ class _timerAreaState extends State<timerArea> {
                       onPressed: () {
                         if(arrShots.length <= 1 ){
                           print("Should get into alert");
+                          errorViewingStringDialog();
 
-                          AlertDialog alert = AlertDialog(
-                            title: Text("Warning!"),
-                            content: Text("No shots registered. Please shoot a string of shots before viewing the string."),
-                            actions: [
-                              FlatButton(child: Text("Ok"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },),                        ],
-                          );
-
-                          return showDialog(
-                              context: context,
-                              builder: (BuildContext context){
-                                return alert;
-                              }
-                          );
+                          // AlertDialog alert = AlertDialog(
+                          //   title: Text("Warning!"),
+                          //   content: Text("No shots registered. Please shoot a string of shots before viewing the string."),
+                          //   actions: [
+                          //     FlatButton(child: Text("Ok"),
+                          //       onPressed: () {
+                          //         Navigator.pop(context);
+                          //       },),                        ],
+                          // );
+                          //
+                          // return showDialog(
+                          //     context: context,
+                          //     builder: (BuildContext context){
+                          //       return alert;
+                          //     }
+                          // );
 
                         }
                         else
@@ -521,6 +524,70 @@ class _timerAreaState extends State<timerArea> {
         )
     );
 
+  }
+  errorViewingStringDialog(){
+
+    Dialog dialog = new Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 140,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Please shoot a string before viewing.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                color: Colors.blueAccent,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("TRY AGAIN",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Colors.redAccent,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
+            ),
+          ],
+        )
+    );
+    showDialog(context: context, builder: (context) => dialog);
   }
 
 }
@@ -582,6 +649,8 @@ obtainUserDefaults() async{
   // print("USER DEFAULTS: TONE- " + sTone);
 
 }
+
+
 
 
 
