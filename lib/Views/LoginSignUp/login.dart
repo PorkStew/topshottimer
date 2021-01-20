@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
@@ -8,6 +10,7 @@ import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/LoginSignUp/signup.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
 import 'package:topshottimer/loading.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 //TODO we don't need controllers any mroe
 class Login extends StatefulWidget {
   @override
@@ -28,15 +31,20 @@ class LoginState extends State<Login> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+   bool obscureText = false;
+   FocusNode _focusNode = FocusNode();
 
   //email widget
-  Widget _buildEmail() {
+  Widget _buildEmail(BuildContext context) {
+    final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
           prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color),
         //labelText: 'Email',
-          labelText: 'EMAIL'
+          labelText: 'EMAIL',
       ),
+      onEditingComplete: () => node.nextFocus(),
+      textInputAction: TextInputAction.next,
       controller: _email,
       validator: (String value) {
         if (value.isEmpty) {
@@ -52,7 +60,8 @@ class LoginState extends State<Login> {
   }
 
   //password widget
-  Widget _buildPassword() {
+  Widget _buildPassword(BuildContext context) {
+    final node = FocusScope.of(context);
     return TextFormField(
 
       decoration: InputDecoration(
@@ -69,12 +78,18 @@ class LoginState extends State<Login> {
               : Icons.visibility_off,
         ),
         onPressed: () {
+
           // Update the state i.e. toogle the state of passwordVisible variable
           setState(() {
             _passwordVisible = !_passwordVisible;
-          });
+          }
+          );
+          Timer.run(() => _focusNode.unfocus());
         },
       )),
+      onFieldSubmitted: (_) => node.unfocus(),
+      textInputAction: TextInputAction.done,
+      focusNode: _focusNode,
       obscureText: !_passwordVisible,
       controller: _password,
       // maxLength: 10,
@@ -92,7 +107,8 @@ class LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return loading? Loading() :  Scaffold(
+    return loading? Loading() :  KeyboardDismisser(
+      child: Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         //physics: NeverScrollableScrollPhysics(),
@@ -103,7 +119,7 @@ class LoginState extends State<Login> {
           child: Container(
            // decoration: BoxDecoration(
             //  image: DecorationImage(
-                //image: AssetImage("assets/hizir-kaya-ExxuYNsViC4-unsplash.jpg"),
+
              //   fit: BoxFit.cover,
            //   ),
            // ),
@@ -116,7 +132,8 @@ class LoginState extends State<Login> {
                  ClipRRect(
                      borderRadius: BorderRadius.circular(35.0),
                      child: Image.asset(
-                       "assets/target-red.png",
+                       "assets/target-green@3x.png",
+                       width: 130,
                      )),
                 SizedBox(height: 30),
                 Container(
@@ -131,6 +148,8 @@ class LoginState extends State<Login> {
                             children: [
                               Text("Login", style: TextStyle(
                                 fontSize: 24,
+                                fontFamily: 'Montserrat-Regular',
+                                letterSpacing: 0.2
                               ),),
                             ],
                           )
@@ -142,57 +161,49 @@ class LoginState extends State<Login> {
                               children: [
                                 Text("Please sign in to continue", style: TextStyle(
                                   fontSize: 18,
+                                    fontFamily: 'Montserrat-Regular',
+                                  letterSpacing: 0.2,
                                   color: Colors.grey
                                 ),),
                               ],
                             )
                         ),
                         SizedBox(height: 5),
-                        _buildEmail(),
+                        _buildEmail(context),
                         SizedBox(height: 15),
-                        _buildPassword(),
+                        _buildPassword(context),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: 30),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                          margin: const EdgeInsets.only(left: 40.0, right: 10.0),
-                          child: Divider(
-                            thickness: 2,
-                          )),
-                    ),
-                    RichText(
+                SizedBox(height: 20),
+                Center(
+
+                  child:  RichText(
                         text: TextSpan(
-                            text: "Forgot Password?",
-                            style: TextStyle(color: Colors.blueAccent),
+                            text: "Forgot your password?",
+                            style: TextStyle(color: Themes.darkButton2Color, fontFamily: 'Montserrat-Regular',
+                                letterSpacing: 0.2),
                             recognizer: new TapGestureRecognizer()
                               ..onTap = () {
+                              //TODO change this i think
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ResetPassword(_email.text)));
+                                       builder: (context) => ResetPassword(_email.text))
+                                );
                               })),
-                    Expanded(
-                        child: Container(
-                            margin:
-                            const EdgeInsets.only(left: 10.0, right: 40.0),
-                            child: Divider(
-                              thickness: 2,
-                            ))),
-                  ],
+
                 ),
                 SizedBox(height: 30),
                 SizedBox(
-                    width: 250,
-                    height: 40,
+                    width: 268,
+                    height: 60,
                     child: RaisedButton(
                       child: Text(
-                        'SIGN IN',
-                        style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
+                        'Login',
+                        style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor, fontFamily: 'Montserrat-Regular',
+                            letterSpacing: 0.2),
                       ),
                       onPressed: () {
                         if (!_formKey.currentState.validate()) {
@@ -200,22 +211,23 @@ class LoginState extends State<Login> {
                         }
                         updateData(_email.text, _password.text);
                       },
-                      color: Themes.PrimaryColorRed,
+                      color: Themes.darkButton1Color,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       //side: BorderSide(color: Colors.red))),
                     )),
                 SizedBox(
-                  height: 20,
+                  height: 26,
                 ),
                 SizedBox(
-                    width: 250,
-                    height: 40,
+                    width: 268,
+                    height: 60,
                     child: RaisedButton(
                       child: Text(
-                        'SIGN UP',
-                        style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
+                        'Sign Up',
+                        style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor, fontFamily: 'Montserrat-Regular',
+                            letterSpacing: 0.2),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -223,7 +235,7 @@ class LoginState extends State<Login> {
                             MaterialPageRoute(
                                 builder: (context) => SignUp(_email.text)));
                       },
-                      color: Themes.PrimaryColorBlue,
+                      color: Themes.darkButton2Color,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -233,6 +245,7 @@ class LoginState extends State<Login> {
           ),
         ),
       ),
+    ),
     );
   }
 
@@ -244,20 +257,21 @@ class LoginState extends State<Login> {
     var digest = sha256.convert(bytes);
     hashedPassword = digest.toString();
     var url = 'https://www.topshottimer.co.za/login.php';
-    var res = await http.post(Uri.encodeFull(url), headers: {
-      "Accept": "application/jason"
-    }, body: {
-      //get this information from user defaults
-      "emailAddress": email,
-      "password": hashedPassword,
-    });
-    print("hello123");
-    Map<String, dynamic> data = json.decode(res.body);
-    String id = data['id'];
-    String status = data["status"];
-    String firstName = data["firstName"];
-    String lastName = data["lastName"];
+    try {
+      var res = await http.post(Uri.encodeFull(url), headers: {
+        "Accept": "application/jason"
+      }, body: {
+        //get this information from user defaults
+        "emailAddress": email,
+        "password": hashedPassword,
+      }).timeout(Duration(seconds: 5));
 
+      print("hello123");
+      Map<String, dynamic> data = json.decode(res.body);
+      String id = data['id'];
+      String status = data["status"];
+      String firstName = data["firstName"];
+      String lastName = data["lastName"];
     //display message because they are not a user
     if (status == "not-user") {
       setState(() => loading = false);
@@ -295,6 +309,14 @@ class LoginState extends State<Login> {
       print("hello3");
       setState(() => loading = false);
     }
+
+    } on TimeoutException catch (e) {
+      print('Timeout Error: $e');
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
+    } on Error catch (e) {
+      print('General Error: $e');
+    }
   }
 
 //takes the users information and stores it in shared preferences
@@ -312,124 +334,157 @@ class LoginState extends State<Login> {
   }
 
   incorrectDetailsDialog(){
-      SimpleDialog carDialog = SimpleDialog(
-        contentPadding: EdgeInsets.all(0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              SizedBox(
-                height: 20,
-              ),
-              Text("Incorrect Details!", style: TextStyle(fontSize: 20),),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: InkWell(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(6), bottomRight:  Radius.circular(6)),
-                          color: Themes.PrimaryColorRed,
+    Dialog dialog = new Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 140,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Incorrect Details!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                color: Themes.darkButton2Color,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("TRY AGAIN",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
                         ),
-                        height: 45,
-                        child: Center(
-                          child: Text("TRY AGAIN",
-                              style: TextStyle(fontSize: 20)),
-                        ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ],
-          ),
-        ],
-      );
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Themes.darkButton2Color,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
+            ),
+          ],
+        )
+    );
+    showDialog(context: context, builder: (context) => dialog);
+  }
 
-      showDialog(context: context, builder: (context) => carDialog);
-    }
 
 
   createAccountDialog() {
-    SimpleDialog carDialog = SimpleDialog(
-      contentPadding: EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            SizedBox(
-              height: 20,
-            ),
-            Text("Having Trouble?", style: TextStyle(fontSize: 25),),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Text("Don't feel left out, Sign up now!", textAlign: TextAlign.center, style: TextStyle(fontSize: 20),),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(
-                  child: InkWell(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(6)),
-                        color: Colors.blueAccent,
-                      ),
-                      height: 45,
-                      child: Center(
-                        child: Text("TRY AGAIN",
-                            style: TextStyle(fontSize: 20)),
-                      ),
+    Dialog dialog = new Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 160,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Having Trouble?", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(height: 5,),
+                    Text("Don't feel left out, Sign up now!", style: TextStyle(fontSize: 17),textAlign: TextAlign.center,),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10)),
+                                color: Themes.darkButton1Color,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("TRY AGAIN",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              // Navigator.pop(context);
+                              //Navigator.push(context,
+                              // MaterialPageRoute(builder: (context) => SignUp(_email.text)));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.only(bottomRight: Radius.circular(10)),
+                                  //color: Themes.PrimaryColorRed,
+                                  color: Themes.darkButton2Color
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("SIGN UP",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  ],
                 ),
-                Expanded(
-                  child: InkWell(
-                    onTap: (){
-                      Navigator.pop(context);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignUp(_email.text)));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                        BorderRadius.only(bottomRight: Radius.circular(6)),
-                        color: Themes.PrimaryColorRed,
-                      ),
-                      height: 45,
-                      child: Center(
-                        child: Text("SIGN UP",
-                            style: TextStyle(fontSize: 20)),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Themes.darkButton2Color,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
             ),
           ],
-        ),
-      ],
+        )
     );
-
-    showDialog(context: context, builder: (context) => carDialog);
-
+    showDialog(context: context, builder: (context) => dialog);
   }
-
 }
+

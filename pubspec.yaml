@@ -40,6 +40,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   audio_session: ^0.0.9
   just_audio: ^0.5.7
+  keyboard_dismisser: ^1.0.2
   #firebase_admob: ^0.10.2
 
 
@@ -101,6 +102,12 @@ flutter:
     - family: Digital-7
       fonts:
         - asset: assets/digital-7.ttf
+    - family: Montserrat-Regular
+      fonts:
+        - asset: assets/Montserrat-Regular.ttf
+    - family: Montserrat-Bold
+      fonts:
+        - asset: assets/Montserrat-Bold.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
