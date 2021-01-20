@@ -338,7 +338,7 @@ class viewSplitsState extends State<viewSplits> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Are you sure about this?", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    Text("Are you sure about this?", style: TextStyle(color: Colors.white, fontSize: 20),),
                     SizedBox(height: 20,),
 
                     Row(
@@ -358,7 +358,7 @@ class viewSplitsState extends State<viewSplits> {
                               height: 45,
                               child: Center(
                                 child: Text("Cancel",
-                                    style: TextStyle(fontSize: 20)),
+                                    style: TextStyle(fontSize: 20,color: Colors.white)),
                               ),
                             ),
                           ),
@@ -384,7 +384,7 @@ class viewSplitsState extends State<viewSplits> {
                               height: 45,
                               child: Center(
                                 child: Text("Delete String",
-                                    style: TextStyle(fontSize: 20)),
+                                    style: TextStyle(fontSize: 20,color: Colors.white)),
                               ),
                             ),
                           ),

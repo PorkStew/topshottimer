@@ -106,7 +106,7 @@ class _editUserDetailsState extends State<editUserDetails> {
     return Scaffold(
       appBar: AppBar(title: Text(""), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
       body: Container(
-        padding: EdgeInsets.only(top: 35,bottom: 20,left: 20, right: 20),
+        padding: EdgeInsets.only(top: 5,bottom: 20,left: 20, right: 20),
         child: FutureBuilder(
 
           future: newSensitivityFuture,
@@ -150,7 +150,7 @@ class _editUserDetailsState extends State<editUserDetails> {
                         child: Column(
                           children: [
                             Container(
-                              padding: EdgeInsets.only(top: 20,bottom: 0,left: 0, right: 0),
+                              padding: EdgeInsets.only(top: 0,bottom: 0,left: 0, right: 0),
                               //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                             ),
@@ -235,61 +235,38 @@ class _editUserDetailsState extends State<editUserDetails> {
                               //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                             ),
+                            FlatButton(
+                              color: Themes.darkButton2Color,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFFA2C11C))),
+                              height: 50,
+                              minWidth: 180,
+                              child: Text("Update",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
+                              onPressed: () {
+                                print("Hello world");
+                                print(newFirstName);
+
+                                if (!_formKey.currentState.validate()) {
+                                  return;
+                                }
+
+                                _formKey.currentState.save();
+                                newFirstName = StringUtils.capitalize(newFirstName);
+                                newLastName = StringUtils.capitalize(newLastName);
+
+                                print(newFirstName.replaceAll(new RegExp(r"\s+"), ""));
+                                print(newLastName);
+                                print(Email.toLowerCase());
+                                updateUserDefaults(newFirstName, newLastName);
+                                updateDetails(newFirstName, newLastName, Email);
 
 
-                            Row(
-                              children: [
+                                //TODO Needs to navigate to Page selector and have a popup dialog
 
-                                FlatButton(
-                                  color: Themes.darkButton1Color,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFF2C5D63))),
-                                  height: 50,
-                                  minWidth: 180,
-                                  child: Text("Back",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
-                                  onPressed: () {
-                                    //resetPassword(Email.toLowerCase());
-                                    Navigator.pop(context);
-                                    //Navigator.pushReplacementNamed(context, '/Settings');
-                                    print("Back Clicked");                            },
+                              },
 
-
-                                ),
-                                Spacer(),
-                                FlatButton(
-                                  color: Themes.darkButton2Color,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFFA2C11C))),
-                                  height: 50,
-                                  minWidth: 180,
-                                  child: Text("Update",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
-                                  onPressed: () {
-                                    print("Hello world");
-                                    print(newFirstName);
-
-                                    if (!_formKey.currentState.validate()) {
-                                      return;
-                                    }
-
-                                    _formKey.currentState.save();
-                                    newFirstName = StringUtils.capitalize(newFirstName);
-                                    newLastName = StringUtils.capitalize(newLastName);
-
-                                    print(newFirstName.replaceAll(new RegExp(r"\s+"), ""));
-                                    print(newLastName);
-                                    print(Email.toLowerCase());
-                                    updateUserDefaults(newFirstName, newLastName);
-                                    updateDetails(newFirstName, newLastName, Email);
-
-
-                                    //TODO Needs to navigate to Page selector and have a popup dialog
-
-                                  },
-
-
-                                ),
-
-                              ],
 
                             ),
+
 
 
 
@@ -367,7 +344,7 @@ class _editUserDetailsState extends State<editUserDetails> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Send a password reset email?", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    Text("Send a password reset email?", style: TextStyle( fontSize: 20, color: Colors.white),),
                     SizedBox(height: 20,),
 
                     Row(
@@ -387,7 +364,7 @@ class _editUserDetailsState extends State<editUserDetails> {
                               height: 45,
                               child: Center(
                                 child: Text("Cancel",
-                                    style: TextStyle(fontSize: 20)),
+                                    style: TextStyle(fontSize: 20, color: Colors.white)),
                               ),
                             ),
                           ),
@@ -415,7 +392,7 @@ class _editUserDetailsState extends State<editUserDetails> {
                               height: 45,
                               child: Center(
                                 child: Text("Send Email",
-                                    style: TextStyle(fontSize: 20)),
+                                    style: TextStyle(fontSize: 20, color: Colors.white)),
                               ),
                             ),
                           ),
