@@ -128,8 +128,8 @@ checkUserInformation(context) async {
         await prefs.setString('verify', 'true');
         await prefs.setString('firstName', firstName);
         await prefs.setString('lastName', lastName);
-        //Navigator.pushReplacementNamed(context, '/PageSelector');
-        Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
+        Navigator.pushReplacementNamed(context, '/PageSelector');
+        //Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
       }
       //no shared preference data is found go to login
     } else{
