@@ -76,6 +76,8 @@ class _timerAreaState extends State<timerArea> {
   int iSeconds;
   int iMilliseconds;
 
+  bool bStopable = true;
+
   var swatch = Stopwatch();
   final dur = const Duration(milliseconds: 1);
   int iCountShots = 0;
@@ -155,6 +157,11 @@ class _timerAreaState extends State<timerArea> {
       iMinutes = swatch.elapsed.inMinutes%60;
       iSeconds = swatch.elapsed.inSeconds%60;
       iMilliseconds = swatch.elapsed.inMilliseconds%1000;
+      int iMillisecondsCount = swatch.elapsed.inMilliseconds;
+      print(iMillisecondsCount);
+      if (iMillisecondsCount >= 200){
+        bStopable = true;
+      }
 
       // print("In Minutes: " + iMinutes.toString());
       // print("In Seconds: "+ iSeconds.toString());
@@ -198,6 +205,7 @@ class _timerAreaState extends State<timerArea> {
       stopispressed = false;
     });
     if (bstop == false){
+      bStopable = false;
       bstop = true;
       isRunning = true;
       print("Going to play sound now!!!!");
@@ -363,7 +371,7 @@ class _timerAreaState extends State<timerArea> {
                   shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
                   onPressed: () {
                     obtainUserDefaults();
-
+                    if (bStopable == true){
                       if(bResetOnStart == true){
                         arrShots.clear();
                         arrShots.add("00:00:00");
@@ -376,7 +384,6 @@ class _timerAreaState extends State<timerArea> {
                         didReset = true;
 
                       }
-
                       if (didReset == true){
 
 
@@ -411,6 +418,12 @@ class _timerAreaState extends State<timerArea> {
                         );
                         print("You need to reset");
                       }
+
+                    }
+
+
+
+
 
 
 
