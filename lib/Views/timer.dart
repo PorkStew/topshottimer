@@ -76,8 +76,6 @@ class _timerAreaState extends State<timerArea> {
   int iSeconds;
   int iMilliseconds;
 
-  String sTestingEar = "";
-
   bool bStopable = true;
 
   var swatch = Stopwatch();
@@ -160,7 +158,7 @@ class _timerAreaState extends State<timerArea> {
       iSeconds = swatch.elapsed.inSeconds%60;
       iMilliseconds = swatch.elapsed.inMilliseconds%1000;
       int iMillisecondsCount = swatch.elapsed.inMilliseconds;
-      //print(iMillisecondsCount);
+      print(iMillisecondsCount);
       if (iMillisecondsCount >= 200){
         bStopable = true;
       }
@@ -295,7 +293,6 @@ class _timerAreaState extends State<timerArea> {
     swatch.start();
     try {
       _noiseSubscription = _noiseMeter.noiseStream.listen(onData);
-
     } on NoiseMeter catch (exception) {
       print("Start Exception: " + exception.toString());
     }
@@ -303,7 +300,7 @@ class _timerAreaState extends State<timerArea> {
   }
 
   void onData(NoiseReading noiseReading) {
-    //print("Got into data method");
+    print("Got into data method");
 
     //audioCache.play('2100.mp3');
     this.setState(() {
@@ -313,21 +310,8 @@ class _timerAreaState extends State<timerArea> {
     });
     //print("Got to on Data method");
     //print(noiseReading.toString());
-    if(noiseReading.maxDecibel>89) {
-      sTestingEar = noiseReading.maxDecibel.toString();
-      //print();
-      print(noiseReading);
-      print("*****Sound Mean"+ noiseReading.meanDecibel.toString());
-      print("*****Sound Max"+noiseReading.maxDecibel.toString());
 
-      //print("Noise Reading"+noiseReading.toString());
-      //double db = 20 * log10(2**15 * noiseReading.maxDecibel)
-
-    }
-
-    if(noiseReading.maxDecibel>90){
-      print("*****Sound"+ noiseReading.maxDecibel.toString());
-
+    if(noiseReading.maxDecibel>timerSensitivity){
       //arrShots.add(noiseReading.maxDecibel.toString());
       arrShots.add(stoptimetodisplay);
       arrMinutes.add(iMinutes);
@@ -546,8 +530,6 @@ class _timerAreaState extends State<timerArea> {
 
                         }
                         else
-                          //Navigator.pushNamedAndRemoveUntil(context, newRouteName, (route) => false)context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
-
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
                       }
                   ),
@@ -556,7 +538,6 @@ class _timerAreaState extends State<timerArea> {
                 ]
 
             ),
-            Text(sTestingEar),
 
 
           ],
@@ -567,7 +548,7 @@ class _timerAreaState extends State<timerArea> {
   errorViewingStringDialog(){
 
     Dialog dialog = new Dialog(
-        backgroundColor: Themes.darkBackgoundColor,
+      backgroundColor: Themes.darkBackgoundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10)
         ),
@@ -661,7 +642,7 @@ obtainUserDefaults() async{
   }
 
   if (dSensitivity == 0.0){
-    timerSensitivity = 89.55;
+    timerSensitivity = 89.4;
   } else
   if (dSensitivity == 25.0){
     timerSensitivity = 80.0;

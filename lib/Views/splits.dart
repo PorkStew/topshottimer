@@ -105,44 +105,62 @@ class SplitsState extends State<Splits> {
                   shrinkWrap: true,
                   itemCount: arrShots.length,
                   itemBuilder: (BuildContext context, int index){
+
                     String sShot = arrShots[index];
-                    return Container(
-                        child:Column(
-                          children: <Widget>[
-                            Card(
-                              child: Row(
-                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-                                children: <Widget>[
-                                  Text((index+1).toString(),style: TextStyle(fontSize: 30),),
-                                  Spacer(),
-                                  Text(sShot,style: TextStyle(fontSize: 30)),
-                                  Spacer(),
-                                  FlatButton(
-                                    //color: Colors.red,
-                                    height: 35,
-                                    minWidth: 35,
-                                    shape: CircleBorder(side: BorderSide(color: Color(0xFFDE561C), width: 2)),
-                                    child: Text("X",style: TextStyle(fontSize: 20, color: Color(0xFFDE561C)),),
-                                    onPressed: () {
-                                      setState(() {
-                                        arrShots.remove(sShot);
-                                        print(arrShots);
-                                        print("Hello World");
-                                      });
+                      return Container(
+                          child:Column(
+                            children: <Widget>[
+                              Card(
+                                child: Row(
+                                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-                                    },
-                                  ),
-                                ],
+                                  children: <Widget>[
+                                    Text((index+1).toString(),style: TextStyle(fontSize: 30),),
+                                    Spacer(),
+                                    Text(sShot,style: TextStyle(fontSize: 30)),
+                                    Spacer(),
+                                    FlatButton(
+                                      //color: Colors.red,
+                                      height: 35,
+                                      minWidth: 35,
+                                      shape: CircleBorder(side: BorderSide(color: Color(0xFFDE561C), width: 2)),
+                                      child: Text("X",style: TextStyle(fontSize: 20, color: Color(0xFFDE561C)),),
+                                      onPressed: () {
+                                        setState(() {
+                                          // if (arrShots.length==1)
+                                          // {
+                                          // }
+                                          if (arrShots.length>1)
+                                          {
+                                            arrShots.remove(sShot);
+                                          }
+                                          else
+                                            Navigator.pop(context);
+
+
+                                          //print(arrShots);
+                                          print("Hello World");
+
+                                        });
+
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
 
-                          ],
-                        )
-
+                            ],
+                          )
 
 
-                    );
+
+                      );
+
+
+
+
+
                   },
                 ),
               ),
@@ -256,7 +274,7 @@ class SplitsState extends State<Splits> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text("What should we call this string?", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20), textAlign: TextAlign.center,),
+                Text("What should we call this string?", style: TextStyle(color: Colors.white, fontSize: 20), textAlign: TextAlign.center,),
 
                 Padding(padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                   child: Form(
@@ -299,7 +317,7 @@ class SplitsState extends State<Splits> {
                           height: 45,
                           child: Center(
                             child: Text("Cancel",
-                                style: TextStyle(fontSize: 20)),
+                                style: TextStyle(fontSize: 20, color: Colors.white)),
                           ),
                         ),
                       ),
@@ -326,7 +344,7 @@ class SplitsState extends State<Splits> {
                           height: 45,
                           child: Center(
                             child: Text("Save",
-                                style: TextStyle(fontSize: 20)),
+                                style: TextStyle(fontSize: 20, color: Colors.white)),
                           ),
                         ),
                       ),
