@@ -30,12 +30,9 @@ class _verifyEmailState extends State<verifyEmail> {
   @override
   void initState(){
     super.initState();
-    //check if user is verified or send email verification link
+    print("VERIFYEMAIL.DART");
     getUserInfo();
     timer = Timer.periodic(Duration(seconds: 5), (Timer t) => areTheyVerified());
-    //timer?.cancel();
-    //super.dispose();
-
   }
   @override
   Widget build(BuildContext context) {
@@ -45,22 +42,23 @@ class _verifyEmailState extends State<verifyEmail> {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.only(top: 50, bottom: 15, left: 0, right: 0),
+                padding: EdgeInsets.only(top: 80, bottom: 15, left: 0, right: 0),
                 child: Column(
                   children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: ClipRRect(
-                          child: Image.asset(
-                            "assets/mail-icon@3x.png",
-                            width: 140,
-                          )),
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color> (Themes.darkButton2Color),
+                        strokeWidth: 5.0,
+                      ),
                     ),
                     SizedBox(
-                      height: 16,
+                      height: 25,
                     ),
                     Text("$test", textAlign: TextAlign.center, style:  TextStyle(
-                        fontSize: 30
+                        fontSize: 30, color: Themes.darkButton2Color, fontFamily: 'Montserrat-Regular',
+                        letterSpacing: 0.2
                     ),),
                     Container(
                       padding: EdgeInsets.all(25),
@@ -100,7 +98,7 @@ class _verifyEmailState extends State<verifyEmail> {
                                       //tests();
                                       //return to sign up because they entered the wrong information
                                       setState(() => loading = true);
-                                      setUserPreferencesNull();
+
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -120,7 +118,7 @@ class _verifyEmailState extends State<verifyEmail> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 50, bottom: 15, left: 0, right: 0),
+                padding: EdgeInsets.only(top: 90, bottom: 0, left: 0, right: 0),
                 child: Column(
                   children: [
                     SizedBox(
@@ -135,7 +133,6 @@ class _verifyEmailState extends State<verifyEmail> {
                           child: Text(
                               'Resend Email',
                             style: TextStyle(fontSize: 20, color: Colors.white       ),
-
                           ),
                           color: Themes.darkButton1Color,
                           shape: RoundedRectangleBorder(
@@ -159,8 +156,7 @@ class _verifyEmailState extends State<verifyEmail> {
                         text: " Login",
                         recognizer: new TapGestureRecognizer()..onTap = () =>
                         {
-                        setState(() => loading = true),
-                          setUserPreferencesNull(),
+                        //setState(() => loading = true),
                           Navigator.pushReplacementNamed(context, '/LoginSignUp/login'),
                         },
                         style: TextStyle(
@@ -177,28 +173,25 @@ class _verifyEmailState extends State<verifyEmail> {
         )
     );
   }
-  setUserPreferencesNull() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('id', null);
-    await prefs.setString('email', null);
-    await prefs.setString('password', null);
-    await prefs.setString('verify', null);
-    await prefs.setString('firstName', null);
-    await prefs.setString('lastName', null);
-  }
   tests() async{
+    await Future.delayed(const Duration(seconds: 1), (){});
     setState(() {
-      test = "Checking Magazine";
+      test = "Updating Account";
+    });
+    await Future.delayed(const Duration(seconds: 3), (){});
+    setState(() {
+      test = "Verifying Account";
     });
     await Future.delayed(const Duration(seconds: 5), (){});
     setState(() {
-      test = "Loading Bullets";
-    });
-    await Future.delayed(const Duration(seconds: 5), (){});
-    setState(() {
-      test = "Locked & Loaded";
+      test = "Verification Complete";
     });
     await Future.delayed(const Duration(seconds: 2), (){});
+    setState(() {
+      timer.cancel();
+      Navigator.pushReplacementNamed(context, '/PageSelector');
+    });
+    //super.dispose();
   }
   areTheyVerified() async{
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -240,13 +233,14 @@ class _verifyEmailState extends State<verifyEmail> {
       else if (status == "verified") {
         await prefs.setString('verify', "verified");
         //saveUserInformation(id, email, hashedPassword);
-        setState(() => loading = true);
-        timer.cancel();
-        super.dispose();
-        Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+        //setState(() => loading = true);
+        tests();
+        //timer.cancel();
+        //super.dispose();
       } else{
 
       }
+      //RELOAD PAGE TO RESEND EMAIL
       } on TimeoutException catch (e) {
         print('Timeout Error: $e');
       } on Socket catch (e) {
@@ -256,10 +250,15 @@ class _verifyEmailState extends State<verifyEmail> {
       }
   }
   //this called auto on page loador when user clicks button
-  getUserInfo() async{
+  Future getUserInfo() async{
+    // final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+    print("Sending email!!!");
+    //check if user is verified or send email verification link
+    //print("should call send user verify email");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
     print(email);
+    print("************************");
     try{
       var url = 'https://www.topshottimer.co.za/createAccountVerifyEmailMailer.php';
       var res = await http.post(

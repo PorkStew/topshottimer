@@ -59,6 +59,7 @@ class timerArea extends StatefulWidget {
 class _timerAreaState extends State<timerArea> {
 
 
+  bool bTest = true;
   bool _isRecording = false;
 
   List<String> arrShots = List<String>();
@@ -74,6 +75,10 @@ class _timerAreaState extends State<timerArea> {
   int iMinutes;
   int iSeconds;
   int iMilliseconds;
+
+  String sTestingEar = "";
+
+  bool bStopable = true;
 
   var swatch = Stopwatch();
   final dur = const Duration(milliseconds: 1);
@@ -154,6 +159,11 @@ class _timerAreaState extends State<timerArea> {
       iMinutes = swatch.elapsed.inMinutes%60;
       iSeconds = swatch.elapsed.inSeconds%60;
       iMilliseconds = swatch.elapsed.inMilliseconds%1000;
+      int iMillisecondsCount = swatch.elapsed.inMilliseconds;
+      //print(iMillisecondsCount);
+      if (iMillisecondsCount >= 200){
+        bStopable = true;
+      }
 
       // print("In Minutes: " + iMinutes.toString());
       // print("In Seconds: "+ iSeconds.toString());
@@ -197,6 +207,7 @@ class _timerAreaState extends State<timerArea> {
       stopispressed = false;
     });
     if (bstop == false){
+      bStopable = false;
       bstop = true;
       isRunning = true;
       print("Going to play sound now!!!!");
@@ -278,6 +289,7 @@ class _timerAreaState extends State<timerArea> {
 
   //////////////////////////NOISE METER START
   void start() async {
+    bTest = false;
     print("Got into start method");
     starttimer();
     swatch.start();
@@ -291,7 +303,8 @@ class _timerAreaState extends State<timerArea> {
   }
 
   void onData(NoiseReading noiseReading) {
-    print("Got into data method");
+    //print("Got into data method");
+
     //audioCache.play('2100.mp3');
     this.setState(() {
       if (!this._isRecording) {
@@ -300,8 +313,21 @@ class _timerAreaState extends State<timerArea> {
     });
     //print("Got to on Data method");
     //print(noiseReading.toString());
+    if(noiseReading.maxDecibel>89) {
+      sTestingEar = noiseReading.maxDecibel.toString();
+      //print();
+      print(noiseReading);
+      print("*****Sound Mean"+ noiseReading.meanDecibel.toString());
+      print("*****Sound Max"+noiseReading.maxDecibel.toString());
 
-    if(noiseReading.maxDecibel>timerSensitivity){
+      //print("Noise Reading"+noiseReading.toString());
+      //double db = 20 * log10(2**15 * noiseReading.maxDecibel)
+
+    }
+
+    if(noiseReading.maxDecibel>90){
+      print("*****Sound"+ noiseReading.maxDecibel.toString());
+
       //arrShots.add(noiseReading.maxDecibel.toString());
       arrShots.add(stoptimetodisplay);
       arrMinutes.add(iMinutes);
@@ -361,53 +387,61 @@ class _timerAreaState extends State<timerArea> {
                   shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
                   onPressed: () {
                     obtainUserDefaults();
-                    if(bResetOnStart == true){
-                      arrShots.clear();
-                      arrShots.add("00:00:00");
-                      iCountShots = 0;
-                      swatch.reset();
-                      stopRecorder();
-                      stoptimer();
-                      reset();
-                      //startstopwatch();
-                      didReset = true;
+                    if (bStopable == true){
+                      if(bResetOnStart == true){
+                        arrShots.clear();
+                        arrShots.add("00:00:00");
+                        iCountShots = 0;
+                        swatch.reset();
+                        stopRecorder();
+                        stoptimer();
+                        reset();
+                        //startstopwatch();
+                        didReset = true;
 
-                    }
-
-                    if (didReset == true){
-
-
-                      print("Got into pressed method");
-                      if (startispressed == true) {
-                        //audioCache.play("2100.mp3");
-                        //playSoundFuture = _playSound();
-                        //triggerSound();
-                        startstopwatch();
-                        isChanged = !isChanged;
-                        colorisChanged = !colorisChanged;
-                        setState(() {
-                          colorisChanged == true ? btnColor = Color(0xFFA2C11C) : btnColor = Color(0xFF2C5D63);
-                          isChanged == true ? buttonText = "Start" : buttonText = "Stop";
-                        });
-                        //Future.delayed(const Duration(seconds: 2));
                       }
-                    }
-                    else
-                    {
-                      Fluttertoast.showToast(
-                          msg: "Please reset before starting another string",
+                      if (didReset == true){
 
-                          //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 3,
-                          backgroundColor: Colors.red,
 
-                          textColor: Colors.black,
-                          fontSize: 24.0
-                      );
-                      print("You need to reset");
+                        print("Got into pressed method");
+                        if (startispressed == true) {
+                          //audioCache.play("2100.mp3");
+                          //playSoundFuture = _playSound();
+                          //triggerSound();
+                          startstopwatch();
+                          isChanged = !isChanged;
+                          colorisChanged = !colorisChanged;
+                          setState(() {
+                            colorisChanged == true ? btnColor = Color(0xFFA2C11C) : btnColor = Color(0xFF2C5D63);
+                            isChanged == true ? buttonText = "Start" : buttonText = "Stop";
+                          });
+                          //Future.delayed(const Duration(seconds: 2));
+                        }
+                      }
+                      else
+                      {
+                        Fluttertoast.showToast(
+                            msg: "Please reset before starting another string",
+
+                            //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 3,
+                            backgroundColor: Colors.red,
+
+                            textColor: Colors.black,
+                            fontSize: 24.0
+                        );
+                        print("You need to reset");
+                      }
+
                     }
+
+
+
+
+
+
 
                     //startispressed ? startstopwatch: null;
                   },
@@ -512,6 +546,8 @@ class _timerAreaState extends State<timerArea> {
 
                         }
                         else
+                          //Navigator.pushNamedAndRemoveUntil(context, newRouteName, (route) => false)context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
+
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
                       }
                   ),
@@ -520,6 +556,7 @@ class _timerAreaState extends State<timerArea> {
                 ]
 
             ),
+            Text(sTestingEar),
 
 
           ],
@@ -530,7 +567,7 @@ class _timerAreaState extends State<timerArea> {
   errorViewingStringDialog(){
 
     Dialog dialog = new Dialog(
-      backgroundColor: Themes.darkBackgoundColor,
+        backgroundColor: Themes.darkBackgoundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10)
         ),
@@ -552,7 +589,7 @@ class _timerAreaState extends State<timerArea> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("You have not shot a string.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    Text("You have not shot a string.", style: TextStyle(color: Colors.white, fontSize: 20),),
                     SizedBox(height: 20,),
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -571,7 +608,7 @@ class _timerAreaState extends State<timerArea> {
                               height: 45,
                               child: Center(
                                 child: Text("Shoot String",
-                                    style: TextStyle(fontSize: 20)),
+                                    style: TextStyle(fontSize: 20,color: Colors.white)),
                               ),
                             ),
                           ),
@@ -624,7 +661,7 @@ obtainUserDefaults() async{
   }
 
   if (dSensitivity == 0.0){
-    timerSensitivity = 89.4;
+    timerSensitivity = 89.55;
   } else
   if (dSensitivity == 25.0){
     timerSensitivity = 80.0;

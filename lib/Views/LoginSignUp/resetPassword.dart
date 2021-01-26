@@ -124,8 +124,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                               print(_emailFromLogin);
                               print("email below");
                               print(_email);
-                              resetUserPreferences(_email);
-                              Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': _email},);
+                              resetPassword(_email);
+
                              // resetPassword(_email.toLowerCase());
                             }
                           },
@@ -194,9 +194,10 @@ class _ResetPasswordState extends State<ResetPassword> {
     )
     );
   }
-  resetUserPreferences(String email) async{
+  resetPassword(String email) async{
     SharedPreferences  prefs = await SharedPreferences.getInstance();
     await prefs.setString('email', email);
+    Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': _email},);
   }
 //REMOVE
   // resetPassword(String email) async{
