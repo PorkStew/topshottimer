@@ -10,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/editUserDetails.dart';
 import 'package:topshottimer/main.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 
 class Settings extends StatefulWidget {
@@ -412,6 +414,22 @@ class _SettingsState extends State<Settings> {
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
                               height: 50,
                               minWidth: 150,
+                              child: Text("View Privacy Policy",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor ),),
+                              onPressed: () async {
+                                _launchURL();
+                                //SharedPreferences preferences = await SharedPreferences.getInstance();
+                                //await preferences.clear();
+                                //Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
+                                //print("Signed Out");
+                              },
+
+
+                            ),
+                            FlatButton(
+                              color: Themes.darkButton2Color,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
+                              height: 50,
+                              minWidth: 150,
                               child: Text("Sign Out",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor ),),
                               onPressed: () async {
                                 SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -529,4 +547,12 @@ setUserTone(String newValue) async{
   await prefs.setString('userTone', newValue);
   print("New user tone was set to: "+ newValue);
 
+}
+_launchURL() async {
+  const url = 'https://topshottimer.co.za/TopShot_Timer_Privacy_Policy.html';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }

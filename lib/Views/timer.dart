@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:isolate';
+import 'dart:math';
+import 'dart:io' as io;
 import 'package:audio_session/audio_session.dart';
 //import 'package:dartins/dartins.dart';
 //import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 //import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:noise_meter/noise_meter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,6 +16,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/splits.dart';
 import 'dart:io' show Platform;
+import 'package:path_provider/path_provider.dart';
+import 'package:file/local.dart';
+//import 'package:audioplayers/audioplayers.dart';
+
+
+
 
 import '../Themes.dart';
 
@@ -51,6 +60,10 @@ class _TimerPageState extends State<TimerPage> {
   }}
 
 class timerArea extends StatefulWidget {
+  final LocalFileSystem localFileSystem;
+
+  timerArea({localFileSystem})
+      : this.localFileSystem = localFileSystem ?? LocalFileSystem();
   @override
   _timerAreaState createState() => _timerAreaState();
 
@@ -58,6 +71,11 @@ class timerArea extends StatefulWidget {
 
 class _timerAreaState extends State<timerArea> {
 
+  FlutterAudioRecorder _recorder;
+  Recording _current;
+  RecordingStatus _currentStatus = RecordingStatus.Unset;
+  bool bStarted = false;
+  bool bCanStart = false;
 
   bool bTest = true;
   bool _isRecording = false;
@@ -75,6 +93,8 @@ class _timerAreaState extends State<timerArea> {
   int iMinutes;
   int iSeconds;
   int iMilliseconds;
+
+  String sTestingEar = "";
 
   bool bStopable = true;
 
@@ -121,10 +141,10 @@ class _timerAreaState extends State<timerArea> {
   void initState(){
     super.initState();
     arrShots.add("00:00:00");
-
+    _init();
     obtainUserDefaults();
     permissions();
-    _noiseMeter = new NoiseMeter(onError);
+    //_noiseMeter = new NoiseMeter(onError);
     //playSoundFuture = _playSound();
     if (Platform.isIOS) {
       _setSession();
@@ -158,7 +178,7 @@ class _timerAreaState extends State<timerArea> {
       iSeconds = swatch.elapsed.inSeconds%60;
       iMilliseconds = swatch.elapsed.inMilliseconds%1000;
       int iMillisecondsCount = swatch.elapsed.inMilliseconds;
-      print(iMillisecondsCount);
+      //print(iMillisecondsCount);
       if (iMillisecondsCount >= 200){
         bStopable = true;
       }
@@ -178,6 +198,8 @@ class _timerAreaState extends State<timerArea> {
   }
 
   void stoptimer(){
+    _stopnow();
+    _init();
     swatch.stop();
   }
 
@@ -240,7 +262,7 @@ class _timerAreaState extends State<timerArea> {
 
       Timer(Duration(milliseconds: 600), () {
         //player.pause();
-        start();
+        _start();
       });
       //print(timerDelay.toString());
       //start();
@@ -258,7 +280,7 @@ class _timerAreaState extends State<timerArea> {
       isRunning = false;
       didReset = false;
       stoptimer();
-      stopRecorder();
+      //stopRecorder();
       reset();
       bResetOnStart = true;
       if (Platform.isIOS) {
@@ -284,63 +306,196 @@ class _timerAreaState extends State<timerArea> {
     swatch.reset();
   }
 
+  _init() async {
+    try {
+      if (await FlutterAudioRecorder.hasPermissions) {
+        String customPath = '/flutter_audio_recorder_';
+        io.Directory appDocDirectory;
+//        io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
+        if (io.Platform.isIOS) {
+          appDocDirectory = await getApplicationDocumentsDirectory();
+        } else {
+          appDocDirectory = await getExternalStorageDirectory();
+        }
 
-  //////////////////////////NOISE METER START
-  void start() async {
+        // can add extension like ".mp4" ".wav" ".m4a" ".aac"
+        customPath = appDocDirectory.path +
+            customPath +
+            DateTime.now().millisecondsSinceEpoch.toString();
+
+        // .wav <---> AudioFormat.WAV
+        // .mp4 .m4a .aac <---> AudioFormat.AAC
+        // AudioFormat is optional, if given value, will overwrite path extension when there is conflicts.
+        _recorder =
+            FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
+
+        await _recorder.initialized;
+        // after initialization
+        var current = await _recorder.current(channel: 0);
+        //print(current);
+        // should be "Initialized", if all working fine
+        setState(() {
+          _current = current;
+          _currentStatus = current.status;
+          //print(_currentStatus);
+
+        });
+      } else {
+        Scaffold.of(context).showSnackBar(
+            new SnackBar(content: new Text("You must accept permissions")));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+  _start() async {
     bTest = false;
     print("Got into start method");
     starttimer();
     swatch.start();
-    try {
-      _noiseSubscription = _noiseMeter.noiseStream.listen(onData);
-    } on NoiseMeter catch (exception) {
-      print("Start Exception: " + exception.toString());
-    }
 
+    if (bCanStart = true) {
+      bCanStart = false;
+
+      try {
+        await _recorder.start();
+        var recording = await _recorder.current(channel: 0);
+        setState(() {
+          _current = recording;
+
+        });
+
+        const tick = const Duration(milliseconds: 50);
+        new Timer.periodic(tick, (Timer t) async {
+          if (_currentStatus == RecordingStatus.Stopped) {
+            t.cancel();
+          }
+
+          var current = await _recorder.current(channel: 0);
+          setState(() {
+            int iCount = 1;
+            _current = current;
+
+            _currentStatus = _current.status;
+            if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) > timerSensitivity) {
+              //arrShots.add((pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+                  arrShots.add(stoptimetodisplay);
+                  arrMinutes.add(iMinutes);
+                  arrSeconds.add(iSeconds);
+                  arrMilliseconds.add(iMilliseconds);
+
+                  print("Gun Shot Captured!!!!!!!!!!!!!!!!" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+                  iCountShots++;
+              print(pow(10, _current?.metering?.peakPower / 20) * 120.0);
+
+              // _pause();
+              bCanStart = true;
+              _pause();
+              _resume();
+
+              return;
+
+            }
+
+          });
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+  _resume() async {
+    await _recorder.resume();
+    setState(() {});
   }
 
-  void onData(NoiseReading noiseReading) {
-    print("Got into data method");
+  _pause() async {
+    _recorder.pause();
+    setState(() {});
+  }
 
-    //audioCache.play('2100.mp3');
-    this.setState(() {
-      if (!this._isRecording) {
-        this._isRecording = true;
-      }
+  _stopnow() async {
+    print('stopping now*****');
+    var result = await _recorder.stop();
+    print("Stop recording: ${result.path}");
+    print("Stop recording: ${result.duration}");
+    //File file = widget.localFileSystem.file(result.path);
+    //print("File length: ${await file.length()}");
+    setState(() {
+      _current = result;
+      _currentStatus = _current.status;
     });
-    //print("Got to on Data method");
-    //print(noiseReading.toString());
-
-    if(noiseReading.maxDecibel>timerSensitivity){
-      //arrShots.add(noiseReading.maxDecibel.toString());
-      arrShots.add(stoptimetodisplay);
-      arrMinutes.add(iMinutes);
-      arrSeconds.add(iSeconds);
-      arrMilliseconds.add(iMilliseconds);
-
-      print("Gun Shot Captured!!!!!!!!!!!!!!!!" + noiseReading.maxDecibel.toString());
-      iCountShots++;
-    }
   }
+  //////////////////////////NOISE METER START
+  // void start() async {
+  //   bTest = false;
+  //   print("Got into start method");
+  //   starttimer();
+  //   swatch.start();
+  //   try {
+  //     _noiseSubscription = _noiseMeter.noiseStream.listen(onData);
+  //
+  //   } on NoiseMeter catch (exception) {
+  //     print("Start Exception: " + exception.toString());
+  //   }
+  //
+  // }
 
-  void onError(PlatformException e) {
-    print(e.toString());
-    _isRecording = false;
-  }
+  // void onData(NoiseReading noiseReading) {
+  //   //print("Got into data method");
+  //
+  //   //audioCache.play('2100.mp3');
+  //   this.setState(() {
+  //     if (!this._isRecording) {
+  //       this._isRecording = true;
+  //     }
+  //   });
+  //   //print("Got to on Data method");
+  //   //print(noiseReading.toString());
+  //   if(noiseReading.maxDecibel>89) {
+  //     sTestingEar = noiseReading.maxDecibel.toString();
+  //     //print();
+  //     print(noiseReading);
+  //     print("*****Sound Mean"+ noiseReading.meanDecibel.toString());
+  //     print("*****Sound Max"+noiseReading.maxDecibel.toString());
+  //
+  //     //print("Noise Reading"+noiseReading.toString());
+  //     //double db = 20 * log10(2**15 * noiseReading.maxDecibel)
+  //
+  //   }
+  //
+  //   if(noiseReading.maxDecibel>90){
+  //     print("*****Sound"+ noiseReading.maxDecibel.toString());
+  //
+  //     //arrShots.add(noiseReading.maxDecibel.toString());
+  //     arrShots.add(stoptimetodisplay);
+  //     arrMinutes.add(iMinutes);
+  //     arrSeconds.add(iSeconds);
+  //     arrMilliseconds.add(iMilliseconds);
+  //
+  //     print("Gun Shot Captured!!!!!!!!!!!!!!!!" + noiseReading.maxDecibel.toString());
+  //     iCountShots++;
+  //   }
+  // }
 
-  void stopRecorder() async {
-    try {
-      if (_noiseSubscription != null) {
-        _noiseSubscription.cancel();
-        _noiseSubscription = null;
-      }
-      this.setState(() {
-        this._isRecording = false;
-      });
-    } catch (err) {
-      print('stopRecorder error: $err');
-    }
-  }
+  // void onError(PlatformException e) {
+  //   print(e.toString());
+  //   _isRecording = false;
+  // }
+
+  // void stopRecorder() async {
+  //   try {
+  //     if (_noiseSubscription != null) {
+  //       _noiseSubscription.cancel();
+  //       _noiseSubscription = null;
+  //     }
+  //     this.setState(() {
+  //       this._isRecording = false;
+  //     });
+  //   } catch (err) {
+  //     print('stopRecorder error: $err');
+  //   }
+  // }
 
   /////////////////////////////NOISE METER END
 
@@ -377,7 +532,8 @@ class _timerAreaState extends State<timerArea> {
                         arrShots.add("00:00:00");
                         iCountShots = 0;
                         swatch.reset();
-                        stopRecorder();
+                        stoptimer();
+                        //stopRecorder();
                         stoptimer();
                         reset();
                         //startstopwatch();
@@ -530,7 +686,9 @@ class _timerAreaState extends State<timerArea> {
 
                         }
                         else
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
+                          //Navigator.pushNamedAndRemoveUntil(context, newRouteName, (route) => false)context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
+
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
                       }
                   ),
                   Spacer(),
@@ -538,6 +696,7 @@ class _timerAreaState extends State<timerArea> {
                 ]
 
             ),
+            Text(sTestingEar),
 
 
           ],
@@ -642,19 +801,19 @@ obtainUserDefaults() async{
   }
 
   if (dSensitivity == 0.0){
-    timerSensitivity = 89.4;
+    timerSensitivity = 105;
   } else
   if (dSensitivity == 25.0){
-    timerSensitivity = 80.0;
+    timerSensitivity = 100;
   } else
   if (dSensitivity == 50.0){
-    timerSensitivity = 70.0;
+    timerSensitivity = 90;
   } else
   if (dSensitivity == 75.0){
-    timerSensitivity = 60.0;
+    timerSensitivity = 85;
   } else
   if (dSensitivity == 100.0){
-    timerSensitivity = 50.0;
+    timerSensitivity = 80.0;
   }
   else {
     print("No User Defaults set");
