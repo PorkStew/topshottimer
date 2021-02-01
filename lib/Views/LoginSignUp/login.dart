@@ -209,6 +209,7 @@ class LoginState extends State<Login> {
                         if (!_formKey.currentState.validate()) {
                           return;
                         }
+                        nullPreferences();
                         updateData(_email.text, _password.text);
                       },
                       color: Themes.darkButton1Color,
@@ -248,7 +249,10 @@ class LoginState extends State<Login> {
     ),
     );
   }
-
+   nullPreferences()async{
+     SharedPreferences preferences = await SharedPreferences.getInstance();
+     await preferences.clear();
+   }
   updateData(String email, String password) async {
     print("hello");
     setState(() => loading = true);

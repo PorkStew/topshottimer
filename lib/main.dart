@@ -73,8 +73,7 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
 }
 //acts like a auto login system that will check if shared preferences has user information and will show a screen depending on that information
 checkUserInformation(context) async {
-  String name = '4 ever 1 k g @@ @';
-  print(name.replaceAll(new RegExp(r"\s+"), ""));
+  print('MAIN.DART');
   //get user information
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String id = prefs.getString('id');
@@ -86,6 +85,7 @@ checkUserInformation(context) async {
   print(email);
   print(hashedPassword);
   print(verified);
+  print("DONE USER DETAILS!!!!");
   try{
   //checks the validity shared preference information is not empty, then will try login
     if(id != null && email != null && hashedPassword != null && verified != null) {
@@ -106,13 +106,15 @@ checkUserInformation(context) async {
       String status = data["status"];
       String firstName = data["firstName"];
       String lastName = data["lastName"];
-      print("this iis recived data");
+      print("We recived the following data!");
       print(id);
       print(status);
       print(firstName);
       print(lastName);
+      print("END OF RECIVING DATA!!!");
       //not a user
       if (status == "not-user") {
+        print("MAIN.DART END*******************************");
        Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
       }
       //is a user but has not verified their email yet
@@ -121,6 +123,7 @@ checkUserInformation(context) async {
         await prefs.setString('verify', 'false');
         await prefs.setString('firstName', firstName);
         await prefs.setString('lastName', lastName);
+        print("MAIN.DART END*******************************");
         Navigator.pushReplacementNamed(context, '/LoginSignUp/verifyEmail', arguments: {'email': email});
         //if details are in the database and user email is verified
       } else if (status == "verified" && id != null) {
@@ -128,13 +131,15 @@ checkUserInformation(context) async {
         await prefs.setString('verify', 'true');
         await prefs.setString('firstName', firstName);
         await prefs.setString('lastName', lastName);
-        //Navigator.pushReplacementNamed(context, '/PageSelector');
-        Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
+        print("MAIN.DART END*******************************");
+        Navigator.pushReplacementNamed(context, '/PageSelector');
+        //Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
       }
       //no shared preference data is found go to login
     } else{
       Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
       //Navigator.push(context, Dialog())
+      print("MAIN.DART END*******************************");
     }
   } on TimeoutException catch (e) {
     print('Timeout Error: $e');
