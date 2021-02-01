@@ -26,6 +26,8 @@ class _SettingsState extends State<Settings> {
   Future fLastName;
   Future fEmail;
   Future fRandom;
+  Future fUserTone;
+  int userToneValue;
 
   AudioPlayer player = AudioPlayer();
 
@@ -40,6 +42,7 @@ class _SettingsState extends State<Settings> {
     fFirstName = _getFirstName();
     fLastName = _getLastName();
     fEmail = _getEmail();
+    fUserTone = _getTone();
     newDelayFuture = _getDelay();
     newSensitivityFuture = _getSensitivity();
     fRandom = _getRandomDelay();
@@ -58,6 +61,46 @@ class _SettingsState extends State<Settings> {
   _getEmail() async {
     Email = await userEmail();
     return userEmail();
+  }
+
+  _getTone() async {
+    UserTone = await userTone();
+
+    if (UserTone == "1500"){
+      userToneValue = 1;
+    } else
+    if (UserTone == "1700"){
+      userToneValue = 2;
+    } else
+    if (UserTone == "1900"){
+      userToneValue = 3;
+    } else
+    if (UserTone == "2100"){
+      userToneValue = 4;
+    } else
+    if (UserTone == "2300"){
+      userToneValue = 5;
+    } else
+    if (UserTone == "2500"){
+      userToneValue = 6;
+    } else
+    if (UserTone == "2700"){
+      userToneValue = 7;
+    } else
+    if (UserTone == "2900"){
+      userToneValue = 8;
+    } else
+    if (UserTone == "3100"){
+      userToneValue = 9;
+    } else
+    if (UserTone == "3300"){
+      userToneValue = 10;
+    }
+    print("User Tone Value" + userToneValue.toString());
+    return userTone();
+
+
+
   }
 
   _getDelay() async{
@@ -95,6 +138,7 @@ class _SettingsState extends State<Settings> {
   String FirstName = "";
   String LastName = "";
   String Email = "";
+  String UserTone="";
 
   int dropDownValue = 1;
   // AudioPlayer advancedPlayer;
@@ -130,7 +174,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-            padding: EdgeInsets.only(top: 20,bottom: 20,left: 20, right: 20),
+            padding: EdgeInsets.only(top: 10,bottom: 20,left: 20, right: 20),
             child: FutureBuilder(
 
               future: newSensitivityFuture,
@@ -186,65 +230,48 @@ class _SettingsState extends State<Settings> {
                                     children: <Widget>[
 
                                       Text('First Name: ', style: TextStyle(
-                                          fontSize: 28.0, color: Themes.darkButton2Color),),
+                                          fontSize: 23.0, color: Themes.darkButton2Color),),
                                       Text(FirstName.toString(), style: TextStyle(
-                                          fontSize: 20.0
+                                          fontSize: 18.0
                                       ),),
                                       Container(
-                                        padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
+                                        padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
                                         //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                                       ),
                                       Text('Last Name: ', style: TextStyle(
-                                          fontSize: 28.0, color: Themes.darkButton2Color
+                                          fontSize: 23.0, color: Themes.darkButton2Color
                                       ),),
                                       Text(LastName.toString(), style: TextStyle(
-                                          fontSize: 20.0
+                                          fontSize: 18.0
                                       ),),
                                       Container(
-                                        padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
+                                        padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
                                         //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                                       ),
                                       Text('Email: ', style: TextStyle(
-                                          fontSize: 28.0, color: Themes.darkButton2Color
+                                          fontSize: 23.0, color: Themes.darkButton2Color
                                       ),),
                                       Text(Email.toString(), style: TextStyle(
-                                          fontSize: 20.0
+                                          fontSize: 18.0
                                       ),),
                                       Container(
-                                        padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
-                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
-
-                                      ),
-                                      Container(
                                         padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
                                         //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                                       ),
-                                      FlatButton(
-                                        color: Themes.darkButton1Color,
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
-                                        height: 50,
-                                        minWidth: 150,
-                                        child: Text("Edit Details",style: TextStyle(fontSize: 20,color: Theme.of(context).buttonColor ),),
-                                        onPressed: () async {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => editUserDetails()));
-
-                                          //Navigator.pushReplacementNamed(context, '/editUserDetails');
-                                          print("Going to edit details");
-                                        },
 
 
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
-                                      ),
                                       Text('Timer Sensitivity', style: TextStyle(
-                                          fontSize: 30.0, color: Themes.darkButton2Color
+                                          fontSize: 23.0, color: Themes.darkButton2Color
                                       ),),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 5,bottom: 0,left: 0, right: 0),
+                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                                      ),
                                       Column(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,10 +357,19 @@ class _SettingsState extends State<Settings> {
 
                                         ],
                                       ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 5,bottom: 0,left: 0, right: 0),
+                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+                                      ),
 
                                       Text('Timer Delay', style: TextStyle(
-                                          fontSize: 30.0, color: Themes.darkButton2Color
+                                          fontSize: 23.0, color: Themes.darkButton2Color
                                       ),),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 5,bottom: 0,left: 0, right: 0),
+                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                                      ),
 
                                       Column(
                                         mainAxisAlignment: MainAxisAlignment.start,
@@ -420,8 +456,13 @@ class _SettingsState extends State<Settings> {
 
                                         ],
                                       ),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 5,bottom: 0,left: 0, right: 0),
+                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                                      ),
                                       Text('Random Delay', style: TextStyle(
-                                          fontSize: 30.0, color: Themes.darkButton2Color
+                                          fontSize: 23.0, color: Themes.darkButton2Color
                                       ),),
                                       Transform.scale(scale: 1.5,
                                         child: Switch(
@@ -440,12 +481,12 @@ class _SettingsState extends State<Settings> {
                                         ),),
 
                                       Text('Timer Tone', style: TextStyle(
-                                          fontSize: 30.0, color: Themes.darkButton2Color
+                                          fontSize: 23.0, color: Themes.darkButton2Color
                                       ),),
 
                                       DropdownButton(
-                                          value: dropDownValue,
-                                          dropdownColor: Colors.green,
+                                          value: userToneValue,
+                                          dropdownColor: Themes.darkButton2Color,
                                           items: [
                                             DropdownMenuItem(
                                               child: Text("Tone 1"),
@@ -490,6 +531,7 @@ class _SettingsState extends State<Settings> {
                                           ],
                                           onChanged: (value) {
                                             setState(() {
+                                              userToneValue = value;
                                               dropDownValue = value;
                                               print("Selected dropdown value: " + value.toString());
                                               String sAudioString;
@@ -546,6 +588,26 @@ class _SettingsState extends State<Settings> {
                                               setUserTone(sAudioString);
                                             });
                                           }),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
+                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                                      ),
+                                      FlatButton(
+                                        color: Themes.darkButton1Color,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
+                                        height: 50,
+                                        minWidth: 150,
+                                        child: Text("Edit Details",style: TextStyle(fontSize: 20,color: Theme.of(context).buttonColor ),),
+                                        onPressed: () async {
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => editUserDetails()));
+
+                                          //Navigator.pushReplacementNamed(context, '/editUserDetails');
+                                          print("Going to edit details");
+                                        },
+
+
+                                      ),
                                       Container(
                                         padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
                                         //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))

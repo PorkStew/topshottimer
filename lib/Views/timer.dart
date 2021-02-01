@@ -275,7 +275,7 @@ class _timerAreaState extends State<timerArea> {
       // await Future.delayed(const Duration(milliseconds: 1000));
       // start();
 
-      Timer(Duration(milliseconds: 600), () {
+      Timer(Duration(milliseconds: 100), () {
         //player.pause();
         _start();
       });
