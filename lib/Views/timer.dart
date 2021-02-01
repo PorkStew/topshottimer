@@ -34,6 +34,7 @@ const String testDevice = '';
 double timerSensitivity;
 int timerDelay;
 String timerTone;
+bool bRandomDelay;
 
 class TimerPage extends StatefulWidget {
   @override
@@ -235,22 +236,36 @@ class _timerAreaState extends State<timerArea> {
 
       var duration = await player.setAsset("assets/audios/"+ timerTone + ".mp3");
 
-      print(timerDelay);
-      if (timerDelay == 1){
-        await Future.delayed(const Duration(seconds: 1));
-      }else
-      if (timerDelay == 2){
-        await Future.delayed(const Duration(seconds: 2));
-      }else
-      if (timerDelay == 3){
-        await Future.delayed(const Duration(seconds: 3));
-      }else
-      if (timerDelay == 4){
-        await Future.delayed(const Duration(seconds: 4));
-      }else
-      if (timerDelay == 5){
-        await Future.delayed(const Duration(seconds: 5));
+      if (bRandomDelay == false){
+        // int max = 5;
+        //
+        // int randomNumber = Random().nextInt(max) + 1;
+        print("Random Delay is false");
+        if (timerDelay == 1){
+          await Future.delayed(const Duration(seconds: 1));
+        }else
+        if (timerDelay == 2){
+          await Future.delayed(const Duration(seconds: 2));
+        }else
+        if (timerDelay == 3){
+          await Future.delayed(const Duration(seconds: 3));
+        }else
+        if (timerDelay == 4){
+          await Future.delayed(const Duration(seconds: 4));
+        }else
+        if (timerDelay == 5){
+          await Future.delayed(const Duration(seconds: 5));
+        }
       }
+      else{
+        int max = 5;
+        int randomNumber = Random().nextInt(max) + 1;
+        //int iRandomNum = randomNumber;
+        print("Random Delay is True: "+ randomNumber.toString());
+        await Future.delayed(Duration(seconds: randomNumber));
+      }
+      print(timerDelay);
+
       print("Before Play");
       player.setVolume(1.0);
       player.seek(Duration(milliseconds: 0));
@@ -778,6 +793,7 @@ class _timerAreaState extends State<timerArea> {
 obtainUserDefaults() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   double dDelay = await prefs.getDouble('userDelay');
+  bool bRandom = await prefs.getBool('randomDelay');
   double dSensitivity = await prefs.getDouble('userSensitivity');
   String sTone = await prefs.getString('userTone');
 
@@ -785,6 +801,11 @@ obtainUserDefaults() async{
   {
     await prefs.setDouble('userDelay',3);
     dDelay = await prefs.getDouble('userDelay');
+  }
+
+  if (bRandom == null){
+    await prefs.setBool('randomDelay', false);
+    bRandom = false;
   }
 
   if (dSensitivity == null)
@@ -822,6 +843,7 @@ obtainUserDefaults() async{
   dTime = await double.parse(dDelay.toStringAsFixed(0));
   timerDelay = dDelay.round();
   timerTone = sTone;
+  bRandomDelay = bRandom;
 
   // print("Default Delay: " + dDelay.toString());
   // print("Default Sensitivity: " + dSensitivity.toString());
