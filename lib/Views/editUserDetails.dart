@@ -104,7 +104,7 @@ class _editUserDetailsState extends State<editUserDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(""), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
+      appBar: AppBar(title: Text("Edit Details"), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
       body: Container(
         padding: EdgeInsets.only(top: 5,bottom: 20,left: 20, right: 20),
         child: FutureBuilder(

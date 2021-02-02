@@ -7,6 +7,7 @@ class Themes {
   Themes._();
 
 
+
   static const darkBackgoundColor = const Color(0xFF283739);
   static const darkTextColor = const Color(0xFFFFFFFF);
   static const darkParagraphColor = const Color(0xFF949494);
@@ -20,7 +21,9 @@ class Themes {
     brightness: Brightness.light,
 
 
-    primarySwatch: MaterialColor(0xFFA2C11C, {
+
+
+      primarySwatch: MaterialColor(0xFFA2C11C, {
       50:  darkButton2Color,
       100: darkButton2Color,
       200: darkButton2Color,
@@ -32,6 +35,7 @@ class Themes {
       800: darkButton2Color,
       900: darkButton2Color,
     }),
+
 
     appBarTheme: AppBarTheme(
       color: darkButton1Color,
@@ -93,6 +97,7 @@ class Themes {
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     //colorScheme: ColorScheme.light(),
+    canvasColor: const Color(0xFF283739),
 
 
     scaffoldBackgroundColor: darkBackgoundColor,
