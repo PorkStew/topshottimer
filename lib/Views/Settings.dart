@@ -297,7 +297,7 @@ class _SettingsState extends State<Settings> {
 
                                                   child: Align(
                                                     alignment: Alignment.center,
-                                                    child: Text("Live", textAlign: TextAlign.center,),
+                                                    child: Text("Live", textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
                                                   ),
                                                 ),
                                                 Expanded(
@@ -347,7 +347,7 @@ class _SettingsState extends State<Settings> {
 
                                                   child: Align(
                                                     alignment: Alignment.center,
-                                                    child: Text("Dry", textAlign: TextAlign.center,),
+                                                    child: Text("Dry", textAlign: TextAlign.center,style: TextStyle(color: Colors.white)),
                                                   ),
                                                 ),
 
@@ -396,7 +396,7 @@ class _SettingsState extends State<Settings> {
 
                                                   child: Align(
                                                     alignment: Alignment.center,
-                                                    child: Text("1 Sec", textAlign: TextAlign.center,),
+                                                    child: Text("1 Sec", textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
                                                   ),
                                                 ),
                                                 Expanded(
@@ -446,7 +446,7 @@ class _SettingsState extends State<Settings> {
 
                                                   child: Align(
                                                     alignment: Alignment.center,
-                                                    child: Text("5 Sec", textAlign: TextAlign.center,),
+                                                    child: Text("5 Sec", textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
                                                   ),
                                                 ),
 
@@ -483,111 +483,129 @@ class _SettingsState extends State<Settings> {
                                       Text('Timer Tone', style: TextStyle(
                                           fontSize: 23.0, color: Themes.darkButton2Color
                                       ),),
+                                      Container(
+                                        padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
+                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
-                                      DropdownButton(
-                                          value: userToneValue,
-                                          dropdownColor: Themes.darkButton2Color,
-                                          items: [
-                                            DropdownMenuItem(
-                                              child: Text("Tone 1"),
-                                              value: 1,
-                                            ),
-                                            DropdownMenuItem(
-                                              child: Text("Tone 2"),
-                                              value: 2,
-                                            ),
-                                            DropdownMenuItem(
-                                                child: Text("Tone 3"),
-                                                value: 3
-                                            ),
-                                            DropdownMenuItem(
-                                                child: Text("Tone 4"),
-                                                value: 4
-                                            ),
-                                            DropdownMenuItem(
-                                              child: Text("Tone 5"),
-                                              value: 5,
-                                            ),
-                                            DropdownMenuItem(
-                                              child: Text("Tone 6"),
-                                              value: 6,
-                                            ),
-                                            DropdownMenuItem(
-                                                child: Text("Tone 7"),
-                                                value: 7
-                                            ),
-                                            DropdownMenuItem(
-                                                child: Text("Tone 8"),
-                                                value: 8
-                                            ),
-                                            DropdownMenuItem(
-                                              child: Text("Tone 9"),
-                                              value: 9,
-                                            ),
-                                            DropdownMenuItem(
-                                              child: Text("Tone 10"),
-                                              value: 10,
-                                            )
-                                          ],
-                                          onChanged: (value) {
-                                            setState(() {
-                                              userToneValue = value;
-                                              dropDownValue = value;
-                                              print("Selected dropdown value: " + value.toString());
-                                              String sAudioString;
-                                              if (value == 1){
-                                                sAudioString = "1500";
-                                              } else
-                                              if (value == 2){
-                                                sAudioString = "1700";
-                                              } else
-                                              if (value == 3){
-                                                sAudioString = "1900";
-                                              } else
-                                              if (value == 4){
-                                                sAudioString = "2100";
-                                              } else
-                                              if (value == 5){
-                                                sAudioString = "2300";
-                                              } else
-                                              if (value == 6){
-                                                sAudioString = "2500";
-                                              } else
-                                              if (value == 7){
-                                                sAudioString = "2700";
-                                              } else
-                                              if (value == 8){
-                                                sAudioString = "2900";
-                                              } else
-                                              if (value == 9){
-                                                sAudioString = "3100";
-                                              } else
-                                              if (value == 10){
-                                                sAudioString = "3300";
-                                              }
-                                              player.stop();
-                                              var duration = player.setAsset("assets/audios/"+ sAudioString + ".mp3");
-                                              player.setVolume(1.0);
-                                              player.seek(Duration(milliseconds: 0));
-                                              player.play();
-                                              //player.stop();
+                                      ),
 
-                                              // Timer(Duration(milliseconds: 800), () {
-                                              //   //player.pause();
-                                              //     player.stop();
-                                              //     //var duration =  player.load();
-                                              //     // player.dispose();
-                                              // });
-                                              //
-                                              if (Platform.isIOS) {
-                                                _setSession();
-                                              }
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      border: Border.all(
+                                          color: Themes.darkButton2Color, style: BorderStyle.solid, width: 0.80),
+                                    ),
+                                    child: DropdownButton(
+                                        value: userToneValue,
+                                        //dropdownColor: Themes.darkButton2Color,
+                                        items: [
+                                          DropdownMenuItem(
+                                            child: Text("Tone 1" ),
+                                            value: 1,
+                                          ),
+                                          DropdownMenuItem(
+                                            child: Text("Tone 2"),
+                                            value: 2,
+                                          ),
+                                          DropdownMenuItem(
+                                              child: Text("Tone 3"),
+                                              value: 3
+                                          ),
+                                          DropdownMenuItem(
+                                              child: Text("Tone 4"),
+                                              value: 4
+                                          ),
+                                          DropdownMenuItem(
+                                            child: Text("Tone 5"),
+                                            value: 5,
+                                          ),
+                                          DropdownMenuItem(
+                                            child: Text("Tone 6"),
+                                            value: 6,
+                                          ),
+                                          DropdownMenuItem(
+                                              child: Text("Tone 7"),
+                                              value: 7
+                                          ),
+                                          DropdownMenuItem(
+                                              child: Text("Tone 8"),
+                                              value: 8
+                                          ),
+                                          DropdownMenuItem(
+                                            child: Text("Tone 9"),
+                                            value: 9,
+                                          ),
+                                          DropdownMenuItem(
+                                            child: Text("Tone 10"),
+                                            value: 10,
+                                          )
+                                        ],
+                                        onChanged: (value) {
+                                          setState(() {
+                                            userToneValue = value;
+                                            dropDownValue = value;
+                                            print("Selected dropdown value: " + value.toString());
+                                            String sAudioString;
+                                            if (value == 1){
+                                              sAudioString = "1500";
+                                            } else
+                                            if (value == 2){
+                                              sAudioString = "1700";
+                                            } else
+                                            if (value == 3){
+                                              sAudioString = "1900";
+                                            } else
+                                            if (value == 4){
+                                              sAudioString = "2100";
+                                            } else
+                                            if (value == 5){
+                                              sAudioString = "2300";
+                                            } else
+                                            if (value == 6){
+                                              sAudioString = "2500";
+                                            } else
+                                            if (value == 7){
+                                              sAudioString = "2700";
+                                            } else
+                                            if (value == 8){
+                                              sAudioString = "2900";
+                                            } else
+                                            if (value == 9){
+                                              sAudioString = "3100";
+                                            } else
+                                            if (value == 10){
+                                              sAudioString = "3300";
+                                            }
+                                            if (Platform.isIOS) {
+                                              _setSession();
+                                            }
+                                            player.stop();
+                                            var duration = player.setAsset("assets/audios/"+ sAudioString + ".mp3");
+                                            player.setVolume(1.0);
+                                            player.seek(Duration(milliseconds: 0));
+                                            player.play();
+                                            //player.stop();
+
+                                            // Timer(Duration(milliseconds: 800), () {
+                                            //   //player.pause();
+                                            //     player.stop();
+                                            //     //var duration =  player.load();
+                                            //     // player.dispose();
+                                            // });
+                                            //
+                                            if (Platform.isIOS) {
+                                              _setSession();
+                                            }
 
 
-                                              //audioCache.play(sAudioString+'.mp3');
-                                              setUserTone(sAudioString);
-                                            });
-                                          }),
+                                            //audioCache.play(sAudioString+'.mp3');
+                                            setUserTone(sAudioString);
+                                          });
+                                        }),
+                                  ),
+
+
                                       Container(
                                         padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
                                         //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
@@ -598,7 +616,7 @@ class _SettingsState extends State<Settings> {
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
                                         height: 50,
                                         minWidth: 150,
-                                        child: Text("Edit Details",style: TextStyle(fontSize: 20,color: Theme.of(context).buttonColor ),),
+                                        child: Text("Edit Details",style: TextStyle(fontSize: 20,color: Colors.white),),
                                         onPressed: () async {
                                           Navigator.push(context, MaterialPageRoute(builder: (context) => editUserDetails()));
 
@@ -619,7 +637,7 @@ class _SettingsState extends State<Settings> {
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
                                         height: 50,
                                         minWidth: 150,
-                                        child: Text("Sign Out",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor ),),
+                                        child: Text("Sign Out",style: TextStyle(fontSize: 20, color: Colors.white,)),
                                         onPressed: () async {
                                           SharedPreferences preferences = await SharedPreferences.getInstance();
                                           await preferences.clear();
@@ -661,7 +679,7 @@ class _SettingsState extends State<Settings> {
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text("TopShot Timer 1.0.0"),
+                                  Text("TopShot Timer 1.0.0",),
                                   SizedBox(
                                     height: 10,
                                   ),
