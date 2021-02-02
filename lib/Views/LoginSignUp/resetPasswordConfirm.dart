@@ -46,7 +46,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                       )),
                 ),
                 Text("Password Reset", textAlign: TextAlign.center, style:  TextStyle(
-                    fontSize: 30
+                    fontSize: 30, color: Themes.darkButton2Color
                 ),),
                 Container(
                   padding: EdgeInsets.all(25),
@@ -56,7 +56,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                         textAlign: TextAlign.center,
                         text: TextSpan(children: <TextSpan>[
                           TextSpan(
-                              text: "A verification link has been sent to ",
+                              text: "A reset link has been sent to ",
                               style: TextStyle(color: Colors.grey, fontSize: 17)),
                           TextSpan(
                               text: arguments['email'],
@@ -65,7 +65,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold, fontSize: 17)),
                           TextSpan(
-                              text: " follow the instructions to complete your account setup.",
+                              text: " follow the instructions to successfully reset your password",
                               style: TextStyle(color: Colors.grey, fontSize: 17)),
                         ]),
                       ),

@@ -232,6 +232,7 @@ class _verifyEmailState extends State<verifyEmail> {
       //is a user and is veried email so they can use the app
       else if (status == "verified") {
         await prefs.setString('verify', "verified");
+        await prefs.setBool('loginBefore', true);
         //saveUserInformation(id, email, hashedPassword);
         //setState(() => loading = true);
         tests();

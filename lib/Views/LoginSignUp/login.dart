@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
@@ -20,6 +21,7 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
+
    String test = "s";
 
   //variable declarations
@@ -109,12 +111,12 @@ class LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return loading? Loading() :  KeyboardDismisser(
       child: Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
+      resizeToAvoidBottomInset: false,
+      body:
         //physics: NeverScrollableScrollPhysics(),
 
         //margin: EdgeInsets.all(20),
-        child: Form(
+         Form(
           key: _formKey,
           child: Container(
            // decoration: BoxDecoration(
@@ -245,7 +247,6 @@ class LoginState extends State<Login> {
             ),
           ),
         ),
-      ),
     ),
     );
   }
@@ -332,6 +333,7 @@ class LoginState extends State<Login> {
     await prefs.setString('verify', status);
     await prefs.setString('firstName', firstName);
     await prefs.setString('lastName', lastName);
+    await prefs.setBool('loginBefore', true);
     print(firstName);
     print(lastName);
 
