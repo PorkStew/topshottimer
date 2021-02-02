@@ -61,7 +61,10 @@ class _TimerPageState extends State<TimerPage> {
   }}
 
 class timerArea extends StatefulWidget {
+  //File Decleration for audio recorder
   final LocalFileSystem localFileSystem;
+
+
 
   timerArea({localFileSystem})
       : this.localFileSystem = localFileSystem ?? LocalFileSystem();
@@ -72,6 +75,8 @@ class timerArea extends StatefulWidget {
 
 class _timerAreaState extends State<timerArea> {
 
+
+  //Variable declerations for All flags and arrays
   FlutterAudioRecorder _recorder;
   Recording _current;
   RecordingStatus _currentStatus = RecordingStatus.Unset;
@@ -90,6 +95,8 @@ class _timerAreaState extends State<timerArea> {
   bool bstop = false;
   bool startispressed = true;
   bool stopispressed = true;
+
+  //Initial Time
   String stoptimetodisplay = "00:00:00";
   int iMinutes;
   int iSeconds;
@@ -98,18 +105,15 @@ class _timerAreaState extends State<timerArea> {
   String sTestingEar = "";
 
   bool bStopable = true;
-
+  //Declaring Stopwatch
   var swatch = Stopwatch();
   final dur = const Duration(milliseconds: 1);
   int iCountShots = 0;
+  //Flags for starting and stopping timer
   bool isRunning = false;
   bool bClicked = false;
   double dTime = 0.00;
-  // Duration _duration = Duration();
-  // Duration _position = Duration();
-  // AudioPlayer audioPlayer = AudioPlayer();
-  // AudioPlayer advancedPlayer;
-  // AudioCache audioCache;
+
   String localPathFile;
   final startStop = TextEditingController();
   bool didReset = true;
@@ -122,15 +126,7 @@ class _timerAreaState extends State<timerArea> {
   AudioPlayer player = AudioPlayer();
 
 
-
-
-
-  //final player = AudioCache();
-
-  StreamSubscription<NoiseReading> _noiseSubscription;
-  NoiseMeter _noiseMeter;
-
-
+  //Getting permissions to record
   Future permissions() async{
     Map<Permission, PermissionStatus> statuses = await [
       Permission.microphone,
@@ -141,13 +137,18 @@ class _timerAreaState extends State<timerArea> {
   @override
   void initState(){
     super.initState();
+    //Adds first ellement of the array to display correctly before starting
+
     arrShots.add("00:00:00");
+
+    //Calls init for audio player
     _init();
     obtainUserDefaults();
     permissions();
     //_noiseMeter = new NoiseMeter(onError);
     //playSoundFuture = _playSound();
     if (Platform.isIOS) {
+      //sets session for ios
       _setSession();
     }
     //start();
@@ -156,24 +157,13 @@ class _timerAreaState extends State<timerArea> {
   }
 
 
-  // void initPlayer(){
-  //   advancedPlayer = AudioPlayer();
-  //   audioCache = AudioCache(fixedPlayer: advancedPlayer);
-  //
-  //   advancedPlayer.durationHandler = (d) => setState((){
-  //     _duration = d;
-  //   });
-  //   advancedPlayer.positionHandler = (d) => setState((){
-  //     _position = d;
-  //   });
-  // }
-
-
+//Checks if swatch is running and if so starts timer
   void keeprunning(){
     if (swatch.isRunning){
       starttimer();
     }
     setState(() {
+      //Calculation for total times and seperates the minutes, seconds and milliseconds
       stoptimetodisplay = (swatch.elapsed.inMinutes%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inSeconds%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inMilliseconds%1000).toString().padLeft(2,"0");
       iMinutes = swatch.elapsed.inMinutes%60;
       iSeconds = swatch.elapsed.inSeconds%60;
@@ -192,18 +182,18 @@ class _timerAreaState extends State<timerArea> {
 
     });
   }
-
+  //Starts the timer
   void starttimer(){
     Timer(dur, keeprunning);
     bstop = true;
   }
-
+  //Stops the timer and reinitialises the player and recorder
   void stoptimer(){
     _stopnow();
     _init();
     swatch.stop();
   }
-
+  //Sets the audio sessions
   _setSession() async {
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration(
@@ -214,14 +204,7 @@ class _timerAreaState extends State<timerArea> {
 
   }
 
-  // _playSound() async{
-  //
-  //   return "true";
-  // }
-  //
-  // triggerSound() async{
-  //   playSoundFuture = _playSound();
-  // }
+  //Starts stop watch and checks various flags have been reset and stopped
 
   Future<void> startstopwatch() async {
     setState(() {
@@ -313,6 +296,7 @@ class _timerAreaState extends State<timerArea> {
     }
 
   }
+  //resets timer
   void reset() {
     setState(() {
       startispressed = true;
@@ -320,7 +304,7 @@ class _timerAreaState extends State<timerArea> {
 
     swatch.reset();
   }
-
+//Performs recorder initialisations
   _init() async {
     try {
       if (await FlutterAudioRecorder.hasPermissions) {
@@ -363,6 +347,8 @@ class _timerAreaState extends State<timerArea> {
       print(e);
     }
   }
+
+  //Starts the playing and recording process
   _start() async {
     bTest = false;
     print("Got into start method");
@@ -379,7 +365,7 @@ class _timerAreaState extends State<timerArea> {
           _current = recording;
 
         });
-
+      //Sets the tick to pick up and record sounds
         const tick = const Duration(milliseconds: 50);
         new Timer.periodic(tick, (Timer t) async {
           if (_currentStatus == RecordingStatus.Stopped) {
@@ -419,6 +405,7 @@ class _timerAreaState extends State<timerArea> {
       }
     }
   }
+  //resumes the recorder
   _resume() async {
     await _recorder.resume();
     setState(() {});
@@ -428,7 +415,7 @@ class _timerAreaState extends State<timerArea> {
     _recorder.pause();
     setState(() {});
   }
-
+  //Stops the recorder
   _stopnow() async {
     print('stopping now*****');
     var result = await _recorder.stop();
@@ -441,78 +428,7 @@ class _timerAreaState extends State<timerArea> {
       _currentStatus = _current.status;
     });
   }
-  //////////////////////////NOISE METER START
-  // void start() async {
-  //   bTest = false;
-  //   print("Got into start method");
-  //   starttimer();
-  //   swatch.start();
-  //   try {
-  //     _noiseSubscription = _noiseMeter.noiseStream.listen(onData);
-  //
-  //   } on NoiseMeter catch (exception) {
-  //     print("Start Exception: " + exception.toString());
-  //   }
-  //
-  // }
 
-  // void onData(NoiseReading noiseReading) {
-  //   //print("Got into data method");
-  //
-  //   //audioCache.play('2100.mp3');
-  //   this.setState(() {
-  //     if (!this._isRecording) {
-  //       this._isRecording = true;
-  //     }
-  //   });
-  //   //print("Got to on Data method");
-  //   //print(noiseReading.toString());
-  //   if(noiseReading.maxDecibel>89) {
-  //     sTestingEar = noiseReading.maxDecibel.toString();
-  //     //print();
-  //     print(noiseReading);
-  //     print("*****Sound Mean"+ noiseReading.meanDecibel.toString());
-  //     print("*****Sound Max"+noiseReading.maxDecibel.toString());
-  //
-  //     //print("Noise Reading"+noiseReading.toString());
-  //     //double db = 20 * log10(2**15 * noiseReading.maxDecibel)
-  //
-  //   }
-  //
-  //   if(noiseReading.maxDecibel>90){
-  //     print("*****Sound"+ noiseReading.maxDecibel.toString());
-  //
-  //     //arrShots.add(noiseReading.maxDecibel.toString());
-  //     arrShots.add(stoptimetodisplay);
-  //     arrMinutes.add(iMinutes);
-  //     arrSeconds.add(iSeconds);
-  //     arrMilliseconds.add(iMilliseconds);
-  //
-  //     print("Gun Shot Captured!!!!!!!!!!!!!!!!" + noiseReading.maxDecibel.toString());
-  //     iCountShots++;
-  //   }
-  // }
-
-  // void onError(PlatformException e) {
-  //   print(e.toString());
-  //   _isRecording = false;
-  // }
-
-  // void stopRecorder() async {
-  //   try {
-  //     if (_noiseSubscription != null) {
-  //       _noiseSubscription.cancel();
-  //       _noiseSubscription = null;
-  //     }
-  //     this.setState(() {
-  //       this._isRecording = false;
-  //     });
-  //   } catch (err) {
-  //     print('stopRecorder error: $err');
-  //   }
-  // }
-
-  /////////////////////////////NOISE METER END
 
 
 
@@ -633,43 +549,7 @@ class _timerAreaState extends State<timerArea> {
                 children: <Widget>[
                   Spacer(),
 
-                  // FlatButton(
-                  //   //color: Colors.red,
-                  //     minWidth: 170,
-                  //     height: 50,
-                  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Colors.black),),
-                  //     child: Text("Reset", style: TextStyle(fontSize: 25)),
                   //
-                  //     onPressed: () {
-                  //       if (isRunning == false){
-                  //         arrShots.clear();
-                  //         arrShots.add("00:00:00");
-                  //         iCountShots = 0;
-                  //         swatch.reset();
-                  //         stopRecorder();
-                  //         stoptimer();
-                  //         reset();
-                  //         //startstopwatch();
-                  //         didReset = true;
-                  //       } else{
-                  //         Fluttertoast.showToast(
-                  //             msg: "Please stop the timer before tapping reset",
-                  //             //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
-                  //             toastLength: Toast.LENGTH_SHORT,
-                  //             gravity: ToastGravity.BOTTOM,
-                  //             timeInSecForIosWeb: 3,
-                  //             backgroundColor: Colors.red,
-                  //
-                  //             textColor: Colors.black,
-                  //             fontSize: 24.0
-                  //         );
-                  //       }
-                  //
-                  //
-                  //
-                  //     }
-                  // ),
-                  // Spacer(),
                   FlatButton(
                     //color: Colors.blue,
                       minWidth: 200,
@@ -682,26 +562,10 @@ class _timerAreaState extends State<timerArea> {
                           print("Should get into alert");
                           errorViewingStringDialog();
 
-                          // AlertDialog alert = AlertDialog(
-                          //   title: Text("Warning!"),
-                          //   content: Text("No shots registered. Please shoot a string of shots before viewing the string."),
-                          //   actions: [
-                          //     FlatButton(child: Text("Ok"),
-                          //       onPressed: () {
-                          //         Navigator.pop(context);
-                          //       },),                        ],
-                          // );
-                          //
-                          // return showDialog(
-                          //     context: context,
-                          //     builder: (BuildContext context){
-                          //       return alert;
-                          //     }
-                          // );
+
 
                         }
                         else
-                          //Navigator.pushNamedAndRemoveUntil(context, newRouteName, (route) => false)context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
 
                         Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
                       }
@@ -719,6 +583,8 @@ class _timerAreaState extends State<timerArea> {
     );
 
   }
+
+  //No strings shot dialog
   errorViewingStringDialog(){
 
     Dialog dialog = new Dialog(
@@ -789,7 +655,7 @@ class _timerAreaState extends State<timerArea> {
   }
 
 }
-
+//Gets user defaults for saving strings etc
 obtainUserDefaults() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   double dDelay = await prefs.getDouble('userDelay');
@@ -844,34 +710,8 @@ obtainUserDefaults() async{
   timerDelay = dDelay.round();
   timerTone = sTone;
   bRandomDelay = bRandom;
-
-  // print("Default Delay: " + dDelay.toString());
-  // print("Default Sensitivity: " + dSensitivity.toString());
-  // print("Default Tone: " + sTone.toString());
-  //
-  // print("USER DEFAULTS: SENSITIVITY- " + timerSensitivity.toString());
-  // print("USER DEFAULTS: DELAY- " + timerDelay.toString());
-  // print("USER DEFAULTS: TONE- " + sTone);
-
 }
 
 
 
 
-
-//
-// s.start();
-// sleep(new Duration(seconds: 2));
-// print(s.isRunning); // true
-// print(s.elapsedMilliseconds); // around 2000ms
-//
-// sleep(new Duration(seconds: 1));
-// s.stop();
-// print(s.elapsedMilliseconds); // around 3000ms
-// print(s.isRunning); // false
-//
-// sleep(new Duration(seconds: 1));
-// print(s.elapsedMilliseconds); // around 3000ms
-//
-// s.reset();
-// print(s.elapsedMilliseconds); // 0
