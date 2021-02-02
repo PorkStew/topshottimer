@@ -83,7 +83,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                               recognizer: new TapGestureRecognizer()
                                 ..onTap = () {
                                   print("wrong email!!!");
-                                  resetUserPreferences();
+
                                   //tests();
                                   //return to sign up because they entered the wrong information
                                   setState(() => loading = true);
@@ -114,7 +114,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                         onPressed: (){
                           print("return to login please!");
                           //checkUserVerified();
-                          resetUserPreferences();
+
                           Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
                         },
                         child: Text(
@@ -166,7 +166,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                       recognizer: new TapGestureRecognizer()..onTap = () =>
                       {
                       print("wrong email!!!"),
-                        resetUserPreferences(),
+                       
                       //tests();
                       //return to sign up because they entered the wrong information
                       setState(() => loading = true),
@@ -187,7 +187,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
       ),
     );
   }
-  resetPassword() async{
+  Future resetPassword() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
     print(email);
@@ -211,9 +211,5 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
       print(error.toString());
       setState(() => loading = false);
     }
-  }
-  resetUserPreferences() async{
-      SharedPreferences  prefs = await SharedPreferences.getInstance();
-      await prefs.setString('email', null);
   }
 }

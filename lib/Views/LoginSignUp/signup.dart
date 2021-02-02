@@ -158,7 +158,7 @@ class SignUpState extends  State<SignUp> {
             onPressed: () {
               _prefixTapped = true;
               _focusNode.unfocus();
-              print("prefix tapped");
+              //print("prefix tapped");
               // Update the state i.e. toogle the state of passwordVisible variable
               setState(() {
                 _passwordVisible = !_passwordVisible;
@@ -225,7 +225,7 @@ class SignUpState extends  State<SignUp> {
         }
         //checks if passwords are matching
         if(value != _password){
-          print("passwords don't match");
+          //print("passwords don't match");
           return "passwords don't match";
         }
         if (!RegExp(
@@ -285,16 +285,16 @@ class SignUpState extends  State<SignUp> {
                       if (!_formKey.currentState.validate()) {
                         return;
                       }
-
+                      nullPreferences();
                       _formKey.currentState.save();
                       _firstName = StringUtils.capitalize(_firstName);
                       _lastName = StringUtils.capitalize(_lastName);
 
-                      print(_firstName.replaceAll(new RegExp(r"\s+"), ""));
-                      print(_lastName);
-                      print(_email.toLowerCase());
-                      print(_password);
-                      print(_conPassword);
+                      //print(_firstName.replaceAll(new RegExp(r"\s+"), ""));
+                     // print(_lastName);
+                     // print(_email.toLowerCase());
+                     // print(_password);
+                     // print(_conPassword);
 
                       // _email = _email.toLowerCase();
                       //Send to API
@@ -318,7 +318,7 @@ class SignUpState extends  State<SignUp> {
                         text: " Login",
                         recognizer: new TapGestureRecognizer()..onTap = () =>
                         {
-                          print("testing one two three"),
+                          //print("testing one two three"),
                           //setState(() => loading = true),
                           //setUserPreferencesNull(),
                           Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/login', (r) => false)
@@ -340,7 +340,10 @@ class SignUpState extends  State<SignUp> {
     )
     );
   }
-
+  nullPreferences()async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+  }
   //sends user input to php file where it's inserted into the db
   sendData(String firstName, String lastName, String email, String password) async {
     //hashes user password
@@ -365,13 +368,27 @@ class SignUpState extends  State<SignUp> {
       String status = data["status"];
       if(id == "" || status == "not-user")
       {
-        print("this is not a user");
-         saveUserInformation(id, email, hashedPassword, "false", firstName, lastName);
-         Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/verifyEmail', (r) => false ,arguments: {'email': email});
+        //print("this is not a user");
+         //saveUserInformation(id, email, hashedPassword, "false", firstName, lastName);
+         print(id);
+         print(email);
+         print("saving user information!!");
+         SharedPreferences prefs = await SharedPreferences.getInstance();
+         await prefs.setString('id', id);
+         await prefs.setString('email', email);
+         await prefs.setString('password', hashedPassword);
+         await prefs.setString('verify', status);
+         await prefs.setString('firstName', firstName);
+         await prefs.setString('lastName', lastName);
+         print("email in signup");
+         print(email);
+         print(prefs.getString('email'));
+         print("DONE SAVING USER INFORMATION");
+         Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/verifyEmail', (r) => false ,arguments: {'email': email}, );
       } else if(id != "" && status == "user"){
-        print("this is a user");
+        //print("this is a user");
         setState(() => _loading = false);
-        saveUserInformation(id, email, hashedPassword, "true", firstName, lastName);
+        //saveUserInformation(id, email, hashedPassword, "true", firstName, lastName);
         //show dialog
         accountInUseDialog();
       }
@@ -384,17 +401,7 @@ class SignUpState extends  State<SignUp> {
   }
   }
 
-  //takes the users information and stores it in shared preferences
-  saveUserInformation(var id, String email, String hashedPassword, String status, String firstName, String lastName) async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('id', id);
-    await prefs.setString('email', email);
-    await prefs.setString('password', hashedPassword);
-    await prefs.setString('verify', status);
-    await prefs.setString('firstName', firstName);
-    await prefs.setString('lastName', lastName);
 
-  }
   //account email is already used
   accountInUseDialog(){
     Dialog dialog = new Dialog(
