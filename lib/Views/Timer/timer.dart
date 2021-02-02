@@ -14,7 +14,7 @@ import 'package:noise_meter/noise_meter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:topshottimer/Views/splits.dart';
+import 'package:topshottimer/Views/Timer/splits.dart';
 import 'dart:io' show Platform;
 import 'package:path_provider/path_provider.dart';
 import 'package:file/local.dart';
@@ -23,7 +23,7 @@ import 'package:file/local.dart';
 
 
 
-import '../Themes.dart';
+import '../../Themes.dart';
 
 //import 'package:isolate/isolate.dart';
 //Pushing to Merge

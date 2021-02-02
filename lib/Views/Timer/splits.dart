@@ -6,8 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Themes.dart';
-import 'PageSelector.dart';
+import '../../Themes.dart';
+import '../PageSelector.dart';
 
 String userGetID;
 
@@ -80,7 +80,7 @@ class SplitsState extends State<Splits> {
             "userID": userGetID.toString(),
             "totalShots": arrShots.length.toString(),
             "totalTime": sTotalTime,
-             "arrShots": sArray,
+            "arrShots": sArray,
           }
       );
       //print("account created");
@@ -167,11 +167,11 @@ class SplitsState extends State<Splits> {
 
               Text("Total Time: "+arrShots[arrShots.length - 1],style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,),),
               Text("Total Shots: "+(arrShots.length).toString(),style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,),),
+              //Text("Date: "),
 
               Container(
-                padding: EdgeInsets.only(top: 20,bottom: 15,left: 0, right: 0),
+                padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
                 //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
-
               ),
               Row(
                 children: [
@@ -198,40 +198,17 @@ class SplitsState extends State<Splits> {
                     onPressed: () {
                       stringNameDialog();
 
-                      // showDialog(
-                      //     context: context,
-                      //     builder: (BuildContext context){
-                      //       return AlertDialog(
-                      //         title: Text("Please enter a name for this string below:"),
-                      //         content: TextField(
-                      //           controller: sUserInput,
-                      //           decoration: InputDecoration(labelText: 'String Name',),
-                      //
-                      //         ),
-                      //         actions:[
-                      //
-                      //
-                      //           FlatButton(child: Text("Cancel"),
-                      //             onPressed: () {
-                      //               Navigator.pop(context);
-                      //             },),
-                      //           FlatButton(child: Text("Save"),
-                      //             onPressed: () {
-                      //             print("******************" + sUserInput.text);
-                      //             sendData(sUserInput.text, 10, 10.2);
-                      //
-                      //               Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
-                      //             },),
-                      //         ],
-                      //       );
-                      //     }
-                      // );
                     },
 
 
                   ),
                   Spacer(),
                 ],
+
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 20,bottom: 0,left: 0, right: 0),
+                //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
               ),
 
@@ -351,9 +328,12 @@ class SplitsState extends State<Splits> {
                     ),
                   ],
                 ),
+
               ],
             ),
+
           ),
+
         ),
         ),
 

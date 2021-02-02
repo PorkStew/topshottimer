@@ -6,8 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Themes.dart';
-import 'PageSelector.dart';
+import '../../Themes.dart';
+import '../PageSelector.dart';
 
 String userGetID;
 

@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:noise_meter/noise_meter.dart';
 import 'package:topshottimer/Views/Playground.dart';
-import './timer.dart';
-import './Profile.dart';
-import './Settings.dart';
+import 'Timer/timer.dart';
+import 'Scores/Profile.dart';
+import 'Settings/Settings.dart';
 
 class pageSelector extends StatefulWidget {
   @override
@@ -42,15 +42,15 @@ class _pageSelectorState extends State<pageSelector> {
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              title: Text('Home')
+              label: 'Home',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_outlined),
-              title: Text('Scores')
+              label: 'Scores',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings),
-              title: Text('Settings')
+              label: 'Settings',
           ),
         ],
       ),

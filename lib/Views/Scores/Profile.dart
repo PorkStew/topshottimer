@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:topshottimer/Views/viewSplits.dart';
+import 'package:topshottimer/Views/Scores/viewSplits.dart';
+
+import '../../Themes.dart';
 
 
 class Profile extends StatefulWidget {
@@ -22,6 +24,8 @@ class _ProfileState extends State<Profile> {
     List<String> arrStringName = List<String>();
     List<String> arrTotalShots = List<String>();
     List<String> arrTotalTime = List<String>();
+    List<String> arrDates = List<String>();
+
 
     @override
     void initState() {
@@ -66,6 +70,7 @@ class _ProfileState extends State<Profile> {
       arrStringName.add(id[iPopulate]['stringName']);
       arrTotalShots.add(id[iPopulate]['totalShots']);
       arrTotalTime.add(id[iPopulate]['totalTime']);
+      arrDates.add(id[iPopulate]['stringDate']);
     }
 
     //print(arrStringName[0].toString());
@@ -161,6 +166,14 @@ class _ProfileState extends State<Profile> {
                                               Text("Total Shots: " + arrTotalShots[index],style: TextStyle(fontSize: 17)),
                                               Spacer(),
                                             ]),
+                                        Row(
+
+                                            children: <Widget>[
+
+
+                                              Text("Date: " + arrDates[index],style: TextStyle(fontSize: 17, color: Themes.darkButton2Color)),
+                                              Spacer(),
+                                            ]),
 
 
 
@@ -215,13 +228,14 @@ class _ProfileState extends State<Profile> {
           arrStringName.add(id[iPopulate]['stringName']);
           arrTotalShots.add(id[iPopulate]['totalShots']);
           arrTotalTime.add(id[iPopulate]['totalTime']);
+          arrDates.add(id[iPopulate]['stringDate']);
         }
 
       //print(arrStringName[0].toString());
       for(int iPrint = 0; iPrint<=iLength-1; iPrint++)
       {
         //print(arrStringName[iPrint]);
-        print("String ID: " + arrStringID[iPrint]+ ", String Name: " + arrStringName[iPrint]+ ", Total Shots: " + arrTotalShots[iPrint].toString() + ", Total Time: " + arrTotalTime[iPrint]);
+        print("String ID: " + arrStringID[iPrint]+ ", String Name: " + arrStringName[iPrint]+ ", Total Shots: " + arrTotalShots[iPrint].toString() + ", Total Time: " + arrTotalTime[iPrint]+ ", Date: " + arrDates[iPrint]);
       }
 
 
