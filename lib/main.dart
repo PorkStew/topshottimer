@@ -2,10 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:one_context/one_context.dart';
-import 'package:topshottimer/Views/Dialog.dart';
 import 'package:topshottimer/Themes.dart';
-import 'package:topshottimer/Views/LoginSignUp/signup.dart';
 import 'package:topshottimer/Views/Profile.dart';
 import 'package:topshottimer/Views/timer.dart';
 import 'dart:convert';
@@ -17,12 +14,10 @@ import 'package:topshottimer/Views/LoginSignUp/login.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart';
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:get/get.dart';
-
 import 'Views/Settings.dart';
 import 'Views/editUserDetails.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 //TODO: check shared preferences and the naming
 //TODO: add a loading screen to the sign up when going to verifyemail
 void main() {
@@ -59,42 +54,34 @@ class CheckUserDetails extends StatefulWidget {
 }
 
 class _CheckUserDetailsState extends State<CheckUserDetails> {
-  Future newSensitivityFuture;
   //variable declaration
   bool _loading = true;
   bool hasConnection = false;
-  Future newDelayFuture;
+  Future noInternetConnectionDialogFuture;
   @override
   void initState() {
     super.initState();
-
+    //checks continually every 1 second for internet connection
+    //to change delay go to Dart Packages/data_connection_checker-version/data_connection_checker.dart
     DataConnectionChecker().onStatusChange.listen((status) {
-
         switch(status){
+          //has internet connection
           case DataConnectionStatus.connected:
-            hasConnection = true;
             print('success there is internet');
+             hasConnection = true;
+            //_loading = false;
             setInternet(true);
-            // setState(() {
-            //   _loading = false;
-            // });
             checkUserInformation(context);
             break;
-            //should go to login or pageselector if they have details or not
+            //no internet
           case DataConnectionStatus.disconnected:
-            newDelayFuture = _getDelay();
+            print("No internet connection");
             hasConnection = false;
-            print('no internet');
-              setInternet(false);
-           // offlineProcess();
-            //print(testFuture);
-
-        // example dialog
+            noInternetConnectionDialogFuture = _noInternetConnectionDialog();
         }
     });
-
   }
-  _getDelay() async{
+  _noInternetConnectionDialog() async{
     print('inside no internet redirect');
     testFuture = await offlineProcess();
     print(testFuture);

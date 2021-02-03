@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:get/get.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -16,15 +16,10 @@ class ResetPasswordConfirm extends StatefulWidget {
 
 class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
   bool loading = false;
-  BuildContext context;
-
-  //resetPassword(arguments['email']);
   @override
   void initState(){
     super.initState();
-    resetPassword();
-    print("HERE");
-    //print(arguments['email']);
+    sendResetPasswordEmail();
   }
   @override
   Widget build(BuildContext context) {
@@ -110,7 +105,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                   SizedBox(
                       width: 268,
                       height: 60,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: (){
                           print("return to login please!");
                           //checkUserVerified();
@@ -121,20 +116,20 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                           'Login',
                            style: TextStyle(color: Colors.white , fontSize: 20),
                         ),
-                        color: Themes.darkButton1Color,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                       )
                   ),
                   SizedBox(height: 30),
                   SizedBox(
                       width: 268,
                       height: 60,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: (){
+                          //emailSent();
                           print("HELO CONFIRM FOR ME PEASE");
-                          resetPassword();
+                          sendResetPasswordEmail();
+                          emailSent();
+                          //context != null is an issue with this
                           //checkUserVerified();
                           //Navigator.push(context,
                               //MaterialPageRoute(builder: (context) => Login()));
@@ -143,10 +138,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                           'Resend Email',
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
-                        color: Themes.darkButton2Color,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                       )
                   ),
                 ],
@@ -171,6 +163,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                       //return to sign up because they entered the wrong information
                       setState(() => loading = true),
                 //setUserPreferencesNull()
+                        nullPreferences(),
                       Navigator.pushReplacementNamed(context, '/LoginSignUp/login')
                       },
                       style: TextStyle(
@@ -187,7 +180,11 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
       ),
     );
   }
-  Future resetPassword() async{
+  nullPreferences()async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+  }
+  Future sendResetPasswordEmail() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
     print(email);
@@ -211,5 +208,70 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
       print(error.toString());
       setState(() => loading = false);
     }
+  }
+  //used Get.dialog because of context error
+  emailSent() {
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 140,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Verification Email Sent!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                color: Themes.darkButton2Color,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Confirm",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Themes.darkButton2Color,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
+            ),
+          ],
+        )
+      ),
+    );
   }
 }

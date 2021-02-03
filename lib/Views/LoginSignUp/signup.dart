@@ -66,12 +66,12 @@ class SignUpState extends  State<SignUp> {
           return 'Required';
         }
         if(RegExp(r"\s+").hasMatch(value)){
-          return 'White Spaces Not Allowed';
+          return 'White spaces not allowed';
         }
         if (!RegExp(
             r"^([a-zA-Z]+?)$")
             .hasMatch(value)) {
-          return 'Only Letters Allowed';
+          return 'Only letters allowed';
         }
         return null;
       },
@@ -95,12 +95,12 @@ class SignUpState extends  State<SignUp> {
           return 'Required';
         }
         if(RegExp(r"\s+").hasMatch(value)){
-          return 'White Spaces Not Allowed';
+          return 'White spaces not allowed';
         }
         if (!RegExp(
             r"^([a-zA-Z]+?)$")
             .hasMatch(value)) {
-          return 'Only Letters Allowed';
+          return 'Only letters allowed';
         }
         return null;
       },
@@ -126,7 +126,7 @@ class SignUpState extends  State<SignUp> {
           return 'Required';
         }
         if(RegExp(r"\s+").hasMatch(value)){
-          return 'White Spaces not Allowed';
+          return 'White spaces not allowed';
         }
         //regex
         if (!RegExp(
@@ -171,7 +171,10 @@ class SignUpState extends  State<SignUp> {
       obscureText: !_passwordVisible,
       validator: (String value) {
         if (value.isEmpty) {
-          return 'Password is Required';
+          return 'Password cant be empty';
+        }
+        if(value.length <=6){
+          return "Must be 6+ characters";
         }
         //regex to check strength of password
         if (!RegExp(
@@ -226,7 +229,10 @@ class SignUpState extends  State<SignUp> {
         //checks if passwords are matching
         if(value != _password){
           //print("passwords don't match");
-          return "passwords don't match";
+          return "Passwords don't match";
+        }
+        if(value.length <=6){
+          return "Must be 6+ characters";
         }
         if (!RegExp(
             r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$")
@@ -279,7 +285,7 @@ class SignUpState extends  State<SignUp> {
                               SizedBox(
                                   width: 268,
                                   height: 61,
-                                  child: RaisedButton(
+                                  child: ElevatedButton(
                                     child: Text(
                                       'SUBMIT',
                                       style: TextStyle(
@@ -287,8 +293,7 @@ class SignUpState extends  State<SignUp> {
                                           .of(context)
                                           .buttonColor),
                                     ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                                    style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
                                     ),
                                     onPressed: () {
                                       if (!_formKey.currentState.validate()) {
@@ -321,7 +326,6 @@ class SignUpState extends  State<SignUp> {
                                           _password.replaceAll(
                                               new RegExp(r"\s+"), ""));
                                     },
-                                    color: Themes.darkButton2Color,
                                   )
                               ),
                               SizedBox(height: 30),
@@ -341,7 +345,7 @@ class SignUpState extends  State<SignUp> {
                                           {
                                             //print("testing one two three"),
                                             //setState(() => loading = true),
-                                            //setUserPreferencesNull(),
+                                            nullPreferences(),
                                             Navigator.pushNamedAndRemoveUntil(
                                                 context, '/LoginSignUp/login', (
                                                 r) => false)
