@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:topshottimer/Themes.dart';
-import 'package:topshottimer/Views/Profile.dart';
-import 'package:topshottimer/Views/timer.dart';
+import 'package:topshottimer/Views/Scores/Profile.dart';
+import 'package:topshottimer/Views/Settings/Settings.dart';
+import 'package:topshottimer/Views/Settings/editUserDetails.dart';
+import 'package:topshottimer/Views/Timer/timer.dart';
 import 'dart:convert';
 import 'package:topshottimer/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,8 +17,6 @@ import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart';
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get/get.dart';
-import 'Views/Settings.dart';
-import 'Views/editUserDetails.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 //TODO: check shared preferences and the naming
 //TODO: add a loading screen to the sign up when going to verifyemail
@@ -39,10 +39,10 @@ class MyApp extends StatelessWidget {
         '/PageSelector': (context) => pageSelector(),
         '/LoginSignUp/resetPasswordConfirm': (context) => ResetPasswordConfirm(),
         '/LoginSignUp/verifyEmail': (context) => verifyEmail(),
-        '/editUserDetails': (context) => editUserDetails(),
-        '/Timer': (context) => TimerPage(),
-        '/Profile': (context) => Profile(),
-        '/Settings': (context) => Settings(),
+        'Settings/editUserDetails': (context) => editUserDetails(),
+        'Timer/Timer': (context) => TimerPage(),
+        'Scores/Profile': (context) => Profile(),
+        'Settings/Settings': (context) => Settings(),
       },
     );
   }
