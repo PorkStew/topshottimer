@@ -1,20 +1,29 @@
 import 'dart:async';
 import 'dart:isolate';
+import 'dart:math';
+import 'dart:io' as io;
 import 'package:audio_session/audio_session.dart';
 //import 'package:dartins/dartins.dart';
 //import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 //import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:noise_meter/noise_meter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:topshottimer/Views/splits.dart';
+import 'package:topshottimer/Views/Timer/splits.dart';
 import 'dart:io' show Platform;
+import 'package:path_provider/path_provider.dart';
+import 'package:file/local.dart';
+//import 'package:audioplayers/audioplayers.dart';
 
-import '../Themes.dart';
+
+
+
+import '../../Themes.dart';
 
 //import 'package:isolate/isolate.dart';
 //Pushing to Merge
@@ -25,6 +34,7 @@ const String testDevice = '';
 double timerSensitivity;
 int timerDelay;
 String timerTone;
+bool bRandomDelay;
 
 class TimerPage extends StatefulWidget {
   @override
@@ -51,6 +61,13 @@ class _TimerPageState extends State<TimerPage> {
   }}
 
 class timerArea extends StatefulWidget {
+  //File Decleration for audio recorder
+  final LocalFileSystem localFileSystem;
+
+
+
+  timerArea({localFileSystem})
+      : this.localFileSystem = localFileSystem ?? LocalFileSystem();
   @override
   _timerAreaState createState() => _timerAreaState();
 
@@ -58,6 +75,13 @@ class timerArea extends StatefulWidget {
 
 class _timerAreaState extends State<timerArea> {
 
+
+  //Variable declerations for All flags and arrays
+  FlutterAudioRecorder _recorder;
+  Recording _current;
+  RecordingStatus _currentStatus = RecordingStatus.Unset;
+  bool bStarted = false;
+  bool bCanStart = false;
 
   bool bTest = true;
   bool _isRecording = false;
@@ -71,24 +95,25 @@ class _timerAreaState extends State<timerArea> {
   bool bstop = false;
   bool startispressed = true;
   bool stopispressed = true;
+
+  //Initial Time
   String stoptimetodisplay = "00:00:00";
   int iMinutes;
   int iSeconds;
   int iMilliseconds;
 
-  bool bStopable = true;
+  String sTestingEar = "";
 
+  bool bStopable = true;
+  //Declaring Stopwatch
   var swatch = Stopwatch();
   final dur = const Duration(milliseconds: 1);
   int iCountShots = 0;
+  //Flags for starting and stopping timer
   bool isRunning = false;
   bool bClicked = false;
   double dTime = 0.00;
-  // Duration _duration = Duration();
-  // Duration _position = Duration();
-  // AudioPlayer audioPlayer = AudioPlayer();
-  // AudioPlayer advancedPlayer;
-  // AudioCache audioCache;
+
   String localPathFile;
   final startStop = TextEditingController();
   bool didReset = true;
@@ -101,15 +126,7 @@ class _timerAreaState extends State<timerArea> {
   AudioPlayer player = AudioPlayer();
 
 
-
-
-
-  //final player = AudioCache();
-
-  StreamSubscription<NoiseReading> _noiseSubscription;
-  NoiseMeter _noiseMeter;
-
-
+  //Getting permissions to record
   Future permissions() async{
     Map<Permission, PermissionStatus> statuses = await [
       Permission.microphone,
@@ -120,13 +137,18 @@ class _timerAreaState extends State<timerArea> {
   @override
   void initState(){
     super.initState();
+    //Adds first ellement of the array to display correctly before starting
+
     arrShots.add("00:00:00");
 
+    //Calls init for audio player
+    _init();
     obtainUserDefaults();
     permissions();
-    _noiseMeter = new NoiseMeter(onError);
+    //_noiseMeter = new NoiseMeter(onError);
     //playSoundFuture = _playSound();
     if (Platform.isIOS) {
+      //sets session for ios
       _setSession();
     }
     //start();
@@ -135,30 +157,19 @@ class _timerAreaState extends State<timerArea> {
   }
 
 
-  // void initPlayer(){
-  //   advancedPlayer = AudioPlayer();
-  //   audioCache = AudioCache(fixedPlayer: advancedPlayer);
-  //
-  //   advancedPlayer.durationHandler = (d) => setState((){
-  //     _duration = d;
-  //   });
-  //   advancedPlayer.positionHandler = (d) => setState((){
-  //     _position = d;
-  //   });
-  // }
-
-
+//Checks if swatch is running and if so starts timer
   void keeprunning(){
     if (swatch.isRunning){
       starttimer();
     }
     setState(() {
+      //Calculation for total times and seperates the minutes, seconds and milliseconds
       stoptimetodisplay = (swatch.elapsed.inMinutes%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inSeconds%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inMilliseconds%1000).toString().padLeft(2,"0");
       iMinutes = swatch.elapsed.inMinutes%60;
       iSeconds = swatch.elapsed.inSeconds%60;
       iMilliseconds = swatch.elapsed.inMilliseconds%1000;
       int iMillisecondsCount = swatch.elapsed.inMilliseconds;
-      print(iMillisecondsCount);
+      //print(iMillisecondsCount);
       if (iMillisecondsCount >= 200){
         bStopable = true;
       }
@@ -171,16 +182,18 @@ class _timerAreaState extends State<timerArea> {
 
     });
   }
-
+  //Starts the timer
   void starttimer(){
     Timer(dur, keeprunning);
     bstop = true;
   }
-
+  //Stops the timer and reinitialises the player and recorder
   void stoptimer(){
+    _stopnow();
+    _init();
     swatch.stop();
   }
-
+  //Sets the audio sessions
   _setSession() async {
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration(
@@ -191,14 +204,7 @@ class _timerAreaState extends State<timerArea> {
 
   }
 
-  // _playSound() async{
-  //
-  //   return "true";
-  // }
-  //
-  // triggerSound() async{
-  //   playSoundFuture = _playSound();
-  // }
+  //Starts stop watch and checks various flags have been reset and stopped
 
   Future<void> startstopwatch() async {
     setState(() {
@@ -213,22 +219,36 @@ class _timerAreaState extends State<timerArea> {
 
       var duration = await player.setAsset("assets/audios/"+ timerTone + ".mp3");
 
-      print(timerDelay);
-      if (timerDelay == 1){
-        await Future.delayed(const Duration(seconds: 1));
-      }else
-      if (timerDelay == 2){
-        await Future.delayed(const Duration(seconds: 2));
-      }else
-      if (timerDelay == 3){
-        await Future.delayed(const Duration(seconds: 3));
-      }else
-      if (timerDelay == 4){
-        await Future.delayed(const Duration(seconds: 4));
-      }else
-      if (timerDelay == 5){
-        await Future.delayed(const Duration(seconds: 5));
+      if (bRandomDelay == false){
+        // int max = 5;
+        //
+        // int randomNumber = Random().nextInt(max) + 1;
+        print("Random Delay is false");
+        if (timerDelay == 1){
+          await Future.delayed(const Duration(seconds: 1));
+        }else
+        if (timerDelay == 2){
+          await Future.delayed(const Duration(seconds: 2));
+        }else
+        if (timerDelay == 3){
+          await Future.delayed(const Duration(seconds: 3));
+        }else
+        if (timerDelay == 4){
+          await Future.delayed(const Duration(seconds: 4));
+        }else
+        if (timerDelay == 5){
+          await Future.delayed(const Duration(seconds: 5));
+        }
       }
+      else{
+        int max = 5;
+        int randomNumber = Random().nextInt(max) + 1;
+        //int iRandomNum = randomNumber;
+        print("Random Delay is True: "+ randomNumber.toString());
+        await Future.delayed(Duration(seconds: randomNumber));
+      }
+      print(timerDelay);
+
       print("Before Play");
       player.setVolume(1.0);
       player.seek(Duration(milliseconds: 0));
@@ -240,7 +260,7 @@ class _timerAreaState extends State<timerArea> {
 
       Timer(Duration(milliseconds: 600), () {
         //player.pause();
-        start();
+        _start();
       });
       //print(timerDelay.toString());
       //start();
@@ -258,7 +278,7 @@ class _timerAreaState extends State<timerArea> {
       isRunning = false;
       didReset = false;
       stoptimer();
-      stopRecorder();
+      //stopRecorder();
       reset();
       bResetOnStart = true;
       if (Platform.isIOS) {
@@ -276,6 +296,7 @@ class _timerAreaState extends State<timerArea> {
     }
 
   }
+  //resets timer
   void reset() {
     setState(() {
       startispressed = true;
@@ -283,66 +304,131 @@ class _timerAreaState extends State<timerArea> {
 
     swatch.reset();
   }
+//Performs recorder initialisations
+  _init() async {
+    try {
+      if (await FlutterAudioRecorder.hasPermissions) {
+        String customPath = '/flutter_audio_recorder_';
+        io.Directory appDocDirectory;
+//        io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
+        if (io.Platform.isIOS) {
+          appDocDirectory = await getApplicationDocumentsDirectory();
+        } else {
+          appDocDirectory = await getExternalStorageDirectory();
+        }
 
+        // can add extension like ".mp4" ".wav" ".m4a" ".aac"
+        customPath = appDocDirectory.path +
+            customPath +
+            DateTime.now().millisecondsSinceEpoch.toString();
 
-  //////////////////////////NOISE METER START
-  void start() async {
+        // .wav <---> AudioFormat.WAV
+        // .mp4 .m4a .aac <---> AudioFormat.AAC
+        // AudioFormat is optional, if given value, will overwrite path extension when there is conflicts.
+        _recorder =
+            FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
+
+        await _recorder.initialized;
+        // after initialization
+        var current = await _recorder.current(channel: 0);
+        //print(current);
+        // should be "Initialized", if all working fine
+        setState(() {
+          _current = current;
+          _currentStatus = current.status;
+          //print(_currentStatus);
+
+        });
+      } else {
+        Scaffold.of(context).showSnackBar(
+            new SnackBar(content: new Text("You must accept permissions")));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //Starts the playing and recording process
+  _start() async {
     bTest = false;
     print("Got into start method");
     starttimer();
     swatch.start();
-    try {
-      _noiseSubscription = _noiseMeter.noiseStream.listen(onData);
-    } on NoiseMeter catch (exception) {
-      print("Start Exception: " + exception.toString());
-    }
 
+    if (bCanStart = true) {
+      bCanStart = false;
+
+      try {
+        await _recorder.start();
+        var recording = await _recorder.current(channel: 0);
+        setState(() {
+          _current = recording;
+
+        });
+      //Sets the tick to pick up and record sounds
+        const tick = const Duration(milliseconds: 50);
+        new Timer.periodic(tick, (Timer t) async {
+          if (_currentStatus == RecordingStatus.Stopped) {
+            t.cancel();
+          }
+
+          var current = await _recorder.current(channel: 0);
+          setState(() {
+            int iCount = 1;
+            _current = current;
+
+            _currentStatus = _current.status;
+            if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) > timerSensitivity) {
+              //arrShots.add((pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+                  arrShots.add(stoptimetodisplay);
+                  arrMinutes.add(iMinutes);
+                  arrSeconds.add(iSeconds);
+                  arrMilliseconds.add(iMilliseconds);
+
+                  print("Gun Shot Captured!!!!!!!!!!!!!!!!" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+                  iCountShots++;
+              print(pow(10, _current?.metering?.peakPower / 20) * 120.0);
+
+              // _pause();
+              bCanStart = true;
+              _pause();
+              _resume();
+
+              return;
+
+            }
+
+          });
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+  //resumes the recorder
+  _resume() async {
+    await _recorder.resume();
+    setState(() {});
   }
 
-  void onData(NoiseReading noiseReading) {
-    print("Got into data method");
-
-    //audioCache.play('2100.mp3');
-    this.setState(() {
-      if (!this._isRecording) {
-        this._isRecording = true;
-      }
+  _pause() async {
+    _recorder.pause();
+    setState(() {});
+  }
+  //Stops the recorder
+  _stopnow() async {
+    print('stopping now*****');
+    var result = await _recorder.stop();
+    print("Stop recording: ${result.path}");
+    print("Stop recording: ${result.duration}");
+    //File file = widget.localFileSystem.file(result.path);
+    //print("File length: ${await file.length()}");
+    setState(() {
+      _current = result;
+      _currentStatus = _current.status;
     });
-    //print("Got to on Data method");
-    //print(noiseReading.toString());
-
-    if(noiseReading.maxDecibel>timerSensitivity){
-      //arrShots.add(noiseReading.maxDecibel.toString());
-      arrShots.add(stoptimetodisplay);
-      arrMinutes.add(iMinutes);
-      arrSeconds.add(iSeconds);
-      arrMilliseconds.add(iMilliseconds);
-
-      print("Gun Shot Captured!!!!!!!!!!!!!!!!" + noiseReading.maxDecibel.toString());
-      iCountShots++;
-    }
   }
 
-  void onError(PlatformException e) {
-    print(e.toString());
-    _isRecording = false;
-  }
-
-  void stopRecorder() async {
-    try {
-      if (_noiseSubscription != null) {
-        _noiseSubscription.cancel();
-        _noiseSubscription = null;
-      }
-      this.setState(() {
-        this._isRecording = false;
-      });
-    } catch (err) {
-      print('stopRecorder error: $err');
-    }
-  }
-
-  /////////////////////////////NOISE METER END
 
 
 
@@ -377,7 +463,8 @@ class _timerAreaState extends State<timerArea> {
                         arrShots.add("00:00:00");
                         iCountShots = 0;
                         swatch.reset();
-                        stopRecorder();
+                        stoptimer();
+                        //stopRecorder();
                         stoptimer();
                         reset();
                         //startstopwatch();
@@ -462,43 +549,7 @@ class _timerAreaState extends State<timerArea> {
                 children: <Widget>[
                   Spacer(),
 
-                  // FlatButton(
-                  //   //color: Colors.red,
-                  //     minWidth: 170,
-                  //     height: 50,
-                  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), side: BorderSide(width: 2, color: Colors.black),),
-                  //     child: Text("Reset", style: TextStyle(fontSize: 25)),
                   //
-                  //     onPressed: () {
-                  //       if (isRunning == false){
-                  //         arrShots.clear();
-                  //         arrShots.add("00:00:00");
-                  //         iCountShots = 0;
-                  //         swatch.reset();
-                  //         stopRecorder();
-                  //         stoptimer();
-                  //         reset();
-                  //         //startstopwatch();
-                  //         didReset = true;
-                  //       } else{
-                  //         Fluttertoast.showToast(
-                  //             msg: "Please stop the timer before tapping reset",
-                  //             //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
-                  //             toastLength: Toast.LENGTH_SHORT,
-                  //             gravity: ToastGravity.BOTTOM,
-                  //             timeInSecForIosWeb: 3,
-                  //             backgroundColor: Colors.red,
-                  //
-                  //             textColor: Colors.black,
-                  //             fontSize: 24.0
-                  //         );
-                  //       }
-                  //
-                  //
-                  //
-                  //     }
-                  // ),
-                  // Spacer(),
                   FlatButton(
                     //color: Colors.blue,
                       minWidth: 200,
@@ -511,26 +562,12 @@ class _timerAreaState extends State<timerArea> {
                           print("Should get into alert");
                           errorViewingStringDialog();
 
-                          // AlertDialog alert = AlertDialog(
-                          //   title: Text("Warning!"),
-                          //   content: Text("No shots registered. Please shoot a string of shots before viewing the string."),
-                          //   actions: [
-                          //     FlatButton(child: Text("Ok"),
-                          //       onPressed: () {
-                          //         Navigator.pop(context);
-                          //       },),                        ],
-                          // );
-                          //
-                          // return showDialog(
-                          //     context: context,
-                          //     builder: (BuildContext context){
-                          //       return alert;
-                          //     }
-                          // );
+
 
                         }
                         else
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
+
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
                       }
                   ),
                   Spacer(),
@@ -538,6 +575,7 @@ class _timerAreaState extends State<timerArea> {
                 ]
 
             ),
+            Text(sTestingEar),
 
 
           ],
@@ -545,6 +583,8 @@ class _timerAreaState extends State<timerArea> {
     );
 
   }
+
+  //No strings shot dialog
   errorViewingStringDialog(){
 
     Dialog dialog = new Dialog(
@@ -615,10 +655,11 @@ class _timerAreaState extends State<timerArea> {
   }
 
 }
-
+//Gets user defaults for saving strings etc
 obtainUserDefaults() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   double dDelay = await prefs.getDouble('userDelay');
+  bool bRandom = await prefs.getBool('randomDelay');
   double dSensitivity = await prefs.getDouble('userSensitivity');
   String sTone = await prefs.getString('userTone');
 
@@ -626,6 +667,11 @@ obtainUserDefaults() async{
   {
     await prefs.setDouble('userDelay',3);
     dDelay = await prefs.getDouble('userDelay');
+  }
+
+  if (bRandom == null){
+    await prefs.setBool('randomDelay', false);
+    bRandom = false;
   }
 
   if (dSensitivity == null)
@@ -642,19 +688,19 @@ obtainUserDefaults() async{
   }
 
   if (dSensitivity == 0.0){
-    timerSensitivity = 89.4;
+    timerSensitivity = 105;
   } else
   if (dSensitivity == 25.0){
-    timerSensitivity = 80.0;
+    timerSensitivity = 100;
   } else
   if (dSensitivity == 50.0){
-    timerSensitivity = 70.0;
+    timerSensitivity = 90;
   } else
   if (dSensitivity == 75.0){
-    timerSensitivity = 60.0;
+    timerSensitivity = 85;
   } else
   if (dSensitivity == 100.0){
-    timerSensitivity = 50.0;
+    timerSensitivity = 80.0;
   }
   else {
     print("No User Defaults set");
@@ -663,34 +709,9 @@ obtainUserDefaults() async{
   dTime = await double.parse(dDelay.toStringAsFixed(0));
   timerDelay = dDelay.round();
   timerTone = sTone;
-
-  // print("Default Delay: " + dDelay.toString());
-  // print("Default Sensitivity: " + dSensitivity.toString());
-  // print("Default Tone: " + sTone.toString());
-  //
-  // print("USER DEFAULTS: SENSITIVITY- " + timerSensitivity.toString());
-  // print("USER DEFAULTS: DELAY- " + timerDelay.toString());
-  // print("USER DEFAULTS: TONE- " + sTone);
-
+  bRandomDelay = bRandom;
 }
 
 
 
 
-
-//
-// s.start();
-// sleep(new Duration(seconds: 2));
-// print(s.isRunning); // true
-// print(s.elapsedMilliseconds); // around 2000ms
-//
-// sleep(new Duration(seconds: 1));
-// s.stop();
-// print(s.elapsedMilliseconds); // around 3000ms
-// print(s.isRunning); // false
-//
-// sleep(new Duration(seconds: 1));
-// print(s.elapsedMilliseconds); // around 3000ms
-//
-// s.reset();
-// print(s.elapsedMilliseconds); // 0
