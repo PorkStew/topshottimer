@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
@@ -11,6 +12,7 @@ import 'package:topshottimer/Views/LoginSignUp/signup.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
 import 'package:topshottimer/loading.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:topshottimer/global.dart';
 //TODO we don't need controllers any mroe
 class Login extends StatefulWidget {
   @override
@@ -20,7 +22,9 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-   String test = "s";
+  //change this value to enable or disable buttons
+  bool enableBtn = false;
+  String test = "s";
 
   //variable declarations
   int _count = 0;
@@ -109,21 +113,14 @@ class LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return loading? Loading() :  KeyboardDismisser(
       child: Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
+      resizeToAvoidBottomInset: false,
+      body:
         //physics: NeverScrollableScrollPhysics(),
 
         //margin: EdgeInsets.all(20),
-        child: Form(
+         Form(
           key: _formKey,
           child: Container(
-           // decoration: BoxDecoration(
-            //  image: DecorationImage(
-
-             //   fit: BoxFit.cover,
-           //   ),
-           // ),
-            //margin: EdgeInsets.all(20),
             height: MediaQuery.of(context).size.height,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -199,24 +196,15 @@ class LoginState extends State<Login> {
                 SizedBox(
                     width: 268,
                     height: 60,
-                    child: RaisedButton(
+                    child: ElevatedButton(onPressed: true ?
+                        () => loginProcess() :
+                    null,
                       child: Text(
                         'Login',
                         style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor, fontFamily: 'Montserrat-Regular',
                             letterSpacing: 0.2),
                       ),
-                      onPressed: () {
-                        if (!_formKey.currentState.validate()) {
-                          return;
-                        }
-                        nullPreferences();
-                        updateData(_email.text, _password.text);
-                      },
-                      color: Themes.darkButton1Color,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      //side: BorderSide(color: Colors.red))),
+                      style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     )),
                 SizedBox(
                   height: 26,
@@ -224,30 +212,46 @@ class LoginState extends State<Login> {
                 SizedBox(
                     width: 268,
                     height: 60,
-                    child: RaisedButton(
+                    child: ElevatedButton(onPressed: enaleBtn ?
+                        () =>       Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignUp(_email.text)))  :
+                    null,
                       child: Text(
                         'Sign Up',
                         style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor, fontFamily: 'Montserrat-Regular',
                             letterSpacing: 0.2),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignUp(_email.text)));
-                      },
-                      color: Themes.darkButton2Color,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                      // onPressed: () {
+                      //   Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => SignUp(_email.text)));
+                      // },
+                      style: ElevatedButton.styleFrom(primary: Themes.darkButton2Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     )),
               ],
             ),
           ),
         ),
-      ),
     ),
     );
+  }
+  //for login button
+  login(){
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    nullPreferences();
+    updateData(_email.text, _password.text);
+  }
+  loginProcess(){
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    nullPreferences();
+    updateData(_email.text, _password.text);
   }
    nullPreferences()async{
      SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -332,6 +336,7 @@ class LoginState extends State<Login> {
     await prefs.setString('verify', status);
     await prefs.setString('firstName', firstName);
     await prefs.setString('lastName', lastName);
+    await prefs.setBool('loginBefore', true);
     print(firstName);
     print(lastName);
 

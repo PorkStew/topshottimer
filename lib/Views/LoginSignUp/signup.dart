@@ -63,15 +63,15 @@ class SignUpState extends  State<SignUp> {
       validator: (String value) {
         if (value.isEmpty) {
           //saveData(context);
-          return 'First name is Required';
+          return 'Required';
         }
         if(RegExp(r"\s+").hasMatch(value)){
-          return 'White Spaces not Allowed';
+          return 'White spaces not allowed';
         }
         if (!RegExp(
             r"^([a-zA-Z]+?)$")
             .hasMatch(value)) {
-          return 'Invalid first name';
+          return 'Only letters allowed';
         }
         return null;
       },
@@ -92,15 +92,15 @@ class SignUpState extends  State<SignUp> {
       textInputAction: TextInputAction.next,
       validator: (String value) {
         if (value.isEmpty) {
-          return 'Last name is Required';
+          return 'Required';
         }
         if(RegExp(r"\s+").hasMatch(value)){
-          return 'White Spaces not Allowed';
+          return 'White spaces not allowed';
         }
         if (!RegExp(
             r"^([a-zA-Z]+?)$")
             .hasMatch(value)) {
-          return 'Invalid last name';
+          return 'Only letters allowed';
         }
         return null;
       },
@@ -123,16 +123,16 @@ class SignUpState extends  State<SignUp> {
       initialValue: _emailFromLogin,
       validator: (String value) {
         if (value.isEmpty) {
-          return 'Email is Required';
+          return 'Required';
+        }
+        if(RegExp(r"\s+").hasMatch(value)){
+          return 'White spaces not allowed';
         }
         //regex
         if (!RegExp(
             r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
             .hasMatch(value)) {
           return 'Invalid email address';
-        }
-        if(RegExp(r"\s+").hasMatch(value)){
-          return 'White Spaces not Allowed';
         }
         return null;
       },
@@ -171,7 +171,10 @@ class SignUpState extends  State<SignUp> {
       obscureText: !_passwordVisible,
       validator: (String value) {
         if (value.isEmpty) {
-          return 'Password is Required';
+          return 'Password cant be empty';
+        }
+        if(value.length <=6){
+          return "Must be 6+ characters";
         }
         //regex to check strength of password
         if (!RegExp(
@@ -226,7 +229,10 @@ class SignUpState extends  State<SignUp> {
         //checks if passwords are matching
         if(value != _password){
           //print("passwords don't match");
-          return "passwords don't match";
+          return "Passwords don't match";
+        }
+        if(value.length <=6){
+          return "Must be 6+ characters";
         }
         if (!RegExp(
             r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$")
@@ -248,96 +254,118 @@ class SignUpState extends  State<SignUp> {
     //dsiplays loading screen when set state is true
     return _loading ? Loading() : KeyboardDismisser(
       child: Scaffold(
-      appBar: AppBar(title: Text("SIGN UP"), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
-      //allows for the movement of widget to not be blocked by the keyboard
-      resizeToAvoidBottomInset: true,
-      body: Column(
-          children: [
-      Expanded(
-      child: Form(
-      key: _formKey,
-        child: Container(
-          padding: EdgeInsets.all(30),
-          child: Column(
-            children: [
-              _buildFirstName(),
-              SizedBox(height: 15),
-              _buildLastName(),
-              SizedBox(height: 15),
-              _buildEmail(),
-              SizedBox(height: 15),
-              _buildPassword(),
-              SizedBox(height: 15),
-              _buildConPassword(),
-              SizedBox(height: 30),
-              SizedBox(
-                  width: 268,
-                  height: 61,
-                  child: RaisedButton(
-                    child: Text(
-                      'SUBMIT',
-                      style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    onPressed: () {
-                      if (!_formKey.currentState.validate()) {
-                        return;
-                      }
-                      nullPreferences();
-                      _formKey.currentState.save();
-                      _firstName = StringUtils.capitalize(_firstName);
-                      _lastName = StringUtils.capitalize(_lastName);
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          title: Text("Sign Up"), iconTheme: IconThemeData(color: Theme
+            .of(context)
+            .iconTheme
+            .color),),
+        //allows for the movement of widget to not be blocked by the keyboard
+        //Custom and Silver are used because singlechildscrollview dose not work with expanded
+        body:             //hasScrollBody: false,
+               Column(
+                  children: [
+                    Expanded(
+                      child: Form(
+                        key: _formKey,
+                        child: Container(
+                          padding: EdgeInsets.all(30),
+                          child: Column(
+                            children: [
+                              _buildFirstName(),
+                              SizedBox(height: 15),
+                              _buildLastName(),
+                              SizedBox(height: 15),
+                              _buildEmail(),
+                              SizedBox(height: 15),
+                              _buildPassword(),
+                              SizedBox(height: 15),
+                              _buildConPassword(),
+                              SizedBox(height: 30),
+                              SizedBox(
+                                  width: 268,
+                                  height: 61,
+                                  child: ElevatedButton(
+                                    child: Text(
+                                      'SUBMIT',
+                                      style: TextStyle(
+                                          fontSize: 20, color: Theme
+                                          .of(context)
+                                          .buttonColor),
+                                    ),
+                                    style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
+                                    ),
+                                    onPressed: () {
+                                      if (!_formKey.currentState.validate()) {
+                                        return;
+                                      }
+                                      nullPreferences();
+                                      _formKey.currentState.save();
+                                      _firstName =
+                                          StringUtils.capitalize(_firstName);
+                                      _lastName =
+                                          StringUtils.capitalize(_lastName);
 
-                      //print(_firstName.replaceAll(new RegExp(r"\s+"), ""));
-                     // print(_lastName);
-                     // print(_email.toLowerCase());
-                     // print(_password);
-                     // print(_conPassword);
+                                      //print(_firstName.replaceAll(new RegExp(r"\s+"), ""));
+                                      // print(_lastName);
+                                      // print(_email.toLowerCase());
+                                      // print(_password);
+                                      // print(_conPassword);
 
-                      // _email = _email.toLowerCase();
-                      //Send to API
-                      //send user information to the database
-                      //setState(() => _loading = true);
-                      sendData(_firstName.replaceAll(new RegExp(r"\s+"), ""), _lastName.replaceAll(new RegExp(r"\s+"), ""), _email.replaceAll(new RegExp(r"\s+"), "").toLowerCase(), _password.replaceAll(new RegExp(r"\s+"), ""));
-                    },
-                    color: Themes.darkButton2Color,
-                  )
-              ),
-              Expanded(child:
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(children: <TextSpan>[
-                    TextSpan(
-                        text: "Already have an account?",
-                        style: TextStyle(color: Colors.white)),
-                    TextSpan(
-                        text: " Login",
-                        recognizer: new TapGestureRecognizer()..onTap = () =>
-                        {
-                          //print("testing one two three"),
-                          //setState(() => loading = true),
-                          //setUserPreferencesNull(),
-                          Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/login', (r) => false)
-                        },
-                        style: TextStyle(
-                            color: Themes.darkButton2Color,
-                            fontWeight: FontWeight.bold)),
+                                      // _email = _email.toLowerCase();
+                                      //Send to API
+                                      //send user information to the database
+                                      //setState(() => _loading = true);
+                                      sendData(_firstName.replaceAll(
+                                          new RegExp(r"\s+"), ""),
+                                          _lastName.replaceAll(
+                                              new RegExp(r"\s+"), ""),
+                                          _email.replaceAll(
+                                              new RegExp(r"\s+"), "")
+                                              .toLowerCase(),
+                                          _password.replaceAll(
+                                              new RegExp(r"\s+"), ""));
+                                    },
+                                  )
+                              ),
+                              SizedBox(height: 30),
+                              Expanded(child:
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(children: <TextSpan>[
+                                    TextSpan(
+                                        text: "Already have an account?",
+                                        style: TextStyle(color: Colors.white)),
+                                    TextSpan(
+                                        text: " Login",
+                                        recognizer: new TapGestureRecognizer()
+                                          ..onTap = () =>
+                                          {
+                                            //print("testing one two three"),
+                                            //setState(() => loading = true),
+                                            nullPreferences(),
+                                            Navigator.pushNamedAndRemoveUntil(
+                                                context, '/LoginSignUp/login', (
+                                                r) => false)
+                                          },
+                                        style: TextStyle(
+                                            color: Themes.darkButton2Color,
+                                            fontWeight: FontWeight.bold)),
+                                  ]),
+                                ),
+                              )),
+                            ],
+                          ),
+                        ),
+
+                      ),
+                    ),
+
                   ]),
-                ),
-              )),
-            ],
-          ),
-        ),
 
-              ),
-            ),
-
-    ]),
-    )
+      ),
     );
   }
   nullPreferences()async{
@@ -380,6 +408,7 @@ class SignUpState extends  State<SignUp> {
          await prefs.setString('verify', status);
          await prefs.setString('firstName', firstName);
          await prefs.setString('lastName', lastName);
+         await prefs.setBool('loginBefore', false);
          print("email in signup");
          print(email);
          print(prefs.getString('email'));
