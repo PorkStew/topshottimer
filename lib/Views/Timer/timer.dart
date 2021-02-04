@@ -253,44 +253,25 @@ class _timerAreaState extends State<timerArea> {
       player.setVolume(1.0);
       player.seek(Duration(milliseconds: 0));
       player.play();
-      // player.play();
-      //await player.seek(Duration(milliseconds: 445));
-      // await Future.delayed(const Duration(milliseconds: 1000));
-      // start();
 
-      Timer(Duration(milliseconds: 600), () {
-        //player.pause();
+      Timer(Duration(milliseconds: 700), () {
         _start();
       });
-      //print(timerDelay.toString());
-      //start();
-      //print(bstop.toString() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
       bResetOnStart = false;
     }
     else if (bstop == true){
-      //playSoundFuture = null;
-      //player.pause();
-      //player.stop();
-      //player.pause();
-      //player.dispose();
 
       startispressed = true;
       isRunning = false;
       didReset = false;
       stoptimer();
-      //stopRecorder();
       reset();
       bResetOnStart = true;
       if (Platform.isIOS) {
         _setSession();
       }
-      // print("Total Minutes: "+arrMinutes[arrMinutes.length-1].toString());
-      // print("Total Seconds: "+arrSeconds[arrSeconds.length-1].toString());
-      // print("Total Milliseconds: "+arrMilliseconds[arrMilliseconds.length-1].toString());
-      // print(arrMinutes[arrMinutes.length-1].toString() + ":" + arrSeconds[arrSeconds.length-1].toString()+ ":" + arrMilliseconds[arrMilliseconds.length-1].toString());
-      // for (var i = 0; i <= arrShots.length-1; i++) {
-      //   print(arrShots[i]);
-      // }
+
       print("*********************"+ arrShots[arrShots.length-1]);
       bstop = false;
     }
@@ -317,26 +298,20 @@ class _timerAreaState extends State<timerArea> {
           appDocDirectory = await getExternalStorageDirectory();
         }
 
-        // can add extension like ".mp4" ".wav" ".m4a" ".aac"
         customPath = appDocDirectory.path +
             customPath +
             DateTime.now().millisecondsSinceEpoch.toString();
 
-        // .wav <---> AudioFormat.WAV
-        // .mp4 .m4a .aac <---> AudioFormat.AAC
-        // AudioFormat is optional, if given value, will overwrite path extension when there is conflicts.
+
         _recorder =
             FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
 
         await _recorder.initialized;
-        // after initialization
         var current = await _recorder.current(channel: 0);
-        //print(current);
-        // should be "Initialized", if all working fine
+
         setState(() {
           _current = current;
           _currentStatus = current.status;
-          //print(_currentStatus);
 
         });
       } else {
@@ -348,7 +323,6 @@ class _timerAreaState extends State<timerArea> {
     }
   }
 
-  //Starts the playing and recording process
   _start() async {
     bTest = false;
     print("Got into start method");
@@ -365,7 +339,8 @@ class _timerAreaState extends State<timerArea> {
           _current = recording;
 
         });
-      //Sets the tick to pick up and record sounds
+
+        //Sets the tick to pick up and record sounds
         const tick = const Duration(milliseconds: 50);
         new Timer.periodic(tick, (Timer t) async {
           if (_currentStatus == RecordingStatus.Stopped) {
@@ -379,7 +354,7 @@ class _timerAreaState extends State<timerArea> {
 
             _currentStatus = _current.status;
             if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) > timerSensitivity) {
-              //arrShots.add((pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+
                   arrShots.add(stoptimetodisplay);
                   arrMinutes.add(iMinutes);
                   arrSeconds.add(iSeconds);
@@ -389,7 +364,6 @@ class _timerAreaState extends State<timerArea> {
                   iCountShots++;
               print(pow(10, _current?.metering?.peakPower / 20) * 120.0);
 
-              // _pause();
               bCanStart = true;
               _pause();
               _resume();
@@ -421,8 +395,7 @@ class _timerAreaState extends State<timerArea> {
     var result = await _recorder.stop();
     print("Stop recording: ${result.path}");
     print("Stop recording: ${result.duration}");
-    //File file = widget.localFileSystem.file(result.path);
-    //print("File length: ${await file.length()}");
+
     setState(() {
       _current = result;
       _currentStatus = _current.status;
@@ -442,7 +415,6 @@ class _timerAreaState extends State<timerArea> {
           children: [
             Container(
               padding: EdgeInsets.only(top: 35,bottom: 15,left: 0, right: 0),
-              //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
             ),
 
@@ -476,9 +448,7 @@ class _timerAreaState extends State<timerArea> {
 
                         print("Got into pressed method");
                         if (startispressed == true) {
-                          //audioCache.play("2100.mp3");
-                          //playSoundFuture = _playSound();
-                          //triggerSound();
+
                           startstopwatch();
                           isChanged = !isChanged;
                           colorisChanged = !colorisChanged;
@@ -486,7 +456,6 @@ class _timerAreaState extends State<timerArea> {
                             colorisChanged == true ? btnColor = Color(0xFFA2C11C) : btnColor = Color(0xFF2C5D63);
                             isChanged == true ? buttonText = "Start" : buttonText = "Stop";
                           });
-                          //Future.delayed(const Duration(seconds: 2));
                         }
                       }
                       else
@@ -494,7 +463,6 @@ class _timerAreaState extends State<timerArea> {
                         Fluttertoast.showToast(
                             msg: "Please reset before starting another string",
 
-                            //BoxDecoration(borderRadius: BorderRadius.circular(25.0)),
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.BOTTOM,
                             timeInSecForIosWeb: 3,
@@ -529,9 +497,7 @@ class _timerAreaState extends State<timerArea> {
                     fontFamily: 'Digital-7'
                 ),)
 
-              //arrShots.length == -1 ? "00:00:00" : arrShots[arrShots.length-1]
-              // isChanged == true ? buttonText = "Start" : buttonText =
-              // "Stop";
+
             ),
             Container(
                 padding: EdgeInsets.only(top: 10,bottom: 30,left: 0, right: 0),
