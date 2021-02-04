@@ -22,7 +22,7 @@ class _editUserDetailsState extends State<editUserDetails> {
   Future fEmail;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-
+  bool bConnected = false;
 
 
   @override
@@ -35,6 +35,7 @@ class _editUserDetailsState extends State<editUserDetails> {
     newDelayFuture = _getDelay();
     newSensitivityFuture = _getSensitivity();
   }
+
 
   _getFirstName() async{
     FirstName = await userFirstName();
@@ -242,7 +243,7 @@ class _editUserDetailsState extends State<editUserDetails> {
                               minWidth: 180,
                               child: Text("Update",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
                               onPressed: () {
-                                print("Hello world");
+                                //print("Hello world");
                                 print(newFirstName);
 
                                 if (!_formKey.currentState.validate()) {
@@ -258,6 +259,7 @@ class _editUserDetailsState extends State<editUserDetails> {
                                 print(Email.toLowerCase());
                                 updateUserDefaults(newFirstName, newLastName);
                                 updateDetails(newFirstName, newLastName, Email);
+                                updateDetailsDialog();
 
 
                                 //TODO Needs to navigate to Page selector and have a popup dialog
@@ -372,12 +374,12 @@ class _editUserDetailsState extends State<editUserDetails> {
                         Expanded(
                           child: InkWell(
                             onTap: (){
-                              print("Delete Clicked");
                               resetPassword(Email.toLowerCase());
                               clearDefaults();
                               //Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
                               print("Signed Out");
-                              Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
+                              //Navigator.pop(context);
+                              Navigator.pushNamedAndRemoveUntil(context,'/LoginSignUp/login', (route) => false);
                               // Navigator.pop(context);
                               //Navigator.push(context,
                               // MaterialPageRoute(builder: (context) => SignUp(_email.text)));
@@ -416,6 +418,76 @@ class _editUserDetailsState extends State<editUserDetails> {
     );
     showDialog(context: context, builder: (context) => dialog);
 
+  }
+  updateDetailsDialog(){
+
+    Dialog dialog = new Dialog(
+        backgroundColor: Themes.darkBackgoundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 160,
+              child: Padding(
+
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+
+
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+
+                    Text("Your details have been updated successfully. Thank you.", textAlign: TextAlign.center,style: TextStyle(color: Colors.white, fontSize: 20, ),),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pushReplacementNamed(context, '/PageSelector');
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                color: Themes.darkButton2Color,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Continue",
+                                    style: TextStyle(fontSize: 20,color: Colors.white)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Themes.darkButton2Color,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
+            ),
+          ],
+        )
+    );
+    showDialog(context: context, builder: (context) => dialog);
   }
 }
 

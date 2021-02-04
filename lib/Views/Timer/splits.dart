@@ -128,9 +128,7 @@ class SplitsState extends State<Splits> {
                                       child: Text("X",style: TextStyle(fontSize: 20, color: Color(0xFFDE561C)),),
                                       onPressed: () {
                                         setState(() {
-                                          // if (arrShots.length==1)
-                                          // {
-                                          // }
+
                                           if (arrShots.length>1)
                                           {
                                             arrShots.remove(sShot);
@@ -139,7 +137,6 @@ class SplitsState extends State<Splits> {
                                             Navigator.pop(context);
 
 
-                                          //print(arrShots);
                                           print("Hello World");
 
                                         });
@@ -171,7 +168,7 @@ class SplitsState extends State<Splits> {
 
               Container(
                 padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-                //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
               ),
               Row(
                 children: [
