@@ -6,13 +6,11 @@ import 'package:topshottimer/Themes.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
-import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
 import 'package:topshottimer/Views/LoginSignUp/signup.dart';
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/loading.dart';
-//TODO WHAT SOULD WE DO IF THEY VERIFY AND ARE STILL ON THIS PAGE SHOULD WE CHECK
 //TODO can still get email if verified issue issue
 //TODO password cant be less than 6
 class verifyEmail extends StatefulWidget {
@@ -124,20 +122,18 @@ class _verifyEmailState extends State<verifyEmail> {
                     SizedBox(
                         width: 268,
                         height: 61,
-                       child: RaisedButton(
+                       child: ElevatedButton(
                           onPressed: (){
                             print("resending email to user!");
                             //checkUserVerified();
                             getUserInfo();
+                            emailSent();
                           },
                           child: Text(
                               'Resend Email',
                             style: TextStyle(fontSize: 20, color: Colors.white       ),
                           ),
-                          color: Themes.darkButton1Color,
-                          shape: RoundedRectangleBorder(
-                           borderRadius: BorderRadius.circular(10),
-                         ),
+                         style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                         )
                     ),
                   ],
@@ -157,6 +153,7 @@ class _verifyEmailState extends State<verifyEmail> {
                         recognizer: new TapGestureRecognizer()..onTap = () =>
                         {
                         //setState(() => loading = true),
+                          nullPreferences(),
                           Navigator.pushReplacementNamed(context, '/LoginSignUp/login'),
                         },
                         style: TextStyle(
@@ -172,6 +169,10 @@ class _verifyEmailState extends State<verifyEmail> {
           ),
         )
     );
+  }
+  nullPreferences()async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
   }
   tests() async{
     await Future.delayed(const Duration(seconds: 1), (){});
@@ -232,6 +233,7 @@ class _verifyEmailState extends State<verifyEmail> {
       //is a user and is veried email so they can use the app
       else if (status == "verified") {
         await prefs.setString('verify', "verified");
+        await prefs.setBool('loginBefore', true);
         //saveUserInformation(id, email, hashedPassword);
         //setState(() => loading = true);
         tests();
@@ -250,7 +252,7 @@ class _verifyEmailState extends State<verifyEmail> {
       }
   }
   //this called auto on page loador when user clicks button
-  Future getUserInfo() async{
+  Future getUserInfo() async {
     // final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     print("Sending email!!!");
     //check if user is verified or send email verification link
@@ -259,7 +261,7 @@ class _verifyEmailState extends State<verifyEmail> {
     String email = await prefs.getString('email');
     print(email);
     print("************************");
-    try{
+    try {
       var url = 'https://www.topshottimer.co.za/createAccountVerifyEmailMailer.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
@@ -273,9 +275,9 @@ class _verifyEmailState extends State<verifyEmail> {
       String status = data["success"];
       print(status);
       //TODO show that message was sent successfully
-      if(status == 'true'){
+      if (status == 'true') {
         print("EMAIL SENT SUCCESSFULY");
-      } else if(status == 'false'){
+      } else if (status == 'false') {
         print("EMAIL WAS NOT SENT DUE TO ERROR");
       }
       // if(status == "non-verified" && _count != 0) {
@@ -289,52 +291,7 @@ class _verifyEmailState extends State<verifyEmail> {
     } on Error catch (e) {
       print('General Error: $e');
     }
-  }
-  //delete
-  emailSent(){
-    SimpleDialog carDialog = SimpleDialog(
-      contentPadding: EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            SizedBox(
-              height: 20,
-            ),
-            Text("Email Sent!", style: TextStyle(fontSize: 20),),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(
-                  child: InkWell(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(6), bottomRight:  Radius.circular(6)),
-                        color: Themes.darkButton2Color,
-                      ),
-                      height: 45,
-                      child: Center(
-                        child: Text("OKAY",
-                            style: TextStyle(color: Colors.black, fontSize: 20)),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
 
-    showDialog(context: context, builder: (context) => carDialog);
   }
   //delete
   notVerifiedError(){
@@ -401,6 +358,69 @@ class _verifyEmailState extends State<verifyEmail> {
     );
 
     showDialog(context: context, builder: (context) => carDialog);
+  }
+  emailSent(){
+    Dialog dialog = new Dialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 140,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text("Verification Email Sent!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                color: Themes.darkButton2Color,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Confirm",
+                                    style: TextStyle(fontSize: 20)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Themes.darkButton2Color,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
+            ),
+          ],
+        )
+    );
+    showDialog(context: context, builder: (context) => dialog);
   }
 }
 

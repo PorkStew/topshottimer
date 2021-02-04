@@ -29,23 +29,26 @@ dependencies:
   crypto: ^2.1.2
   flutter_session: ^0.1.1
   shared_preferences: ^0.5.12+4
-  #audioplayers: ^0.16.2
+  audioplayers: ^0.16.2
   noise_meter: ^2.0.0
   fluttertoast: ^7.1.1
   flutter_launcher_icons: ^0.8.1
   flutter_launcher_name: ^0.0.1
   flutter_form_bloc: ^0.19.0
+  flutter_bloc: ^6.0.0
+  bloc: ^6.1.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
   audio_session: ^0.0.9
   just_audio: ^0.5.7
   keyboard_dismisser: ^1.0.2
-  flutter_audio_recorder: ^0.5.5
-  audioplayers: ^0.17.2
+  connectivity: ^2.0.2
+  data_connection_checker: ^0.3.4
+  one_context: ^0.5.0
+  get: ^3.24.0
   url_launcher: ^5.7.10
-  #flutter_audio_recorder: ^0.5.5
-
+  flutter_audio_recorder: ^0.5.5
   #firebase_admob: ^0.10.2
 
 

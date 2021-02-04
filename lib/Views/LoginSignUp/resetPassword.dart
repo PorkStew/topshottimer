@@ -65,7 +65,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       body: Column(
         children: [
           Container(
-              //padding: EdgeInsets.only(top: 50,bottom: 15,left: 0, right: 0),
+              padding: EdgeInsets.only(top: 30, bottom: 0, left: 0, right: 0),
            child: Column(
              children: <Widget>[
                Container(
@@ -105,11 +105,11 @@ class _ResetPasswordState extends State<ResetPassword> {
                     child: Column(
                       children: <Widget>[
                         _buildEmail(),
-                        SizedBox(height: 20,),
+                        SizedBox(height: 50,),
                         SizedBox(
                           width: 268,
                           height: 61,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text('Submit',
                             style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),
                           ),
@@ -129,11 +129,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                              // resetPassword(_email.toLowerCase());
                             }
                           },
-                          color: Themes.darkButton1Color,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
+                          style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
                         ),
                       ],
                     ),
@@ -151,6 +147,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                             text: " Login",
                             recognizer: new TapGestureRecognizer()..onTap = () =>
                             {
+                              nullPreferences(),
                               print("testing one two three"),
                               //setState(() => loading = true),
                               //setUserPreferencesNull(),
@@ -193,6 +190,10 @@ class _ResetPasswordState extends State<ResetPassword> {
       )
     )
     );
+  }
+  nullPreferences()async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
   }
   resetPassword(String email) async{
     SharedPreferences  prefs = await SharedPreferences.getInstance();
