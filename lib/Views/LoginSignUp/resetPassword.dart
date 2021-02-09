@@ -31,7 +31,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   Widget _buildEmail() {
     return TextFormField(
       decoration: InputDecoration(
-        labelText: 'EMAIL',
+        labelText: 'Email',
         prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color,),
       ),
       initialValue: _emailFromLogin,

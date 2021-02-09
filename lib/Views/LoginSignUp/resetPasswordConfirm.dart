@@ -189,7 +189,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
     String email = await prefs.getString('email');
     print(email);
     try{
-      var url = 'https://www.topshottimer.co.za/resetPasswordMailer.php';
+      var url = 'https://authentication.topshottimer.co.za/authentication/resetPasswordMailer.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
           body: {
@@ -204,6 +204,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
       } else if(status == 'false'){
         print("EMAIL WAS NOT SENT DUE TO ERROR");
       }
+      print("Done");
     }catch (error) {
       print(error.toString());
       setState(() => loading = false);

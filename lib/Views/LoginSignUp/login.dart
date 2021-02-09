@@ -45,7 +45,7 @@ class LoginState extends State<Login> {
       decoration: InputDecoration(
           prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color),
         //labelText: 'Email',
-          labelText: 'EMAIL',
+          labelText: 'Email',
       ),
       onEditingComplete: () => node.nextFocus(),
       textInputAction: TextInputAction.next,
@@ -70,7 +70,7 @@ class LoginState extends State<Login> {
 
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.lock, color: Theme.of(context).iconTheme.color),
-          labelText: 'PASSWORD',
+          labelText: 'Password',
 
       //contentPadding: EdgeInsets.zero,
       //prefix: Icon(Icons.lock),

@@ -85,6 +85,8 @@ class _editUserDetailsState extends State<editUserDetails> {
   String newLastName = "";
   String Email = "";
 
+
+
   int dropDownValue = 1;
   AudioPlayer advancedPlayer;
   AudioCache audioCache;
@@ -243,23 +245,47 @@ class _editUserDetailsState extends State<editUserDetails> {
                               minWidth: 180,
                               child: Text("Update",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
                               onPressed: () {
+                                print("**FirstName: "+ FirstName);
+                                print("**LastName: "+ LastName);
+                                print("**NewFirstName: "+ newFirstName);
+                                print("**NewLastName: "+ newLastName);
+
+
                                 //print("Hello world");
                                 print(newFirstName);
 
                                 if (!_formKey.currentState.validate()) {
                                   return;
                                 }
-
                                 _formKey.currentState.save();
-                                newFirstName = StringUtils.capitalize(newFirstName);
-                                newLastName = StringUtils.capitalize(newLastName);
 
-                                print(newFirstName.replaceAll(new RegExp(r"\s+"), ""));
-                                print(newLastName);
-                                print(Email.toLowerCase());
-                                updateUserDefaults(newFirstName, newLastName);
-                                updateDetails(newFirstName, newLastName, Email);
-                                updateDetailsDialog();
+
+                                if(newFirstName==FirstName && newLastName==LastName){
+
+                                  print("***********No Details Were Edited");
+                                  print("**NewFirstName: "+ newFirstName);
+                                  print("**NewLastName: "+ newLastName);
+                                  //_formKey.currentState.save();
+                                  notUpdateDetailsDialog();
+                                }
+                                else{
+
+                                  print("***********Details Were Edited");
+                                  print("**NewFirstName: "+ newFirstName);
+                                  print("**NewLastName: "+ newLastName);
+                                  // _formKey.currentState.save();
+                                  newFirstName = StringUtils.capitalize(newFirstName);
+                                  newLastName = StringUtils.capitalize(newLastName);
+
+                                  print(newFirstName.replaceAll(new RegExp(r"\s+"), ""));
+                                  print(newLastName);
+                                  print(Email.toLowerCase());
+                                  updateUserDefaults(newFirstName, newLastName);
+                                  updateDetails(newFirstName, newLastName, Email);
+                                  updateDetailsDialog();
+                                }
+
+
 
 
                                 //TODO Needs to navigate to Page selector and have a popup dialog
@@ -285,25 +311,6 @@ class _editUserDetailsState extends State<editUserDetails> {
 
 
 
-
-                      // Text('First Name: ', style: TextStyle(
-                      //     fontSize: 28.0, color: Themes.darkButton2Color),),
-                      // Text(FirstName.toString(), style: TextStyle(
-                      //     fontSize: 20.0
-                      // ),),
-                      //
-                      // Text('Last Name: ', style: TextStyle(
-                      //     fontSize: 28.0, color: Themes.darkButton2Color
-                      // ),),
-                      // Text(LastName.toString(), style: TextStyle(
-                      //     fontSize: 20.0
-                      // ),),
-                      // Text('Email: ', style: TextStyle(
-                      //     fontSize: 28.0, color: Themes.darkButton2Color
-                      // ),),
-                      // Text(Email.toString(), style: TextStyle(
-                      //     fontSize: 20.0
-                      // ),),
 
 
 
@@ -346,7 +353,7 @@ class _editUserDetailsState extends State<editUserDetails> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Send a password reset email?", style: TextStyle( fontSize: 20, color: Colors.white),),
+                    Text("Are you sure you would like to reset your password. By confirming this you will be logged out.",textAlign: TextAlign.center, style: TextStyle( fontSize: 20, color: Colors.white),),
                     SizedBox(height: 20,),
 
                     Row(
@@ -393,7 +400,7 @@ class _editUserDetailsState extends State<editUserDetails> {
                               ),
                               height: 45,
                               child: Center(
-                                child: Text("Send Email",
+                                child: Text("Confirm",
                                     style: TextStyle(fontSize: 20, color: Colors.white)),
                               ),
                             ),
@@ -418,6 +425,75 @@ class _editUserDetailsState extends State<editUserDetails> {
     );
     showDialog(context: context, builder: (context) => dialog);
 
+  }
+  notUpdateDetailsDialog(){
+    Dialog dialog = new Dialog(
+        backgroundColor: Themes.darkBackgoundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Stack(
+
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 180,
+              child: Padding(
+
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                child: Column(
+
+
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+
+                    Text("Your details were not edited. Please change your details before clicking update.", textAlign: TextAlign.center,style: TextStyle(color: Colors.white, fontSize: 20, ),),
+                    SizedBox(height: 20,),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                color: Themes.darkButton2Color,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Close",
+                                    style: TextStyle(fontSize: 20,color: Colors.white)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Themes.darkButton2Color,
+                    radius: 40,
+                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
+                )
+            ),
+          ],
+        )
+    );
+    showDialog(context: context, builder: (context) => dialog);
   }
   updateDetailsDialog(){
 
@@ -497,7 +573,7 @@ class _editUserDetailsState extends State<editUserDetails> {
 // }
 resetPassword(String email) async{
   try{
-    var url = 'https://www.topshottimer.co.za/resetPasswordMailer.php';
+    var url = 'https://authentication.topshottimer.co.za/authentication/resetPasswordMailer.php';
     var res = await http.post(
         Uri.encodeFull(url), headers: {"Accept": "application/jason"},
         body: {

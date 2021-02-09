@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:basic_utils/basic_utils.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import '../../Themes.dart';
 //TODO better handling of errors when they click the wrong link
 //TODO if they are verified then the system must send a different file to display that they are already verified.
 class SignUp extends StatefulWidget {
@@ -55,7 +56,7 @@ class SignUpState extends  State<SignUp> {
     final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'FIRST NAME',
+          labelText: 'First Name',
         prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color),
       ),
       onEditingComplete: () => node.nextFocus(),
@@ -86,7 +87,7 @@ class SignUpState extends  State<SignUp> {
     return TextFormField(
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color),
-          labelText: 'LAST NAME',
+          labelText: 'Last Name',
       ),
       onEditingComplete: () => node.nextFocus(),
       textInputAction: TextInputAction.next,
@@ -114,7 +115,7 @@ class SignUpState extends  State<SignUp> {
     final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
-        labelText: 'EMAIL',
+        labelText: 'Email',
           prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color),
 
       ),
@@ -146,7 +147,7 @@ class SignUpState extends  State<SignUp> {
     final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'PASSWORD',
+          labelText: 'Password',
         prefixIcon: Icon(Icons.lock, color: Theme.of(context).iconTheme.color),
           suffixIcon: IconButton(color: Theme.of(context).iconTheme.color,
             icon: Icon(
@@ -200,7 +201,7 @@ class SignUpState extends  State<SignUp> {
     final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
-          labelText: 'CONFIRM PASSWORD',
+          labelText: 'Confirm Password',
         prefixIcon: Icon(Icons.lock, color: Theme.of(context).iconTheme.color),
         suffixIcon: IconButton(color: Theme.of(context).iconTheme.color,
           icon: Icon(
@@ -337,7 +338,10 @@ class SignUpState extends  State<SignUp> {
                                   text: TextSpan(children: <TextSpan>[
                                     TextSpan(
                                         text: "Already have an account?",
-                                        style: TextStyle(color: Colors.white)),
+                                       // style: TextStyle(color: Theme.of(context),
+
+                                        //style: TextStyle(color:)
+                                    ),
                                     TextSpan(
                                         text: " Login",
                                         recognizer: new TapGestureRecognizer()

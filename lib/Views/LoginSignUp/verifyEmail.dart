@@ -262,7 +262,7 @@ class _verifyEmailState extends State<verifyEmail> {
     print(email);
     print("************************");
     try {
-      var url = 'https://www.topshottimer.co.za/createAccountVerifyEmailMailer.php';
+      var url = 'https://authentication.topshottimer.co.za/authentication/createAccountVerifyEmailMailer.php';
       var res = await http.post(
           Uri.encodeFull(url), headers: {"Accept": "application/jason"},
           body: {
