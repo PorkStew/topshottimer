@@ -18,6 +18,7 @@ import 'package:topshottimer/Views/Timer/splits.dart';
 import 'dart:io' show Platform;
 import 'package:path_provider/path_provider.dart';
 import 'package:file/local.dart';
+//import 'package:firebase_admob/firebase_admob.dart';
 //import 'package:audioplayers/audioplayers.dart';
 
 
@@ -137,6 +138,9 @@ class _timerAreaState extends State<timerArea> {
   @override
   void initState(){
     super.initState();
+    //FirebaseAdMob.instance.initialize(appId: "ca-app-pub-7160847622040015~8571197345");
+
+
     //Adds first ellement of the array to display correctly before starting
 
     arrShots.add("00:00:00");

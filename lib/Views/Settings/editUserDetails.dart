@@ -344,7 +344,7 @@ class _editUserDetailsState extends State<editUserDetails> {
           children: [
             Container(
               //this will affect the height of the dialog
-              height: 140,
+              height: 205,
               child: Padding(
                 //play with top padding to make items fit
                 padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
