@@ -265,6 +265,7 @@ class SignUpState extends  State<SignUp> {
         //Custom and Silver are used because singlechildscrollview dose not work with expanded
         body:             //hasScrollBody: false,
                Column(
+
                   children: [
                     Expanded(
                       child: Form(
@@ -288,7 +289,7 @@ class SignUpState extends  State<SignUp> {
                                   height: 61,
                                   child: ElevatedButton(
                                     child: Text(
-                                      'SUBMIT',
+                                      'Submit',
                                       style: TextStyle(
                                           fontSize: 20, color: Theme
                                           .of(context)
@@ -338,10 +339,9 @@ class SignUpState extends  State<SignUp> {
                                   text: TextSpan(children: <TextSpan>[
                                     TextSpan(
                                         text: "Already have an account?",
-                                       // style: TextStyle(color: Theme.of(context),
+                                        style: TextStyle(color: Theme.of(context).dividerColor),
 
-                                        //style: TextStyle(color:)
-                                    ),
+                                        ),
                                     TextSpan(
                                         text: " Login",
                                         recognizer: new TapGestureRecognizer()
@@ -456,7 +456,7 @@ class SignUpState extends  State<SignUp> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Account already in user!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    Text("Account already in use", style: TextStyle(fontSize: 20, color: Colors.white),),
                     SizedBox(height: 20,),
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -475,7 +475,7 @@ class SignUpState extends  State<SignUp> {
                               height: 45,
                               child: Center(
                                 child: Text("Confirm",
-                                    style: TextStyle(fontSize: 20)),
+                                    style: TextStyle(fontSize: 20, color: Colors.white)),
                               ),
                             ),
                           ),
@@ -489,7 +489,7 @@ class SignUpState extends  State<SignUp> {
             Positioned(
                 top: -40,
                 child: CircleAvatar(
-                    backgroundColor: Colors.redAccent,
+                    backgroundColor: Themes.darkButton2Color,
                     radius: 40,
                     child: Image.asset("assets/Exclamation@3x.png", height: 53,)
                 )

@@ -57,7 +57,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                               text: arguments['email'],
                               recognizer: new TapGestureRecognizer()..onTap = () => print('Tap Here onTap'),
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(context).dividerColor,
                                   fontWeight: FontWeight.bold, fontSize: 17)),
                           TextSpan(
                               text: " follow the instructions to successfully reset your password",
@@ -152,7 +152,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                 text: TextSpan(children: <TextSpan>[
                   TextSpan(
                       text: "Already have an account?",
-                      style: TextStyle(color: Colors.white)),
+                      style: TextStyle(color: Theme.of(context).dividerColor)),
                   TextSpan(
                       text: " Login",
                       recognizer: new TapGestureRecognizer()..onTap = () =>

@@ -254,6 +254,7 @@ class SplitsState extends State<Splits> {
                   child: Form(
                     key: _formKey,
                     child: TextFormField(
+                      style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
 
                         //labelText: 'Email',

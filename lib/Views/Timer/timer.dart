@@ -18,6 +18,7 @@ import 'package:topshottimer/Views/Timer/splits.dart';
 import 'dart:io' show Platform;
 import 'package:path_provider/path_provider.dart';
 import 'package:file/local.dart';
+//import 'package:firebase_admob/firebase_admob.dart';
 //import 'package:audioplayers/audioplayers.dart';
 
 
@@ -137,6 +138,9 @@ class _timerAreaState extends State<timerArea> {
   @override
   void initState(){
     super.initState();
+    //FirebaseAdMob.instance.initialize(appId: "ca-app-pub-7160847622040015~8571197345");
+
+
     //Adds first ellement of the array to display correctly before starting
 
     arrShots.add("00:00:00");
@@ -654,19 +658,19 @@ obtainUserDefaults() async{
   }
 
   if (dSensitivity == 0.0){
-    timerSensitivity = 105;
-  } else
-  if (dSensitivity == 25.0){
-    timerSensitivity = 100;
-  } else
-  if (dSensitivity == 50.0){
     timerSensitivity = 90;
   } else
-  if (dSensitivity == 75.0){
+  if (dSensitivity == 25.0){
     timerSensitivity = 85;
   } else
+  if (dSensitivity == 50.0){
+    timerSensitivity = 80;
+  } else
+  if (dSensitivity == 75.0){
+    timerSensitivity = 75;
+  } else
   if (dSensitivity == 100.0){
-    timerSensitivity = 80.0;
+    timerSensitivity = 70.0;
   }
   else {
     print("No User Defaults set");

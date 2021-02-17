@@ -344,7 +344,7 @@ class _editUserDetailsState extends State<editUserDetails> {
           children: [
             Container(
               //this will affect the height of the dialog
-              height: 140,
+              height: 205,
               child: Padding(
                 //play with top padding to make items fit
                 padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
@@ -353,7 +353,10 @@ class _editUserDetailsState extends State<editUserDetails> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Are you sure you would like to reset your password. By confirming this you will be logged out.",textAlign: TextAlign.center, style: TextStyle( fontSize: 20, color: Colors.white),),
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: Text("Are you sure you would like to reset your password. By confirming this you will be logged out.",textAlign: TextAlign.center, style: TextStyle( fontSize: 20, color: Colors.white),),
+                    ),
                     SizedBox(height: 20,),
 
                     Row(
@@ -509,7 +512,7 @@ class _editUserDetailsState extends State<editUserDetails> {
           children: [
             Container(
               //this will affect the height of the dialog
-              height: 160,
+              height: 180,
               child: Padding(
 
                 //play with top padding to make items fit
