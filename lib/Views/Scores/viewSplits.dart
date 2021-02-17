@@ -148,7 +148,7 @@ class viewSplitsState extends State<viewSplits> {
                                             ),
                                             Row(
                                             children: <Widget>[
-                                              Text("Split Time: "+arrSplits[index],style: TextStyle(fontSize: 20,),textAlign: TextAlign.right),
+                                              Text("Shot Time: "+arrSplits[index],style: TextStyle(fontSize: 20,),textAlign: TextAlign.right),
                                             ]
                                             )
 
@@ -167,7 +167,7 @@ class viewSplitsState extends State<viewSplits> {
 
                             ),
                           ),
-
+                          SizedBox(height: 5),
                           Row(
                             children: [
                               Spacer(),
@@ -241,6 +241,11 @@ class viewSplitsState extends State<viewSplits> {
                               ),
                               Spacer(),
                             ],
+
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(top: 20,bottom: 0,left: 0, right: 0),
+                            //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                           ),
                           // FlatButton(

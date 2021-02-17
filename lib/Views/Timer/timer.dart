@@ -658,19 +658,19 @@ obtainUserDefaults() async{
   }
 
   if (dSensitivity == 0.0){
-    timerSensitivity = 105;
-  } else
-  if (dSensitivity == 25.0){
-    timerSensitivity = 100;
-  } else
-  if (dSensitivity == 50.0){
     timerSensitivity = 90;
   } else
-  if (dSensitivity == 75.0){
+  if (dSensitivity == 25.0){
     timerSensitivity = 85;
   } else
+  if (dSensitivity == 50.0){
+    timerSensitivity = 80;
+  } else
+  if (dSensitivity == 75.0){
+    timerSensitivity = 75;
+  } else
   if (dSensitivity == 100.0){
-    timerSensitivity = 80.0;
+    timerSensitivity = 70.0;
   }
   else {
     print("No User Defaults set");
