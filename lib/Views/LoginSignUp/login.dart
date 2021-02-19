@@ -5,6 +5,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Themes.dart';
@@ -23,7 +24,7 @@ class Login extends StatefulWidget {
 
 class LoginState extends State<Login> {
   //change this value to enable or disable buttons
-  bool enableBtn = false;
+  bool enableBtn = true;
   String test = "s";
 
   //variable declarations
@@ -37,7 +38,7 @@ class LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
    bool obscureText = false;
    FocusNode _focusNode = FocusNode();
-
+  final controller = Get.put(Controller());
   //email widget
   Widget _buildEmail(BuildContext context) {
     final node = FocusScope.of(context);
@@ -58,6 +59,7 @@ class LoginState extends State<Login> {
       },
       onSaved: (String value) {
         _email.text = value;
+
       },
 
     );
@@ -178,7 +180,7 @@ class LoginState extends State<Login> {
 
                   child:  RichText(
                         text: TextSpan(
-                            text: "Forgot your password?",
+                            text: "Forgot your password? ${controller.btnState.value}",
                             style: TextStyle(color: Themes.darkButton2Color, fontFamily: 'Montserrat-Regular',
                                 letterSpacing: 0.2),
                             recognizer: new TapGestureRecognizer()
@@ -196,7 +198,7 @@ class LoginState extends State<Login> {
                 SizedBox(
                     width: 268,
                     height: 60,
-                    child: ElevatedButton(onPressed: true ?
+                    child: ElevatedButton(onPressed: controller.btnState.value ?
                         () => loginProcess() :
                     null,
                       child: Text(
@@ -212,7 +214,7 @@ class LoginState extends State<Login> {
                 SizedBox(
                     width: 268,
                     height: 60,
-                    child: ElevatedButton(onPressed: enaleBtn ?
+                    child: ElevatedButton(onPressed: controller.btnState.value ?
                         () =>       Navigator.push(
                             context,
                             MaterialPageRoute(

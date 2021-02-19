@@ -17,7 +17,7 @@ import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart';
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get/get.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:topshottimer/global.dart';
 //TODO: check shared preferences and the naming
 //TODO: add a loading screen to the sign up when going to verifyemail
 void main() {
@@ -58,6 +58,7 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
   bool _loading = true;
   bool hasConnection = false;
   Future noInternetConnectionDialogFuture;
+  final controller = Get.put(Controller());
   @override
   void initState() {
     super.initState();
@@ -67,15 +68,29 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
         switch(status){
           //has internet connection
           case DataConnectionStatus.connected:
+            //Tells GET that it should update the variable when its true or false
+            controller.btnState.firstRebuild = false;
+            controller.btnState.value = true;
+            // setState(() {
+            //   controller.btnState.value = true;
+            // });
+            print('INTERNET ON BUTTON STATE: ${controller.btnState}');
             print('success there is internet');
              hasConnection = true;
+
             //_loading = false;
             setInternet(true);
             checkUserInformation(context);
             break;
             //no internet
           case DataConnectionStatus.disconnected:
+            controller.btnState.firstRebuild = false;
+            controller.btnState.value = false;
+            // setState(() {
+            //   controller.btnState.value = false;
+            // });
             print("No internet connection");
+            print('INTERNET OFF BUTTON STATE: ${controller.btnState}');
             hasConnection = false;
             noInternetConnectionDialogFuture = _noInternetConnectionDialog();
         }
@@ -135,6 +150,7 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
                               child: InkWell(
                                 onTap: (){
                                   //Navigator.pop(context);
+                                  Get.back();
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
