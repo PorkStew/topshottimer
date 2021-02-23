@@ -211,16 +211,11 @@ class _SettingsState extends State<Settings> {
                       return Column(
                         children: [
                           Container(
-                            height: 650,
-                            child: ListView(
-
-                              //scrollDirection: Axis.vertical,
-                              //shrinkWrap: true,
-
-                              children: [
-
+                            //height: 650,
+                            child:
                                 Align(
                                   alignment: Alignment.topCenter,
+
                                   child: Column(
 
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -228,39 +223,44 @@ class _SettingsState extends State<Settings> {
                                     //mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
-
-                                      Text('First Name: ', style: TextStyle(
-                                          fontSize: 23.0, color: Themes.darkButton2Color),),
-                                      Text(FirstName.toString(), style: TextStyle(
-                                          fontSize: 18.0
-                                      ),),
                                       Container(
-                                        padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+                                        padding: EdgeInsets.only(top: 30,bottom: 0,left: 0, right: 0),
                                         //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                                       ),
-                                      Text('Last Name: ', style: TextStyle(
-                                          fontSize: 23.0, color: Themes.darkButton2Color
-                                      ),),
-                                      Text(LastName.toString(), style: TextStyle(
-                                          fontSize: 18.0
-                                      ),),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
-                                      ),
-                                      Text('Email: ', style: TextStyle(
-                                          fontSize: 23.0, color: Themes.darkButton2Color
-                                      ),),
-                                      Text(Email.toString(), style: TextStyle(
-                                          fontSize: 18.0
-                                      ),),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
-
-                                      ),
+                                      // Text('First Name: ', style: TextStyle(
+                                      //     fontSize: 23.0, color: Themes.darkButton2Color),),
+                                      // Text(FirstName.toString(), style: TextStyle(
+                                      //     fontSize: 18.0
+                                      // ),),
+                                      // Container(
+                                      //   padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+                                      //   //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+                                      //
+                                      // ),
+                                      // Text('Last Name: ', style: TextStyle(
+                                      //     fontSize: 23.0, color: Themes.darkButton2Color
+                                      // ),),
+                                      // Text(LastName.toString(), style: TextStyle(
+                                      //     fontSize: 18.0
+                                      // ),),
+                                      // Container(
+                                      //   padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+                                      //   //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+                                      //
+                                      // ),
+                                      // Text('Email: ', style: TextStyle(
+                                      //     fontSize: 23.0, color: Themes.darkButton2Color
+                                      // ),),
+                                      // Text(Email.toString(), style: TextStyle(
+                                      //     fontSize: 18.0
+                                      // ),),
+                                      // Container(
+                                      //   padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+                                      //   //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+                                      //
+                                      // ),
 
 
 
@@ -484,7 +484,7 @@ class _SettingsState extends State<Settings> {
                                           fontSize: 23.0, color: Themes.darkButton2Color
                                       ),),
                                       Container(
-                                        padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
+                                        padding: EdgeInsets.only(top: 5,bottom: 0,left: 0, right: 0),
                                         //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                                       ),
@@ -660,13 +660,6 @@ class _SettingsState extends State<Settings> {
 
 
 
-
-
-
-
-                              ],
-
-                            ),
 
                       ),
                           Expanded(child:
