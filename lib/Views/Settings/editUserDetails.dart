@@ -107,7 +107,7 @@ class _editUserDetailsState extends State<editUserDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Edit Details"), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
+      appBar: AppBar(title: Text("Edit Details", style: TextStyle(color: Colors.white)), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
       body: Container(
         padding: EdgeInsets.only(top: 5,bottom: 20,left: 20, right: 20),
         child: FutureBuilder(
@@ -219,7 +219,7 @@ class _editUserDetailsState extends State<editUserDetails> {
                             ),
 
 
-
+                            SizedBox(height: 15,),
                             FlatButton(
                               color: Themes.darkButton1Color,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
