@@ -177,10 +177,9 @@ class LoginState extends State<Login> {
                 ),
                 SizedBox(height: 20),
                 Center(
-
                   child:  RichText(
                         text: TextSpan(
-                            text: "Forgot your password? ${controller.btnState.value}",
+                            text: "Forgot your password?",
                             style: TextStyle(color: Themes.darkButton2Color, fontFamily: 'Montserrat-Regular',
                                 letterSpacing: 0.2),
                             recognizer: new TapGestureRecognizer()
@@ -198,7 +197,7 @@ class LoginState extends State<Login> {
                 SizedBox(
                     width: 268,
                     height: 60,
-                    child: ElevatedButton(onPressed: controller.btnState.value ?
+                    child: Obx(() => ElevatedButton(onPressed: controller.btnState.value ?
                         () => loginProcess() :
                     null,
                       child: Text(
@@ -207,30 +206,25 @@ class LoginState extends State<Login> {
                             letterSpacing: 0.2),
                       ),
                       style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                    )),
+                    ))),
                 SizedBox(
                   height: 26,
                 ),
                 SizedBox(
                     width: 268,
                     height: 60,
-                    child: ElevatedButton(onPressed: controller.btnState.value ?
-                        () =>       Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignUp(_email.text)))  :
-                    null,
+                    child: ElevatedButton(
                       child: Text(
                         'Sign Up',
                         style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor, fontFamily: 'Montserrat-Regular',
                             letterSpacing: 0.2),
                       ),
-                      // onPressed: () {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => SignUp(_email.text)));
-                      // },
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignUp(_email.text)));
+                      },
                       style: ElevatedButton.styleFrom(primary: Themes.darkButton2Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     )),
               ],

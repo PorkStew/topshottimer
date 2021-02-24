@@ -100,12 +100,17 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
     print('inside no internet redirect');
     testFuture = await offlineProcess();
     print(testFuture);
+    print("fuck");
+    print(Get.currentRoute);
+
     if(testFuture != false){
       print('SHOWING PAGESELECTOR');
       // Navigator.pushReplacementNamed(context, '/PageSelector');
       //Get.toNamed('/PageSelector');
       Get.off(pageSelector());
-    } else {
+    } else if(Get.currentRoute == "/Login") {
+      print("Already in login");
+    } else{
       print('SHOWING LOGIN');
       //Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
       //Get.toNamed('/LoginSignUp/login');
@@ -136,9 +141,9 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
                         Padding(padding: const EdgeInsets.fromLTRB(10, 0, 10,0),
                           child: Column(
                               children: [
-                                Text("Whoops!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                                Text("Whoops!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),),
                                 SizedBox(height: 20,),
-                                Text("No internet connection found. Without an internet connection certain features will be disabled.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),textAlign: TextAlign.center,),
+                                Text("No internet connection found. Without an internet connection certain features will be disabled.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),textAlign: TextAlign.center,),
                                 SizedBox(height: 20,),
                               ]
                           ),
@@ -161,7 +166,7 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
                                   height: 45,
                                   child: Center(
                                     child: Text("Confirm",
-                                        style: TextStyle(fontSize: 20)),
+                                        style: TextStyle(fontSize: 20, color: Colors.white)),
                                   ),
                                 ),
                               ),

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
@@ -11,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:basic_utils/basic_utils.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:topshottimer/global.dart';
 import '../../Themes.dart';
 //TODO better handling of errors when they click the wrong link
 //TODO if they are verified then the system must send a different file to display that they are already verified.
@@ -32,7 +34,6 @@ class SignUpState extends  State<SignUp> {
   String _lastName;
   String _email;
   String _password;
-  String _conPassword;
   String _emailFromLogin;
   bool _passwordVisible = false;
   bool _loading = false;
@@ -40,6 +41,7 @@ class SignUpState extends  State<SignUp> {
   final _focusNode = FocusNode();
   var _prefixTapped = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final controller = Get.put(Controller());
   //allows the accepting of data from another view
   SignUpState(this._emailFromLogin);
   //following 5 widgets are inputs for user information with validation
@@ -164,11 +166,17 @@ class SignUpState extends  State<SignUp> {
               setState(() {
                 _passwordVisible = !_passwordVisible;
               });
+
             },
+
       ),
       ),
-      onEditingComplete: () => node.nextFocus(),
-      textInputAction: TextInputAction.next,
+      onEditingComplete: () {
+        // Move the focus to the next node explicitly.
+        FocusScope.of(context).nextFocus();
+      },
+      onFieldSubmitted: (_) => node.unfocus(),
+      textInputAction: TextInputAction.done,
       obscureText: !_passwordVisible,
       validator: (String value) {
         if (value.isEmpty) {
@@ -196,60 +204,6 @@ class SignUpState extends  State<SignUp> {
       },
     );
   }
-  ////confirm password input and validation
-  Widget _buildConPassword() {
-    final node = FocusScope.of(context);
-    return TextFormField(
-      decoration: InputDecoration(
-          labelText: 'Confirm Password',
-        prefixIcon: Icon(Icons.lock, color: Theme.of(context).iconTheme.color),
-        suffixIcon: IconButton(color: Theme.of(context).iconTheme.color,
-          icon: Icon(
-            // Based on passwordVisible state choose the icon
-            _passwordVisible
-                ? Icons.visibility
-                : Icons.visibility_off,
-          ),
-          onPressed: () {
-            _prefixTapped = true;
-            _focusNode.unfocus();
-            // Update the state i.e. toogle the state of passwordVisible variable
-            setState(() {
-              _passwordVisible = !_passwordVisible;
-            });
-          },
-        ),
-      ),
-      onFieldSubmitted: (_) => node.unfocus(),
-      textInputAction: TextInputAction.done,
-      obscureText: !_passwordVisible,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Password cant be empty';
-        }
-        //checks if passwords are matching
-        if(value != _password){
-          //print("passwords don't match");
-          return "Passwords don't match";
-        }
-        if(value.length <=6){
-          return "Must be 6+ characters";
-        }
-        if (!RegExp(
-            r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$")
-            .hasMatch(value)) {
-          return 'Password not strong';
-        }
-        if(RegExp(r"\s+").hasMatch(value)){
-          return 'White Spaces not Allowed';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _conPassword = value;
-      },
-    );
-  }
   @override
   Widget build(BuildContext context) {
     //dsiplays loading screen when set state is true
@@ -257,10 +211,7 @@ class SignUpState extends  State<SignUp> {
       child: Scaffold(
         //resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text("Sign Up"), iconTheme: IconThemeData(color: Theme
-            .of(context)
-            .iconTheme
-            .color),),
+          title: Text("Sign Up", style: TextStyle(color: Colors.white)), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
         //allows for the movement of widget to not be blocked by the keyboard
         //Custom and Silver are used because singlechildscrollview dose not work with expanded
         body: LayoutBuilder(
@@ -269,6 +220,8 @@ class SignUpState extends  State<SignUp> {
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: constraint.maxHeight),
                 child: IntrinsicHeight(
+                  child: Form(
+                    key: _formKey,
                   child: Column(
                     children: <Widget>[
                       Expanded(
@@ -283,13 +236,13 @@ class SignUpState extends  State<SignUp> {
                             _buildEmail(),
                             SizedBox(height: 15),
                             _buildPassword(),
-                            SizedBox(height: 15),
-                            _buildConPassword(),
-                            SizedBox(height: 30),
+                            SizedBox(height: 45),
                         SizedBox(
                           width: 268,
                           height: 61,
-                          child: ElevatedButton(
+                          child: Obx(() => ElevatedButton(onPressed: controller.btnState.value ?
+                              () => signUpProcess() :
+                          null,
                             child: Text(
                               'Submit',
                               style: TextStyle(
@@ -299,39 +252,9 @@ class SignUpState extends  State<SignUp> {
                             ),
                             style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
                             ),
-                            onPressed: () {
-                              if (!_formKey.currentState.validate()) {
-                                return;
-                              }
-                              nullPreferences();
-                              _formKey.currentState.save();
-                              _firstName =
-                                  StringUtils.capitalize(_firstName);
-                              _lastName =
-                                  StringUtils.capitalize(_lastName);
-
-                              //print(_firstName.replaceAll(new RegExp(r"\s+"), ""));
-                              // print(_lastName);
-                              // print(_email.toLowerCase());
-                              // print(_password);
-                              // print(_conPassword);
-
-                              // _email = _email.toLowerCase();
-                              //Send to API
-                              //send user information to the database
-                              //setState(() => _loading = true);
-                              sendData(_firstName.replaceAll(
-                                  new RegExp(r"\s+"), ""),
-                                  _lastName.replaceAll(
-                                      new RegExp(r"\s+"), ""),
-                                  _email.replaceAll(
-                                      new RegExp(r"\s+"), "")
-                                      .toLowerCase(),
-                                  _password.replaceAll(
-                                      new RegExp(r"\s+"), ""));
-                            },
                           )
                         )
+                        ),
                           ],
                         ),
                 ),
@@ -364,6 +287,7 @@ class SignUpState extends  State<SignUp> {
                       SizedBox(height:30)
                     ],
                   ),
+                  )
                 ),
               ),
             );
@@ -371,6 +295,37 @@ class SignUpState extends  State<SignUp> {
         )
       ),
     );
+  }
+  signUpProcess(){
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    nullPreferences();
+    _formKey.currentState.save();
+    _firstName =
+        StringUtils.capitalize(_firstName);
+    _lastName =
+        StringUtils.capitalize(_lastName);
+
+    //print(_firstName.replaceAll(new RegExp(r"\s+"), ""));
+    // print(_lastName);
+    // print(_email.toLowerCase());
+    // print(_password);
+    // print(_conPassword);
+
+    // _email = _email.toLowerCase();
+    //Send to API
+    //send user information to the database
+    //setState(() => _loading = true);
+    sendData(_firstName.replaceAll(
+        new RegExp(r"\s+"), ""),
+        _lastName.replaceAll(
+            new RegExp(r"\s+"), ""),
+        _email.replaceAll(
+            new RegExp(r"\s+"), "")
+            .toLowerCase(),
+        _password.replaceAll(
+            new RegExp(r"\s+"), ""));
   }
   nullPreferences()async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
