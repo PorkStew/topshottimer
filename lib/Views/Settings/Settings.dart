@@ -212,15 +212,10 @@ class _SettingsState extends State<Settings> {
                         children: [
                           Container(
                             //height: 650,
-                            child: ListView(
-
-                              //scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-
-                              children: [
-
+                            child:
                                 Align(
                                   alignment: Alignment.topCenter,
+
                                   child: Column(
 
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -228,6 +223,11 @@ class _SettingsState extends State<Settings> {
                                     //mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
+                                      Container(
+                                        padding: EdgeInsets.only(top: 30,bottom: 0,left: 0, right: 0),
+                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
+
+                                      ),
 
                                       // Text('First Name: ', style: TextStyle(
                                       //     fontSize: 23.0, color: Themes.darkButton2Color),),
@@ -660,13 +660,6 @@ class _SettingsState extends State<Settings> {
 
 
 
-
-
-
-
-                              ],
-
-                            ),
 
                       ),
                           Expanded(child:
