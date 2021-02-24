@@ -17,7 +17,7 @@ import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart';
 import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get/get.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:topshottimer/global.dart';
 //TODO: check shared preferences and the naming
 //TODO: add a loading screen to the sign up when going to verifyemail
 void main() {
@@ -58,6 +58,7 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
   bool _loading = true;
   bool hasConnection = false;
   Future noInternetConnectionDialogFuture;
+  final controller = Get.put(Controller());
   @override
   void initState() {
     super.initState();
@@ -67,15 +68,29 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
         switch(status){
           //has internet connection
           case DataConnectionStatus.connected:
+            //Tells GET that it should update the variable when its true or false
+            controller.btnState.firstRebuild = false;
+            controller.btnState.value = true;
+            // setState(() {
+            //   controller.btnState.value = true;
+            // });
+            print('INTERNET ON BUTTON STATE: ${controller.btnState}');
             print('success there is internet');
              hasConnection = true;
+
             //_loading = false;
             setInternet(true);
             checkUserInformation(context);
             break;
             //no internet
           case DataConnectionStatus.disconnected:
+            controller.btnState.firstRebuild = false;
+            controller.btnState.value = false;
+            // setState(() {
+            //   controller.btnState.value = false;
+            // });
             print("No internet connection");
+            print('INTERNET OFF BUTTON STATE: ${controller.btnState}');
             hasConnection = false;
             noInternetConnectionDialogFuture = _noInternetConnectionDialog();
         }
@@ -85,12 +100,17 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
     print('inside no internet redirect');
     testFuture = await offlineProcess();
     print(testFuture);
+    print("fuck");
+    print(Get.currentRoute);
+
     if(testFuture != false){
       print('SHOWING PAGESELECTOR');
       // Navigator.pushReplacementNamed(context, '/PageSelector');
       //Get.toNamed('/PageSelector');
       Get.off(pageSelector());
-    } else {
+    } else if(Get.currentRoute == "/Login") {
+      print("Already in login");
+    } else{
       print('SHOWING LOGIN');
       //Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
       //Get.toNamed('/LoginSignUp/login');
@@ -121,9 +141,9 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
                         Padding(padding: const EdgeInsets.fromLTRB(10, 0, 10,0),
                           child: Column(
                               children: [
-                                Text("Whoops!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                                Text("Whoops!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),),
                                 SizedBox(height: 20,),
-                                Text("No internet connection found. Without an internet connection certain features will be disabled.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),textAlign: TextAlign.center,),
+                                Text("No internet connection found. Without an internet connection certain features will be disabled.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),textAlign: TextAlign.center,),
                                 SizedBox(height: 20,),
                               ]
                           ),
@@ -135,6 +155,7 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
                               child: InkWell(
                                 onTap: (){
                                   //Navigator.pop(context);
+                                  Get.back();
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -145,7 +166,7 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
                                   height: 45,
                                   child: Center(
                                     child: Text("Confirm",
-                                        style: TextStyle(fontSize: 20)),
+                                        style: TextStyle(fontSize: 20, color: Colors.white)),
                                   ),
                                 ),
                               ),

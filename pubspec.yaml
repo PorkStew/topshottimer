@@ -46,6 +46,7 @@ dependencies:
   connectivity: ^2.0.2
   data_connection_checker: ^0.3.4
   one_context: ^0.5.0
+  #for internet and enabling or disabling buttons
   get: ^3.24.0
   url_launcher: ^5.7.10
   flutter_audio_recorder: ^0.5.5
