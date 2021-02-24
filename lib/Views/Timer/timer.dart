@@ -359,13 +359,13 @@ class _timerAreaState extends State<timerArea> {
             _currentStatus = _current.status;
             if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) > timerSensitivity) {
 
-                  arrShots.add(stoptimetodisplay);
-                  arrMinutes.add(iMinutes);
-                  arrSeconds.add(iSeconds);
-                  arrMilliseconds.add(iMilliseconds);
+              arrShots.add(stoptimetodisplay);
+              arrMinutes.add(iMinutes);
+              arrSeconds.add(iSeconds);
+              arrMilliseconds.add(iMilliseconds);
 
-                  print("Gun Shot Captured!!!!!!!!!!!!!!!!" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
-                  iCountShots++;
+              print("Gun Shot Captured!!!!!!!!!!!!!!!!" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+              iCountShots++;
               print(pow(10, _current?.metering?.peakPower / 20) * 120.0);
 
               bCanStart = true;
@@ -537,7 +537,7 @@ class _timerAreaState extends State<timerArea> {
                         }
                         else
 
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
                       }
                   ),
                   Spacer(),
@@ -558,7 +558,7 @@ class _timerAreaState extends State<timerArea> {
   errorViewingStringDialog(){
 
     Dialog dialog = new Dialog(
-      backgroundColor: Themes.darkBackgoundColor,
+        backgroundColor: Themes.darkBackgoundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10)
         ),
@@ -681,7 +681,3 @@ obtainUserDefaults() async{
   timerTone = sTone;
   bRandomDelay = bRandom;
 }
-
-
-
-
