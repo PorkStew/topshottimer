@@ -9,13 +9,14 @@ import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/LoginSignUp/login.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
 import 'package:topshottimer/loading.dart';
-
+import 'package:topshottimer/global.dart';
 class ResetPasswordConfirm extends StatefulWidget {
   _ResetPasswordConfirmState createState() => _ResetPasswordConfirmState();
 }
 
 class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
   bool loading = false;
+  final controller = Get.put(Controller());
   @override
   void initState(){
     super.initState();
@@ -123,22 +124,15 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                   SizedBox(
                       width: 268,
                       height: 60,
-                      child: ElevatedButton(
-                        onPressed: (){
-                          //emailSent();
-                          print("HELO CONFIRM FOR ME PEASE");
-                          sendResetPasswordEmail();
-                          emailSent();
-                          //context != null is an issue with this
-                          //checkUserVerified();
-                          //Navigator.push(context,
-                              //MaterialPageRoute(builder: (context) => Login()));
-                        },
+                      child: Obx(() => ElevatedButton(onPressed: controller.btnState.value ?
+                          () => resendEmailProcess() :
+                      null,
                         child: Text(
                           'Resend Email',
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                         style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                      )
                       )
                   ),
                 ],
@@ -179,6 +173,16 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
         ),
       ),
     );
+  }
+  resendEmailProcess(){
+    //emailSent();
+    print("HELO CONFIRM FOR ME PEASE");
+    sendResetPasswordEmail();
+    emailSent();
+    //context != null is an issue with this
+    //checkUserVerified();
+    //Navigator.push(context,
+    //MaterialPageRoute(builder: (context) => Login()));
   }
   nullPreferences()async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -232,7 +236,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Verification Email Sent!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                    Text("Verification Email Sent!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Colors.white),),
                     SizedBox(height: 20,),
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -251,7 +255,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                               height: 45,
                               child: Center(
                                 child: Text("Confirm",
-                                    style: TextStyle(fontSize: 20)),
+                                    style: TextStyle(fontSize: 20, color: Colors.white)),
                               ),
                             ),
                           ),
