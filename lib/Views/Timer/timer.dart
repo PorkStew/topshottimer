@@ -76,7 +76,7 @@ class timerArea extends StatefulWidget {
 
 class _timerAreaState extends State<timerArea> {
 
-
+  int iCountStart = 0;
   //Variable declerations for All flags and arrays
   FlutterAudioRecorder _recorder;
   Recording _current;
@@ -220,8 +220,26 @@ class _timerAreaState extends State<timerArea> {
       isRunning = true;
       print("Going to play sound now!!!!");
       print("Before seconds duration");
+      print("************************* Before Initilisation of Player***********************");
 
-      var duration = await player.setAsset("assets/audios/"+ timerTone + ".mp3");
+      if(iCountStart==0){
+        if(Platform.isAndroid){
+          print("*************************THIS IS ANDROID***********************");
+          //var duration = await player.setAsset("assets/audios/"+ timerTone + ".mp3");
+          player.setAsset("assets/audios/"+ timerTone + ".mp3");
+        }
+
+
+      }
+      
+      if(Platform.isIOS){
+        print("*************************THIS IS IOS***********************");
+        var duration = await player.setAsset("assets/audios/"+ timerTone + ".mp3");
+      }
+
+
+
+
 
       if (bRandomDelay == false){
         // int max = 5;
@@ -243,6 +261,17 @@ class _timerAreaState extends State<timerArea> {
         if (timerDelay == 5){
           await Future.delayed(const Duration(seconds: 5));
         }
+        // print("Before Play");
+        // player.setVolume(1.0);
+        // player.seek(Duration(milliseconds: 0));
+        // player.play();
+        // player.seek(Duration(milliseconds: 0));
+        //
+        // print("After Play");
+        //player.stop();
+
+
+
       }
       else{
         int max = 5;
@@ -257,11 +286,16 @@ class _timerAreaState extends State<timerArea> {
       player.setVolume(1.0);
       player.seek(Duration(milliseconds: 0));
       player.play();
+      player.seek(Duration(milliseconds: 0));
+
+      print("After Play");
+
 
       Timer(Duration(milliseconds: 700), () {
         _start();
       });
-
+      //player.dispose();
+      iCountStart++;
       bResetOnStart = false;
     }
     else if (bstop == true){
@@ -357,6 +391,10 @@ class _timerAreaState extends State<timerArea> {
             _current = current;
 
             _currentStatus = _current.status;
+            // if((pow(10, _current?.metering?.peakPower / 20) * 120.0) > 50)
+            //   {
+                //print(_current?.metering?.peakPower);
+              // }
             if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) > timerSensitivity) {
 
               arrShots.add(stoptimetodisplay);
@@ -364,13 +402,16 @@ class _timerAreaState extends State<timerArea> {
               arrSeconds.add(iSeconds);
               arrMilliseconds.add(iMilliseconds);
 
-              print("Gun Shot Captured!!!!!!!!!!!!!!!!" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+              print("***********************Gun Shot Captured!!!!!!!!!!!!!!!!" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
               iCountShots++;
               print(pow(10, _current?.metering?.peakPower / 20) * 120.0);
 
               bCanStart = true;
-              _pause();
-              _resume();
+              if(io.Platform.isIOS){
+                 _pause();
+                 _resume();
+              }
+
 
               return;
 
@@ -378,6 +419,7 @@ class _timerAreaState extends State<timerArea> {
 
           });
         });
+
       } catch (e) {
         print(e);
       }
