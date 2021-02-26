@@ -1,44 +1,42 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart'
-    as con;
-import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/loading.dart';
 import 'package:topshottimer/global.dart';
 
 class ResetPassword extends StatefulWidget {
-  String something = "";
-
-  ResetPassword(this.something);
+  //accepts email from the login if they have entered one
+  String email = "";
+  ResetPassword(this.email);
 
   @override
   State<StatefulWidget> createState() {
-    //need to accept a aurgement
-    return _ResetPasswordState(this.something);
+    return _ResetPasswordState(this.email);
   }
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
+  //variable declarations
   String _email;
   String _emailFromLogin;
   bool loading = false;
-
+  //accepts email from login if one is entered
   _ResetPasswordState(this._emailFromLogin);
-
   final controller = Get.put(Controller());
-  final email = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   //email input and validation
   Widget _buildEmail() {
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'Email',
+          labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 15,
+              fontFamily: 'Montserrat-Regular',
+              letterSpacing: 0.2, color: Colors.grey),
         prefixIcon: Icon(
           Icons.email,
           color: Theme.of(context).iconTheme.color,
@@ -66,7 +64,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       },
     );
   }
-
+  //main view with all widgets combined
   @override
   Widget build(BuildContext context) {
     return loading
@@ -79,9 +77,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   iconTheme:
                       IconThemeData(color: Theme.of(context).iconTheme.color),
                 ),
-
                 //allows for the movement of widget to not be blocked by the keyboard
-                //Custom and Silver are used because singlechildscrollview dose not work with expanded
                 body: LayoutBuilder(
                   builder: (context, constraint) {
                     return SingleChildScrollView(
@@ -108,12 +104,20 @@ class _ResetPasswordState extends State<ResetPassword> {
                                             )
                                             ),
                                       ),
-                                      SizedBox(height: 10),
-                                      Text("Forgot your password?", style: TextStyle(
-                                          fontSize: 25
+                                      SizedBox(height: 30),
+                                      Text("Forgot Password?", style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 25,
+                                          fontFamily: 'Montserrat-Regular',
+                                          letterSpacing: 0.2,
                                       ),),
+                                      SizedBox(height: 20),
                                       Text("Confirm your email and we'll send the instructions.", textAlign: TextAlign.center, style:  TextStyle(
-                                          fontSize: 17
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 17,
+                                          fontFamily: 'Montserrat-Regular',
+                                          letterSpacing: 0.2,
+                                          color: Colors.grey
                                       ),),
                                       _buildEmail(),
                                       SizedBox(height: 50,),
@@ -152,7 +156,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                                   TextSpan(
                                     text: "Already have an account?",
                                     style: TextStyle(
-                                        color: Theme.of(context).dividerColor),
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 13,
+                                        fontFamily: 'Montserrat-Regular',
+                                        letterSpacing: 0.2, color: Theme.of(context).dividerColor),
                                   ),
                                   TextSpan(
                                       text: " Login",
@@ -167,8 +174,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                                                   (r) => false)
                                             },
                                       style: TextStyle(
-                                          color: Themes.darkButton2Color,
-                                          fontWeight: FontWeight.bold)),
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 13,
+                                          fontFamily: 'Montserrat-Regular',
+                                          letterSpacing: 0.2, color: Themes.darkButton2Color),),
                                 ]),
                               ),
                               SizedBox(height: 30)
@@ -181,7 +190,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 )),
           );
   }
-
+  //on reset button click validate input, show loading screen and call resetPassword()
   resetPasswordProcess() {
     if (!_formKey.currentState.validate()) {
       return;
@@ -197,12 +206,12 @@ class _ResetPasswordState extends State<ResetPassword> {
       // resetPassword(_email.toLowerCase());
     }
   }
-
+  //sets sharedPreferences to null on already have account login button click
   nullPreferences() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();
   }
-
+  //called in resetPasswordProcess when reset button is clicked, saves email in sharedPreferences and goes to new view
   resetPassword(String email) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('email', email);
@@ -213,23 +222,4 @@ class _ResetPasswordState extends State<ResetPassword> {
       arguments: {'email': _email},
     );
   }
-//REMOVE
-// resetPassword(String email) async{
-//   try{
-//     var url = 'https://www.topshottimer.co.za/resetPasswordMailer.php';
-//     var res = await http.post(
-//         Uri.encodeFull(url), headers: {"Accept": "application/jason"},
-//         body: {
-//           "emailAddress": email,
-//         }
-//     );
-//     //Navigator.of(context).pop();
-//     //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
-//     //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': email});
-//
-//   }catch (error) {
-//     print(error.toString());
-//     setState(() => loading = false);
-//   }
-// }
 }
