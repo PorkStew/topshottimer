@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,8 +13,7 @@ import 'package:basic_utils/basic_utils.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:topshottimer/global.dart';
 import '../../Themes.dart';
-//TODO better handling of errors when they click the wrong link
-//TODO if they are verified then the system must send a different file to display that they are already verified.
+
 class SignUp extends StatefulWidget {
   //accepts email from the login if they have entered one
   String something = "";
@@ -28,6 +26,9 @@ class SignUp extends StatefulWidget {
   }
 }
 
+//CONTENTS
+//  4 X Widget
+//  4 X Method
 class SignUpState extends  State<SignUp> {
   //variable declarations
   String _firstName;
@@ -38,29 +39,26 @@ class SignUpState extends  State<SignUp> {
   bool _passwordVisible = false;
   bool _loading = false;
   //form key
-  final _focusNode = FocusNode();
-  var _prefixTapped = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  //access global variables in global.dart
   final controller = Get.put(Controller());
   //allows the accepting of data from another view
   SignUpState(this._emailFromLogin);
   //following 5 widgets are inputs for user information with validation
   //first name input and validation
-  @override
-  void initState() {
-    super.initState();
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus & _prefixTapped) _focusNode.unfocus();
-      _prefixTapped = false;
-    });
-  }
   Widget _buildFirstName() {
     final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
           labelText: 'First Name',
+          labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 15,
+              fontFamily: 'Montserrat-Regular',
+              letterSpacing: 0.2, color: Colors.grey),
         prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color),
       ),
+      //allows the keyboard function to go to next textfield or close keyboard
       onEditingComplete: () => node.nextFocus(),
       textInputAction: TextInputAction.next,
       validator: (String value) {
@@ -68,9 +66,11 @@ class SignUpState extends  State<SignUp> {
           //saveData(context);
           return 'Required';
         }
+        //regex to check for white spaces
         if(RegExp(r"\s+").hasMatch(value)){
           return 'White spaces not allowed';
         }
+        //regex only allowing letters
         if (!RegExp(
             r"^([a-zA-Z]+?)$")
             .hasMatch(value)) {
@@ -88,8 +88,13 @@ class SignUpState extends  State<SignUp> {
     final node = FocusScope.of(context);
     return TextFormField(
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color),
           labelText: 'Last Name',
+          labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 15,
+              fontFamily: 'Montserrat-Regular',
+              letterSpacing: 0.2, color: Colors.grey),
+        prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color),
       ),
       onEditingComplete: () => node.nextFocus(),
       textInputAction: TextInputAction.next,
@@ -97,9 +102,11 @@ class SignUpState extends  State<SignUp> {
         if (value.isEmpty) {
           return 'Required';
         }
+        //regex to check for white spaces
         if(RegExp(r"\s+").hasMatch(value)){
           return 'White spaces not allowed';
         }
+        //regex only allowing letters
         if (!RegExp(
             r"^([a-zA-Z]+?)$")
             .hasMatch(value)) {
@@ -118,9 +125,14 @@ class SignUpState extends  State<SignUp> {
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'Email',
+          labelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 15,
+              fontFamily: 'Montserrat-Regular',
+              letterSpacing: 0.2, color: Colors.grey),
           prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color),
-
       ),
+      //allows the keyboard function to go to next textfield or close keyboard
       onEditingComplete: () => node.nextFocus(),
       textInputAction: TextInputAction.next,
       initialValue: _emailFromLogin,
@@ -128,10 +140,11 @@ class SignUpState extends  State<SignUp> {
         if (value.isEmpty) {
           return 'Required';
         }
+        //regex to check for white spaces
         if(RegExp(r"\s+").hasMatch(value)){
           return 'White spaces not allowed';
         }
-        //regex
+        //regex makes sure that it contains a @gmail.com of some sort
         if (!RegExp(
             r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
             .hasMatch(value)) {
@@ -150,6 +163,11 @@ class SignUpState extends  State<SignUp> {
     return TextFormField(
       decoration: InputDecoration(
           labelText: 'Password',
+          labelStyle: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 15,
+            fontFamily: 'Montserrat-Regular',
+            letterSpacing: 0.2, color: Colors.grey),
         prefixIcon: Icon(Icons.lock, color: Theme.of(context).iconTheme.color),
           suffixIcon: IconButton(color: Theme.of(context).iconTheme.color,
             icon: Icon(
@@ -159,22 +177,20 @@ class SignUpState extends  State<SignUp> {
                   : Icons.visibility_off,
             ),
             onPressed: () {
-              _prefixTapped = true;
-              _focusNode.unfocus();
+
               //print("prefix tapped");
               // Update the state i.e. toogle the state of passwordVisible variable
               setState(() {
                 _passwordVisible = !_passwordVisible;
               });
-
             },
-
       ),
       ),
       onEditingComplete: () {
         // Move the focus to the next node explicitly.
         FocusScope.of(context).nextFocus();
       },
+      //allows the keyboard function to go to next textfield or close keyboard
       onFieldSubmitted: (_) => node.unfocus(),
       textInputAction: TextInputAction.done,
       obscureText: !_passwordVisible,
@@ -182,17 +198,19 @@ class SignUpState extends  State<SignUp> {
         if (value.isEmpty) {
           return 'Password cant be empty';
         }
+        //password must be 6 characters or more
         if(value.length <=6){
           return "Must be 6+ characters";
+        }
+        //regex to check for white spaces
+        if(RegExp(r"\s+").hasMatch(value)){
+          return 'White Spaces not Allowed';
         }
         //regex to check strength of password
         if (!RegExp(
             r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$")
             .hasMatch(value)) {
           return 'Password not strong';
-        }
-        if(RegExp(r"\s+").hasMatch(value)){
-          return 'White Spaces not Allowed';
         }
         return null;
       },
@@ -204,12 +222,13 @@ class SignUpState extends  State<SignUp> {
       },
     );
   }
+  //main view with all widgets combined
   @override
   Widget build(BuildContext context) {
     //dsiplays loading screen when set state is true
     return _loading ? Loading() : KeyboardDismisser(
       child: Scaffold(
-        //resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text("Sign Up", style: TextStyle(color: Colors.white)), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
         //allows for the movement of widget to not be blocked by the keyboard
@@ -246,9 +265,11 @@ class SignUpState extends  State<SignUp> {
                             child: Text(
                               'Submit',
                               style: TextStyle(
-                                  fontSize: 20, color: Theme
-                                  .of(context)
-                                  .buttonColor),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20,
+                                  fontFamily: 'Montserrat-Regular',
+                                  letterSpacing: 0.2,
+                                  color: Colors.white),
                             ),
                             style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
                             ),
@@ -264,7 +285,10 @@ class SignUpState extends  State<SignUp> {
                     text: TextSpan(children: <TextSpan>[
                       TextSpan(
                         text: "Already have an account?",
-                        style: TextStyle(color: Theme.of(context).dividerColor),
+                        style: TextStyle(fontWeight: FontWeight.w300,
+                            fontSize: 13,
+                            fontFamily: 'Montserrat-Regular',
+                            letterSpacing: 0.2, color: Theme.of(context).dividerColor),
 
                       ),
                       TextSpan(
@@ -272,16 +296,16 @@ class SignUpState extends  State<SignUp> {
                           recognizer: new TapGestureRecognizer()
                             ..onTap = () =>
                             {
-                              //print("testing one two three"),
-                              //setState(() => loading = true),
                               nullPreferences(),
                               Navigator.pushNamedAndRemoveUntil(
                                   context, '/LoginSignUp/login', (
                                   r) => false)
                             },
                           style: TextStyle(
-                              color: Themes.darkButton2Color,
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.w300,
+                              fontSize: 13,
+                              fontFamily: 'Montserrat-Regular',
+                              letterSpacing: 0.2, color: Themes.darkButton2Color),)
                     ]),
                   ),
                       SizedBox(height:30)
@@ -296,6 +320,7 @@ class SignUpState extends  State<SignUp> {
       ),
     );
   }
+  //sign up button
   signUpProcess(){
     if (!_formKey.currentState.validate()) {
       return;
@@ -307,16 +332,6 @@ class SignUpState extends  State<SignUp> {
     _lastName =
         StringUtils.capitalize(_lastName);
 
-    //print(_firstName.replaceAll(new RegExp(r"\s+"), ""));
-    // print(_lastName);
-    // print(_email.toLowerCase());
-    // print(_password);
-    // print(_conPassword);
-
-    // _email = _email.toLowerCase();
-    //Send to API
-    //send user information to the database
-    //setState(() => _loading = true);
     sendData(_firstName.replaceAll(
         new RegExp(r"\s+"), ""),
         _lastName.replaceAll(
@@ -327,6 +342,7 @@ class SignUpState extends  State<SignUp> {
         _password.replaceAll(
             new RegExp(r"\s+"), ""));
   }
+  //when signing up reset sharedPreferences and when clicking already have account login
   nullPreferences()async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();
@@ -388,11 +404,10 @@ class SignUpState extends  State<SignUp> {
   print('General Error: $e');
   }
   }
-
-
   //account email is already used
   accountInUseDialog(){
     Dialog dialog = new Dialog(
+        backgroundColor: Themes.darkBackgoundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10)
         ),
@@ -411,7 +426,11 @@ class SignUpState extends  State<SignUp> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Account already in use", style: TextStyle(fontSize: 20, color: Colors.white),),
+                    Text("Account already in use", style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    fontFamily: 'Montserrat-Regular',
+                    letterSpacing: 0.2, color: Colors.white),),
                     SizedBox(height: 20,),
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -430,7 +449,10 @@ class SignUpState extends  State<SignUp> {
                               height: 45,
                               child: Center(
                                 child: Text("Confirm",
-                                    style: TextStyle(fontSize: 20, color: Colors.white)),
+                                    style: TextStyle(fontWeight: FontWeight.w500,
+                                        fontSize: 20,
+                                        fontFamily: 'Montserrat-Regular',
+                                        letterSpacing: 0.2, color: Colors.white),),
                               ),
                             ),
                           ),
@@ -452,6 +474,7 @@ class SignUpState extends  State<SignUp> {
           ],
         )
     );
+    //shows dialog since it's inside a method
     showDialog(context: context, builder: (context) => dialog);
   }
 }

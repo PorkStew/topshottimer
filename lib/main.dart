@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/Scores/Profile.dart';
@@ -18,12 +17,12 @@ import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get/get.dart';
 import 'package:topshottimer/global.dart';
-//TODO: check shared preferences and the naming
-//TODO: add a loading screen to the sign up when going to verifyemail
+
+//TODO remove prints when beta and release
 void main() {
   runApp(MyApp());
 }
-
+//themes and routes
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,11 +32,12 @@ class MyApp extends StatelessWidget {
       darkTheme: Themes.darkTheme,
       home: CheckUserDetails(),
       debugShowCheckedModeBanner: false,
-      //tells the system the locations for views that are accessed through pushReplacementNamed
+      //system locations for views that are accessed through pushReplacementNamed and GET plugin
       routes: {
         '/LoginSignUp/login': (context) => Login(),
         '/PageSelector': (context) => pageSelector(),
-        '/LoginSignUp/resetPasswordConfirm': (context) => ResetPasswordConfirm(),
+        '/LoginSignUp/resetPasswordConfirm': (context) =>
+            ResetPasswordConfirm(),
         '/LoginSignUp/verifyEmail': (context) => verifyEmail(),
         'Settings/editUserDetails': (context) => editUserDetails(),
         'Timer/Timer': (context) => TimerPage(),
@@ -56,149 +56,143 @@ class CheckUserDetails extends StatefulWidget {
 class _CheckUserDetailsState extends State<CheckUserDetails> {
   //variable declaration
   bool _loading = true;
-  bool hasConnection = false;
-  Future noInternetConnectionDialogFuture;
-  final controller = Get.put(Controller());
+  bool _hasConnection = false;
+  Future _noInternetConnectionDialogFuture;
+  final _controller = Get.put(Controller());
+
   @override
   void initState() {
     super.initState();
     //checks continually every 1 second for internet connection
     //to change delay go to Dart Packages/data_connection_checker-version/data_connection_checker.dart
     DataConnectionChecker().onStatusChange.listen((status) {
-        switch(status){
-          //has internet connection
-          case DataConnectionStatus.connected:
-            //Tells GET that it should update the variable when its true or false
-            controller.btnState.firstRebuild = false;
-            controller.btnState.value = true;
-            // setState(() {
-            //   controller.btnState.value = true;
-            // });
-            print('INTERNET ON BUTTON STATE: ${controller.btnState}');
-            print('success there is internet');
-             hasConnection = true;
-
-            //_loading = false;
-            setInternet(true);
-            checkUserInformation(context);
-            break;
-            //no internet
-          case DataConnectionStatus.disconnected:
-            controller.btnState.firstRebuild = false;
-            controller.btnState.value = false;
-            // setState(() {
-            //   controller.btnState.value = false;
-            // });
-            print("No internet connection");
-            print('INTERNET OFF BUTTON STATE: ${controller.btnState}');
-            hasConnection = false;
-            noInternetConnectionDialogFuture = _noInternetConnectionDialog();
-        }
+      switch (status) {
+        //has internet connection
+        case DataConnectionStatus.connected:
+          print('success there is internet');
+          //firstRebuild for GET tells the system to update the value when it's either true or false. By default that get works is that if the default value is false then we say a new value is false then it won't update any place the variable is used
+          _controller.btnState.firstRebuild = false;
+          _controller.btnState.value = true;
+          _hasConnection = true;
+          // setInternet(true);
+          checkUserInformation(context);
+          break;
+        //no internet which setts button states to disabled and shows dialog
+        case DataConnectionStatus.disconnected:
+          print("No internet connection");
+          _controller.btnState.firstRebuild = false;
+          _controller.btnState.value = false;
+          _hasConnection = false;
+          _noInternetConnectionDialogFuture = _noInternetConnectionDialog();
+      }
     });
   }
-  _noInternetConnectionDialog() async{
-    print('inside no internet redirect');
-    testFuture = await offlineProcess();
-    print(testFuture);
-    print("fuck");
-    print(Get.currentRoute);
 
-    if(testFuture != false){
-      print('SHOWING PAGESELECTOR');
-      // Navigator.pushReplacementNamed(context, '/PageSelector');
-      //Get.toNamed('/PageSelector');
+  //check if they have logged in before and go to either login.dart or pageSelector.dart and show no Internet dialog
+  _noInternetConnectionDialog() async {
+    bool _loggedInBefore = false;
+    //checks SharedPreferences to see if they have logged in before
+    _loggedInBefore = await offlineProcess();
+    //if they have logged in before show pageSelector.dart
+    if (_loggedInBefore != false) {
       Get.off(pageSelector());
-    } else if(Get.currentRoute == "/Login") {
-      print("Already in login");
-    } else{
-      print('SHOWING LOGIN');
-      //Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
-      //Get.toNamed('/LoginSignUp/login');
+    } else if (Get.currentRoute == "/Login") {
+    } else {
       Get.off(Login());
     }
-    print('showing dialog for no internet');
-
-    Get.dialog(
-        Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)
-            ),
-            child: Stack(
-              overflow: Overflow.visible,
-              alignment: Alignment.topCenter,
-              children: [
-                Container(
-                  //this will affect the height of the dialog
-                  height: 230,
-                  child: Padding(
-                    //play with top padding to make items fit
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(padding: const EdgeInsets.fromLTRB(10, 0, 10,0),
-                          child: Column(
-                              children: [
-                                Text("Whoops!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),),
-                                SizedBox(height: 20,),
-                                Text("No internet connection found. Without an internet connection certain features will be disabled.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),textAlign: TextAlign.center,),
-                                SizedBox(height: 20,),
-                              ]
-                          ),
+    //No Internet Dialog
+    Get.dialog(Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Stack(
+          overflow: Overflow.visible,
+          alignment: Alignment.topCenter,
+          children: [
+            Container(
+              //this will affect the height of the dialog
+              height: 230,
+              child: Padding(
+                //play with top padding to make items fit
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Column(children: [
+                        Text(
+                          "Whoops!",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.white),
                         ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Expanded(
-                              child: InkWell(
-                                onTap: (){
-                                  //Navigator.pop(context);
-                                  Get.back();
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                    color: Themes.darkButton2Color,
-                                  ),
-                                  height: 45,
-                                  child: Center(
-                                    child: Text("Confirm",
-                                        style: TextStyle(fontSize: 20, color: Colors.white)),
-                                  ),
-                                ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "No internet connection found. Without an internet connection certain features will be disabled.",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ]),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              //Navigator.pop(context);
+                              Get.back();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                color: Themes.darkButton2Color,
+                              ),
+                              height: 45,
+                              child: Center(
+                                child: Text("Confirm",
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white)),
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
-                Positioned(
-                    top: -40,
-                    child: CircleAvatar(
-                        backgroundColor: Themes.darkButton2Color,
-                        radius: 40,
-                        child: Image.asset("assets/Exclamation@3x.png", height: 53,)
-                    )
-                ),
-              ],
-            )
-        ));
+              ),
+            ),
+            Positioned(
+                top: -40,
+                child: CircleAvatar(
+                    backgroundColor: Themes.darkButton2Color,
+                    radius: 40,
+                    child: Image.asset(
+                      "assets/Exclamation@3x.png",
+                      height: 53,
+                    ))),
+          ],
+        )));
   }
-  bool testFuture;
-  //loading screen
+
+  //loading screen which is called from loading.dart
   @override
   Widget build(BuildContext context) {
     return _loading ? Loading() : Container();
   }
-}
-setInternet(bool hasInternet) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setBool('internet', hasInternet);
 }
 
 //acts like a auto login system that will check if shared preferences has user information and will show a screen depending on that information
@@ -207,88 +201,73 @@ checkUserInformation(context) async {
   print('MAIN.DART');
   //get user information
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String id = prefs.getString('id');
-  String email =  prefs.getString('email');
-  String hashedPassword = prefs.getString('password');
-  String verified = prefs.getString('verify');
+  String _id = prefs.getString('id');
+  String _email = prefs.getString('email');
+  String _hashedPassword = prefs.getString('password');
+  String _verified = prefs.getString('verify');
   print("The Following is user details");
-  print(id);
-  print(email);
-  print(hashedPassword);
-  print(verified);
+  print(_id);
+  print(_email);
+  print(_hashedPassword);
+  print(_verified);
   print("DONE USER DETAILS!!!!");
-  try{
-  //checks the validity shared preference information is not empty, then will try login
-    if(id != null && email != null && hashedPassword != null && verified != null) {
+  try {
+    //checks the validity shared preference information is not empty, then will try login
+    if (_id != null &&
+        _email != null &&
+        _hashedPassword != null &&
+        _verified != null) {
       var url = 'https://www.topshottimer.co.za/login.php';
-      var res = await post(
-          Uri.encodeFull(url), headers: {"Accept": "application/jason"},
-          body: {
-            //get this information from user shared preferences
-            "emailAddress": email,
-            "password": hashedPassword,
-          }
-      );
+      var res = await post(Uri.encodeFull(url), headers: {
+        "Accept": "application/jason"
+      }, body: {
+        //get this information from user shared preferences
+        "emailAddress": _email,
+        "password": _hashedPassword,
+      });
 
       //data is then received from the php file indicating user state
       //status can either be verified / non-verified or not-user
       Map<String, dynamic> data = json.decode(res.body);
-      String id = data['id'];
-      String status = data["status"];
-      String firstName = data["firstName"];
-      String lastName = data["lastName"];
-      print("We recived the following data!");
-      print(id);
-      print(status);
-      print(firstName);
-      print(lastName);
-      print("END OF RECIVING DATA!!!");
+      String _id = data['id'];
+      String _status = data["status"];
+      String _firstName = data["firstName"];
+      String _lastName = data["lastName"];
+      print("We received the following data!");
+      print(_id);
+      print(_status);
+      print(_firstName);
+      print(_lastName);
+      print("END OF RECEIVING DATA!!!");
 
       //not a user
-      if (status == "not-user") {
+      if (_status == "not-user") {
         print("MAIN.DART END*******************************");
-       // Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
         await prefs.setBool('loginBefore', false);
-        //Get.toNamed('/LoginSignUp/login');
         Get.off(Login());
       }
       //is a user but has not verified their email yet
-      else if (status == "non-verified" && id != null) {
-        await prefs.setString('id', id);
+      else if (_status == "non-verified" && _id != null) {
+        await prefs.setString('id', _id);
         await prefs.setString('verify', 'false');
-        await prefs.setString('firstName', firstName);
-        await prefs.setString('lastName', lastName);
+        await prefs.setString('firstName', _firstName);
+        await prefs.setString('lastName', _lastName);
         await prefs.setBool('loginBefore', false);
         print("MAIN.DART END*******************************");
-        //Get.toNamed('/LoginSignUp/verifyEmail', arguments: {'email': email});
-        Get.off(verifyEmail(), arguments: {'email': email});
-        //Navigator.pushReplacementNamed(context, '/LoginSignUp/verifyEmail', arguments: {'email': email});
-        //if details are in the database and user email is verified
-      } else if (status == "verified" && id != null) {
-        await prefs.setString('id', id);
+        Get.off(verifyEmail(), arguments: {'email': _email});
+        //is a user and account is verified
+      } else if (_status == "verified" && _id != null) {
+        await prefs.setString('id', _id);
         await prefs.setString('verify', 'true');
-        await prefs.setString('firstName', firstName);
-        await prefs.setString('lastName', lastName);
+        await prefs.setString('firstName', _firstName);
+        await prefs.setString('lastName', _lastName);
         await prefs.setBool('loginBefore', true);
         print("MAIN.DART END*******************************");
-        //Navigator.pushReplacementNamed(context, '/PageSelector');
-        //Get.toNamed('/PageSelector');
         Get.off(pageSelector());
-        //Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
       }
       //no shared preference data is found go to login
-    } else{
-      //Get.toNamed('/LoginSignUp/login');
+    } else {
       Get.off(Login());
-      //Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
-
-      //Navigator.pushReplacementNamed(context, routeName)
-
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => Login()));
-      //Navigator.push(context, Dialog());
       print("MAIN.DART END*******************************");
     }
   } on TimeoutException catch (e) {
@@ -298,29 +277,20 @@ checkUserInformation(context) async {
   } on Error catch (e) {
     print('General Error: $e');
   }
-
 }
-offlineProcess() async{
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // await prefs.setBool('loginBefore', false);
-  print('offlineProcess');
-  bool loginBefore = false;
+
+//checks if the user has logged in before which means they have account details and they are correct.
+offlineProcess() async {
+  bool _loginBefore = false;
   try {
-    print('okay');
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    loginBefore = prefs.getBool('loginBefore');
-    //print(false);
-    if(loginBefore == null){
+    _loginBefore = prefs.getBool('loginBefore');
+    if (_loginBefore == null) {
       return false;
     }
-    //print(loginBefore.toString());
-    return loginBefore;
-  } catch(exception){
-    print('error');
+    return _loginBefore;
+  } catch (exception) {
     print(exception);
-    //print(loginBefore.toString());
-    return loginBefore;
+    return _loginBefore;
   }
-
-
 }

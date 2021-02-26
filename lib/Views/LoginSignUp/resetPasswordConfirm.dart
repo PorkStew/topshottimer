@@ -2,26 +2,28 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
-import 'package:topshottimer/Views/LoginSignUp/login.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
 import 'package:topshottimer/loading.dart';
 import 'package:topshottimer/global.dart';
+
 class ResetPasswordConfirm extends StatefulWidget {
   _ResetPasswordConfirmState createState() => _ResetPasswordConfirmState();
 }
 
 class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
+  //variable declarations
   bool loading = false;
+  //access global variables in global.dart
   final controller = Get.put(Controller());
   @override
   void initState(){
     super.initState();
     sendResetPasswordEmail();
   }
+  //main view
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
@@ -30,7 +32,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 50, bottom: 15, left: 0, right: 0),
+              padding: EdgeInsets.only(top: 50, left: 0, right: 0),
             child: Column(
               children: [
                 Container(
@@ -41,11 +43,12 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                         width: 130,
                       )),
                 ),
+                SizedBox(height: 30),
                 Text("Password Reset", textAlign: TextAlign.center, style:  TextStyle(
-                    fontSize: 30, color: Themes.darkButton2Color
+                    fontSize: 30
                 ),),
                 Container(
-                  padding: EdgeInsets.all(25),
+                  padding: EdgeInsets.only(left: 25, right: 25, top: 30),
                   child: Column(
                     children: [
                       RichText(
@@ -69,18 +72,19 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(top: 2),
+                  padding: EdgeInsets.only(top: 45, bottom: 25),
                   child: Column(
                     children: [
                       RichText(
                           text: TextSpan(
                               text: "Wrong email address?",
-                              style: TextStyle(color: Themes.darkButton2Color, fontSize: 15),
+                              style: TextStyle(fontWeight: FontWeight.w400,
+                                  fontSize: 15,
+                                  fontFamily: 'Montserrat-Regular',
+                                  letterSpacing: 0.2,
+                                  color: Themes.darkButton2Color),
                               recognizer: new TapGestureRecognizer()
                                 ..onTap = () {
-                                  print("wrong email!!!");
-
-                                  //tests();
                                   //return to sign up because they entered the wrong information
                                   setState(() => loading = true);
                                   //setUserPreferencesNull();
@@ -100,7 +104,6 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
             ),
             ),
             Container(
-
               child: Column(
                 children: [
                   SizedBox(
@@ -109,13 +112,14 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                       child: ElevatedButton(
                         onPressed: (){
                           print("return to login please!");
-                          //checkUserVerified();
-
                           Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
                         },
                         child: Text(
                           'Login',
-                           style: TextStyle(color: Colors.white , fontSize: 20),
+                           style: TextStyle(fontWeight: FontWeight.w500,
+                               fontSize: 20,
+                               fontFamily: 'Montserrat-Regular',
+                               letterSpacing: 0.2,color: Theme.of(context).buttonColor),
                         ),
                         style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                       )
@@ -129,9 +133,13 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                       null,
                         child: Text(
                           'Resend Email',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          style: TextStyle(fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              fontFamily: 'Montserrat-Regular',
+                              letterSpacing: 0.2,
+                            color: Theme.of(context).buttonColor,),
                         ),
-                        style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        style: ElevatedButton.styleFrom(primary: Themes.darkButton2Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                       )
                       )
                   ),
@@ -146,23 +154,24 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                 text: TextSpan(children: <TextSpan>[
                   TextSpan(
                       text: "Already have an account?",
-                      style: TextStyle(color: Theme.of(context).dividerColor)),
+                      style: TextStyle(fontWeight: FontWeight.w300,
+                          fontSize: 13,
+                          fontFamily: 'Montserrat-Regular',
+                          letterSpacing: 0.2, color: Theme.of(context).dividerColor)),
                   TextSpan(
                       text: " Login",
                       recognizer: new TapGestureRecognizer()..onTap = () =>
                       {
-                      print("wrong email!!!"),
-                       
-                      //tests();
                       //return to sign up because they entered the wrong information
                       setState(() => loading = true),
-                //setUserPreferencesNull()
                         nullPreferences(),
                       Navigator.pushReplacementNamed(context, '/LoginSignUp/login')
                       },
                       style: TextStyle(
-                          color: Themes.darkButton2Color,
-                          fontWeight: FontWeight.bold)),
+                          fontWeight: FontWeight.w300,
+                          fontSize: 13,
+                          fontFamily: 'Montserrat-Regular',
+                          letterSpacing: 0.2, color: Themes.darkButton2Color),),
                 ]),
               ),
             )),
@@ -174,20 +183,20 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
       ),
     );
   }
+
+  //on resend email button click
   resendEmailProcess(){
-    //emailSent();
-    print("HELO CONFIRM FOR ME PEASE");
     sendResetPasswordEmail();
     emailSent();
-    //context != null is an issue with this
-    //checkUserVerified();
-    //Navigator.push(context,
-    //MaterialPageRoute(builder: (context) => Login()));
   }
+
+  //reset sharedPreferences when clicking already have account login
   nullPreferences()async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();
   }
+
+  //called on init state and on request of another email
   Future sendResetPasswordEmail() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
@@ -214,7 +223,9 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
       setState(() => loading = false);
     }
   }
+
   //used Get.dialog because of context error
+  //dialog is shown when user requests another email be sent
   emailSent() {
     Get.dialog(
       Dialog(
