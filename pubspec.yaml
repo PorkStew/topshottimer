@@ -40,7 +40,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
-  audio_session: ^0.0.9
+  audio_session: ^0.0.11
   just_audio: ^0.5.7
   keyboard_dismisser: ^1.0.2
   connectivity: ^2.0.2
@@ -49,7 +49,7 @@ dependencies:
   #for internet and enabling or disabling buttons
   get: ^3.24.0
   url_launcher: ^5.7.10
-  flutter_audio_recorder: ^0.5.5
+  flutter_audio_recorder: 0.5.5
   #firebase_admob: ^0.11.0+1
   #firebase_admob: ^0.10.2
 
