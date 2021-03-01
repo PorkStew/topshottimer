@@ -33,9 +33,6 @@ class _pageSelectorState extends State<pageSelector> {
         onTap: (int index) {
           setState(() {
             _selectedPage = index;
-
-
-
           });
 
         },
