@@ -10,7 +10,9 @@ import 'package:topshottimer/Views/LoginSignUp/signup.dart';
 import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
 import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
 import 'package:http/http.dart' as http;
+import 'package:topshottimer/global.dart';
 import 'package:topshottimer/loading.dart';
+import 'package:get/get.dart';
 //TODO can still get email if verified issue issue
 //TODO password cant be less than 6
 class verifyEmail extends StatefulWidget {
@@ -25,6 +27,7 @@ class _verifyEmailState extends State<verifyEmail> {
   Timer timer;
   bool loading = false;
   String test = "Awaiting Verification";
+  final controller = Get.put(Controller());
   @override
   void initState(){
     super.initState();
@@ -72,8 +75,7 @@ class _verifyEmailState extends State<verifyEmail> {
                                   text: arguments['email'],
                                   recognizer: new TapGestureRecognizer()..onTap = () => print('Tap Here onTap'),
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold, fontSize: 17)),
+                                      fontWeight: FontWeight.bold, fontSize: 17,color: Theme.of(context).dividerColor)),
                               TextSpan(
                                   text: " follow the instructions to complete your account setup.",
                                   style: TextStyle(color: Colors.grey, fontSize: 17)),
@@ -122,13 +124,10 @@ class _verifyEmailState extends State<verifyEmail> {
                     SizedBox(
                         width: 268,
                         height: 61,
-                       child: ElevatedButton(
-                          onPressed: (){
-                            print("resending email to user!");
-                            //checkUserVerified();
-                            getUserInfo();
-                            emailSent();
-                          },
+                       child: Obx(() => ElevatedButton(onPressed: controller.btnState.value ?
+                           () => resendEmailProcess() :
+                       null,
+
                           child: Text(
                               'Resend Email',
                             style: TextStyle(fontSize: 20, color: Colors.white       ),
@@ -136,6 +135,7 @@ class _verifyEmailState extends State<verifyEmail> {
                          style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                         )
                     ),
+                    )
                   ],
                 ),
               ),
@@ -147,7 +147,7 @@ class _verifyEmailState extends State<verifyEmail> {
                   text: TextSpan(children: <TextSpan>[
                     TextSpan(
                         text: "Already have an account?",
-                        style: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Theme.of(context).dividerColor)),
                     TextSpan(
                         text: " Login",
                         recognizer: new TapGestureRecognizer()..onTap = () =>
@@ -169,6 +169,12 @@ class _verifyEmailState extends State<verifyEmail> {
           ),
         )
     );
+  }
+  resendEmailProcess(){
+    print("resending email to user!");
+    //checkUserVerified();
+    getUserInfo();
+    emailSent();
   }
   nullPreferences()async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -291,7 +297,6 @@ class _verifyEmailState extends State<verifyEmail> {
     } on Error catch (e) {
       print('General Error: $e');
     }
-
   }
   //delete
   notVerifiedError(){

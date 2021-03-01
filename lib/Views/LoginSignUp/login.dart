@@ -5,6 +5,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:topshottimer/Themes.dart';
@@ -23,7 +24,7 @@ class Login extends StatefulWidget {
 
 class LoginState extends State<Login> {
   //change this value to enable or disable buttons
-  bool enableBtn = false;
+  bool enableBtn = true;
   String test = "s";
 
   //variable declarations
@@ -37,7 +38,7 @@ class LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
    bool obscureText = false;
    FocusNode _focusNode = FocusNode();
-
+  final controller = Get.put(Controller());
   //email widget
   Widget _buildEmail(BuildContext context) {
     final node = FocusScope.of(context);
@@ -58,6 +59,7 @@ class LoginState extends State<Login> {
       },
       onSaved: (String value) {
         _email.text = value;
+
       },
 
     );
@@ -175,7 +177,6 @@ class LoginState extends State<Login> {
                 ),
                 SizedBox(height: 20),
                 Center(
-
                   child:  RichText(
                         text: TextSpan(
                             text: "Forgot your password?",
@@ -196,7 +197,7 @@ class LoginState extends State<Login> {
                 SizedBox(
                     width: 268,
                     height: 60,
-                    child: ElevatedButton(onPressed: true ?
+                    child: Obx(() => ElevatedButton(onPressed: controller.btnState.value ?
                         () => loginProcess() :
                     null,
                       child: Text(
@@ -205,30 +206,25 @@ class LoginState extends State<Login> {
                             letterSpacing: 0.2),
                       ),
                       style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                    )),
+                    ))),
                 SizedBox(
                   height: 26,
                 ),
                 SizedBox(
                     width: 268,
                     height: 60,
-                    child: ElevatedButton(onPressed: enaleBtn ?
-                        () =>       Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignUp(_email.text)))  :
-                    null,
+                    child: ElevatedButton(
                       child: Text(
                         'Sign Up',
                         style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor, fontFamily: 'Montserrat-Regular',
                             letterSpacing: 0.2),
                       ),
-                      // onPressed: () {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => SignUp(_email.text)));
-                      // },
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignUp(_email.text)));
+                      },
                       style: ElevatedButton.styleFrom(primary: Themes.darkButton2Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     )),
               ],
