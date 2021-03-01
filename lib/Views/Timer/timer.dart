@@ -231,7 +231,7 @@ class _timerAreaState extends State<timerArea> {
 
 
       }
-      
+
       if(Platform.isIOS){
         print("*************************THIS IS IOS***********************");
         var duration = await player.setAsset("assets/audios/"+ timerTone + ".mp3");
@@ -391,10 +391,11 @@ class _timerAreaState extends State<timerArea> {
             _current = current;
 
             _currentStatus = _current.status;
-            // if((pow(10, _current?.metering?.peakPower / 20) * 120.0) > 50)
-            //   {
-                //print(_current?.metering?.peakPower);
-              // }
+            if((pow(10, _current?.metering?.peakPower / 20) * 120.0) > 50)
+              {
+                print("Search");
+                print("***********************" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+              }
             if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) > timerSensitivity) {
 
               arrShots.add(stoptimetodisplay);
@@ -699,23 +700,47 @@ obtainUserDefaults() async{
 
   }
 
-  if (dSensitivity == 0.0){
-    timerSensitivity = 90;
-  } else
-  if (dSensitivity == 25.0){
-    timerSensitivity = 85;
-  } else
-  if (dSensitivity == 50.0){
-    timerSensitivity = 80;
-  } else
-  if (dSensitivity == 75.0){
-    timerSensitivity = 75;
-  } else
-  if (dSensitivity == 100.0){
-    timerSensitivity = 70.0;
+  if(Platform.isIOS){
+    if (dSensitivity == 0.0){
+      timerSensitivity = 90;
+    } else
+    if (dSensitivity == 25.0){
+      timerSensitivity = 85;
+    } else
+    if (dSensitivity == 50.0){
+      timerSensitivity = 80;
+    } else
+    if (dSensitivity == 75.0){
+      timerSensitivity = 75;
+    } else
+    if (dSensitivity == 100.0){
+      timerSensitivity = 70.0;
+    }
+    else {
+      print("No IOS User Defaults set");
+    }
+
   }
-  else {
-    print("No User Defaults set");
+  if(Platform.isAndroid){
+    if (dSensitivity == 0.0){
+      timerSensitivity = 75;
+    } else
+    if (dSensitivity == 25.0){
+      timerSensitivity = 70;
+    } else
+    if (dSensitivity == 50.0){
+      timerSensitivity = 65;
+    } else
+    if (dSensitivity == 75.0){
+      timerSensitivity = 60;
+    } else
+    if (dSensitivity == 100.0){
+      timerSensitivity = 55.0;
+    }
+    else {
+      print("No ANDROID User Defaults set");
+    }
+
   }
   double dTime;
   dTime = await double.parse(dDelay.toStringAsFixed(0));
