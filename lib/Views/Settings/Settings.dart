@@ -5,12 +5,16 @@ import 'package:audio_session/audio_session.dart';
 import 'package:audioplayers/audio_cache.dart';
 //import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/Settings/editUserDetails.dart';
 import 'package:topshottimer/main.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:topshottimer/global.dart';
+
+
 
 
 
@@ -20,6 +24,11 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+
+  //Controller to check for internet
+  final controller = Get.put(Controller());
+
+  //Variable decleration for all users info
   Future newSensitivityFuture;
   Future newDelayFuture;
   Future fFirstName;
@@ -38,7 +47,12 @@ class _SettingsState extends State<Settings> {
   void initState(){
     super.initState();
     //initPlayer();
+
+    //sets the session to play the sound
     _setSession();
+
+    //Assigns future variables to methods that return values
+
     fFirstName = _getFirstName();
     fLastName = _getLastName();
     fEmail = _getEmail();
@@ -48,6 +62,7 @@ class _SettingsState extends State<Settings> {
     fRandom = _getRandomDelay();
   }
 
+  //Methods to obtain user information
   _getFirstName() async{
     FirstName = await userFirstName();
     return userFirstName();
@@ -66,6 +81,7 @@ class _SettingsState extends State<Settings> {
   _getTone() async {
     UserTone = await userTone();
 
+    //Sets user tone variable to assign it to an audio file in timer.dart page
     if (UserTone == "1500"){
       userToneValue = 1;
     } else
@@ -103,6 +119,7 @@ class _SettingsState extends State<Settings> {
 
   }
 
+  //gets current user delay
   _getDelay() async{
     sliderValue2 = await userDelay();
     if (sliderValue2 == null)
@@ -111,12 +128,15 @@ class _SettingsState extends State<Settings> {
     }
     return userDelay();
   }
+
+  //Checks if user delay is acivated
   _getRandomDelay() async{
     isSwitched = await userRandom();
 
     return userRandom();
   }
 
+  //Gets current user sensitivity
   _getSensitivity() async{
     sliderValue1 = await userSensitivity();
     if (sliderValue1 == null)
@@ -127,33 +147,22 @@ class _SettingsState extends State<Settings> {
     return userSensitivity();
   }
 
-  getDetails() async{
-
-  }
-  // Store both of these values in user defaults
-  //Stewart Knows How User Defaults Works
-  //**********************************************
+  //Variable initialisation
   double sliderValue1 = 0;
   double sliderValue2 = 1;
   String FirstName = "";
   String LastName = "";
   String Email = "";
   String UserTone="";
-
   int dropDownValue = 1;
-  // AudioPlayer advancedPlayer;
-  // AudioCache audioCache;
   String localPathFile;
-
-  //var sHello = await userSensitivity(context);
-  //**********************************************
-
   String secDelay = '3';
   var arrSensititvity = ['Extremely Not Sensitive','Not Sensitive','Normal','Sensitive','Extremely Sensitive'];
   String timerSensitivity = 'Normal';
   bool isSwitched = false;
 
 
+  //Set Session method to set the session to play sounds
   _setSession() async {
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration(
@@ -164,17 +173,12 @@ class _SettingsState extends State<Settings> {
 
   }
 
-  // void initPlayer(){
-  //   advancedPlayer = AudioPlayer();
-  //   audioCache = AudioCache(fixedPlayer: advancedPlayer);
-  // }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
             padding: EdgeInsets.only(top: 10,bottom: 20,left: 20, right: 20),
+            //Future builder to wait for variables to be populated
             child: FutureBuilder(
 
               future: newSensitivityFuture,
@@ -211,7 +215,6 @@ class _SettingsState extends State<Settings> {
                       return Column(
                         children: [
                           Container(
-                            //height: 650,
                             child:
                                 Align(
                                   alignment: Alignment.topCenter,
@@ -219,51 +222,11 @@ class _SettingsState extends State<Settings> {
                                   child: Column(
 
                                     mainAxisAlignment: MainAxisAlignment.start,
-
-                                    //mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
                                         padding: EdgeInsets.only(top: 30,bottom: 0,left: 0, right: 0),
-                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
-
                                       ),
-
-                                      // Text('First Name: ', style: TextStyle(
-                                      //     fontSize: 23.0, color: Themes.darkButton2Color),),
-                                      // Text(FirstName.toString(), style: TextStyle(
-                                      //     fontSize: 18.0
-                                      // ),),
-                                      // Container(
-                                      //   padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-                                      //   //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
-                                      //
-                                      // ),
-                                      // Text('Last Name: ', style: TextStyle(
-                                      //     fontSize: 23.0, color: Themes.darkButton2Color
-                                      // ),),
-                                      // Text(LastName.toString(), style: TextStyle(
-                                      //     fontSize: 18.0
-                                      // ),),
-                                      // Container(
-                                      //   padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-                                      //   //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
-                                      //
-                                      // ),
-                                      // Text('Email: ', style: TextStyle(
-                                      //     fontSize: 23.0, color: Themes.darkButton2Color
-                                      // ),),
-                                      // Text(Email.toString(), style: TextStyle(
-                                      //     fontSize: 18.0
-                                      // ),),
-                                      // Container(
-                                      //   padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-                                      //   //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
-                                      //
-                                      // ),
-
-
-
                                       Text('Timer Sensitivity', style: TextStyle(
                                           fontSize: 23.0, color: Themes.darkButton2Color
                                       ),),
@@ -337,12 +300,9 @@ class _SettingsState extends State<Settings> {
                                                 Container(
                                                   height: 50,
                                                   width: 50,
-                                                  //width: 50,
-                                                  //color: Themes.darkButton2Color,
                                                   decoration: BoxDecoration(
                                                     color: Themes.darkButton2Color,
                                                     shape: BoxShape.circle,
-                                                    //borderRadius: BorderRadius.all(Radius.circular(20))
                                                   ),
 
                                                   child: Align(
@@ -359,7 +319,6 @@ class _SettingsState extends State<Settings> {
                                       ),
                                       Container(
                                         padding: EdgeInsets.only(top: 5,bottom: 0,left: 0, right: 0),
-                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
                                       ),
 
                                       Text('Timer Delay', style: TextStyle(
@@ -378,9 +337,6 @@ class _SettingsState extends State<Settings> {
                                           Align(
                                             alignment: Alignment.center,
                                             child: Row(
-
-
-                                              //mainAxisAlignment: MainAxisAlignment.center,
                                               crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Container(
@@ -458,7 +414,6 @@ class _SettingsState extends State<Settings> {
                                       ),
                                       Container(
                                         padding: EdgeInsets.only(top: 5,bottom: 0,left: 0, right: 0),
-                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                                       ),
                                       Text('Random Delay', style: TextStyle(
@@ -585,21 +540,12 @@ class _SettingsState extends State<Settings> {
                                             player.setVolume(1.0);
                                             player.seek(Duration(milliseconds: 0));
                                             player.play();
-                                            //player.stop();
 
-                                            // Timer(Duration(milliseconds: 800), () {
-                                            //   //player.pause();
-                                            //     player.stop();
-                                            //     //var duration =  player.load();
-                                            //     // player.dispose();
-                                            // });
-                                            //
                                             if (Platform.isIOS) {
                                               _setSession();
                                             }
 
 
-                                            //audioCache.play(sAudioString+'.mp3');
                                             setUserTone(sAudioString);
                                           });
                                         }),
@@ -608,27 +554,28 @@ class _SettingsState extends State<Settings> {
 
                                       Container(
                                         padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
-                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                                       ),
-                                      FlatButton(
-                                        color: Themes.darkButton1Color,
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
-                                        height: 50,
-                                        minWidth: 150,
-                                        child: Text("Edit Details",style: TextStyle(fontSize: 20,color: Colors.white),),
-                                        onPressed: () async {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => editUserDetails()));
+                                      SizedBox(
+                                          width: 150,
+                                          height: 50,
+                                          child: Obx(() => ElevatedButton(onPressed: controller.btnState.value ?
+                                              () {
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => editUserDetails()));
 
-                                          //Navigator.pushReplacementNamed(context, '/editUserDetails');
-                                          print("Going to edit details");
-                                        },
-
-
+                                              }:
+                                          null,
+                                            child: Text(
+                                              'Edit Details',
+                                              style: TextStyle(color: Colors.white, fontSize: 20),
+                                            ),
+                                            style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                                          )
+                                          )
                                       ),
+
                                       Container(
                                         padding: EdgeInsets.only(top: 15,bottom: 0,left: 0, right: 0),
-                                        //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                                       ),
 
@@ -644,24 +591,11 @@ class _SettingsState extends State<Settings> {
                                           Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
                                           print("Signed Out");
                                         },
-
-
                                       ),
-
-
-
-
-
-
-
                                     ],
                                   ),
                                 ),
-
-
-
-
-                      ),
+                          ),
                           Expanded(child:
                           Align(
                             alignment: Alignment.bottomCenter,
@@ -682,11 +616,9 @@ class _SettingsState extends State<Settings> {
                                           },
                                     child: Text("Privacy Policy", style: TextStyle(color: Themes.darkButton2Color),),
                                     ),
-
                                 ],
                               ),
                             )
-
                           )),
                           SizedBox(
                             height: 10,
@@ -695,8 +627,6 @@ class _SettingsState extends State<Settings> {
                         ],
                       )
                         ;
-
-
                       }
                 }
               },
@@ -708,37 +638,27 @@ class _SettingsState extends State<Settings> {
   }
 }
 
-// doStuff() async{
-//   var x = await userSensitivity();
-//   return x;
-// }
 
+//The below methods obtain user details from the shared preferences
 Future <String> userFirstName() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //await prefs.setDouble('userSensitivity', 50.00);
   String sFirstName = await prefs.getString('firstName');
-
-  //print(dSensitivity.toString());
   return sFirstName;
 
 }
 
 Future <String> userLastName() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
   String sLastName = await prefs.getString('lastName');
-
-  //print(dSensitivity.toString());
   return sLastName;
 
 }
 
 Future <String> userEmail() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
   String sEmail = await prefs.getString('email');
 
-  //print(dSensitivity.toString());
   return sEmail;
 
 }
@@ -746,12 +666,10 @@ Future <String> userEmail() async{
 
 Future<double> userSensitivity() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
   double dSensitivity = await prefs.getDouble('userSensitivity');
   if (dSensitivity == null){
     await prefs.setDouble('userSensitivity', 50.0);
   }
-  //print(dSensitivity.toString());
   return dSensitivity;
 }
 
@@ -773,23 +691,19 @@ setDefaultDelay(double newValue) async{
 
 Future<double> userDelay() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
   double dDelay = await prefs.getDouble('userDelay');
   if (dDelay == null){
     await prefs.setDouble('userDelay', 3);
   }
-  //print(dSensitivity.toString());
   return dDelay;
 }
 
 Future<bool> userRandom() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
   bool bRandomDelay = await prefs.getBool('randomDelay');
   if (bRandomDelay == null){
     await prefs.setBool('randomDelay', false);
   }
-  //print(dSensitivity.toString());
   return bRandomDelay;
 }
 
@@ -797,12 +711,10 @@ Future<bool> userRandom() async {
 
 Future<String> userTone() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
   String sTone = await prefs.getString('userTone');
   if (sTone == null){
     await prefs.setString('userTone', "1500");
   }
-  //print(dSensitivity.toString());
   return sTone;
 }
 

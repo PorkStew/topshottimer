@@ -23,6 +23,8 @@ class viewSplits extends StatefulWidget {
 
 
 class viewSplitsState extends State<viewSplits> {
+
+  //Variable decleration
   List<String> arrSplits = List<String>();
   String sID;
   Future fUSerID;
@@ -36,7 +38,7 @@ class viewSplitsState extends State<viewSplits> {
     fUSerID = _getID();
   }
 
-
+  //Getting row from database with the string id
   _getID() async {
     sID = await userID();
     var url = 'https://www.topshottimer.co.za/viewSplits.php';
@@ -50,8 +52,8 @@ class viewSplitsState extends State<viewSplits> {
     //print(json.decode(res.body));
 
 
+    //Populating splits array with all shots from database
     print("before res.body");
-
     List<dynamic> data = json.decode(res.body);
     int iLength = data.length;
     print("Length of list: " + iLength.toString());
@@ -72,6 +74,7 @@ class viewSplitsState extends State<viewSplits> {
     return userID();
   }
 
+  //Get string ID when they select the string in the scores page
   Future<String> userID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.setDouble('userSensitivity', 50.00);
@@ -81,6 +84,7 @@ class viewSplitsState extends State<viewSplits> {
     return sUserID;
   }
 
+  //Future builder to wait for variables to be populated
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,48 +196,6 @@ class viewSplitsState extends State<viewSplits> {
                                 child: Text("Delete String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
                                 onPressed: () {
                                   deleteStringConfirmationDialog();
-                                  // showDialog(
-                                  //     context: context,
-                                  //     builder: (BuildContext context){
-                                  //       return AlertDialog(
-                                  //         title: Text("Delete String and Splits", style: TextStyle(color: Themes.darkTextColor)),
-                                  //         content: Text("Are you sure you would like to delete this string?"),
-                                  //         actions: [
-                                  //           FlatButton(
-                                  //             child: Text("Cancel"),
-                                  //             onPressed: () {
-                                  //               Navigator.pop(context);
-                                  //             },
-                                  //           ),
-                                  //           FlatButton(
-                                  //             child: Text("Delete"),
-                                  //             onPressed: () {
-                                  //               //deleteStringSplits();
-                                  //               deleteStringConfirmationDialog();
-                                  //               // Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
-                                  //               // showDialog(
-                                  //               //     context: context,
-                                  //               //     builder: (BuildContext context){
-                                  //               //       return AlertDialog(
-                                  //               //         title: Text("String Deleted", style: TextStyle(color: Themes.darkTextColor),),
-                                  //               //         content: Text("Your string was deleted succesfully"),
-                                  //               //         actions: [
-                                  //               //           FlatButton(child: Text("Ok"),
-                                  //               //             onPressed: () {
-                                  //               //               Navigator.pop(context);
-                                  //               //             },
-                                  //               //           ),
-                                  //               //         ],
-                                  //               //       );
-                                  //               //     });
-                                  //             },
-                                  //           )
-                                  //         ],
-                                  //       );
-                                  //
-                                  //     }
-                                  //
-                                  // );
 
                                 },
 
@@ -248,57 +210,6 @@ class viewSplitsState extends State<viewSplits> {
                             //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                           ),
-                          // FlatButton(
-                          //   child: Text("Delete String", style: TextStyle(color: Color(0xFFA2C11C)),),
-                          //   onPressed: () {
-                          //       showDialog(
-                          //       context: context,
-                          //       builder: (BuildContext context){
-                          //         return AlertDialog(
-                          //           title: Text("Delete String and Splits"),
-                          //           content: Text("Are you sure you would like to delete this string?"),
-                          //           actions: [
-                          //             FlatButton(
-                          //               child: Text("Cancel"),
-                          //               onPressed: () {
-                          //                 Navigator.pop(context);
-                          //               },
-                          //             ),
-                          //             FlatButton(
-                          //               child: Text("Delete"),
-                          //               onPressed: () {
-                          //                 deleteStringSplits();
-                          //                 Navigator.push(context, MaterialPageRoute(builder: (context) => pageSelector()));
-                          //                 showDialog(
-                          //             context: context,
-                          //             builder: (BuildContext context){
-                          //               return AlertDialog(
-                          //                 title: Text("String Deleted"),
-                          //                 content: Text("Your string was deleted succesfully"),
-                          //                 actions: [
-                          //                   FlatButton(child: Text("Ok"),
-                          //                     onPressed: () {
-                          //                     Navigator.pop(context);
-                          //                     },
-                          //                   ),
-                          //                 ],
-                          //               );
-                          //             });
-                          //                  },
-                          //             )
-                          //           ],
-                          //         );
-                          //
-                          //       }
-                          //
-                          //       );
-                          //
-                          //           }
-                          //                       )            //deleteStringSplits();
-
-
-
-
                         ]
                     );
                   }
@@ -310,6 +221,7 @@ class viewSplitsState extends State<viewSplits> {
 
   }
 
+  //Delete statement if the user chooses to delete a specific string
   deleteStringSplits() async{
     var url = 'https://www.topshottimer.co.za/deleteStringSplits.php';
     var res = await http.post(
@@ -322,6 +234,7 @@ class viewSplitsState extends State<viewSplits> {
 
   }
 
+  //Delete string confirmation dialog to confirm deleting a string
   deleteStringConfirmationDialog(){
     Dialog dialog = new Dialog(
       backgroundColor: Themes.darkBackgoundColor,
