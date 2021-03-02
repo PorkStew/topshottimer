@@ -374,7 +374,6 @@ class SignUpState extends  State<SignUp> {
       String status = data["status"];
       if(id == "" || status == "not-user")
       {
-        //print("this is not a user");
          //saveUserInformation(id, email, hashedPassword, "false", firstName, lastName);
          print(id);
          print(email);
