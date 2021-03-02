@@ -160,6 +160,13 @@ class _timerAreaState extends State<timerArea> {
     //initPlayer();
   }
 
+  @override
+  void dispose(){
+    //super.dispose();
+    stoptimer();
+    //super.dispose();
+  }
+
 
 //Checks if swatch is running and if so starts timer
   void keeprunning(){
@@ -392,10 +399,10 @@ class _timerAreaState extends State<timerArea> {
 
             _currentStatus = _current.status;
             if((pow(10, _current?.metering?.peakPower / 20) * 120.0) > 50)
-              {
-                print("Search");
-                print("***********************" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
-              }
+            {
+              print("Search");
+              print("***********************" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+            }
             if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) > timerSensitivity) {
 
               arrShots.add(stoptimetodisplay);
@@ -409,8 +416,8 @@ class _timerAreaState extends State<timerArea> {
 
               bCanStart = true;
               if(io.Platform.isIOS){
-                 _pause();
-                 _resume();
+                _pause();
+                _resume();
               }
 
 
