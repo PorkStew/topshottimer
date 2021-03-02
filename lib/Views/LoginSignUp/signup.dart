@@ -38,6 +38,7 @@ class SignUpState extends  State<SignUp> {
   String _emailFromLogin;
   bool _passwordVisible = false;
   bool _loading = false;
+  FocusNode _focusNode = FocusNode();
   //form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //access global variables in global.dart
@@ -183,6 +184,7 @@ class SignUpState extends  State<SignUp> {
               setState(() {
                 _passwordVisible = !_passwordVisible;
               });
+              Timer.run(() => _focusNode.unfocus());
             },
       ),
       ),
@@ -193,6 +195,7 @@ class SignUpState extends  State<SignUp> {
       //allows the keyboard function to go to next textfield or close keyboard
       onFieldSubmitted: (_) => node.unfocus(),
       textInputAction: TextInputAction.done,
+      focusNode: _focusNode,
       obscureText: !_passwordVisible,
       validator: (String value) {
         if (value.isEmpty) {
