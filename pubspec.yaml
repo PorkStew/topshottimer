@@ -32,7 +32,7 @@ dependencies:
   shared_preferences: ^0.5.12+4
     #audioplayers: ^0.16.2
     #noise_meter: ^2.0.0
-  audio_session: ^0.0.11
+  audio_ session: ^0.0.11
   just_audio: ^0.5.7
     #DO WE NEED THIS, should remove this used in timer .dart?
     #fluttertoast: ^7.1.1
@@ -64,10 +64,10 @@ dev_dependencies:
     sdk: flutter
 
 
-flutter_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/icon.png"
+#flutter_icons:
+#  android: "launcher_icon"
+#  ios: true
+#  image_path: "assets/icon.png"
 
 flutter_launcher_name:
   name: "TopShot Timer"
