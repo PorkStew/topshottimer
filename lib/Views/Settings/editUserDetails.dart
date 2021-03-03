@@ -1,5 +1,5 @@
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audio_cache.dart';
+// import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,8 +68,8 @@ class _editUserDetailsState extends State<editUserDetails> {
   String newLastName = "";
   String Email = "";
   int dropDownValue = 1;
-  AudioPlayer advancedPlayer;
-  AudioCache audioCache;
+  // AudioPlayer advancedPlayer;
+  // AudioCache audioCache;
   String localPathFile;
 
 
