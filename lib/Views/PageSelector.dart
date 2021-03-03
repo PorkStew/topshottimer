@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:noise_meter/noise_meter.dart';
+// import 'package:noise_meter/noise_meter.dart';
 import 'package:topshottimer/Views/Playground.dart';
 import 'Timer/timer.dart';
 import 'Scores/Profile.dart';
@@ -13,6 +13,7 @@ class pageSelector extends StatefulWidget {
 }
 
 class _pageSelectorState extends State<pageSelector> {
+
   int _selectedPage = 0;
   final _pageOptions = [
     TimerPage(),
@@ -20,8 +21,8 @@ class _pageSelectorState extends State<pageSelector> {
     Settings(),
   ];
 
-  StreamSubscription<NoiseReading> _noiseSubscription;
-  NoiseMeter _noiseMeter;
+  // StreamSubscription<NoiseReading> _noiseSubscription;
+  // NoiseMeter _noiseMeter;
 
   @override
   Widget build(BuildContext context) {

@@ -24,35 +24,40 @@ dependencies:
   flutter:
     sdk: flutter
   http:
-  permission_handler: ^5.0.1+1
+  #used to manipulate a variable like capitalization
   basic_utils: ^2.7.0-rc.4
+    #used to hash user passwords
   crypto: ^2.1.2
   flutter_session: ^0.1.1
   shared_preferences: ^0.5.12+4
-  audioplayers: ^0.16.2
-  noise_meter: ^2.0.0
-  fluttertoast: ^7.1.1
-  flutter_launcher_icons: ^0.8.1
-  flutter_launcher_name: ^0.0.1
-  flutter_form_bloc: ^0.19.0
-  flutter_bloc: ^6.0.0
-  bloc: ^6.1.1
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.0
+    #audioplayers: ^0.16.2
+    #noise_meter: ^2.0.0
   audio_session: ^0.0.11
   just_audio: ^0.5.7
+    #DO WE NEED THIS, should remove this used in timer .dart?
+    #fluttertoast: ^7.1.1
+    #flutter_launcher_icons: ^0.8.1
+  flutter_launcher_name: ^0.0.1
+  permission_handler: ^5.0.1+1
+    #flutter_form_bloc: ^0.19.0
+    #flutter_bloc: ^6.0.0
+    #bloc: ^6.1.1
+    # The following adds the Cupertino Icons font to your application.
+    # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.0
+    #allows the user to tap away from the keyboard to dismiss it
   keyboard_dismisser: ^1.0.2
+    #checks if user has internet or not
   connectivity: ^2.0.2
+    #inconjuntion with connectivity it checks for internet
   data_connection_checker: ^0.3.4
-  one_context: ^0.5.0
-  #for internet and enabling or disabling buttons
+    #one_context: ^0.5.0
+    #for internet and enabling or disabling buttons and solves setstate with dialogs
   get: ^3.24.0
   url_launcher: ^5.7.10
   flutter_audio_recorder: 0.5.5
-  #firebase_admob: ^0.11.0+1
-  #firebase_admob: ^0.10.2
-
+    #firebase_admob: ^0.11.0+1
+    #firebase_admob: ^0.10.2
 
 dev_dependencies:
   flutter_test:

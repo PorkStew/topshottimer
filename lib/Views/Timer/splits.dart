@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:topshottimer/global.dart';
 
 import '../../Themes.dart';
 import '../PageSelector.dart';
@@ -26,22 +28,30 @@ class Splits extends StatefulWidget {
 
 class SplitsState extends State<Splits> {
 
+  //Controller decleration for checking internet connection
+
+  final controller = Get.put(Controller());
+
+  //Variable initialisation
   String sEnteredName;
   String sHelloWorld;
   SplitsState(this.sHelloWorld);
   List<String> strings;
   List<String> arrShots = List<String>();
   final sUserInput = TextEditingController();
+
+
   @override
   void initState() {
     obtainUserDefaults();
-    // TODO: implement initState
-    //var a = '["one", "two", "three", "four"]';
+    //Replaces commas in data recieved from database
     sHelloWorld.replaceAll(' ', '');
     print(sHelloWorld);
     final removedBrackets = sHelloWorld.substring(1, sHelloWorld.length -1);
     strings = removedBrackets.split(",");
     String sToTruncate;
+
+    //Trims the array values
 
     for (var i = 0; i <= strings.length-1; i++) {
 
@@ -59,10 +69,9 @@ class SplitsState extends State<Splits> {
 
   }
 
+  //Sends the data to the database if the user decides to save the string
+
   sendData(String stringName, int totalShots, double totalTime) async {
-
-
-    //print(userID);
     print(stringName);
     print(totalShots);
     print(totalTime);
@@ -186,18 +195,20 @@ class SplitsState extends State<Splits> {
 
                   ),
                   Spacer(),
-                  FlatButton(
-                    color: Color(0xFFA2C11C),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFFA2C11C))),
-                    height: 50,
-                    minWidth: 35,
-                    child: Text("Save String",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
-                    onPressed: () {
-                      stringNameDialog();
 
-                    },
-
-
+                  SizedBox(
+                      //minwidth: 100,
+                      height: 50,
+                      child: Obx(() => ElevatedButton(onPressed: controller.btnState.value ?
+                          () => stringNameDialog() :
+                      null,
+                        child: Text(
+                          'Save String',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        style: ElevatedButton.styleFrom(primary: Themes.darkButton2Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                      )
+                      )
                   ),
                   Spacer(),
                 ],
@@ -220,6 +231,8 @@ class SplitsState extends State<Splits> {
     //
 
   }
+
+  //Dialog to enter a string name and save the string to the users account
   stringNameDialog(){
     final _StringName = TextEditingController();
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -350,6 +363,7 @@ class SplitsState extends State<Splits> {
     showDialog(context: context, builder: (context) => dialog);
   }
 }
+//Get user ID from user preferences
 obtainUserDefaults() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String userIdDefault = await prefs.get('id');

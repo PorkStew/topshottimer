@@ -10,8 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:noise_meter/noise_meter.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:noise_meter/noise_meter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/Timer/splits.dart';
@@ -51,6 +50,7 @@ class _TimerPageState extends State<TimerPage> {
   void initState(){
     super.initState();
   }
+
 
 
   @override
@@ -138,26 +138,44 @@ class _timerAreaState extends State<timerArea> {
   @override
   void initState(){
     super.initState();
-    //FirebaseAdMob.instance.initialize(appId: "ca-app-pub-7160847622040015~8571197345");
-
-
-    //Adds first ellement of the array to display correctly before starting
-
     arrShots.add("00:00:00");
 
     //Calls init for audio player
     _init();
     obtainUserDefaults();
     permissions();
-    //_noiseMeter = new NoiseMeter(onError);
-    //playSoundFuture = _playSound();
     if (Platform.isIOS) {
       //sets session for ios
       _setSession();
     }
+    if (Platform.isAndroid){
+      player.setVolume(0.0);
+      player.seek(Duration(milliseconds: 0));
+      player.play();
+    }
+
+
     //start();
     // stopRecorder();
     //initPlayer();
+  }
+
+  // @override
+  // void dispose(){
+  //   super.dispose();
+  //   swatch.reset();
+  //   //stoptimer();
+  //   //stopRecorder();
+  //   stoptimer();
+  //   reset();
+  //
+  // }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _recorder.stop();    // animationController.dispose() instead of your controller.dispose
   }
 
 
@@ -166,25 +184,41 @@ class _timerAreaState extends State<timerArea> {
     if (swatch.isRunning){
       starttimer();
     }
-    setState(() {
-      //Calculation for total times and seperates the minutes, seconds and milliseconds
-      stoptimetodisplay = (swatch.elapsed.inMinutes%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inSeconds%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inMilliseconds%1000).toString().padLeft(2,"0");
-      iMinutes = swatch.elapsed.inMinutes%60;
-      iSeconds = swatch.elapsed.inSeconds%60;
-      iMilliseconds = swatch.elapsed.inMilliseconds%1000;
-      int iMillisecondsCount = swatch.elapsed.inMilliseconds;
-      //print(iMillisecondsCount);
-      if (iMillisecondsCount >= 200){
-        bStopable = true;
-      }
 
-      // print("In Minutes: " + iMinutes.toString());
-      // print("In Seconds: "+ iSeconds.toString());
-      // print("In Milliseconds: " + iMilliseconds.toString());
-      // print("-------------------------");
+    if (!mounted) return;
+      setState(() {
+        stoptimetodisplay = (swatch.elapsed.inMinutes%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inSeconds%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inMilliseconds%1000).toString().padLeft(2,"0");
+        iMinutes = swatch.elapsed.inMinutes%60;
+        iSeconds = swatch.elapsed.inSeconds%60;
+        iMilliseconds = swatch.elapsed.inMilliseconds%1000;
+        int iMillisecondsCount = swatch.elapsed.inMilliseconds;
+        //print(iMillisecondsCount);
+        if (iMillisecondsCount >= 200){
+          bStopable = true;
+        }
+        // Your state change code goes here
+      });
 
 
-    });
+    // setState(() {
+    //   //Calculation for total times and seperates the minutes, seconds and milliseconds
+    //   stoptimetodisplay = (swatch.elapsed.inMinutes%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inSeconds%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inMilliseconds%1000).toString().padLeft(2,"0");
+    //   iMinutes = swatch.elapsed.inMinutes%60;
+    //   iSeconds = swatch.elapsed.inSeconds%60;
+    //   iMilliseconds = swatch.elapsed.inMilliseconds%1000;
+    //   int iMillisecondsCount = swatch.elapsed.inMilliseconds;
+    //   //print(iMillisecondsCount);
+    //   if (iMillisecondsCount >= 200){
+    //     bStopable = true;
+    //   }
+    //
+    //   // print("In Minutes: " + iMinutes.toString());
+    //   // print("In Seconds: "+ iSeconds.toString());
+    //   // print("In Milliseconds: " + iMilliseconds.toString());
+    //   // print("-------------------------");
+    //
+    //
+    // });
   }
   //Starts the timer
   void starttimer(){
@@ -211,6 +245,7 @@ class _timerAreaState extends State<timerArea> {
   //Starts stop watch and checks various flags have been reset and stopped
 
   Future<void> startstopwatch() async {
+    if (!mounted) return;
     setState(() {
       stopispressed = false;
     });
@@ -222,11 +257,15 @@ class _timerAreaState extends State<timerArea> {
       print("Before seconds duration");
       print("************************* Before Initilisation of Player***********************");
 
+      player.stop();
       if(iCountStart==0){
         if(Platform.isAndroid){
           print("*************************THIS IS ANDROID***********************");
           //var duration = await player.setAsset("assets/audios/"+ timerTone + ".mp3");
           player.setAsset("assets/audios/"+ timerTone + ".mp3");
+          // player.setVolume(1.0);
+          // player.seek(Duration(milliseconds: 0));
+          // player.play();
         }
 
 
@@ -238,6 +277,7 @@ class _timerAreaState extends State<timerArea> {
       }
 
 
+      //player.pause();
 
 
 
@@ -280,13 +320,14 @@ class _timerAreaState extends State<timerArea> {
         print("Random Delay is True: "+ randomNumber.toString());
         await Future.delayed(Duration(seconds: randomNumber));
       }
-      print(timerDelay);
+      //player.load();
+      //player.stop();
 
       print("Before Play");
       player.setVolume(1.0);
       player.seek(Duration(milliseconds: 0));
       player.play();
-      player.seek(Duration(milliseconds: 0));
+      //player.seek(Duration(milliseconds: 0));
 
       print("After Play");
 
@@ -299,7 +340,6 @@ class _timerAreaState extends State<timerArea> {
       bResetOnStart = false;
     }
     else if (bstop == true){
-
       startispressed = true;
       isRunning = false;
       didReset = false;
@@ -317,6 +357,7 @@ class _timerAreaState extends State<timerArea> {
   }
   //resets timer
   void reset() {
+    if (!mounted) return;
     setState(() {
       startispressed = true;
     });
@@ -347,6 +388,7 @@ class _timerAreaState extends State<timerArea> {
         await _recorder.initialized;
         var current = await _recorder.current(channel: 0);
 
+        if (!mounted) return;
         setState(() {
           _current = current;
           _currentStatus = current.status;
@@ -373,6 +415,7 @@ class _timerAreaState extends State<timerArea> {
       try {
         await _recorder.start();
         var recording = await _recorder.current(channel: 0);
+        if (!mounted) return;
         setState(() {
           _current = recording;
 
@@ -386,16 +429,17 @@ class _timerAreaState extends State<timerArea> {
           }
 
           var current = await _recorder.current(channel: 0);
+          if (!mounted) return;
           setState(() {
             int iCount = 1;
             _current = current;
 
             _currentStatus = _current.status;
             if((pow(10, _current?.metering?.peakPower / 20) * 120.0) > 50)
-              {
-                print("Search");
-                print("***********************" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
-              }
+            {
+              print("Search");
+              print("***********************" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+            }
             if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) > timerSensitivity) {
 
               arrShots.add(stoptimetodisplay);
@@ -409,8 +453,8 @@ class _timerAreaState extends State<timerArea> {
 
               bCanStart = true;
               if(io.Platform.isIOS){
-                 _pause();
-                 _resume();
+                _pause();
+                _resume();
               }
 
 
@@ -429,11 +473,13 @@ class _timerAreaState extends State<timerArea> {
   //resumes the recorder
   _resume() async {
     await _recorder.resume();
+    if (!mounted) return;
     setState(() {});
   }
 
   _pause() async {
     _recorder.pause();
+    if (!mounted) return;
     setState(() {});
   }
   //Stops the recorder
@@ -442,7 +488,7 @@ class _timerAreaState extends State<timerArea> {
     var result = await _recorder.stop();
     print("Stop recording: ${result.path}");
     print("Stop recording: ${result.duration}");
-
+    if (!mounted) return;
     setState(() {
       _current = result;
       _currentStatus = _current.status;
@@ -482,7 +528,7 @@ class _timerAreaState extends State<timerArea> {
                         arrShots.add("00:00:00");
                         iCountShots = 0;
                         swatch.reset();
-                        stoptimer();
+                        //stoptimer();
                         //stopRecorder();
                         stoptimer();
                         reset();
@@ -499,27 +545,28 @@ class _timerAreaState extends State<timerArea> {
                           startstopwatch();
                           isChanged = !isChanged;
                           colorisChanged = !colorisChanged;
+                          if (!mounted) return;
                           setState(() {
                             colorisChanged == true ? btnColor = Color(0xFFA2C11C) : btnColor = Color(0xFF2C5D63);
                             isChanged == true ? buttonText = "Start" : buttonText = "Stop";
                           });
                         }
                       }
-                      else
-                      {
-                        Fluttertoast.showToast(
-                            msg: "Please reset before starting another string",
-
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 3,
-                            backgroundColor: Colors.red,
-
-                            textColor: Colors.black,
-                            fontSize: 24.0
-                        );
-                        print("You need to reset");
-                      }
+                      // else
+                      // {
+                      //   Fluttertoast.showToast(
+                      //       msg: "Please reset before starting another string",
+                      //
+                      //       toastLength: Toast.LENGTH_SHORT,
+                      //       gravity: ToastGravity.BOTTOM,
+                      //       timeInSecForIosWeb: 3,
+                      //       backgroundColor: Colors.red,
+                      //
+                      //       textColor: Colors.black,
+                      //       fontSize: 24.0
+                      //   );
+                      //   print("You need to reset");
+                      // }
 
                     }
 

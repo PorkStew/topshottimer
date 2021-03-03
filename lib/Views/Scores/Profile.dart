@@ -14,12 +14,15 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+
+  //Decleration of future variable values
     Future fUSerID;
     Future fDataRetrieved;
 
 
     String sID;
 
+    //Arrays of strings and shots
     List<String> arrStringID = List<String>();
     List<String> arrStringName = List<String>();
     List<String> arrTotalShots = List<String>();
@@ -33,7 +36,7 @@ class _ProfileState extends State<Profile> {
       fUSerID = _getID();
     }
 
-
+    //Get user ID from user Defaults
     Future<String> userID() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       //await prefs.setDouble('userSensitivity', 50.00);
@@ -42,6 +45,8 @@ class _ProfileState extends State<Profile> {
       //print(dSensitivity.toString());
       return sUserID;
     }
+
+    //Method to get all values from the database and populate various different arrays
     _getID() async{
     sID = await userID();
     var url = 'https://www.topshottimer.co.za/viewStrings.php';
@@ -64,6 +69,7 @@ class _ProfileState extends State<Profile> {
     print(id);
     print(id[0]['userID']);
 
+    //Populate all arrays
     for(int iPopulate = 0; iPopulate<=iLength-1; iPopulate++)
     {
       arrStringID.add(id[iPopulate]['stringId']);
@@ -73,7 +79,7 @@ class _ProfileState extends State<Profile> {
       arrDates.add(id[iPopulate]['stringDate']);
     }
 
-    //print(arrStringName[0].toString());
+    //Print the arrays with various strings
     for(int iPrint = 0; iPrint<=iLength-1; iPrint++)
     {
       //print(arrStringName[iPrint]);
@@ -201,6 +207,7 @@ class _ProfileState extends State<Profile> {
     ));
   }
 
+    //Retrieve data method to retrieve data from the database
     Future retrieveData(String sID) async {
       var url = 'https://www.topshottimer.co.za/viewStrings.php';
       var res = await http.post(

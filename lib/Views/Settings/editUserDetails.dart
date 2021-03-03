@@ -1,11 +1,15 @@
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audio_cache.dart';
+// import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:basic_utils/basic_utils.dart';
+import 'package:topshottimer/global.dart';
+
+
 
 
 
@@ -15,6 +19,10 @@ class editUserDetails extends StatefulWidget {
 }
 
 class _editUserDetailsState extends State<editUserDetails> {
+  //Initializing controller variable to check for internet connection
+  final controller = Get.put(Controller());
+
+  //Declares future variables
   Future newSensitivityFuture;
   Future newDelayFuture;
   Future fFirstName;
@@ -28,14 +36,13 @@ class _editUserDetailsState extends State<editUserDetails> {
   @override
   void initState(){
     super.initState();
-    initPlayer();
+    //Declaring of future variables for widgets to populate
     fFirstName = _getFirstName();
     fLastName = _getLastName();
     fEmail = _getEmail();
-    newDelayFuture = _getDelay();
-    newSensitivityFuture = _getSensitivity();
   }
 
+  //Methods to get all  user details
 
   _getFirstName() async{
     FirstName = await userFirstName();
@@ -52,31 +59,7 @@ class _editUserDetailsState extends State<editUserDetails> {
     return userEmail();
   }
 
-  _getDelay() async{
-    sliderValue2 = await userDelay();
-    if (sliderValue2 == null)
-    {
-      sliderValue2 = 3;
-    }
-    return userDelay();
-  }
-
-  _getSensitivity() async{
-    sliderValue1 = await userSensitivity();
-    if (sliderValue1 == null)
-    {
-      sliderValue1 = 50.0;
-    }
-
-    return userSensitivity();
-  }
-
-  getDetails() async{
-
-  }
-  // Store both of these values in user defaults
-  //Stewart Knows How User Defaults Works
-  //**********************************************
+  //Decleation of all variables
   double sliderValue1 = 0;
   double sliderValue2 = 1;
   String FirstName = "";
@@ -84,24 +67,10 @@ class _editUserDetailsState extends State<editUserDetails> {
   String LastName = "";
   String newLastName = "";
   String Email = "";
-
-
-
   int dropDownValue = 1;
-  AudioPlayer advancedPlayer;
-  AudioCache audioCache;
+  // AudioPlayer advancedPlayer;
+  // AudioCache audioCache;
   String localPathFile;
-
-  //var sHello = await userSensitivity(context);
-  //**********************************************
-
-
-
-
-  void initPlayer(){
-    advancedPlayer = AudioPlayer();
-    audioCache = AudioCache(fixedPlayer: advancedPlayer);
-  }
 
 
   @override
@@ -220,106 +189,80 @@ class _editUserDetailsState extends State<editUserDetails> {
 
 
                             SizedBox(height: 15,),
-                            FlatButton(
-                              color: Themes.darkButton1Color,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Themes.darkButton1Color)),
-                              height: 50,
-                              minWidth: 220,
-                              child: Text("Reset Password",style: TextStyle(fontSize: 20,color: Theme.of(context).buttonColor ),),
-                              onPressed: () async {
-                                resetPasswordDialog();
-
-                              },
-
-
+                            SizedBox(
+                                width: 220,
+                                height: 50,
+                                child: Obx(() => ElevatedButton(onPressed: controller.btnState.value ?
+                                    () => resetPasswordDialog() :
+                                null,
+                                  child: Text(
+                                    'Reset Password',
+                                    style: TextStyle(color: Colors.white, fontSize: 20),
+                                  ),
+                                  style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                                )
+                                )
                             ),
+
                             Container(
                               padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-                              //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
 
                             ),
-                            FlatButton(
-                              color: Themes.darkButton2Color,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(color: Color(0xFFA2C11C))),
-                              height: 50,
-                              minWidth: 180,
-                              child: Text("Update",style: TextStyle(fontSize: 20, color: Theme.of(context).buttonColor),),
-                              onPressed: () {
-                                print("**FirstName: "+ FirstName);
-                                print("**LastName: "+ LastName);
-                                print("**NewFirstName: "+ newFirstName);
-                                print("**NewLastName: "+ newLastName);
+                            SizedBox(
+                                width: 220,
+                                height: 50,
+                                child: Obx(() => ElevatedButton(onPressed: controller.btnState.value ?
+                                    () {
+                                      print("**FirstName: "+ FirstName);
+                                      print("**LastName: "+ LastName);
+                                      print("**NewFirstName: "+ newFirstName);
+                                      print("**NewLastName: "+ newLastName);
+
+                                      print(newFirstName);
+
+                                      if (!_formKey.currentState.validate()) {
+                                        return;
+                                      }
+                                      _formKey.currentState.save();
 
 
-                                //print("Hello world");
-                                print(newFirstName);
+                                      if(newFirstName==FirstName && newLastName==LastName){
 
-                                if (!_formKey.currentState.validate()) {
-                                  return;
-                                }
-                                _formKey.currentState.save();
+                                        print("***********No Details Were Edited");
+                                        print("**NewFirstName: "+ newFirstName);
+                                        print("**NewLastName: "+ newLastName);
+                                        //_formKey.currentState.save();
+                                        notUpdateDetailsDialog();
+                                      }
+                                      else{
 
+                                        print("***********Details Were Edited");
+                                        print("**NewFirstName: "+ newFirstName);
+                                        print("**NewLastName: "+ newLastName);
+                                        // _formKey.currentState.save();
+                                        newFirstName = StringUtils.capitalize(newFirstName);
+                                        newLastName = StringUtils.capitalize(newLastName);
 
-                                if(newFirstName==FirstName && newLastName==LastName){
-
-                                  print("***********No Details Were Edited");
-                                  print("**NewFirstName: "+ newFirstName);
-                                  print("**NewLastName: "+ newLastName);
-                                  //_formKey.currentState.save();
-                                  notUpdateDetailsDialog();
-                                }
-                                else{
-
-                                  print("***********Details Were Edited");
-                                  print("**NewFirstName: "+ newFirstName);
-                                  print("**NewLastName: "+ newLastName);
-                                  // _formKey.currentState.save();
-                                  newFirstName = StringUtils.capitalize(newFirstName);
-                                  newLastName = StringUtils.capitalize(newLastName);
-
-                                  print(newFirstName.replaceAll(new RegExp(r"\s+"), ""));
-                                  print(newLastName);
-                                  print(Email.toLowerCase());
-                                  updateUserDefaults(newFirstName, newLastName);
-                                  updateDetails(newFirstName, newLastName, Email);
-                                  updateDetailsDialog();
-                                }
-
-
-
-
-                                //TODO Needs to navigate to Page selector and have a popup dialog
-
-                              },
-
-
+                                        print(newFirstName.replaceAll(new RegExp(r"\s+"), ""));
+                                        print(newLastName);
+                                        print(Email.toLowerCase());
+                                        updateUserDefaults(newFirstName, newLastName);
+                                        updateDetails(newFirstName, newLastName, Email);
+                                        updateDetailsDialog();
+                                      }
+                                    } :
+                                null,
+                                  child: Text(
+                                    'Update',
+                                    style: TextStyle(color: Colors.white, fontSize: 20),
+                                  ),
+                                  style: ElevatedButton.styleFrom(primary: Themes.darkButton2Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                                )
+                                )
                             ),
-
-
-
-
-
-
-
                           ],
-
                         ),
-
                       ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     ],
                   );
                 }
@@ -332,6 +275,7 @@ class _editUserDetailsState extends State<editUserDetails> {
 
   }
 
+  //Dialog to confirm password and log out email
   resetPasswordDialog(){
     Dialog dialog = new Dialog(
         backgroundColor: Themes.darkBackgoundColor,
@@ -381,18 +325,14 @@ class _editUserDetailsState extends State<editUserDetails> {
                             ),
                           ),
                         ),
+
                         Expanded(
                           child: InkWell(
                             onTap: (){
                               resetPassword(Email.toLowerCase());
                               clearDefaults();
-                              //Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
                               print("Signed Out");
-                              //Navigator.pop(context);
                               Navigator.pushNamedAndRemoveUntil(context,'/LoginSignUp/login', (route) => false);
-                              // Navigator.pop(context);
-                              //Navigator.push(context,
-                              // MaterialPageRoute(builder: (context) => SignUp(_email.text)));
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -429,6 +369,8 @@ class _editUserDetailsState extends State<editUserDetails> {
     showDialog(context: context, builder: (context) => dialog);
 
   }
+
+  //Dialog to display when the user tries to update user details but no details were changed
   notUpdateDetailsDialog(){
     Dialog dialog = new Dialog(
         backgroundColor: Themes.darkBackgoundColor,
@@ -444,12 +386,8 @@ class _editUserDetailsState extends State<editUserDetails> {
               //this will affect the height of the dialog
               height: 180,
               child: Padding(
-
-                //play with top padding to make items fit
                 padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                 child: Column(
-
-
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -498,6 +436,8 @@ class _editUserDetailsState extends State<editUserDetails> {
     );
     showDialog(context: context, builder: (context) => dialog);
   }
+
+  //Dialog to confirm updating of user details
   updateDetailsDialog(){
 
     Dialog dialog = new Dialog(
@@ -570,10 +510,7 @@ class _editUserDetailsState extends State<editUserDetails> {
   }
 }
 
-// doStuff() async{
-//   var x = await userSensitivity();
-//   return x;
-// }
+  //Method to send users a password reset email
 resetPassword(String email) async{
   try{
     var url = 'https://authentication.topshottimer.co.za/authentication/resetPasswordMailer.php';
@@ -584,17 +521,13 @@ resetPassword(String email) async{
         }
     );
     print("Password Reset Sent");
-
-    //Navigator.of(context).pop();
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
-    //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': email});
-
   }catch (error) {
     print(error.toString());
     //setState(() => loading = false);
   }
 }
 
+//Method that sends updated user details to the database
 updateDetails(String name, String surname, String email) async{
   try{
     var url = 'https://www.topshottimer.co.za/updateUserDetails.php';
@@ -606,15 +539,12 @@ updateDetails(String name, String surname, String email) async{
           "emailAddress": email,
         }
     );
-    //Navigator.of(context).pop();
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => con.resetPasswordConfirm(email)));
-    //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/resetPasswordConfirm', (r) => false ,arguments: {'email': email});
-
   }catch (error) {
     print(error.toString());
     //setState(() => loading = false);
   }
 }
+//Method to update user defaults when they update their details
 updateUserDefaults(String name, String surname) async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('firstName', name);
@@ -622,11 +552,14 @@ updateUserDefaults(String name, String surname) async{
 
 }
 
+//Clears user details for when the user is logged out after requesting a password reset
 clearDefaults() async{
   SharedPreferences preferences = await SharedPreferences.getInstance();
   await preferences.clear();
 }
 
+
+//Below methods are to obtain user defaults
 Future <String> userFirstName() async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //await prefs.setDouble('userSensitivity', 50.00);
@@ -658,54 +591,9 @@ Future <String> userEmail() async{
 }
 
 
-Future<double> userSensitivity() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
-  double dSensitivity = await prefs.getDouble('userSensitivity');
-  if (dSensitivity == null){
-    await prefs.setDouble('userSensitivity', 50.0);
-  }
-  //print(dSensitivity.toString());
-  return dSensitivity;
-}
 
-setDefaultSensitivity(double newValue) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setDouble('userSensitivity', newValue);
 
-}
 
-Future<double> userDelay() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
-  double dDelay = await prefs.getDouble('userDelay');
-  if (dDelay == null){
-    await prefs.setDouble('userDelay', 3);
-  }
-  //print(dSensitivity.toString());
-  return dDelay;
-}
 
-setDefaultDelay(double newValue) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setDouble('userDelay', newValue);
 
-}
 
-Future<String> userTone() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
-  String sTone = await prefs.getString('userTone');
-  if (sTone == null){
-    await prefs.setString('userTone', "1500");
-  }
-  //print(dSensitivity.toString());
-  return sTone;
-}
-
-setUserTone(String newValue) async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('userTone', newValue);
-  print("New user tone was set to: "+ newValue);
-
-}
