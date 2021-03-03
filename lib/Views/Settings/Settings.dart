@@ -197,7 +197,7 @@ class _SettingsState extends State<Settings> {
                               height: 100,
                               width: 100,
                               child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color> (Colors.red),
+                                valueColor: AlwaysStoppedAnimation<Color> (Themes.darkButton2Color),
                                 strokeWidth: 5.0,
                               ),
                             ),
