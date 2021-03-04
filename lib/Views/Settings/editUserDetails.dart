@@ -1,17 +1,11 @@
-// import 'package:audioplayers/audio_cache.dart';
-// import 'package:audioplayers/audioplayers.dart';
+//import 'package:audioplayers/audio_cache.dart';
+//import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/main.dart';
 import 'package:http/http.dart' as http;
 import 'package:basic_utils/basic_utils.dart';
-import 'package:topshottimer/global.dart';
-
-
-
-
 
 class editUserDetails extends StatefulWidget {
   @override
@@ -19,10 +13,6 @@ class editUserDetails extends StatefulWidget {
 }
 
 class _editUserDetailsState extends State<editUserDetails> {
-  //Initializing controller variable to check for internet connection
-  final controller = Get.put(Controller());
-
-  //Declares future variables
   Future newSensitivityFuture;
   Future newDelayFuture;
   Future fFirstName;
@@ -32,24 +22,22 @@ class _editUserDetailsState extends State<editUserDetails> {
 
   bool bConnected = false;
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    //Declaring of future variables for widgets to populate
     fFirstName = _getFirstName();
     fLastName = _getLastName();
     fEmail = _getEmail();
+    newDelayFuture = _getDelay();
+    newSensitivityFuture = _getSensitivity();
   }
 
-  //Methods to get all  user details
-
-  _getFirstName() async{
+  _getFirstName() async {
     FirstName = await userFirstName();
     return userFirstName();
   }
 
-  _getLastName() async{
+  _getLastName() async {
     LastName = await userLastName();
     return userLastName();
   }
@@ -59,7 +47,25 @@ class _editUserDetailsState extends State<editUserDetails> {
     return userEmail();
   }
 
-  //Decleation of all variables
+  _getDelay() async {
+    sliderValue2 = await userDelay();
+    if (sliderValue2 == null) {
+      sliderValue2 = 3;
+    }
+    return userDelay();
+  }
+
+  _getSensitivity() async {
+    sliderValue1 = await userSensitivity();
+    if (sliderValue1 == null) {
+      sliderValue1 = 50.0;
+    }
+
+    return userSensitivity();
+  }
+
+  getDetails() async {}
+
   double sliderValue1 = 0;
   double sliderValue2 = 1;
   String FirstName = "";
@@ -67,23 +73,22 @@ class _editUserDetailsState extends State<editUserDetails> {
   String LastName = "";
   String newLastName = "";
   String Email = "";
-  int dropDownValue = 1;
-  // AudioPlayer advancedPlayer;
-  // AudioCache audioCache;
-  String localPathFile;
 
+  int dropDownValue = 1;
+  String localPathFile;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Edit Details", style: TextStyle(color: Colors.white)), iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),),
+      appBar: AppBar(
+        title: Text("Edit Details", style: TextStyle(color: Colors.white)),
+        iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),
+      ),
       body: Container(
-        padding: EdgeInsets.only(top: 5,bottom: 20,left: 20, right: 20),
+        padding: EdgeInsets.only(top: 5, bottom: 20, left: 20, right: 20),
         child: FutureBuilder(
-
           future: newSensitivityFuture,
-          builder: (context, snapshot )  {
-
+          builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.active:
               case ConnectionState.waiting:
@@ -97,7 +102,8 @@ class _editUserDetailsState extends State<editUserDetails> {
                           height: 100,
                           width: 100,
                           child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color> (Colors.red),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.red),
                             strokeWidth: 5.0,
                           ),
                         ),
@@ -116,20 +122,22 @@ class _editUserDetailsState extends State<editUserDetails> {
                     //mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-
                       Form(
                         key: _formKey,
                         child: Column(
                           children: [
                             Container(
-                              padding: EdgeInsets.only(top: 0,bottom: 0,left: 0, right: 0),
+                              padding: EdgeInsets.only(
+                                  top: 0, bottom: 0, left: 0, right: 0),
                               //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
-
                             ),
                             TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'First Name',
-                                prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color,),
+                                prefixIcon: Icon(
+                                  Icons.perm_identity,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
                               ),
                               initialValue: FirstName,
                               validator: (String value) {
@@ -147,7 +155,10 @@ class _editUserDetailsState extends State<editUserDetails> {
                             TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'Last Name',
-                                prefixIcon: Icon(Icons.perm_identity, color: Theme.of(context).iconTheme.color,),
+                                prefixIcon: Icon(
+                                  Icons.perm_identity,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
                               ),
                               initialValue: LastName,
                               validator: (String value) {
@@ -165,7 +176,10 @@ class _editUserDetailsState extends State<editUserDetails> {
                             TextFormField(
                               decoration: InputDecoration(
                                 labelText: 'Email',
-                                prefixIcon: Icon(Icons.email, color: Theme.of(context).iconTheme.color,),
+                                prefixIcon: Icon(
+                                  Icons.email,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
                               ),
                               initialValue: Email,
                               enabled: false,
@@ -182,83 +196,92 @@ class _editUserDetailsState extends State<editUserDetails> {
                               },
                             ),
                             Container(
-                              padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
+                              padding: EdgeInsets.only(
+                                  top: 10, bottom: 0, left: 0, right: 0),
                               //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
-
                             ),
-
-
-                            SizedBox(height: 15,),
                             SizedBox(
-                                width: 220,
-                                height: 50,
-                                child: Obx(() => ElevatedButton(onPressed: controller.btnState.value ?
-                                    () => resetPasswordDialog() :
-                                null,
-                                  child: Text(
-                                    'Reset Password',
-                                    style: TextStyle(color: Colors.white, fontSize: 20),
-                                  ),
-                                  style: ElevatedButton.styleFrom(primary: Themes.darkButton1Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                                )
-                                )
+                              height: 15,
                             ),
-
+                            FlatButton(
+                              color: Themes.darkButton1Color,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  side: BorderSide(
+                                      color: Themes.darkButton1Color)),
+                              height: 50,
+                              minWidth: 220,
+                              child: Text(
+                                "Reset Password",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Theme.of(context).buttonColor),
+                              ),
+                              onPressed: () async {
+                                resetPasswordDialog();
+                              },
+                            ),
                             Container(
-                              padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-
+                              padding: EdgeInsets.only(
+                                  top: 10, bottom: 0, left: 0, right: 0),
+                              //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
                             ),
-                            SizedBox(
-                                width: 220,
-                                height: 50,
-                                child: Obx(() => ElevatedButton(onPressed: controller.btnState.value ?
-                                    () {
-                                      print("**FirstName: "+ FirstName);
-                                      print("**LastName: "+ LastName);
-                                      print("**NewFirstName: "+ newFirstName);
-                                      print("**NewLastName: "+ newLastName);
+                            FlatButton(
+                              color: Themes.darkButton2Color,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  side: BorderSide(color: Color(0xFFA2C11C))),
+                              height: 50,
+                              minWidth: 180,
+                              child: Text(
+                                "Update",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Theme.of(context).buttonColor),
+                              ),
+                              onPressed: () {
+                                print("**FirstName: " + FirstName);
+                                print("**LastName: " + LastName);
+                                print("**NewFirstName: " + newFirstName);
+                                print("**NewLastName: " + newLastName);
 
-                                      print(newFirstName);
+                                //print("Hello world");
+                                print(newFirstName);
 
-                                      if (!_formKey.currentState.validate()) {
-                                        return;
-                                      }
-                                      _formKey.currentState.save();
+                                if (!_formKey.currentState.validate()) {
+                                  return;
+                                }
+                                _formKey.currentState.save();
 
+                                if (newFirstName == FirstName &&
+                                    newLastName == LastName) {
+                                  print("***********No Details Were Edited");
+                                  print("**NewFirstName: " + newFirstName);
+                                  print("**NewLastName: " + newLastName);
+                                  //_formKey.currentState.save();
+                                  notUpdateDetailsDialog();
+                                } else {
+                                  print("***********Details Were Edited");
+                                  print("**NewFirstName: " + newFirstName);
+                                  print("**NewLastName: " + newLastName);
+                                  // _formKey.currentState.save();
+                                  newFirstName =
+                                      StringUtils.capitalize(newFirstName);
+                                  newLastName =
+                                      StringUtils.capitalize(newLastName);
 
-                                      if(newFirstName==FirstName && newLastName==LastName){
+                                  print(newFirstName.replaceAll(
+                                      new RegExp(r"\s+"), ""));
+                                  print(newLastName);
+                                  print(Email.toLowerCase());
+                                  updateUserDefaults(newFirstName, newLastName);
+                                  updateDetails(
+                                      newFirstName, newLastName, Email);
+                                  updateDetailsDialog();
+                                }
 
-                                        print("***********No Details Were Edited");
-                                        print("**NewFirstName: "+ newFirstName);
-                                        print("**NewLastName: "+ newLastName);
-                                        //_formKey.currentState.save();
-                                        notUpdateDetailsDialog();
-                                      }
-                                      else{
-
-                                        print("***********Details Were Edited");
-                                        print("**NewFirstName: "+ newFirstName);
-                                        print("**NewLastName: "+ newLastName);
-                                        // _formKey.currentState.save();
-                                        newFirstName = StringUtils.capitalize(newFirstName);
-                                        newLastName = StringUtils.capitalize(newLastName);
-
-                                        print(newFirstName.replaceAll(new RegExp(r"\s+"), ""));
-                                        print(newLastName);
-                                        print(Email.toLowerCase());
-                                        updateUserDefaults(newFirstName, newLastName);
-                                        updateDetails(newFirstName, newLastName, Email);
-                                        updateDetailsDialog();
-                                      }
-                                    } :
-                                null,
-                                  child: Text(
-                                    'Update',
-                                    style: TextStyle(color: Colors.white, fontSize: 20),
-                                  ),
-                                  style: ElevatedButton.styleFrom(primary: Themes.darkButton2Color, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                                )
-                                )
+                                //TODO Needs to navigate to Page selector and have a popup dialog
+                              },
                             ),
                           ],
                         ),
@@ -268,20 +291,15 @@ class _editUserDetailsState extends State<editUserDetails> {
                 }
             }
           },
-
         ),
       ),
     );
-
   }
 
-  //Dialog to confirm password and log out email
-  resetPasswordDialog(){
+  resetPasswordDialog() {
     Dialog dialog = new Dialog(
         backgroundColor: Themes.darkBackgoundColor,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
           overflow: Overflow.visible,
           alignment: Alignment.topCenter,
@@ -298,53 +316,65 @@ class _editUserDetailsState extends State<editUserDetails> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: Text("Are you sure you would like to reset your password. By confirming this you will be logged out.",textAlign: TextAlign.center, style: TextStyle( fontSize: 20, color: Colors.white),),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        "Are you sure you would like to reset your password. By confirming this you will be logged out.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
                     ),
-                    SizedBox(height: 20,),
-
+                    SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Expanded(
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius:
-                                BorderRadius.only(bottomLeft: Radius.circular(10)),
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(10)),
                                 color: Themes.darkButton1Color,
                               ),
                               height: 45,
                               child: Center(
                                 child: Text("Cancel",
-                                    style: TextStyle(fontSize: 20, color: Colors.white)),
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white)),
                               ),
                             ),
                           ),
                         ),
-
                         Expanded(
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               resetPassword(Email.toLowerCase());
                               clearDefaults();
+                              //Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
                               print("Signed Out");
-                              Navigator.pushNamedAndRemoveUntil(context,'/LoginSignUp/login', (route) => false);
+                              //Navigator.pop(context);
+                              Navigator.pushNamedAndRemoveUntil(context,
+                                  '/LoginSignUp/login', (route) => false);
+                              // Navigator.pop(context);
+                              //Navigator.push(context,
+                              // MaterialPageRoute(builder: (context) => SignUp(_email.text)));
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius:
-                                BorderRadius.only(bottomRight: Radius.circular(10)),
+                                borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(10)),
                                 //color: Themes.PrimaryColorRed,
                                 color: Themes.darkButton2Color,
                               ),
                               height: 45,
                               child: Center(
                                 child: Text("Confirm",
-                                    style: TextStyle(fontSize: 20, color: Colors.white)),
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white)),
                               ),
                             ),
                           ),
@@ -360,25 +390,20 @@ class _editUserDetailsState extends State<editUserDetails> {
                 child: CircleAvatar(
                     backgroundColor: Themes.darkButton2Color,
                     radius: 40,
-                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
-                )
-            ),
+                    child: Image.asset(
+                      "assets/Exclamation@3x.png",
+                      height: 53,
+                    ))),
           ],
-        )
-    );
+        ));
     showDialog(context: context, builder: (context) => dialog);
-
   }
 
-  //Dialog to display when the user tries to update user details but no details were changed
-  notUpdateDetailsDialog(){
+  notUpdateDetailsDialog() {
     Dialog dialog = new Dialog(
         backgroundColor: Themes.darkBackgoundColor,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-
           overflow: Overflow.visible,
           alignment: Alignment.topCenter,
           children: [
@@ -386,33 +411,44 @@ class _editUserDetailsState extends State<editUserDetails> {
               //this will affect the height of the dialog
               height: 180,
               child: Padding(
+                //play with top padding to make items fit
                 padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-
-                    Text("Your details were not edited. Please change your details before clicking update.", textAlign: TextAlign.center,style: TextStyle(color: Colors.white, fontSize: 20, ),),
-                    SizedBox(height: 20,),
+                    Text(
+                      "Your details were not edited. Please change your details before clicking update.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Expanded(
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius:
-                                BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
                                 color: Themes.darkButton2Color,
                               ),
                               height: 45,
                               child: Center(
                                 child: Text("Close",
-                                    style: TextStyle(fontSize: 20,color: Colors.white)),
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white)),
                               ),
                             ),
                           ),
@@ -428,25 +464,20 @@ class _editUserDetailsState extends State<editUserDetails> {
                 child: CircleAvatar(
                     backgroundColor: Themes.darkButton2Color,
                     radius: 40,
-                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
-                )
-            ),
+                    child: Image.asset(
+                      "assets/Exclamation@3x.png",
+                      height: 53,
+                    ))),
           ],
-        )
-    );
+        ));
     showDialog(context: context, builder: (context) => dialog);
   }
 
-  //Dialog to confirm updating of user details
-  updateDetailsDialog(){
-
+  updateDetailsDialog() {
     Dialog dialog = new Dialog(
         backgroundColor: Themes.darkBackgoundColor,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-
           overflow: Overflow.visible,
           alignment: Alignment.topCenter,
           children: [
@@ -454,37 +485,45 @@ class _editUserDetailsState extends State<editUserDetails> {
               //this will affect the height of the dialog
               height: 180,
               child: Padding(
-
                 //play with top padding to make items fit
                 padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                 child: Column(
-
-
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-
-                    Text("Your details have been updated successfully. Thank you.", textAlign: TextAlign.center,style: TextStyle(color: Colors.white, fontSize: 20, ),),
-                    SizedBox(height: 20,),
+                    Text(
+                      "Your details have been updated successfully. Thank you.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Expanded(
                           child: InkWell(
-                            onTap: (){
-                              Navigator.pushReplacementNamed(context, '/PageSelector');
+                            onTap: () {
+                              Navigator.pushReplacementNamed(
+                                  context, '/PageSelector');
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius:
-                                BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
                                 color: Themes.darkButton2Color,
                               ),
                               height: 45,
                               child: Center(
                                 child: Text("Continue",
-                                    style: TextStyle(fontSize: 20,color: Colors.white)),
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white)),
                               ),
                             ),
                           ),
@@ -500,100 +539,123 @@ class _editUserDetailsState extends State<editUserDetails> {
                 child: CircleAvatar(
                     backgroundColor: Themes.darkButton2Color,
                     radius: 40,
-                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
-                )
-            ),
+                    child: Image.asset(
+                      "assets/Exclamation@3x.png",
+                      height: 53,
+                    ))),
           ],
-        )
-    );
+        ));
     showDialog(context: context, builder: (context) => dialog);
   }
 }
 
-  //Method to send users a password reset email
-resetPassword(String email) async{
-  try{
-    var url = 'https://authentication.topshottimer.co.za/authentication/resetPasswordMailer.php';
-    var res = await http.post(
-        Uri.encodeFull(url), headers: {"Accept": "application/jason"},
-        body: {
-          "emailAddress": email,
-        }
-    );
+// doStuff() async{
+//   var x = await userSensitivity();
+//   return x;
+// }
+resetPassword(String email) async {
+  try {
+    var url =
+        'https://authentication.topshottimer.co.za/authentication/resetPasswordMailer.php';
+    var res = await http.post(Uri.encodeFull(url), headers: {
+      "Accept": "application/jason"
+    }, body: {
+      "emailAddress": email,
+    });
     print("Password Reset Sent");
-  }catch (error) {
+  } catch (error) {
     print(error.toString());
     //setState(() => loading = false);
   }
 }
 
-//Method that sends updated user details to the database
-updateDetails(String name, String surname, String email) async{
-  try{
+updateDetails(String name, String surname, String email) async {
+  try {
     var url = 'https://www.topshottimer.co.za/updateUserDetails.php';
-    var res = await http.post(
-        Uri.encodeFull(url), headers: {"Accept": "application/jason"},
-        body: {
-          "firstName": name,
-          "lastName": surname,
-          "emailAddress": email,
-        }
-    );
-  }catch (error) {
+    var res = await http.post(Uri.encodeFull(url), headers: {
+      "Accept": "application/jason"
+    }, body: {
+      "firstName": name,
+      "lastName": surname,
+      "emailAddress": email,
+    });
+  } catch (error) {
     print(error.toString());
     //setState(() => loading = false);
   }
 }
-//Method to update user defaults when they update their details
-updateUserDefaults(String name, String surname) async{
+
+updateUserDefaults(String name, String surname) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('firstName', name);
   await prefs.setString('lastName', surname);
-
 }
 
-//Clears user details for when the user is logged out after requesting a password reset
-clearDefaults() async{
+clearDefaults() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   await preferences.clear();
 }
 
-
-//Below methods are to obtain user defaults
-Future <String> userFirstName() async{
+Future<String> userFirstName() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
   String sFirstName = await prefs.getString('firstName');
 
-  //print(dSensitivity.toString());
   return sFirstName;
-
 }
 
-Future <String> userLastName() async{
+Future<String> userLastName() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
   String sLastName = await prefs.getString('lastName');
-
-  //print(dSensitivity.toString());
   return sLastName;
-
 }
 
-Future <String> userEmail() async{
+Future<String> userEmail() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String sEmail = await prefs.getString('email');
+  return sEmail;
+}
+
+Future<double> userSensitivity() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  double dSensitivity = await prefs.getDouble('userSensitivity');
+  if (dSensitivity == null) {
+    await prefs.setDouble('userSensitivity', 50.0);
+  }
+  return dSensitivity;
+}
+
+setDefaultSensitivity(double newValue) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setDouble('userSensitivity', newValue);
+}
+
+Future<double> userDelay() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  double dDelay = await prefs.getDouble('userDelay');
+  if (dDelay == null) {
+    await prefs.setDouble('userDelay', 3);
+  }
+  return dDelay;
+}
+
+setDefaultDelay(double newValue) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setDouble('userDelay', newValue);
+}
+
+Future<String> userTone() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //await prefs.setDouble('userSensitivity', 50.00);
-  String sEmail = await prefs.getString('email');
-
+  String sTone = await prefs.getString('userTone');
+  if (sTone == null) {
+    await prefs.setString('userTone', "1500");
+  }
   //print(dSensitivity.toString());
-  return sEmail;
-
+  return sTone;
 }
 
-
-
-
-
-
-
-
+setUserTone(String newValue) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('userTone', newValue);
+  print("New user tone was set to: " + newValue);
+}
