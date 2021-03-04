@@ -3,13 +3,16 @@ import 'dart:isolate';
 import 'dart:math';
 import 'dart:io' as io;
 import 'package:audio_session/audio_session.dart';
+
 //import 'package:dartins/dartins.dart';
 //import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
+
 //import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:just_audio/just_audio.dart';
+
 // import 'package:noise_meter/noise_meter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,11 +20,9 @@ import 'package:topshottimer/Views/Timer/splits.dart';
 import 'dart:io' show Platform;
 import 'package:path_provider/path_provider.dart';
 import 'package:file/local.dart';
+
 //import 'package:firebase_admob/firebase_admob.dart';
 //import 'package:audioplayers/audioplayers.dart';
-
-
-
 
 import '../../Themes.dart';
 
@@ -29,7 +30,6 @@ import '../../Themes.dart';
 //Pushing to Merge
 
 const String testDevice = '';
-
 
 double timerSensitivity;
 int timerDelay;
@@ -39,44 +39,35 @@ bool bRandomDelay;
 class TimerPage extends StatefulWidget {
   @override
   _TimerPageState createState() => _TimerPageState();
-
 }
 
 class _TimerPageState extends State<TimerPage> {
-
-
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(child: timerArea())
-    );
-  }}
+        backgroundColor: Colors.white, body: Center(child: timerArea()));
+  }
+}
 
 class timerArea extends StatefulWidget {
   //File Decleration for audio recorder
   final LocalFileSystem localFileSystem;
 
-
-
   timerArea({localFileSystem})
       : this.localFileSystem = localFileSystem ?? LocalFileSystem();
+
   @override
   _timerAreaState createState() => _timerAreaState();
-
 }
 
 class _timerAreaState extends State<timerArea> {
-
   int iCountStart = 0;
+
   //Variable declerations for All flags and arrays
   FlutterAudioRecorder _recorder;
   Recording _current;
@@ -106,10 +97,12 @@ class _timerAreaState extends State<timerArea> {
   String sTestingEar = "";
 
   bool bStopable = true;
+
   //Declaring Stopwatch
   var swatch = Stopwatch();
   final dur = const Duration(milliseconds: 1);
   int iCountShots = 0;
+
   //Flags for starting and stopping timer
   bool isRunning = false;
   bool bClicked = false;
@@ -126,17 +119,16 @@ class _timerAreaState extends State<timerArea> {
   //Future playSoundFuture;
   AudioPlayer player = AudioPlayer();
 
-
   //Getting permissions to record
-  Future permissions() async{
+  Future permissions() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.microphone,
     ].request();
     print(statuses[Permission.microphone]);
-
   }
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     arrShots.add("00:00:00");
 
@@ -148,12 +140,11 @@ class _timerAreaState extends State<timerArea> {
       //sets session for ios
       _setSession();
     }
-    if (Platform.isAndroid){
+    if (Platform.isAndroid) {
       player.setVolume(0.0);
       player.seek(Duration(milliseconds: 0));
       player.play();
     }
-
 
     //start();
     // stopRecorder();
@@ -175,30 +166,34 @@ class _timerAreaState extends State<timerArea> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _recorder.stop();    // animationController.dispose() instead of your controller.dispose
+    _recorder
+        .stop(); // animationController.dispose() instead of your controller.dispose
   }
 
-
 //Checks if swatch is running and if so starts timer
-  void keeprunning(){
-    if (swatch.isRunning){
+  void keeprunning() {
+    if (swatch.isRunning) {
       starttimer();
     }
 
     if (!mounted) return;
-      setState(() {
-        stoptimetodisplay = (swatch.elapsed.inMinutes%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inSeconds%60).toString().padLeft(2,"0") + ":" + (swatch.elapsed.inMilliseconds%1000).toString().padLeft(2,"0");
-        iMinutes = swatch.elapsed.inMinutes%60;
-        iSeconds = swatch.elapsed.inSeconds%60;
-        iMilliseconds = swatch.elapsed.inMilliseconds%1000;
-        int iMillisecondsCount = swatch.elapsed.inMilliseconds;
-        //print(iMillisecondsCount);
-        if (iMillisecondsCount >= 200){
-          bStopable = true;
-        }
-        // Your state change code goes here
-      });
-
+    setState(() {
+      stoptimetodisplay =
+          (swatch.elapsed.inMinutes % 60).toString().padLeft(2, "0") +
+              ":" +
+              (swatch.elapsed.inSeconds % 60).toString().padLeft(2, "0") +
+              ":" +
+              (swatch.elapsed.inMilliseconds % 1000).toString().padLeft(2, "0");
+      iMinutes = swatch.elapsed.inMinutes % 60;
+      iSeconds = swatch.elapsed.inSeconds % 60;
+      iMilliseconds = swatch.elapsed.inMilliseconds % 1000;
+      int iMillisecondsCount = swatch.elapsed.inMilliseconds;
+      //print(iMillisecondsCount);
+      if (iMillisecondsCount >= 200) {
+        bStopable = true;
+      }
+      // Your state change code goes here
+    });
 
     // setState(() {
     //   //Calculation for total times and seperates the minutes, seconds and milliseconds
@@ -220,26 +215,28 @@ class _timerAreaState extends State<timerArea> {
     //
     // });
   }
+
   //Starts the timer
-  void starttimer(){
+  void starttimer() {
     Timer(dur, keeprunning);
     bstop = true;
   }
+
   //Stops the timer and reinitialises the player and recorder
-  void stoptimer(){
+  void stoptimer() {
     _stopnow();
     _init();
     swatch.stop();
   }
+
   //Sets the audio sessions
   _setSession() async {
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration(
       avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
-      avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.defaultToSpeaker,
-
+      avAudioSessionCategoryOptions:
+          AVAudioSessionCategoryOptions.defaultToSpeaker,
     ));
-
   }
 
   //Starts stop watch and checks various flags have been reset and stopped
@@ -249,56 +246,50 @@ class _timerAreaState extends State<timerArea> {
     setState(() {
       stopispressed = false;
     });
-    if (bstop == false){
+    if (bstop == false) {
       bStopable = false;
       bstop = true;
       isRunning = true;
       print("Going to play sound now!!!!");
       print("Before seconds duration");
-      print("************************* Before Initilisation of Player***********************");
+      print(
+          "************************* Before Initilisation of Player***********************");
 
       player.stop();
-      if(iCountStart==0){
-        if(Platform.isAndroid){
-          print("*************************THIS IS ANDROID***********************");
+      if (iCountStart == 0) {
+        if (Platform.isAndroid) {
+          print(
+              "*************************THIS IS ANDROID***********************");
           //var duration = await player.setAsset("assets/audios/"+ timerTone + ".mp3");
-          player.setAsset("assets/audios/"+ timerTone + ".mp3");
+          player.setAsset("assets/audios/" + timerTone + ".mp3");
           // player.setVolume(1.0);
           // player.seek(Duration(milliseconds: 0));
           // player.play();
         }
-
-
       }
 
-      if(Platform.isIOS){
+      if (Platform.isIOS) {
         print("*************************THIS IS IOS***********************");
-        var duration = await player.setAsset("assets/audios/"+ timerTone + ".mp3");
+        var duration =
+            await player.setAsset("assets/audios/" + timerTone + ".mp3");
       }
-
 
       //player.pause();
 
-
-
-      if (bRandomDelay == false){
+      if (bRandomDelay == false) {
         // int max = 5;
         //
         // int randomNumber = Random().nextInt(max) + 1;
         print("Random Delay is false");
-        if (timerDelay == 1){
+        if (timerDelay == 1) {
           await Future.delayed(const Duration(seconds: 1));
-        }else
-        if (timerDelay == 2){
+        } else if (timerDelay == 2) {
           await Future.delayed(const Duration(seconds: 2));
-        }else
-        if (timerDelay == 3){
+        } else if (timerDelay == 3) {
           await Future.delayed(const Duration(seconds: 3));
-        }else
-        if (timerDelay == 4){
+        } else if (timerDelay == 4) {
           await Future.delayed(const Duration(seconds: 4));
-        }else
-        if (timerDelay == 5){
+        } else if (timerDelay == 5) {
           await Future.delayed(const Duration(seconds: 5));
         }
         // print("Before Play");
@@ -310,14 +301,11 @@ class _timerAreaState extends State<timerArea> {
         // print("After Play");
         //player.stop();
 
-
-
-      }
-      else{
+      } else {
         int max = 5;
         int randomNumber = Random().nextInt(max) + 1;
         //int iRandomNum = randomNumber;
-        print("Random Delay is True: "+ randomNumber.toString());
+        print("Random Delay is True: " + randomNumber.toString());
         await Future.delayed(Duration(seconds: randomNumber));
       }
       //player.load();
@@ -331,15 +319,13 @@ class _timerAreaState extends State<timerArea> {
 
       print("After Play");
 
-
       Timer(Duration(milliseconds: 700), () {
         _start();
       });
       //player.dispose();
       iCountStart++;
       bResetOnStart = false;
-    }
-    else if (bstop == true){
+    } else if (bstop == true) {
       startispressed = true;
       isRunning = false;
       didReset = false;
@@ -350,11 +336,11 @@ class _timerAreaState extends State<timerArea> {
         _setSession();
       }
 
-      print("*********************"+ arrShots[arrShots.length-1]);
+      print("*********************" + arrShots[arrShots.length - 1]);
       bstop = false;
     }
-
   }
+
   //resets timer
   void reset() {
     if (!mounted) return;
@@ -364,6 +350,7 @@ class _timerAreaState extends State<timerArea> {
 
     swatch.reset();
   }
+
 //Performs recorder initialisations
   _init() async {
     try {
@@ -381,7 +368,6 @@ class _timerAreaState extends State<timerArea> {
             customPath +
             DateTime.now().millisecondsSinceEpoch.toString();
 
-
         _recorder =
             FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
 
@@ -392,7 +378,6 @@ class _timerAreaState extends State<timerArea> {
         setState(() {
           _current = current;
           _currentStatus = current.status;
-
         });
       } else {
         Scaffold.of(context).showSnackBar(
@@ -418,7 +403,6 @@ class _timerAreaState extends State<timerArea> {
         if (!mounted) return;
         setState(() {
           _current = recording;
-
         });
 
         //Sets the tick to pick up and record sounds
@@ -435,41 +419,41 @@ class _timerAreaState extends State<timerArea> {
             _current = current;
 
             _currentStatus = _current.status;
-            if((pow(10, _current?.metering?.peakPower / 20) * 120.0) > 50)
-            {
+            if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) > 50) {
               print("Search");
-              print("***********************" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+              print("***********************" +
+                  (pow(10, _current?.metering?.peakPower / 20) * 120.0)
+                      .toString());
             }
-            if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) > timerSensitivity) {
-
+            if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) >
+                timerSensitivity) {
               arrShots.add(stoptimetodisplay);
               arrMinutes.add(iMinutes);
               arrSeconds.add(iSeconds);
               arrMilliseconds.add(iMilliseconds);
 
-              print("***********************Gun Shot Captured!!!!!!!!!!!!!!!!" + (pow(10, _current?.metering?.peakPower / 20) * 120.0).toString());
+              print("***********************Gun Shot Captured!!!!!!!!!!!!!!!!" +
+                  (pow(10, _current?.metering?.peakPower / 20) * 120.0)
+                      .toString());
               iCountShots++;
               print(pow(10, _current?.metering?.peakPower / 20) * 120.0);
 
               bCanStart = true;
-              if(io.Platform.isIOS){
+              if (io.Platform.isIOS) {
                 _pause();
                 _resume();
               }
 
-
               return;
-
             }
-
           });
         });
-
       } catch (e) {
         print(e);
       }
     }
   }
+
   //resumes the recorder
   _resume() async {
     await _recorder.resume();
@@ -482,6 +466,7 @@ class _timerAreaState extends State<timerArea> {
     if (!mounted) return;
     setState(() {});
   }
+
   //Stops the recorder
   _stopnow() async {
     print('stopping now*****');
@@ -495,9 +480,6 @@ class _timerAreaState extends State<timerArea> {
     });
   }
 
-
-
-
   //Actual Widgets
   @override
   Widget build(BuildContext context) {
@@ -505,155 +487,130 @@ class _timerAreaState extends State<timerArea> {
 
     return Scaffold(
         body: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(top: 35,bottom: 15,left: 0, right: 0),
+      children: [
+        Container(
+          padding: EdgeInsets.only(top: 35, bottom: 15, left: 0, right: 0),
+        ),
+        Container(
+            padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
+            child: FlatButton(
+              //color: btnColor,
 
-            ),
-
-            Container(
-                padding: EdgeInsets.only(top: 10,bottom: 0,left: 0, right: 0),
-                child:
-                FlatButton(
-                  //color: btnColor,
-
-                  minWidth: 250,
-                  height: 250,
-                  shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
-                  onPressed: () {
-                    obtainUserDefaults();
-                    if (bStopable == true){
-                      if(bResetOnStart == true){
-                        arrShots.clear();
-                        arrShots.add("00:00:00");
-                        iCountShots = 0;
-                        swatch.reset();
-                        //stoptimer();
-                        //stopRecorder();
-                        stoptimer();
-                        reset();
-                        //startstopwatch();
-                        didReset = true;
-
-                      }
-                      if (didReset == true){
-
-
-                        print("Got into pressed method");
-                        if (startispressed == true) {
-
-                          startstopwatch();
-                          isChanged = !isChanged;
-                          colorisChanged = !colorisChanged;
-                          if (!mounted) return;
-                          setState(() {
-                            colorisChanged == true ? btnColor = Color(0xFFA2C11C) : btnColor = Color(0xFF2C5D63);
-                            isChanged == true ? buttonText = "Start" : buttonText = "Stop";
-                          });
-                        }
-                      }
-                      // else
-                      // {
-                      //   Fluttertoast.showToast(
-                      //       msg: "Please reset before starting another string",
-                      //
-                      //       toastLength: Toast.LENGTH_SHORT,
-                      //       gravity: ToastGravity.BOTTOM,
-                      //       timeInSecForIosWeb: 3,
-                      //       backgroundColor: Colors.red,
-                      //
-                      //       textColor: Colors.black,
-                      //       fontSize: 24.0
-                      //   );
-                      //   print("You need to reset");
-                      // }
-
+              minWidth: 250,
+              height: 250,
+              shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
+              onPressed: () {
+                obtainUserDefaults();
+                if (bStopable == true) {
+                  if (bResetOnStart == true) {
+                    arrShots.clear();
+                    arrShots.add("00:00:00");
+                    iCountShots = 0;
+                    swatch.reset();
+                    //stoptimer();
+                    //stopRecorder();
+                    stoptimer();
+                    reset();
+                    //startstopwatch();
+                    didReset = true;
+                  }
+                  if (didReset == true) {
+                    print("Got into pressed method");
+                    if (startispressed == true) {
+                      startstopwatch();
+                      isChanged = !isChanged;
+                      colorisChanged = !colorisChanged;
+                      if (!mounted) return;
+                      setState(() {
+                        colorisChanged == true
+                            ? btnColor = Color(0xFFA2C11C)
+                            : btnColor = Color(0xFF2C5D63);
+                        isChanged == true
+                            ? buttonText = "Start"
+                            : buttonText = "Stop";
+                      });
                     }
-
-
-
-
-
-
-
-                    //startispressed ? startstopwatch: null;
-                  },
-                  child: Text(buttonText, style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
-
-                )
-            ),
-            Container(
-                padding: EdgeInsets.only(top: 20,bottom: 0,left: 0, right: 0),
-                child:
-                Text(arrShots[arrShots.length-1] , style: TextStyle(
-                    fontSize: 80,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Digital-7'
-                ),)
-
-
-            ),
-            Container(
-                padding: EdgeInsets.only(top: 10,bottom: 30,left: 0, right: 0),
-                child:
-                Text((iCountShots).toString(), style: TextStyle(
-                    fontSize: 80,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Digital-7'
-                ),)
-
-            ),
-
-            Row(
-
-                children: <Widget>[
-                  Spacer(),
-
+                  }
+                  // else
+                  // {
+                  //   Fluttertoast.showToast(
+                  //       msg: "Please reset before starting another string",
                   //
-                  FlatButton(
-                    //color: Colors.blue,
-                      minWidth: 200,
-                      height: 50,
-                      color: Color(0xFF2C5D63),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(width: 2, color: Color(0xFF2C5D63)),),
-                      child: Text("View String", style: TextStyle(fontSize: 25, color: Theme.of(context).buttonColor )),
-                      onPressed: () {
-                        if(arrShots.length <= 1 ){
-                          print("Should get into alert");
-                          errorViewingStringDialog();
+                  //       toastLength: Toast.LENGTH_SHORT,
+                  //       gravity: ToastGravity.BOTTOM,
+                  //       timeInSecForIosWeb: 3,
+                  //       backgroundColor: Colors.red,
+                  //
+                  //       textColor: Colors.black,
+                  //       fontSize: 24.0
+                  //   );
+                  //   print("You need to reset");
+                  // }
 
+                }
 
+                //startispressed ? startstopwatch: null;
+              },
+              child: Text(buttonText,
+                  style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
+            )),
+        Container(
+            padding: EdgeInsets.only(top: 20, bottom: 0, left: 0, right: 0),
+            child: Text(
+              arrShots[arrShots.length - 1],
+              style: TextStyle(
+                  fontSize: 80,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Digital-7'),
+            )),
+        Container(
+            padding: EdgeInsets.only(top: 10, bottom: 30, left: 0, right: 0),
+            child: Text(
+              (iCountShots).toString(),
+              style: TextStyle(
+                  fontSize: 80,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Digital-7'),
+            )),
+        Row(children: <Widget>[
+          Spacer(),
 
-                        }
-                        else
-
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Splits(arrShots.toString())));
-                      }
-                  ),
-                  Spacer(),
-
-                ]
-
-            ),
-            Text(sTestingEar),
-
-
-          ],
-        )
-    );
-
+          //
+          FlatButton(
+              //color: Colors.blue,
+              minWidth: 200,
+              height: 50,
+              color: Color(0xFF2C5D63),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(width: 2, color: Color(0xFF2C5D63)),
+              ),
+              child: Text("View String",
+                  style: TextStyle(
+                      fontSize: 25, color: Theme.of(context).buttonColor)),
+              onPressed: () {
+                if (arrShots.length <= 1) {
+                  print("Should get into alert");
+                  errorViewingStringDialog();
+                } else
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Splits(arrShots.toString())));
+              }),
+          Spacer(),
+        ]),
+        Text(sTestingEar),
+      ],
+    ));
   }
 
   //No strings shot dialog
-  errorViewingStringDialog(){
-
+  errorViewingStringDialog() {
     Dialog dialog = new Dialog(
         backgroundColor: Themes.darkBackgoundColor,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-
           overflow: Overflow.visible,
           alignment: Alignment.topCenter,
           children: [
@@ -661,35 +618,40 @@ class _timerAreaState extends State<timerArea> {
               //this will affect the height of the dialog
               height: 140,
               child: Padding(
-
                 //play with top padding to make items fit
                 padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                 child: Column(
-
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("You have not shot a string.", style: TextStyle(color: Colors.white, fontSize: 20),),
-                    SizedBox(height: 20,),
+                    Text(
+                      "You have not shot a string.",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Expanded(
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius:
-                                BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
                                 color: Themes.darkButton2Color,
                               ),
                               height: 45,
                               child: Center(
                                 child: Text("Shoot String",
-                                    style: TextStyle(fontSize: 20,color: Colors.white)),
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white)),
                               ),
                             ),
                           ),
@@ -705,89 +667,74 @@ class _timerAreaState extends State<timerArea> {
                 child: CircleAvatar(
                     backgroundColor: Themes.darkButton2Color,
                     radius: 40,
-                    child: Image.asset("assets/Exclamation@3x.png", height: 53,)
-                )
-            ),
+                    child: Image.asset(
+                      "assets/Exclamation@3x.png",
+                      height: 53,
+                    ))),
           ],
-        )
-    );
+        ));
     showDialog(context: context, builder: (context) => dialog);
   }
-
 }
+
 //Gets user defaults for saving strings etc
-obtainUserDefaults() async{
+obtainUserDefaults() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   double dDelay = await prefs.getDouble('userDelay');
   bool bRandom = await prefs.getBool('randomDelay');
   double dSensitivity = await prefs.getDouble('userSensitivity');
   String sTone = await prefs.getString('userTone');
 
-  if (dDelay == null)
-  {
-    await prefs.setDouble('userDelay',3);
+  if (dDelay == null) {
+    await prefs.setDouble('userDelay', 3);
     dDelay = await prefs.getDouble('userDelay');
   }
 
-  if (bRandom == null){
+  if (bRandom == null) {
     await prefs.setBool('randomDelay', false);
     bRandom = false;
   }
 
-  if (dSensitivity == null)
-  {
-    await prefs.setDouble('userSensitivity',50.0);
+  if (dSensitivity == null) {
+    await prefs.setDouble('userSensitivity', 50.0);
     dSensitivity = await prefs.getDouble('userSensitivity');
   }
 
-  if (sTone == null){
+  if (sTone == null) {
     print("*******************************NO TONE SET");
-    await prefs.setString('userTone',"2100");
+    await prefs.setString('userTone', "2100");
     sTone = await prefs.getString('userTone');
-
   }
 
-  if(Platform.isIOS){
-    if (dSensitivity == 0.0){
+  if (Platform.isIOS) {
+    if (dSensitivity == 0.0) {
       timerSensitivity = 90;
-    } else
-    if (dSensitivity == 25.0){
+    } else if (dSensitivity == 25.0) {
       timerSensitivity = 85;
-    } else
-    if (dSensitivity == 50.0){
+    } else if (dSensitivity == 50.0) {
       timerSensitivity = 80;
-    } else
-    if (dSensitivity == 75.0){
+    } else if (dSensitivity == 75.0) {
       timerSensitivity = 75;
-    } else
-    if (dSensitivity == 100.0){
+    } else if (dSensitivity == 100.0) {
       timerSensitivity = 70.0;
-    }
-    else {
+    } else {
       print("No IOS User Defaults set");
     }
-
   }
-  if(Platform.isAndroid){
-    if (dSensitivity == 0.0){
+  if (Platform.isAndroid) {
+    if (dSensitivity == 0.0) {
       timerSensitivity = 75;
-    } else
-    if (dSensitivity == 25.0){
+    } else if (dSensitivity == 25.0) {
       timerSensitivity = 70;
-    } else
-    if (dSensitivity == 50.0){
+    } else if (dSensitivity == 50.0) {
       timerSensitivity = 65;
-    } else
-    if (dSensitivity == 75.0){
+    } else if (dSensitivity == 75.0) {
       timerSensitivity = 60;
-    } else
-    if (dSensitivity == 100.0){
+    } else if (dSensitivity == 100.0) {
       timerSensitivity = 55.0;
-    }
-    else {
+    } else {
       print("No ANDROID User Defaults set");
     }
-
   }
   double dTime;
   dTime = await double.parse(dDelay.toStringAsFixed(0));
