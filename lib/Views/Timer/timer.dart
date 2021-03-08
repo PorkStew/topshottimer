@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:isolate';
 import 'dart:math';
 import 'dart:io' as io;
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:audio_session/audio_session.dart';
+//import 'package:firebase_admob/firebase_admob.dart';
+
 
 //import 'package:dartins/dartins.dart';
 //import 'package:audioplayers/audio_cache.dart';
@@ -37,6 +40,7 @@ String timerTone;
 bool bRandomDelay;
 
 class TimerPage extends StatefulWidget {
+
   @override
   _TimerPageState createState() => _TimerPageState();
 }
@@ -44,11 +48,14 @@ class TimerPage extends StatefulWidget {
 class _TimerPageState extends State<TimerPage> {
   @override
   void initState() {
+
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         backgroundColor: Colors.white, body: Center(child: timerArea()));
   }
@@ -119,6 +126,23 @@ class _timerAreaState extends State<timerArea> {
   //Future playSoundFuture;
   AudioPlayer player = AudioPlayer();
 
+
+
+
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
+  AdmobBannerSize bannerSize;
+  AdmobBanner admobBanner;
+
+
+
+
+
+
+
+
+
+
+
   //Getting permissions to record
   Future permissions() async {
     Map<Permission, PermissionStatus> statuses = await [
@@ -127,23 +151,105 @@ class _timerAreaState extends State<timerArea> {
     print(statuses[Permission.microphone]);
   }
 
+
+  String getAdmobBannerAdUnitID() {
+
+    if (Platform.isIOS) {
+      return 'ca-app-pub-3940256099942544/2934735716';
+      //return 'ca-app-pub-3940256099942544~1458002511';
+    } else if (Platform.isAndroid) {
+      // return 'ca-app-pub-3940256099942544~3347511713';
+
+      //return 'ca-app-pub-7160847622040015/3865665573';
+    return 'ca-app-pub-3940256099942544/6300978111';
+    }
+    return null;
+  }
+
+  void requestTracking() async{
+    await Admob.requestTrackingAuthorization();
+  }
+
+  void showSnackBar(String content) {
+    scaffoldState.currentState.showSnackBar(
+      SnackBar(
+        content: Text(content),
+        duration: Duration(milliseconds: 1500),
+      ),
+    );
+  }
+
+  void handleEvent(
+      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+    switch (event) {
+      case AdmobAdEvent.loaded:
+        showSnackBar('New Admob $adType Ad loaded!');
+        break;
+      case AdmobAdEvent.opened:
+        showSnackBar('Admob $adType Ad opened!');
+        break;
+      case AdmobAdEvent.closed:
+        showSnackBar('Admob $adType Ad closed!');
+        break;
+      case AdmobAdEvent.failedToLoad:
+        showSnackBar('Admob $adType failed to load. :(');
+        break;
+      case AdmobAdEvent.rewarded:
+        showDialog(
+          context: scaffoldState.currentContext,
+          builder: (BuildContext context) {
+            return WillPopScope(
+              child: AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text('Reward callback fired. Thanks Andrew!'),
+                    Text('Type: ${args['type']}'),
+                    Text('Amount: ${args['amount']}'),
+                  ],
+                ),
+              ),
+              onWillPop: () async {
+                scaffoldState.currentState.hideCurrentSnackBar();
+                return true;
+              },
+            );
+          },
+        );
+        break;
+      default:
+    }
+  }
+
   @override
   void initState() {
+    Admob.initialize();
+    //Admob.initialize(testDeviceIds: ['3A8BB6BBCB816D25C3B3D23225A99ABF']);
     super.initState();
     arrShots.add("00:00:00");
+    // requestTracking();
+     WidgetsFlutterBinding.ensureInitialized();
 
     //Calls init for audio player
     _init();
     obtainUserDefaults();
     permissions();
+// Run this before displaying any ad.
+
+    bannerSize = AdmobBannerSize.BANNER;
+
+
+
     if (Platform.isIOS) {
       //sets session for ios
       _setSession();
+      print("*******************GOT TO IOS INITIALISATION********************");
     }
     if (Platform.isAndroid) {
       player.setVolume(0.0);
       player.seek(Duration(milliseconds: 0));
       player.play();
+
     }
 
     //start();
@@ -483,6 +589,7 @@ class _timerAreaState extends State<timerArea> {
   //Actual Widgets
   @override
   Widget build(BuildContext context) {
+
     var sliderValue = 0.0;
 
     return Scaffold(
@@ -491,6 +598,26 @@ class _timerAreaState extends State<timerArea> {
         Container(
           padding: EdgeInsets.only(top: 35, bottom: 15, left: 0, right: 0),
         ),
+        Container(
+          margin: EdgeInsets.only(bottom: 20.0),
+          child: AdmobBanner(
+            nonPersonalizedAds: true,
+            adUnitId: 'ca-app-pub-3940256099942544/2934735716',
+            adSize: bannerSize,
+            listener: (AdmobAdEvent event,
+                Map<String, dynamic> args) {
+              handleEvent(event, args, 'Banner');
+            },
+            onBannerCreated:
+                (AdmobBannerController controller) {
+              // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+              // Normally you don't need to worry about disposing this yourself, it's handled.
+              // If you need direct access to dispose, this is your guy!
+              // controller.dispose();
+            },
+          ),
+        ),
+
         Container(
             padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
             child: FlatButton(
@@ -572,34 +699,7 @@ class _timerAreaState extends State<timerArea> {
                   fontWeight: FontWeight.w700,
                   fontFamily: 'Digital-7'),
             )),
-        Row(children: <Widget>[
-          Spacer(),
 
-          //
-          FlatButton(
-              //color: Colors.blue,
-              minWidth: 200,
-              height: 50,
-              color: Color(0xFF2C5D63),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                side: BorderSide(width: 2, color: Color(0xFF2C5D63)),
-              ),
-              child: Text("View String",
-                  style: TextStyle(
-                      fontSize: 25, color: Theme.of(context).buttonColor)),
-              onPressed: () {
-                if (arrShots.length <= 1) {
-                  print("Should get into alert");
-                  errorViewingStringDialog();
-                } else
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Splits(arrShots.toString())));
-              }),
-          Spacer(),
-        ]),
         Text(sTestingEar),
       ],
     ));

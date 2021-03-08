@@ -58,6 +58,8 @@ dependencies:
   flutter_audio_recorder: 0.5.5
     #firebase_admob: ^0.11.0+1
     #firebase_admob: ^0.10.2
+    #firebase_admob: ^0.11.0+1
+  admob_flutter: ^1.0.1
 
 dev_dependencies:
   flutter_test:
