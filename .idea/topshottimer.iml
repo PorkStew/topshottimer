@@ -21,6 +21,12 @@
       <excludeFolder url="file://$MODULE_DIR$/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/admob_flutter/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/admob_flutter/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/admob_flutter/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/admob_flutter/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/admob_flutter/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/admob_flutter/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/audio_session/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/audio_session/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/audio_session/build" />

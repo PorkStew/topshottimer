@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1068103418160",
+    "project_id": "topshot-timer-52f47",
+    "storage_bucket": "topshot-timer-52f47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068103418160:android:84255f545039ea7a6208f5",
+        "android_client_info": {
+          "package_name": "com.simplx.topshottimer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1068103418160-ahqr27t1l5klqe19o07tf12inb1vo4cg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgc2BruEMMruRztnc8yuSlU98Erqr5GKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1068103418160-ahqr27t1l5klqe19o07tf12inb1vo4cg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1068103418160-3isle888dvd2dc06emakvhtuhh5lklot.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.simplx.topshottimer"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-7160847622040015~8571197345"
+    }
+  ],
+  "configuration_version": "1"
+}
