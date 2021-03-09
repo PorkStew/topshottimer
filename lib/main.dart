@@ -65,6 +65,8 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
     super.initState();
     //checks continually every 1 second for internet connection
     //to change delay go to Dart Packages/data_connection_checker-version/data_connection_checker.dart
+    //DataConnectionChecker().connectionStatus = true;
+    //DataConnectionStatus.connected;
     DataConnectionChecker().onStatusChange.listen((status) {
       switch (status) {
         //has internet connection
