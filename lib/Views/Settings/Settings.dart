@@ -153,6 +153,13 @@ class _SettingsState extends State<Settings> {
       avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
       avAudioSessionCategoryOptions:
           AVAudioSessionCategoryOptions.defaultToSpeaker,
+      androidAudioAttributes: const AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.speech,
+        flags: AndroidAudioFlags.none,
+        //usage: AndroidAudioUsage.voiceCommunication,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      androidWillPauseWhenDucked: true,
     ));
   }
 
