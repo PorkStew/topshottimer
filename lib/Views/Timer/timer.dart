@@ -246,6 +246,7 @@ class _timerAreaState extends State<timerArea> {
       print("*******************GOT TO IOS INITIALISATION********************");
     }
     if (Platform.isAndroid) {
+      _setSession();
       player.setVolume(0.0);
       player.seek(Duration(milliseconds: 0));
       player.play();
@@ -272,8 +273,10 @@ class _timerAreaState extends State<timerArea> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _recorder
-        .stop(); // animationController.dispose() instead of your controller.dispose
+    if( _currentStatus == RecordingStatus.Recording){
+      _recorder.stop();
+    }
+     // animationController.dispose() instead of your controller.dispose
   }
 
 //Checks if swatch is running and if so starts timer
@@ -340,9 +343,69 @@ class _timerAreaState extends State<timerArea> {
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration(
       avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
-      avAudioSessionCategoryOptions:
-          AVAudioSessionCategoryOptions.defaultToSpeaker,
+      avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.defaultToSpeaker,
+      // androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      // androidWillPauseWhenDucked: true,
+      androidAudioAttributes: const AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.speech,
+        flags: AndroidAudioFlags.none,
+        //usage: AndroidAudioUsage.voiceCommunication,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      androidWillPauseWhenDucked: true,
     ));
+    //_handleInterruptions(session);
+  }
+  void _handleInterruptions(AudioSession audioSession) {
+    // just_audio can handle interruptions for us, but we have disabled that in
+    // order to demonstrate manual configuration.
+    bool playInterrupted = false;
+    audioSession.becomingNoisyEventStream.listen((_) {
+      print('PAUSE');
+      player.pause();
+    });
+    player.playingStream.listen((playing) {
+      playInterrupted = false;
+      if (playing) {
+        audioSession.setActive(true);
+      }
+    });
+    audioSession.interruptionEventStream.listen((event) {
+      print('interruption begin: ${event.begin}');
+      print('interruption type: ${event.type}');
+      if (event.begin) {
+        switch (event.type) {
+          case AudioInterruptionType.duck:
+            if (audioSession.androidAudioAttributes.usage ==
+                AndroidAudioUsage.game) {
+              player.setVolume(player.volume / 2);
+            }
+            playInterrupted = false;
+            break;
+          case AudioInterruptionType.pause:
+          case AudioInterruptionType.unknown:
+            if (player.playing) {
+              player.pause();
+              playInterrupted = true;
+            }
+            break;
+        }
+      } else {
+        switch (event.type) {
+          case AudioInterruptionType.duck:
+            player.setVolume(min(1.0, player.volume * 2));
+            playInterrupted = false;
+            break;
+          case AudioInterruptionType.pause:
+            if (playInterrupted) player.play();
+            playInterrupted = false;
+            break;
+          case AudioInterruptionType.unknown:
+            playInterrupted = false;
+            break;
+        }
+      }
+    });
   }
 
   //Starts stop watch and checks various flags have been reset and stopped
@@ -378,6 +441,8 @@ class _timerAreaState extends State<timerArea> {
         print("*************************THIS IS IOS***********************");
         var duration =
             await player.setAsset("assets/audios/" + timerTone + ".mp3");
+            player.setVolume(1.0);
+
       }
 
       //player.pause();
@@ -419,6 +484,7 @@ class _timerAreaState extends State<timerArea> {
 
       print("Before Play");
       player.setVolume(1.0);
+      //player.setAndroidAudioAttributes();
       player.seek(Duration(milliseconds: 0));
       player.play();
       //player.seek(Duration(milliseconds: 0));
@@ -426,6 +492,7 @@ class _timerAreaState extends State<timerArea> {
       print("After Play");
 
       Timer(Duration(milliseconds: 700), () {
+        print("About to start recording");
         _start();
       });
       //player.dispose();
@@ -441,7 +508,9 @@ class _timerAreaState extends State<timerArea> {
       if (Platform.isIOS) {
         _setSession();
       }
-
+      // if (Platform.isAndroid) {
+      //   _setSession();
+      // }
       print("*********************" + arrShots[arrShots.length - 1]);
       bstop = false;
     }
@@ -636,7 +705,7 @@ class _timerAreaState extends State<timerArea> {
                     swatch.reset();
                     //stoptimer();
                     //stopRecorder();
-                    stoptimer();
+                    //stoptimer();
                     reset();
                     //startstopwatch();
                     didReset = true;
