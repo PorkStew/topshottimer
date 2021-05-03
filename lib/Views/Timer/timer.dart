@@ -6,7 +6,6 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:audio_session/audio_session.dart';
 //import 'package:firebase_admob/firebase_admob.dart';
 
-
 //import 'package:dartins/dartins.dart';
 //import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +39,6 @@ String timerTone;
 bool bRandomDelay;
 
 class TimerPage extends StatefulWidget {
-
   @override
   _TimerPageState createState() => _TimerPageState();
 }
@@ -48,14 +46,11 @@ class TimerPage extends StatefulWidget {
 class _TimerPageState extends State<TimerPage> {
   @override
   void initState() {
-
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         backgroundColor: Colors.white, body: Center(child: timerArea()));
   }
@@ -126,22 +121,9 @@ class _timerAreaState extends State<timerArea> {
   //Future playSoundFuture;
   AudioPlayer player = AudioPlayer();
 
-
-
-
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
   AdmobBannerSize bannerSize;
   AdmobBanner admobBanner;
-
-
-
-
-
-
-
-
-
-
 
   //Getting permissions to record
   Future permissions() async {
@@ -151,9 +133,7 @@ class _timerAreaState extends State<timerArea> {
     print(statuses[Permission.microphone]);
   }
 
-
   String getAdmobBannerAdUnitID() {
-
     if (Platform.isIOS) {
       return 'ca-app-pub-3940256099942544/2934735716';
       //return 'ca-app-pub-3940256099942544~1458002511';
@@ -161,12 +141,12 @@ class _timerAreaState extends State<timerArea> {
       // return 'ca-app-pub-3940256099942544~3347511713';
 
       //return 'ca-app-pub-7160847622040015/3865665573';
-    return 'ca-app-pub-3940256099942544/6300978111';
+      return 'ca-app-pub-3940256099942544/6300978111';
     }
     return null;
   }
 
-  void requestTracking() async{
+  void requestTracking() async {
     await Admob.requestTrackingAuthorization();
   }
 
@@ -228,7 +208,7 @@ class _timerAreaState extends State<timerArea> {
     super.initState();
     arrShots.add("00:00:00");
     // requestTracking();
-     WidgetsFlutterBinding.ensureInitialized();
+    WidgetsFlutterBinding.ensureInitialized();
 
     //Calls init for audio player
     _init();
@@ -237,8 +217,6 @@ class _timerAreaState extends State<timerArea> {
 // Run this before displaying any ad.
 
     bannerSize = AdmobBannerSize.BANNER;
-
-
 
     if (Platform.isIOS) {
       //sets session for ios
@@ -250,7 +228,6 @@ class _timerAreaState extends State<timerArea> {
       player.setVolume(0.0);
       player.seek(Duration(milliseconds: 0));
       player.play();
-
     }
 
     //start();
@@ -273,10 +250,10 @@ class _timerAreaState extends State<timerArea> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    if( _currentStatus == RecordingStatus.Recording){
+    if (_currentStatus == RecordingStatus.Recording) {
       _recorder.stop();
     }
-     // animationController.dispose() instead of your controller.dispose
+    // animationController.dispose() instead of your controller.dispose
   }
 
 //Checks if swatch is running and if so starts timer
@@ -343,7 +320,8 @@ class _timerAreaState extends State<timerArea> {
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration(
       avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
-      avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.defaultToSpeaker,
+      avAudioSessionCategoryOptions:
+          AVAudioSessionCategoryOptions.defaultToSpeaker,
       // androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
       // androidWillPauseWhenDucked: true,
       androidAudioAttributes: const AndroidAudioAttributes(
@@ -356,6 +334,7 @@ class _timerAreaState extends State<timerArea> {
     ));
     //_handleInterruptions(session);
   }
+
   void _handleInterruptions(AudioSession audioSession) {
     // just_audio can handle interruptions for us, but we have disabled that in
     // order to demonstrate manual configuration.
@@ -441,8 +420,7 @@ class _timerAreaState extends State<timerArea> {
         print("*************************THIS IS IOS***********************");
         var duration =
             await player.setAsset("assets/audios/" + timerTone + ".mp3");
-            player.setVolume(1.0);
-
+        player.setVolume(1.0);
       }
 
       //player.pause();
@@ -658,7 +636,6 @@ class _timerAreaState extends State<timerArea> {
   //Actual Widgets
   @override
   Widget build(BuildContext context) {
-
     var sliderValue = 0.0;
 
     return Scaffold(
@@ -673,12 +650,10 @@ class _timerAreaState extends State<timerArea> {
             nonPersonalizedAds: true,
             adUnitId: 'ca-app-pub-3940256099942544/2934735716',
             adSize: bannerSize,
-            listener: (AdmobAdEvent event,
-                Map<String, dynamic> args) {
+            listener: (AdmobAdEvent event, Map<String, dynamic> args) {
               handleEvent(event, args, 'Banner');
             },
-            onBannerCreated:
-                (AdmobBannerController controller) {
+            onBannerCreated: (AdmobBannerController controller) {
               // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
               // Normally you don't need to worry about disposing this yourself, it's handled.
               // If you need direct access to dispose, this is your guy!
@@ -686,9 +661,8 @@ class _timerAreaState extends State<timerArea> {
             },
           ),
         ),
-
         Container(
-            padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
+            //padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
             child: FlatButton(
               //color: btnColor,
 
@@ -760,7 +734,7 @@ class _timerAreaState extends State<timerArea> {
                   fontFamily: 'Digital-7'),
             )),
         Container(
-            padding: EdgeInsets.only(top: 10, bottom: 30, left: 0, right: 0),
+            padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
             child: Text(
               (iCountShots).toString(),
               style: TextStyle(
@@ -768,8 +742,33 @@ class _timerAreaState extends State<timerArea> {
                   fontWeight: FontWeight.w700,
                   fontFamily: 'Digital-7'),
             )),
-
-        Text(sTestingEar),
+        Row(children: <Widget>[
+          Spacer(),
+          FlatButton(
+              //color: Colors.blue,
+              minWidth: 200,
+              height: 50,
+              color: Color(0xFF2C5D63),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(width: 2, color: Color(0xFF2C5D63)),
+              ),
+              child: Text("View String",
+                  style: TextStyle(
+                      fontSize: 25, color: Theme.of(context).buttonColor)),
+              onPressed: () {
+                if (arrShots.length <= 1) {
+                  print("Should get into alert");
+                  errorViewingStringDialog();
+                } else
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Splits(arrShots.toString())));
+              }),
+          Spacer(),
+        ]),
+        //Text(sTestingEar),
       ],
     ));
   }
