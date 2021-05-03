@@ -769,6 +769,7 @@ class _timerAreaState extends State<timerArea> {
                   fontFamily: 'Digital-7'),
             )),
 
+
         Text(sTestingEar),
       ],
     ));
