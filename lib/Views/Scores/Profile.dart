@@ -16,6 +16,7 @@ class _ProfileState extends State<Profile> {
   //Decleration of future variable values
   Future fUSerID;
   Future fDataRetrieved;
+  int iLength;
 
   String sID;
 
@@ -57,11 +58,12 @@ class _ProfileState extends State<Profile> {
     print("before res.body");
 
     List<dynamic> data = json.decode(res.body);
-    int iLength = data.length;
+    iLength = data.length;
     print("Length of list: " + iLength.toString());
     var id = data;
     print(id);
     print(id[0]['userID']);
+
 
     //Populate all arrays
     for (int iPopulate = 0; iPopulate <= iLength - 1; iPopulate++) {
@@ -120,10 +122,30 @@ class _ProfileState extends State<Profile> {
               );
             case ConnectionState.done:
               if (snapshot.hasError) {
-                return Text('');
+                if(iLength == 0){
+                  print("*****No records found in the DB");
+                }
+                return Column(
+
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(top: 70, left: 15),
+                        child: Column(
+                          children: [
+                            Text("No strings found." , style: TextStyle(fontSize: 17, color: Themes.darkButton2Color), ),
+                          ],
+                        ),
+                      )
+
+                    ],
+                  );
+
               } else {
+
                 print("Got into widget");
                 retrieveData(sID);
+
+
                 return Column(children: <Widget>[
                   Flexible(
                     child: new ListView.builder(
@@ -131,6 +153,7 @@ class _ProfileState extends State<Profile> {
                       shrinkWrap: true,
                       itemCount: arrStringID.length,
                       itemBuilder: (BuildContext context, int index) {
+
                         return InkWell(
                             onTap: () {
                               return Navigator.push(
