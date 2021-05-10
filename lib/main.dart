@@ -17,6 +17,7 @@ import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get/get.dart';
 import 'package:topshottimer/global.dart';
+import 'package:topshottimer/pricing.dart';
 
 //TODO remove prints when beta and release
 void main() {
@@ -220,7 +221,7 @@ checkUserInformation(context) async {
         _hashedPassword != null &&
         _verified != null) {
       var url = 'https://www.topshottimer.co.za/login.php';
-      var res = await post(Uri.encodeFull(url), headers: {
+      var res = await post(Uri.parse(url), headers: {
         "Accept": "application/jason"
       }, body: {
         //get this information from user shared preferences

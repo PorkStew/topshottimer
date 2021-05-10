@@ -65,7 +65,20 @@ class _pricingState extends State<pricing> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Icon(Icons.check, color: Themes.darkButton2Color, size: 34,),
-                    Text('Customizable Timer Tone',
+                    Text('Customisable Timer Tone',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 17,
+                          fontFamily: 'Montserrat-Regular',
+                          letterSpacing: 0.2
+                      ),),
+                  ],
+                ),
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Icon(Icons.check, color: Themes.darkButton2Color, size: 34,),
+                    Text('Changeable Timer Delay',
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 17,

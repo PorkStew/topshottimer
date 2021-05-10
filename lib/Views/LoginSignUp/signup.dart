@@ -8,7 +8,7 @@ import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:topshottimer/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:basic_utils/basic_utils.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:topshottimer/global.dart';
@@ -360,8 +360,8 @@ class SignUpState extends  State<SignUp> {
     //inserts the user data and receives a true or false based on if the user already is in db or not
     try{
       var url = 'https://www.topshottimer.co.za/create.php';
-      var res = await http.post(
-          Uri.encodeFull(url), headers: {"Accept": "application/jason"},
+      var res = await post(
+          Uri.parse(url), headers: {"Accept": "application/jason"},
           body: {
             "firstName": firstName,
             "lastName": lastName,
