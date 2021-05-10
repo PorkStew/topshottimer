@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/LoginSignUp/signup.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
@@ -284,7 +284,7 @@ class LoginState extends State<Login> {
 
     var url = 'https://www.topshottimer.co.za/login.php';
     try {
-      var res = await http.post(Uri.encodeFull(url), headers: {
+      var res = await post(Uri.parse(url), headers: {
         "Accept": "application/jason"
       }, body: {
         //get this information from user defaults
