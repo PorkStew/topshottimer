@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
@@ -203,8 +203,8 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
     print(email);
     try{
       var url = 'https://authentication.topshottimer.co.za/authentication/resetPasswordMailer.php';
-      var res = await http.post(
-          Uri.encodeFull(url), headers: {"Accept": "application/jason"},
+      var res = await post(
+          Uri.parse(url), headers: {"Accept": "application/jason"},
           body: {
             "emailAddress": email,
           }

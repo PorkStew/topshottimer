@@ -6,9 +6,9 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 import 'package:topshottimer/Views/LoginSignUp/signup.dart';
-import 'package:topshottimer/Views/PageSelector.dart' as pageSelector;
-import 'package:topshottimer/Views/LoginSignUp/login.dart' as login;
-import 'package:http/http.dart' as http;
+import 'package:topshottimer/Views/PageSelector.dart';
+import 'package:topshottimer/Views/LoginSignUp/login.dart';
+import 'package:http/http.dart';
 import 'package:topshottimer/global.dart';
 import 'package:topshottimer/loading.dart';
 import 'package:get/get.dart';
@@ -134,7 +134,7 @@ class _verifyEmailState extends State<verifyEmail> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    login.Login()));
+                                                    Login()));
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -237,11 +237,11 @@ class _verifyEmailState extends State<verifyEmail> {
     String verified = await prefs.getString('verify');
     if (verified == 'true') {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => pageSelector.pageSelector()));
+          MaterialPageRoute(builder: (context) => pageSelector()));
     }
     try {
       var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
-      var res = await http.post(Uri.encodeFull(url), headers: {
+      var res = await post(Uri.parse(url), headers: {
         "Accept": "application/jason"
       }, body: {
         //get this information from user defaults
@@ -257,7 +257,7 @@ class _verifyEmailState extends State<verifyEmail> {
         _timer.cancel();
         super.dispose();
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => login.Login()));
+            context, MaterialPageRoute(builder: (context) => Login()));
       }
       //is a user but they haven't verified their email address
       else if (status == "non-verified") {
@@ -287,7 +287,7 @@ class _verifyEmailState extends State<verifyEmail> {
     try {
       var url =
           'https://authentication.topshottimer.co.za/authentication/createAccountVerifyEmailMailer.php';
-      var res = await http.post(Uri.encodeFull(url), headers: {
+      var res = await post(Uri.parse(url), headers: {
         "Accept": "application/jason"
       }, body: {
         //TODO uncomment when testing is complete
