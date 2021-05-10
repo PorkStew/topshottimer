@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:topshottimer/Views/Scores/viewSplits.dart';
 
 import '../../Themes.dart';
@@ -47,7 +47,7 @@ class _ProfileState extends State<Profile> {
   _getID() async {
     sID = await userID();
     var url = 'https://www.topshottimer.co.za/viewStrings.php';
-    var res = await http.post(Uri.encodeFull(url), headers: {
+    var res = await post(Uri.parse(url), headers: {
       "Accept": "application/jason"
     }, body: {
       //get this information from user defaults
@@ -218,7 +218,7 @@ class _ProfileState extends State<Profile> {
   //Retrieve data method to retrieve data from the database
   Future retrieveData(String sID) async {
     var url = 'https://www.topshottimer.co.za/viewStrings.php';
-    var res = await http.post(Uri.encodeFull(url), headers: {
+    var res = await post(Uri.parse(url), headers: {
       "Accept": "application/jason"
     }, body: {
       //get this information from user defaults

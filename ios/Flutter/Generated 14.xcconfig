@@ -1,0 +1,15 @@
+// This is a generated file; do not edit or check into version control.
+FLUTTER_ROOT=/Users/donovankruger/tools/flutter
+FLUTTER_APPLICATION_PATH=/Users/donovankruger/Documents/TopShot Timer Repo
+COCOAPODS_PARALLEL_CODE_SIGN=true
+FLUTTER_TARGET=/Users/donovankruger/Documents/TopShot Timer Repo/lib/main.dart
+FLUTTER_BUILD_DIR=build
+SYMROOT=${SOURCE_ROOT}/../build/ios
+FLUTTER_BUILD_NAME=1.0.1
+FLUTTER_BUILD_NUMBER=6
+EXCLUDED_ARCHS[sdk=iphonesimulator*]=arm64 i386
+DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ==
+DART_OBFUSCATION=false
+TRACK_WIDGET_CREATION=true
+TREE_SHAKE_ICONS=false
+PACKAGE_CONFIG=/Users/donovankruger/Documents/TopShot Timer Repo/.dart_tool/package_config.json

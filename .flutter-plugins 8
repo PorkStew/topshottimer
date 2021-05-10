@@ -1,0 +1,24 @@
+# This is a generated file; do not edit or check into version control.
+admob_flutter=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/admob_flutter-1.0.1/
+audio_session=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/audio_session-0.0.11/
+connectivity=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/connectivity-2.0.2/
+connectivity_for_web=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/connectivity_for_web-0.3.1+4/
+connectivity_macos=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/connectivity_macos-0.1.0+7/
+flutter_audio_recorder=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/flutter_audio_recorder-0.5.5/
+just_audio=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/just_audio-0.5.7/
+just_audio_web=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/just_audio_web-0.1.1/
+path_provider=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.28/
+path_provider_linux=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-0.0.1+2/
+path_provider_macos=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4+8/
+path_provider_windows=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-0.0.5/
+permission_handler=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/permission_handler-5.1.0+2/
+shared_preferences=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.12+4/
+shared_preferences_linux=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-0.0.2+4/
+shared_preferences_macos=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-0.0.1+11/
+shared_preferences_web=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-0.1.2+7/
+shared_preferences_windows=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-0.0.2+3/
+url_launcher=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.7.10/
+url_launcher_linux=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/url_launcher_linux-0.0.1+4/
+url_launcher_macos=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/url_launcher_macos-0.0.1+9/
+url_launcher_web=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/url_launcher_web-0.1.5+3/
+url_launcher_windows=/Users/donovankruger/.pub-cache/hosted/pub.dartlang.org/url_launcher_windows-0.0.1+3/

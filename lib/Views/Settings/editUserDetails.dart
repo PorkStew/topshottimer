@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/main.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:basic_utils/basic_utils.dart';
 
 class editUserDetails extends StatefulWidget {
@@ -557,7 +557,7 @@ resetPassword(String email) async {
   try {
     var url =
         'https://authentication.topshottimer.co.za/authentication/resetPasswordMailer.php';
-    var res = await http.post(Uri.encodeFull(url), headers: {
+    var res = await post(Uri.parse(url), headers: {
       "Accept": "application/jason"
     }, body: {
       "emailAddress": email,
@@ -572,7 +572,7 @@ resetPassword(String email) async {
 updateDetails(String name, String surname, String email) async {
   try {
     var url = 'https://www.topshottimer.co.za/updateUserDetails.php';
-    var res = await http.post(Uri.encodeFull(url), headers: {
+    var res = await post(Uri.parse(url), headers: {
       "Accept": "application/jason"
     }, body: {
       "firstName": name,

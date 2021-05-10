@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Themes.dart';
@@ -43,7 +43,7 @@ class viewSplitsState extends State<viewSplits> {
   _getID() async {
     sID = await userID();
     var url = 'https://www.topshottimer.co.za/viewSplits.php';
-    var res = await http.post(Uri.encodeFull(url), headers: {
+    var res = await post(Uri.parse(url), headers: {
       "Accept": "application/jason"
     }, body: {
       //get this information from user defaults
@@ -219,7 +219,7 @@ class viewSplitsState extends State<viewSplits> {
   //Delete statement if the user chooses to delete a specific string
   deleteStringSplits() async {
     var url = 'https://www.topshottimer.co.za/deleteStringSplits.php';
-    var res = await http.post(Uri.encodeFull(url), headers: {
+    var res = await post(Uri.parse(url), headers: {
       "Accept": "application/jason"
     }, body: {
       //get this information from user defaults
