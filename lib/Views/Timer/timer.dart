@@ -19,6 +19,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/Timer/splits.dart';
+import 'package:topshottimer/pricing.dart';
 import 'dart:io' show Platform;
 import 'package:path_provider/path_provider.dart';
 import 'package:file/local.dart';
@@ -477,6 +478,23 @@ class _timerAreaState extends State<timerArea> {
       iCountStart++;
       bResetOnStart = false;
     } else if (bstop == true) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int getCounter = prefs.getInt('stopCounter');
+
+      if(getCounter<10){
+        print("*********Counter not reached 10. Adding 1 to counter");
+        print("*********Counter Value is: " + getCounter.toString());
+        setCounter();
+      }
+      else{
+        print("*********Will display pricing guide now");
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('stopCounter', 0);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => pricing()));
+      }
       startispressed = true;
       isRunning = false;
       didReset = false;
@@ -909,4 +927,12 @@ obtainUserDefaults() async {
   timerDelay = dDelay.round();
   timerTone = sTone;
   bRandomDelay = bRandom;
+}
+
+
+
+setCounter() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  int getCounter = prefs.getInt('stopCounter');
+  await prefs.setInt('stopCounter', getCounter+1);
 }
