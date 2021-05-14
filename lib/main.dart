@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/Scores/Profile.dart';
 import 'package:topshottimer/Views/Settings/Settings.dart';
@@ -56,7 +58,7 @@ class CheckUserDetails extends StatefulWidget {
 
 class _CheckUserDetailsState extends State<CheckUserDetails> {
   //variable declaration
-  bool _loading = true;
+  bool _loading = false;
   bool _hasConnection = false;
   Future _noInternetConnectionDialogFuture;
   final _controller = Get.put(Controller());
@@ -98,6 +100,7 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
     _loggedInBefore = await offlineProcess();
     //if they have logged in before show pageSelector.dart
     if (_loggedInBefore != false) {
+
       Get.off(pageSelector());
     } else if (Get.currentRoute == "/Login") {
     } else {
@@ -266,7 +269,25 @@ checkUserInformation(context) async {
         await prefs.setString('lastName', _lastName);
         await prefs.setBool('loginBefore', true);
         print("MAIN.DART END*******************************");
-        Get.off(pageSelector());
+        print("REVENUECAT: setting up payment keys and user id asignment");
+        //access RevenuCat with key and use the users id to do so
+        await Purchases.setDebugLogsEnabled(true);
+        await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: _id);
+        try {
+          PurchaserInfo purchaserInfo = await Purchases.getPurchaserInfo();
+          if (purchaserInfo.entitlements.all["premium_features"].isActive) {
+            print("REVENUCAT: has a subscription");
+            Get.off(pageSelector());
+          } else{
+            print("REVENUCAT: NO subscription");
+            Get.off(pricing());
+          }
+        } on PlatformException catch (e) {
+          // Error fetching purchaser info
+        }
+        //Get.off(pageSelector());
+        print("show pricing");
+
       }
       //no shared preference data is found go to login
     } else {

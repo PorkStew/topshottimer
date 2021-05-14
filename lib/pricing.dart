@@ -1,9 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'loading.dart';
 import 'package:get/get.dart';
 import 'package:topshottimer/global.dart';
 import 'package:topshottimer/Themes.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 class pricing extends StatefulWidget {
   @override
   _pricingState createState() => _pricingState();
@@ -208,7 +211,7 @@ class _pricingState extends State<pricing> {
                 height: 60,
                 child: Obx(() => ElevatedButton(
                   onPressed: _controller.btnState.value
-                      ? () => null //proccess when bbutton is clicked here!
+                      ? () => subscriptionProccess() //proccess when bbutton is clicked here!
                       : null,
                   child: Text(
                     'Go Premium',
@@ -247,3 +250,39 @@ class _pricingState extends State<pricing> {
     );
   }
 }
+
+subscriptionProccess() async{
+  print("inside subscription proccess");
+  try {
+    Offerings offerings = await Purchases.getOfferings();
+    if (offerings.current != null) {
+      // Display current offering with offerings.current
+      Package package = offerings.current.monthly;
+      try {
+        PurchaserInfo purchaserInfo = await Purchases.purchasePackage(package);
+        var isPro = purchaserInfo.entitlements.all["premium_features"].isActive;
+        if (isPro) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String _email = prefs.getString('email');
+          String _lastName = prefs.getString('lastName');
+          String _firstName = prefs.getString('firstName');
+          Purchases.setAttributes({ "email" : _email, "displayName" : _lastName + " " + _firstName});
+          // Unlock that great "pro" content
+          print("REVENUCAT: unlock pro content");
+        }
+      } on PlatformException catch (e) {
+        var errorCode = PurchasesErrorHelper.getErrorCode(e);
+        if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
+          //showError(e);
+          print(e);
+          print("REVENUCAT: error");
+        }
+      }
+    }
+  } on PlatformException catch (e) {
+    // optional error handling
+
+  }
+
+}
+
