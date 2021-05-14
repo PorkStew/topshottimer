@@ -14,6 +14,7 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		A0B4C787C9EED2A692A6DE10 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90A84AD121753CB1DADAF6FA /* Pods_Runner.framework */; };
+		F6F3A017264BB75A004E584C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6F3A016264BB75A004E584C /* StoreKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +49,7 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F6075CE025EFA6E6009856F3 /* RunnerProfile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerProfile.entitlements; sourceTree = "<group>"; };
+		F6F3A016264BB75A004E584C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0B4C787C9EED2A692A6DE10 /* Pods_Runner.framework in Frameworks */,
+				F6F3A017264BB75A004E584C /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +114,7 @@
 		BE81D2C7FC8C8193C61AD04C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F6F3A016264BB75A004E584C /* StoreKit.framework */,
 				90A84AD121753CB1DADAF6FA /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
