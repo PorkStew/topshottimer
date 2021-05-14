@@ -341,6 +341,7 @@ class LoginState extends State<Login> {
   //takes the users information and stores it in shared preferences
   saveUserInformation(var _id, String _email, String _hashedPassword, String _status, String _firstName, String _lastName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('stopCounter', 0);
     await prefs.setString('id', _id);
     await prefs.setString('email', _email);
     await prefs.setString('password', _hashedPassword);

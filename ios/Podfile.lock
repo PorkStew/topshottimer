@@ -44,6 +44,8 @@ PODS:
   - "GoogleUtilities/NSData+zlib (7.4.1)"
   - GoogleUtilities/Reachability (7.4.1):
     - GoogleUtilities/Logger
+  - in_app_purchase (0.0.1):
+    - Flutter
   - just_audio (0.0.1):
     - Flutter
   - nanopb (2.30908.0):
@@ -76,6 +78,7 @@ DEPENDENCIES:
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - Flutter (from `Flutter`)
   - flutter_audio_recorder (from `.symlinks/plugins/flutter_audio_recorder/ios`)
+  - in_app_purchase (from `.symlinks/plugins/in_app_purchase/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -107,6 +110,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_audio_recorder:
     :path: ".symlinks/plugins/flutter_audio_recorder/ios"
+  in_app_purchase:
+    :path: ".symlinks/plugins/in_app_purchase/ios"
   just_audio:
     :path: ".symlinks/plugins/just_audio/ios"
   path_provider:
