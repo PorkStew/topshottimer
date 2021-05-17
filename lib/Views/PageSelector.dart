@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:noise_meter/noise_meter.dart';
 import 'Timer/timer.dart';
 import 'Scores/Profile.dart';
 import 'Settings/Settings.dart';
+import 'package:topshottimer/pricing.dart';
+
 
 class pageSelector extends StatefulWidget {
   @override
@@ -13,6 +16,7 @@ class pageSelector extends StatefulWidget {
 
 class _pageSelectorState extends State<pageSelector> {
 
+  bool paidMember = false;
   int _selectedPage = 0;
   final _pageOptions = [
     TimerPage(),
@@ -33,6 +37,17 @@ class _pageSelectorState extends State<pageSelector> {
         onTap: (int index) {
           setState(() {
             _selectedPage = index;
+
+            //Checks if user is paid when selecting the scores page
+            if (paidMember == false && _selectedPage == 1 ){
+              _selectedPage = 0;
+              Get.to(pricing(), arguments: {'pop': true});
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => pricing()));
+            }
+
           });
 
         },
