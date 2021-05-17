@@ -272,17 +272,17 @@ checkUserInformation(context) async {
         print("REVENUECAT: setting up payment keys and user id asignment");
         //access RevenuCat with key and use the users id to do so
         await Purchases.setDebugLogsEnabled(true);
-        await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: _id);
+        await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: '26');
         try {
           PurchaserInfo purchaserInfo = await Purchases.getPurchaserInfo();
           if (purchaserInfo.entitlements.all["premium_features"].isActive) {
             print("REVENUCAT: has a subscription");
             Get.off(pageSelector());
-          } else{
-            print("REVENUCAT: NO subscription");
-            Get.off(pricing());
           }
-        } on PlatformException catch (e) {
+        } catch (e) {
+          print("REVENUCAT: NO subscription");
+          Get.off(pricing());
+          print("******Caught the isactive if statement");
           // Error fetching purchaser info
         }
         //Get.off(pageSelector());

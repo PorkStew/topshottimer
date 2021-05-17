@@ -15,6 +15,8 @@ import 'package:topshottimer/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:topshottimer/global.dart';
 
+import '../../pricing.dart';
+
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();
@@ -145,6 +147,8 @@ class _SettingsState extends State<Settings> {
   ];
   String timerSensitivity = 'Normal';
   bool isSwitched = false;
+  bool paidMember = false;
+
 
   //Set Session method to set the session to play sounds
   _setSession() async {
@@ -439,9 +443,17 @@ class _SettingsState extends State<Settings> {
                                   value: isSwitched,
                                   onChanged: (value) {
                                     setState(() {
-                                      isSwitched = value;
-                                      print(value);
-                                      setRandomDelay(isSwitched);
+
+                                      //Checks if it is a member and if a member then you are allowed to change sounds
+                                      if (paidMember == false){
+                                        Get.to(pricing(), arguments: {'pop': true});
+                                      }
+                                      else{
+                                        isSwitched = value;
+                                        print(value);
+                                        setRandomDelay(isSwitched);
+                                      }
+
                                     });
                                   },
                                   activeTrackColor: Themes.darkButton1Color,
@@ -508,50 +520,59 @@ class _SettingsState extends State<Settings> {
                                     ],
                                     onChanged: (value) {
                                       setState(() {
-                                        userToneValue = value;
-                                        dropDownValue = value;
-                                        print("Selected dropdown value: " +
-                                            value.toString());
-                                        String sAudioString;
-                                        if (value == 1) {
-                                          sAudioString = "1500";
-                                        } else if (value == 2) {
-                                          sAudioString = "1700";
-                                        } else if (value == 3) {
-                                          sAudioString = "1900";
-                                        } else if (value == 4) {
-                                          sAudioString = "2100";
-                                        } else if (value == 5) {
-                                          sAudioString = "2300";
-                                        } else if (value == 6) {
-                                          sAudioString = "2500";
-                                        } else if (value == 7) {
-                                          sAudioString = "2700";
-                                        } else if (value == 8) {
-                                          sAudioString = "2900";
-                                        } else if (value == 9) {
-                                          sAudioString = "3100";
-                                        } else if (value == 10) {
-                                          sAudioString = "3300";
-                                        }
-                                        if (Platform.isIOS) {
-                                          _setSession();
-                                        }
-                                        player.stop();
-                                        var duration = player.setAsset(
-                                            "assets/audios/" +
-                                                sAudioString +
-                                                ".mp3");
-                                        player.setVolume(1.0);
-                                        player.seek(Duration(milliseconds: 0));
-                                        player.play();
+                                        if (paidMember == false){
+                                          Get.to(pricing(), arguments: {'pop': true});
+                                        } else
+                                        {
+                                          userToneValue = value;
+                                          dropDownValue = value;
+                                          print("Selected dropdown value: " +
+                                              value.toString());
+                                          String sAudioString;
+                                          if (value == 1) {
+                                            sAudioString = "1500";
+                                          } else if (value == 2) {
+                                            sAudioString = "1700";
+                                          } else if (value == 3) {
+                                            sAudioString = "1900";
+                                          } else if (value == 4) {
+                                            sAudioString = "2100";
+                                          } else if (value == 5) {
+                                            sAudioString = "2300";
+                                          } else if (value == 6) {
+                                            sAudioString = "2500";
+                                          } else if (value == 7) {
+                                            sAudioString = "2700";
+                                          } else if (value == 8) {
+                                            sAudioString = "2900";
+                                          } else if (value == 9) {
+                                            sAudioString = "3100";
+                                          } else if (value == 10) {
+                                            sAudioString = "3300";
+                                          }
+                                          if (Platform.isIOS) {
+                                            _setSession();
+                                          }
+                                          player.stop();
+                                          var duration = player.setAsset(
+                                              "assets/audios/" +
+                                                  sAudioString +
+                                                  ".mp3");
+                                          player.setVolume(1.0);
+                                          player.seek(Duration(milliseconds: 0));
+                                          player.play();
 
-                                        if (Platform.isIOS) {
-                                          _setSession();
+                                          if (Platform.isIOS) {
+                                            _setSession();
+                                          }
+
+                                          setUserTone(sAudioString);
                                         }
 
-                                        setUserTone(sAudioString);
-                                      });
+
+                                      }
+
+                                      );
                                     }),
                               ),
                               Container(

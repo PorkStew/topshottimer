@@ -240,6 +240,7 @@ class _pricingState extends State<pricing> {
                       color: Colors.grey),
                   recognizer: new TapGestureRecognizer()
                     ..onTap = () {
+
                       print("no thanks");
                     }
               ),
