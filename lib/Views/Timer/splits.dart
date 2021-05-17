@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/global.dart';
 
 import '../../Themes.dart';
+import '../../pricing.dart';
 import '../PageSelector.dart';
 
 String userGetID;
@@ -314,8 +315,15 @@ class SplitsState extends State<Splits> {
                                 print("here is my input from the dialog");
                                 print(_StringName.text);
                                 sendData(_StringName.text, 10, 10.2);
-                                Navigator.pushReplacementNamed(
-                                    context, '/PageSelector');
+                                bool paidMember = false;
+                                if (paidMember == false){
+                                  Get.to(pricing(), arguments: {'pop': true});
+                                }
+                                else{
+                                  Navigator.pushReplacementNamed(
+                                      context, '/PageSelector');
+                                }
+
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -360,6 +368,5 @@ class SplitsState extends State<Splits> {
 obtainUserDefaults() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String userIdDefault = await prefs.get('id');
-
   userGetID = userIdDefault;
 }

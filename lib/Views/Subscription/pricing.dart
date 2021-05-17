@@ -244,6 +244,7 @@ class _pricingState extends State<pricing> {
                       color: Colors.grey),
                   recognizer: new TapGestureRecognizer()
                     ..onTap = () {
+
                       print("no thanks");
                       //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/verifyEmail', (r) => false ,arguments: {'whereTo': 'PageSelector'}, );
                       //whereTo(arguments['whereTo']);
