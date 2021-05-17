@@ -2,11 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'loading.dart';
+import 'package:topshottimer/Views/PageSelector.dart';
+import '../../loading.dart';
 import 'package:get/get.dart';
 import 'package:topshottimer/global.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:topshottimer/Views/Subscription/success.dart';
 class pricing extends StatefulWidget {
   @override
   _pricingState createState() => _pricingState();
@@ -18,6 +20,8 @@ class _pricingState extends State<pricing> {
   final _controller = Get.put(Controller());
   @override
   Widget build(BuildContext context) {
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+    bool pop = arguments['pop'];
     return _loading
         ? Loading() : Scaffold(
       body: Container(
@@ -211,7 +215,7 @@ class _pricingState extends State<pricing> {
                 height: 60,
                 child: Obx(() => ElevatedButton(
                   onPressed: _controller.btnState.value
-                      ? () => subscriptionProccess() //proccess when bbutton is clicked here!
+                      ? () => subscriptionProccess(pop) //proccess when bbutton is clicked here!
                       : null,
                   child: Text(
                     'Go Premium',
@@ -241,6 +245,15 @@ class _pricingState extends State<pricing> {
                   recognizer: new TapGestureRecognizer()
                     ..onTap = () {
                       print("no thanks");
+                      //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/verifyEmail', (r) => false ,arguments: {'whereTo': 'PageSelector'}, );
+                      //whereTo(arguments['whereTo']);
+
+                      if(pop == true) {
+                        Get.back();
+                      } else if(pop == false) {
+                        Get.off(pageSelector());
+                      }
+                     // print(arguments['whereTo']);
                     }
               ),
             ),
@@ -249,26 +262,48 @@ class _pricingState extends State<pricing> {
       ),
     );
   }
-}
 
-subscriptionProccess() async{
+
+subscriptionProccess(bool pop) async {
+  //change state to show loading screen
+  //TODO should add this back
+  setState(() => _loading = true);
+  //await Purchases.setDebugLogsEnabled(true);
+  //TODO: change the id to be dynamic
+ // await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: '50');
   print("inside subscription proccess");
   try {
     Offerings offerings = await Purchases.getOfferings();
     if (offerings.current != null) {
       // Display current offering with offerings.current
+      print("above package package");
       Package package = offerings.current.monthly;
       try {
         PurchaserInfo purchaserInfo = await Purchases.purchasePackage(package);
         var isPro = purchaserInfo.entitlements.all["premium_features"].isActive;
+        print("SHOW ISPRO");
         if (isPro) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           String _email = prefs.getString('email');
           String _lastName = prefs.getString('lastName');
           String _firstName = prefs.getString('firstName');
-          Purchases.setAttributes({ "email" : _email, "displayName" : _lastName + " " + _firstName});
+          Purchases.setAttributes({
+            "\$email": _email,
+            "\$displayName": _lastName + " " + _firstName
+          });
           // Unlock that great "pro" content
           print("REVENUCAT: unlock pro content");
+          //Get.off(success(), arguments: {'whereTo': whereTo});
+          //When Success button is clicked depending on where the user came from. go to page selector or pop view
+          _controller.hasSubscription.value = true;
+          if(pop == true) {
+            print("SHOW SUCCESS with true");
+           Get.back();
+           Get.to(success(), arguments: {'pop': true});
+          } else if(pop == false) {
+            print("SHOW SUCCESS with false");
+            Get.to(success(), arguments: {'pop': false});
+          }
         }
       } on PlatformException catch (e) {
         var errorCode = PurchasesErrorHelper.getErrorCode(e);
@@ -276,13 +311,17 @@ subscriptionProccess() async{
           //showError(e);
           print(e);
           print("REVENUCAT: error");
+          //change state to not show loading screen
+          setState(() => _loading = false);
         }
       }
     }
   } on PlatformException catch (e) {
     // optional error handling
-
+    //print("ERROR pricing.dart: " + e);
+    //change state to not show loading screen
+    setState(() => _loading = false);
   }
-
+}
 }
 

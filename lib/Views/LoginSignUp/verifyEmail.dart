@@ -12,6 +12,7 @@ import 'package:http/http.dart';
 import 'package:topshottimer/global.dart';
 import 'package:topshottimer/loading.dart';
 import 'package:get/get.dart';
+import 'package:topshottimer/Views/Subscription/pricing.dart';
 
 class verifyEmail extends StatefulWidget {
   @override
@@ -236,8 +237,10 @@ class _verifyEmailState extends State<verifyEmail> {
     String password = await prefs.getString('password');
     String verified = await prefs.getString('verify');
     if (verified == 'true') {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => pageSelector()));
+      //Navigator.push(context,
+          //MaterialPageRoute(builder: (context) => pageSelector()));
+      Get.off(pricing(), arguments: {'pop': true});
+
     }
     try {
       var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
@@ -256,8 +259,9 @@ class _verifyEmailState extends State<verifyEmail> {
         setState(() => _loading = true);
         _timer.cancel();
         super.dispose();
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Login()));
+        //Navigator.push(
+          //  context, MaterialPageRoute(builder: (context) => Login()));
+        Get.off(() => Login());
       }
       //is a user but they haven't verified their email address
       else if (status == "non-verified") {
@@ -266,7 +270,10 @@ class _verifyEmailState extends State<verifyEmail> {
       else if (status == "verified") {
         await prefs.setString('verify', "verified");
         await prefs.setBool('loginBefore', true);
-        Navigator.pushReplacementNamed(context, '/PageSelector');
+        //Navigator.pushReplacementNamed(context, '/PageSelector');
+        //TODO: fix this route once payload works
+        //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/verifyEmail', (r) => false ,arguments: {'whereTo': 'PageSelector'}, );
+        Get.off(pricing(), arguments: {'pop': true});
       } else {}
     } on TimeoutException catch (e) {
       print('Timeout Error: $e');
