@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 //import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
+import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 
 // import 'package:noise_meter/noise_meter.dart';
@@ -71,6 +72,7 @@ class timerArea extends StatefulWidget {
 class _timerAreaState extends State<timerArea> {
   int iCountStart = 0;
 
+  bool paidMember = false;
   //Variable declerations for All flags and arrays
   FlutterAudioRecorder _recorder;
   Recording _current;
@@ -478,23 +480,25 @@ class _timerAreaState extends State<timerArea> {
       iCountStart++;
       bResetOnStart = false;
     } else if (bstop == true) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      int getCounter = prefs.getInt('stopCounter');
+      //Displays pricing page if user is not premium
 
-      if(getCounter<10){
-        print("*********Counter not reached 10. Adding 1 to counter");
-        print("*********Counter Value is: " + getCounter.toString());
-        setCounter();
-      }
-      else{
-        print("*********Will display pricing guide now");
+      if (paidMember == false){
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setInt('stopCounter', 0);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => pricing()));
+        int getCounter = prefs.getInt('stopCounter');
+
+        if(getCounter<2){
+          print("*********Counter not reached 10. Adding 1 to counter");
+          print("*********Counter Value is: " + getCounter.toString());
+          setCounter();
+        }
+        else{
+          print("*********Will display pricing guide now");
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setInt('stopCounter', 0);
+          Get.to(pricing(), arguments: {'pop': true});
+        }
       }
+
       startispressed = true;
       isRunning = false;
       didReset = false;
