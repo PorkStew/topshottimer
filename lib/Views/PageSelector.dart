@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:noise_meter/noise_meter.dart';
+import 'Subscription/pricing.dart';
 import 'Timer/timer.dart';
 import 'Scores/Profile.dart';
 import 'Settings/Settings.dart';
-import 'package:topshottimer/pricing.dart';
 
 
 class pageSelector extends StatefulWidget {
