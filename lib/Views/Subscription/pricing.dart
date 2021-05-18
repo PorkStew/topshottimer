@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/PageSelector.dart';
+import 'package:topshottimer/Views/Subscription/success.dart';
 import '../../loading.dart';
 import 'package:get/get.dart';
 import 'package:topshottimer/global.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:topshottimer/Views/Subscription/success.dart';
 class pricing extends StatefulWidget {
   @override
   _pricingState createState() => _pricingState();
@@ -16,12 +16,14 @@ class pricing extends StatefulWidget {
 
 class _pricingState extends State<pricing> {
   bool _loading = false;
-
   final _controller = Get.put(Controller());
+
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     bool pop = arguments['pop'];
+    print("after POP");
+    print(_controller.hasSubscription.value);
     return _loading
         ? Loading() : Scaffold(
       body: Container(
@@ -196,7 +198,7 @@ class _pricingState extends State<pricing> {
                                     fontFamily: 'Montserrat-Regular',
                                     letterSpacing: 0.2
                                 ),),
-                              Text('1.99 billed annually as recurring payment',
+                              Text(_controller.subscriptionPrice,
                                 style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 12,
@@ -244,17 +246,12 @@ class _pricingState extends State<pricing> {
                       color: Colors.grey),
                   recognizer: new TapGestureRecognizer()
                     ..onTap = () {
-
-                      print("no thanks");
-                      //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/verifyEmail', (r) => false ,arguments: {'whereTo': 'PageSelector'}, );
-                      //whereTo(arguments['whereTo']);
-
+                      print(pop);
                       if(pop == true) {
                         Get.back();
                       } else if(pop == false) {
-                        Get.off(pageSelector());
+                        Get.off(() => pageSelector());
                       }
-                     // print(arguments['whereTo']);
                     }
               ),
             ),
@@ -268,17 +265,19 @@ class _pricingState extends State<pricing> {
 subscriptionProccess(bool pop) async {
   //change state to show loading screen
   //TODO should add this back
-  setState(() => _loading = true);
+  //setState(() => _loading = true);
   //await Purchases.setDebugLogsEnabled(true);
   //TODO: change the id to be dynamic
- // await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: '50');
+  // await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: '50');
   print("inside subscription proccess");
   try {
     Offerings offerings = await Purchases.getOfferings();
+    print("walk to the bosss");
     if (offerings.current != null) {
       // Display current offering with offerings.current
       print("above package package");
       Package package = offerings.current.monthly;
+      //print("PRICE: " + package.product.priceString);
       try {
         PurchaserInfo purchaserInfo = await Purchases.purchasePackage(package);
         var isPro = purchaserInfo.entitlements.all["premium_features"].isActive;
@@ -298,16 +297,20 @@ subscriptionProccess(bool pop) async {
           //When Success button is clicked depending on where the user came from. go to page selector or pop view
           _controller.hasSubscription.value = true;
           if(pop == true) {
+            setState(() => _loading = true);
             print("SHOW SUCCESS with true");
            Get.back();
-           Get.to(success(), arguments: {'pop': true});
+           Get.to(() => Success(), arguments: {'pop': true});
           } else if(pop == false) {
+            //setState(() => _loading = true);
             print("SHOW SUCCESS with false");
-            Get.to(success(), arguments: {'pop': false});
+            Get.off(() => Success(), arguments: {'pop': false});
           }
         }
       } on PlatformException catch (e) {
         var errorCode = PurchasesErrorHelper.getErrorCode(e);
+        print("PLATFORM ERROR");
+        print(e);
         if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
           //showError(e);
           print(e);
@@ -324,5 +327,12 @@ subscriptionProccess(bool pop) async {
     setState(() => _loading = false);
   }
 }
+getPrice() async {
+  Offerings offerings = await Purchases.getOfferings();
+  Package package = offerings.current.monthly;
+  print("HERE IS THE PRICE " + package.product.priceString);
+  return package.product.priceString.toString();
 }
+}
+
 

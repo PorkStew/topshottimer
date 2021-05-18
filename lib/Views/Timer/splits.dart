@@ -5,10 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:topshottimer/Views/Subscription/pricing.dart';
 import 'package:topshottimer/global.dart';
 
 import '../../Themes.dart';
-import '../../pricing.dart';
 import '../PageSelector.dart';
 
 String userGetID;
@@ -317,7 +317,7 @@ class SplitsState extends State<Splits> {
                                 sendData(_StringName.text, 10, 10.2);
                                 bool paidMember = false;
                                 if (paidMember == false){
-                                  Get.to(pricing(), arguments: {'pop': true});
+                                  Get.to(() => pricing(), arguments: {'pop': true});
                                 }
                                 else{
                                   Navigator.pushReplacementNamed(

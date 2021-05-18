@@ -178,8 +178,6 @@ class SignUpState extends  State<SignUp> {
                   : Icons.visibility_off,
             ),
             onPressed: () {
-
-              //print("prefix tapped");
               // Update the state i.e. toogle the state of passwordVisible variable
               setState(() {
                 _passwordVisible = !_passwordVisible;
@@ -414,7 +412,7 @@ class SignUpState extends  State<SignUp> {
             borderRadius: BorderRadius.circular(10)
         ),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(

@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 import 'package:topshottimer/Views/LoginSignUp/signup.dart';
-import 'package:topshottimer/Views/PageSelector.dart';
 import 'package:topshottimer/Views/LoginSignUp/login.dart';
 import 'package:http/http.dart';
 import 'package:topshottimer/global.dart';
@@ -14,12 +13,12 @@ import 'package:topshottimer/loading.dart';
 import 'package:get/get.dart';
 import 'package:topshottimer/Views/Subscription/pricing.dart';
 
-class verifyEmail extends StatefulWidget {
+class VerifyEmail extends StatefulWidget {
   @override
-  _verifyEmailState createState() => _verifyEmailState();
+  _VerifyEmailState createState() => _VerifyEmailState();
 }
 
-class _verifyEmailState extends State<verifyEmail> {
+class _VerifyEmailState extends State<VerifyEmail> {
   //variable declaration
   Timer _timer;
   bool _loading = false;
@@ -28,11 +27,9 @@ class _verifyEmailState extends State<verifyEmail> {
   @override
   void initState() {
     super.initState();
-    print("VERIFYEMAIL.DART");
     getUserInfo();
     //check if user verifies email every 5 seconds
-    _timer =
-        Timer.periodic(Duration(seconds: 5), (Timer t) => areTheyVerified());
+    _timer = Timer.periodic(Duration(seconds: 5), (Timer t) => areTheyVerified());
   }
   //main view area
   @override
@@ -127,21 +124,10 @@ class _verifyEmailState extends State<verifyEmail> {
                                     recognizer: new TapGestureRecognizer()
                                       ..onTap = () {
                                         print("wrong email!!!");
-                                        //tests();
                                         //return to sign up because they entered the wrong information
                                         setState(() => _loading = true);
-
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Login()));
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => SignUp(
-                                                    arguments['email'])));
-                                        //getUserInfo();
+                                        Get.off(() => Login());
+                                        Get.to(SignUp(arguments['email']));
                                       })),
                           ],
                         ),
@@ -237,10 +223,7 @@ class _verifyEmailState extends State<verifyEmail> {
     String password = await prefs.getString('password');
     String verified = await prefs.getString('verify');
     if (verified == 'true') {
-      //Navigator.push(context,
-          //MaterialPageRoute(builder: (context) => pageSelector()));
-      Get.off(pricing(), arguments: {'pop': true});
-
+      Get.off(() => pricing(), arguments: {'pop': false});
     }
     try {
       var url = 'https://www.topshottimer.co.za/checkUserIsVerified.php';
@@ -265,21 +248,24 @@ class _verifyEmailState extends State<verifyEmail> {
       }
       //is a user but they haven't verified their email address
       else if (status == "non-verified") {
+        return;
       }
-      //is a user and is veried email so they can use the app
+      //is a user and is verified email so they can use the app
       else if (status == "verified") {
         await prefs.setString('verify', "verified");
         await prefs.setBool('loginBefore', true);
-        //Navigator.pushReplacementNamed(context, '/PageSelector');
-        //TODO: fix this route once payload works
-        //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/verifyEmail', (r) => false ,arguments: {'whereTo': 'PageSelector'}, );
-        Get.off(pricing(), arguments: {'pop': true});
+        _timer.cancel();
+        Get.off(() => pricing(), arguments: {'pop': false});
+        return;
       } else {}
     } on TimeoutException catch (e) {
+      _timer.cancel();
       print('Timeout Error: $e');
     } on Socket catch (e) {
+      _timer.cancel();
       print('Socket Error: $e');
     } on Error catch (e) {
+      _timer.cancel();
       print('General Error: $e');
     }
   }
@@ -290,7 +276,6 @@ class _verifyEmailState extends State<verifyEmail> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = await prefs.getString('email');
     print(email);
-    print("************************");
     try {
       var url =
           'https://authentication.topshottimer.co.za/authentication/createAccountVerifyEmailMailer.php';
@@ -300,15 +285,20 @@ class _verifyEmailState extends State<verifyEmail> {
         //TODO uncomment when testing is complete
         "emailAddress": email,
       });
-      //MAYBE WE NEED THIS?????
-      Map<String, dynamic> data = json.decode(res.body);
-      String status = data["success"];
-      print(status);
-      //TODO show that message was sent successfully
-      if (status == 'true') {
-        print("EMAIL SENT SUCCESSFUL");
-      } else if (status == 'false') {
-        print("EMAIL WAS NOT SENT DUE TO ERROR");
+      //An error will occur when using an email that dose not exist (formatexception)
+      //MAYBE WE NEED THI??
+      try {
+        Map<String, dynamic> data = json.decode(res.body);
+        String status = data["success"];
+        print(status);
+        //TODO show that message was sent successfully
+        if (status == 'true') {
+          print("EMAIL SENT SUCCESSFUL");
+        } else if (status == 'false') {
+          print("EMAIL WAS NOT SENT DUE TO ERROR");
+        }
+      } on FormatException catch(e) {
+        print(e);
       }
     } on TimeoutException catch (e) {
       print('Timeout Error: $e');
@@ -325,7 +315,7 @@ class _verifyEmailState extends State<verifyEmail> {
         backgroundColor: Themes.darkBackgoundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(
@@ -357,7 +347,7 @@ class _verifyEmailState extends State<verifyEmail> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              Navigator.pop(context);
+                              Get.back();
                             },
                             child: Container(
                               decoration: BoxDecoration(

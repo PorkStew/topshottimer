@@ -10,6 +10,7 @@ import 'package:http/http.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/LoginSignUp/signup.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
+import 'package:topshottimer/Views/PageSelector.dart';
 import 'package:topshottimer/loading.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:topshottimer/global.dart';
@@ -321,10 +322,14 @@ class LoginState extends State<Login> {
       }
       //is a user and is verified email so they can use the app
       else if (_status == "verified" && _id != null) {
+        final _controller = Get.put(Controller());
+        _controller.revenueCatSetListener(_id);
         saveUserInformation(
             _id, _email, _hashedPassword, "verified", _firstName, _lastName);
         print("where do i go from here");
-        Navigator.pushReplacementNamed(context, '/PageSelector');
+        //Navigator.pushReplacementNamed(context, '/PageSelector');
+        _controller.revenueCatSetListener(_id);
+        Get.off(pageSelector());
         //if details are not correct then remove loading and stay at loading screen
       } else {
         setState(() => _loading = false);
@@ -357,7 +362,7 @@ class LoginState extends State<Login> {
         backgroundColor: Themes.darkBackgoundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(
@@ -438,7 +443,7 @@ class LoginState extends State<Login> {
         backgroundColor: Themes.darkBackgoundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(
