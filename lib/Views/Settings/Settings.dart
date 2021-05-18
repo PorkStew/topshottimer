@@ -16,7 +16,6 @@ import 'package:topshottimer/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:topshottimer/global.dart';
 
-
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();

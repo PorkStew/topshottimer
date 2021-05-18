@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/Scores/Profile.dart';
 import 'package:topshottimer/Views/Settings/Settings.dart';
@@ -19,9 +17,7 @@ import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get/get.dart';
 import 'package:topshottimer/global.dart';
-import 'package:topshottimer/Views/Subscription/pricing.dart';
 
-//TODO remove prints when beta and release
 void main() {
   runApp(MyApp());
 }
@@ -41,7 +37,7 @@ class MyApp extends StatelessWidget {
         '/PageSelector': (context) => pageSelector(),
         '/LoginSignUp/resetPasswordConfirm': (context) =>
             ResetPasswordConfirm(),
-        '/LoginSignUp/verifyEmail': (context) => verifyEmail(),
+        '/LoginSignUp/verifyEmail': (context) => VerifyEmail(),
         'Settings/editUserDetails': (context) => editUserDetails(),
         'Timer/Timer': (context) => TimerPage(),
         'Scores/Profile': (context) => Profile(),
@@ -59,20 +55,17 @@ class CheckUserDetails extends StatefulWidget {
 class _CheckUserDetailsState extends State<CheckUserDetails> {
   //variable declaration
   bool _loading = true;
-  bool _hasConnection = false;
   Future _noInternetConnectionDialogFuture;
+  //access to global dart file
   final _controller = Get.put(Controller());
-
   @override
   void initState() {
     super.initState();
-    //set subscription button state
+    //set subscription button state and allow the state update to update on both true or false values
     _controller.hasSubscription.firstRebuild = false;
     _controller.hasSubscription.value = false;
-    //checks continually every 1 second for internet connection
+    //checks continually every 5 seconds for internet connection change
     //to change delay go to Dart Packages/data_connection_checker-version/data_connection_checker.dart
-    //DataConnectionChecker().connectionStatus = true;
-    //DataConnectionStatus.connected;
     DataConnectionChecker().onStatusChange.listen((status) {
       switch (status) {
         //has internet connection
@@ -81,16 +74,16 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
           //firstRebuild for GET tells the system to update the value when it's either true or false. By default that get works is that if the default value is false then we say a new value is false then it won't update any place the variable is used
           _controller.btnState.firstRebuild = false;
           _controller.btnState.value = true;
-          _hasConnection = true;
+          //_hasConnection = true;
           // setInternet(true);
-          checkUserInformation(context);
+          checkUserInformation(context, _controller);
           break;
-        //no internet which setts button states to disabled and shows dialog
+        //no internet which sets button states to disabled and shows dialog
         case DataConnectionStatus.disconnected:
           print("No internet connection");
           _controller.btnState.firstRebuild = false;
           _controller.btnState.value = false;
-          _hasConnection = false;
+          //_hasConnection = false;
           _noInternetConnectionDialogFuture = _noInternetConnectionDialog();
       }
     });
@@ -103,17 +96,17 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
     _loggedInBefore = await offlineProcess();
     //if they have logged in before show pageSelector.dart
     if (_loggedInBefore != false) {
-
-      Get.off(pageSelector());
+      Get.off(() => pageSelector());
     } else if (Get.currentRoute == "/Login") {
+      //TODO: remove this
     } else {
-      Get.off(Login());
+      Get.off(() => Login());
     }
     //No Internet Dialog
     Get.dialog(Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(
@@ -196,7 +189,6 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
           ],
         )));
   }
-
   //loading screen which is called from loading.dart
   @override
   Widget build(BuildContext context) {
@@ -205,7 +197,7 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
 }
 
 //acts like a auto login system that will check if shared preferences has user information and will show a screen depending on that information
-checkUserInformation(context) async {
+checkUserInformation(context, Controller _controller) async {
   Get.back();
   print('MAIN.DART');
   //get user information
@@ -222,7 +214,7 @@ checkUserInformation(context) async {
   print("DONE USER DETAILS!!!!");
 
   try {
-    //checks the validity shared preference information is not empty, then will try login
+    //checks the shared preference information is not empty, then will try login
     if (_id != null &&
         _email != null &&
         _hashedPassword != null &&
@@ -249,12 +241,11 @@ checkUserInformation(context) async {
       print(_firstName);
       print(_lastName);
       print("END OF RECEIVING DATA!!!");
-
       //not a user
       if (_status == "not-user") {
         print("MAIN.DART END*******************************");
         await prefs.setBool('loginBefore', false);
-        Get.off(Login());
+        Get.off(() => Login());
       }
       //is a user but has not verified their email yet
       else if (_status == "non-verified" && _id != null) {
@@ -264,7 +255,8 @@ checkUserInformation(context) async {
         await prefs.setString('lastName', _lastName);
         await prefs.setBool('loginBefore', false);
         print("MAIN.DART END*******************************");
-        Get.off(verifyEmail(), arguments: {'email': _email});
+        _controller.revenueCatSetListener(_id);
+        Get.off(() => VerifyEmail(), arguments: {'email': _email});
         //is a user and account is verified
       } else if (_status == "verified" && _id != null) {
         await prefs.setString('id', _id);
@@ -273,19 +265,12 @@ checkUserInformation(context) async {
         await prefs.setString('lastName', _lastName);
         await prefs.setBool('loginBefore', true);
         print("MAIN.DART END*******************************");
-        //TODO CALL HERE
-        print("hello world");
-        //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/verifyEmail', (r) => false);
-        //Get.back();
-        //Get.off(pageSelector());
-        await Purchases.setDebugLogsEnabled(true);
-        await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: _id);
-        Get.off(pricing(), arguments: {'pop': false});
-        //Get.to(pricing());
-        //checkUserHasSubscription(_id);
-      }      //no shared preference data is found go to login
+        _controller.revenueCatSetListener(_id);
+        Get.off(() => pageSelector());
+      }
+      //no shared preference data is found go to login
     } else {
-      Get.off(Login());
+      Get.off(() => Login());
       print("MAIN.DART END*******************************");
     }
   } on TimeoutException catch (e) {
@@ -295,13 +280,13 @@ checkUserInformation(context) async {
   } on Error catch (e) {
     print('General Error: $e');
   }
-
 }
 
 //checks if the user has logged in before which means they have account details and they are correct.
 offlineProcess() async {
   bool _loginBefore = false;
   try {
+    //get shared preference bool value
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _loginBefore = prefs.getBool('loginBefore');
     if (_loginBefore == null) {
@@ -312,51 +297,4 @@ offlineProcess() async {
     print(exception);
     return _loginBefore;
   }
-}
-
-checkUserHasSubscription(Controller _controller, String _id) async{
-  print("REVENUECAT: setting up payment keys and user id asignment");
-  //access RevenuCat with key and use the users id to do so
-  print("check user subscription");
-  // print("after getting");
-  await Purchases.setDebugLogsEnabled(true);
-  await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: _id);
-  Purchases.addPurchaserInfoUpdateListener((info) async{
-    // handle any changes to purchaserInfo
-    //TODO button activity here
-    print("before active");
-    print(info.activeSubscriptions);
-    print('after active');
-  });
-
-  try {
-    PurchaserInfo purchaserInfo = await Purchases.getPurchaserInfo();
-    print("after purchaseInfo");
-    if (purchaserInfo.entitlements.all["premium_features"].isActive) {
-      print("REVENUCAT: has a subscription");
-      //TODO: show loading screen and subscription state
-      _controller.hasSubscription.value = true;
-      Get.off(() => pageSelector());
-    }
-    else {
-      print("go to pay");
-      //Get.off(() => pricing());
-     // Get.off(pricing(), arguments: {'whereTo': 'PageSelector'});
-      Get.off(pageSelector());
-      Get.to(pricing());
-    }
-    print("after if statement");
-  } catch (e) {
-    // Error fetching purchaser info
-    print("show pricing");
-    print("REVENUCAT: NO subscription");
-
-    Get.off(pageSelector());
-    Get.to(pricing());
-   // Get.off(pricing(), arguments: {'whereTo': 'PageSelector'});
-  }
-  //Get.off(pageSelector());
-  //print("show pricing");
-
-
 }

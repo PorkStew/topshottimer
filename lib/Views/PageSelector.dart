@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:topshottimer/Views/Subscription/pricing.dart';
 // import 'package:noise_meter/noise_meter.dart';
 import 'Subscription/pricing.dart';
 import 'Timer/timer.dart';
@@ -41,7 +42,7 @@ class _pageSelectorState extends State<pageSelector> {
             //Checks if user is paid when selecting the scores page
             if (paidMember == false && _selectedPage == 1 ){
               _selectedPage = 0;
-              Get.to(pricing(), arguments: {'pop': true});
+              //Get.to(() => pricing(), arguments: {'pop': true});
               // Navigator.push(
               //     context,
               //     MaterialPageRoute(

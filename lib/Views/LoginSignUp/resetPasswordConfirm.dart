@@ -165,7 +165,8 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                       //return to sign up because they entered the wrong information
                       setState(() => loading = true),
                         nullPreferences(),
-                      Navigator.pushReplacementNamed(context, '/LoginSignUp/login')
+                      //Navigator.pushReplacementNamed(context, '/LoginSignUp/login')
+
                       },
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
@@ -233,7 +234,7 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
             borderRadius: BorderRadius.circular(10)
         ),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(

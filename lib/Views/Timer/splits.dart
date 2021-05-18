@@ -317,7 +317,7 @@ class SplitsState extends State<Splits> {
                                 sendData(_StringName.text, 10, 10.2);
                                 bool paidMember = false;
                                 if (paidMember == false){
-                                  Get.to(pricing(), arguments: {'pop': true});
+                                  Get.to(() => pricing(), arguments: {'pop': true});
                                 }
                                 else{
                                   Navigator.pushReplacementNamed(
