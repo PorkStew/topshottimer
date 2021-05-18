@@ -19,7 +19,7 @@ import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get/get.dart';
 import 'package:topshottimer/global.dart';
-import 'package:topshottimer/pricing.dart';
+import 'package:topshottimer/Views/Subscription/pricing.dart';
 
 //TODO remove prints when beta and release
 void main() {
@@ -58,7 +58,7 @@ class CheckUserDetails extends StatefulWidget {
 
 class _CheckUserDetailsState extends State<CheckUserDetails> {
   //variable declaration
-  bool _loading = false;
+  bool _loading = true;
   bool _hasConnection = false;
   Future _noInternetConnectionDialogFuture;
   final _controller = Get.put(Controller());
@@ -66,6 +66,9 @@ class _CheckUserDetailsState extends State<CheckUserDetails> {
   @override
   void initState() {
     super.initState();
+    //set subscription button state
+    _controller.hasSubscription.firstRebuild = false;
+    _controller.hasSubscription.value = false;
     //checks continually every 1 second for internet connection
     //to change delay go to Dart Packages/data_connection_checker-version/data_connection_checker.dart
     //DataConnectionChecker().connectionStatus = true;
@@ -217,6 +220,7 @@ checkUserInformation(context) async {
   print(_hashedPassword);
   print(_verified);
   print("DONE USER DETAILS!!!!");
+
   try {
     //checks the validity shared preference information is not empty, then will try login
     if (_id != null &&
@@ -269,27 +273,17 @@ checkUserInformation(context) async {
         await prefs.setString('lastName', _lastName);
         await prefs.setBool('loginBefore', true);
         print("MAIN.DART END*******************************");
-        print("REVENUECAT: setting up payment keys and user id asignment");
-        //access RevenuCat with key and use the users id to do so
-        await Purchases.setDebugLogsEnabled(true);
-        await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: '26');
-        try {
-          PurchaserInfo purchaserInfo = await Purchases.getPurchaserInfo();
-          if (purchaserInfo.entitlements.all["premium_features"].isActive) {
-            print("REVENUCAT: has a subscription");
-            Get.off(pageSelector());
-          }
-        } catch (e) {
-          print("REVENUCAT: NO subscription");
-          Get.off(pricing());
-          print("******Caught the isactive if statement");
-          // Error fetching purchaser info
-        }
+        //TODO CALL HERE
+        print("hello world");
+        //Navigator.pushNamedAndRemoveUntil(context, '/LoginSignUp/verifyEmail', (r) => false);
+        //Get.back();
         //Get.off(pageSelector());
-        print("show pricing");
-
-      }
-      //no shared preference data is found go to login
+        await Purchases.setDebugLogsEnabled(true);
+        await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: _id);
+        Get.off(pricing(), arguments: {'pop': false});
+        //Get.to(pricing());
+        //checkUserHasSubscription(_id);
+      }      //no shared preference data is found go to login
     } else {
       Get.off(Login());
       print("MAIN.DART END*******************************");
@@ -301,6 +295,7 @@ checkUserInformation(context) async {
   } on Error catch (e) {
     print('General Error: $e');
   }
+
 }
 
 //checks if the user has logged in before which means they have account details and they are correct.
@@ -317,4 +312,51 @@ offlineProcess() async {
     print(exception);
     return _loginBefore;
   }
+}
+
+checkUserHasSubscription(Controller _controller, String _id) async{
+  print("REVENUECAT: setting up payment keys and user id asignment");
+  //access RevenuCat with key and use the users id to do so
+  print("check user subscription");
+  // print("after getting");
+  await Purchases.setDebugLogsEnabled(true);
+  await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: _id);
+  Purchases.addPurchaserInfoUpdateListener((info) async{
+    // handle any changes to purchaserInfo
+    //TODO button activity here
+    print("before active");
+    print(info.activeSubscriptions);
+    print('after active');
+  });
+
+  try {
+    PurchaserInfo purchaserInfo = await Purchases.getPurchaserInfo();
+    print("after purchaseInfo");
+    if (purchaserInfo.entitlements.all["premium_features"].isActive) {
+      print("REVENUCAT: has a subscription");
+      //TODO: show loading screen and subscription state
+      _controller.hasSubscription.value = true;
+      Get.off(() => pageSelector());
+    }
+    else {
+      print("go to pay");
+      //Get.off(() => pricing());
+     // Get.off(pricing(), arguments: {'whereTo': 'PageSelector'});
+      Get.off(pageSelector());
+      Get.to(pricing());
+    }
+    print("after if statement");
+  } catch (e) {
+    // Error fetching purchaser info
+    print("show pricing");
+    print("REVENUCAT: NO subscription");
+
+    Get.off(pageSelector());
+    Get.to(pricing());
+   // Get.off(pricing(), arguments: {'whereTo': 'PageSelector'});
+  }
+  //Get.off(pageSelector());
+  //print("show pricing");
+
+
 }
