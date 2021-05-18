@@ -4,19 +4,22 @@ import '../../loading.dart';
 import 'package:get/get.dart';
 import 'package:topshottimer/global.dart';
 import 'package:topshottimer/Themes.dart';
-class success extends StatefulWidget {
+class Success extends StatefulWidget {
   @override
-  _successState createState() => _successState();
+  _SuccessState createState() => _SuccessState();
 }
 
-class _successState extends State<success> {
+class _SuccessState extends State<Success> {
+  //variable declarations
   bool _loading = false;
-
   final _controller = Get.put(Controller());
+
   @override
   Widget build(BuildContext context) {
+    //get passed argument and set it to variable
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     bool pop = arguments['pop'];
+
     return _loading
         ? Loading() : Scaffold(
       body: Container(
@@ -145,7 +148,6 @@ class _successState extends State<success> {
                   borderRadius: BorderRadius.circular(10),
 
                 ),
-
                 child:
                 Column(children: [
                   Container(
@@ -164,12 +166,6 @@ class _successState extends State<success> {
                         color: Themes.darkButton1Color
                     ),
                   ),
-                  //adds padding to the left of the text
-                  //SizedBox(width: 20,),
-                  //TODO: remove wrap since the icon is not used
-                  //Icon(Icons.check, color: Colors.green, size: 50,),
-                  //Icon(Icons.check_circle, color: Colors.green, size: 30,),
-                  //SizedBox(width: 20,),
                   SizedBox(height: 5,),
                   Padding(
                     padding: EdgeInsets.only(left: 20, right: 20),
@@ -201,7 +197,7 @@ class _successState extends State<success> {
                 height: 60,
                 child: Obx(() => ElevatedButton(
                   onPressed: _controller.btnState.value
-                      ? () => popView(pop) //proccess when bbutton is clicked here!
+                      ? () => popView(pop) //process when button is clicked here!
                       : null,
                   child: Text(
                     'SUCCESS',
@@ -226,12 +222,10 @@ class _successState extends State<success> {
   //When Success button is clicked depending on where the user came from. go to page selector or pop view
   popView(bool pop) {
     if(pop == true) {
-      print("POPVIEW");
       Get.back();
-      //Get.back();
-    } else if(pop == false){
-      print("DONT POP VIEW");
-      Get.off(pageSelector());
+      Get.back();
+    } else if(pop == false) {
+      Get.off(() => pageSelector());
     }
   }}
 
