@@ -798,7 +798,7 @@ class _timerAreaState extends State<timerArea> {
   //No strings shot dialog
   errorViewingStringDialog() {
     Dialog dialog = new Dialog(
-        backgroundColor: Themes.darkBackgoundColor,
+        backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
           overflow: Overflow.visible,
