@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
+import 'package:topshottimer/Views/LoginSignUp/login.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPassword.dart';
 import 'package:topshottimer/loading.dart';
 import 'package:topshottimer/global.dart';
@@ -112,7 +113,8 @@ class _ResetPasswordConfirmState extends State<ResetPasswordConfirm> {
                       child: ElevatedButton(
                         onPressed: (){
                           print("return to login please!");
-                          Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
+                          Get.off(() => Login());
+                          //Navigator.pushReplacementNamed(context, '/LoginSignUp/login');
                         },
                         child: Text(
                           'Login',

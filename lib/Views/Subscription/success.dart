@@ -50,6 +50,14 @@ class _SuccessState extends State<Success> {
                         fontFamily: 'Montserrat-Regular',
                         letterSpacing: 0.2),
                   ),
+                  Text(
+                    "Unlocked",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 30,
+                        fontFamily: 'Montserrat-Regular',
+                        letterSpacing: 0.2),
+                  ),
                 ],
               ),
             ),
@@ -200,7 +208,7 @@ class _SuccessState extends State<Success> {
                       ? () => popView(pop) //process when button is clicked here!
                       : null,
                   child: Text(
-                    'SUCCESS',
+                    'Continue',
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 20,

@@ -14,16 +14,21 @@ class pricing extends StatefulWidget {
   _pricingState createState() => _pricingState();
 }
 
-class _pricingState extends State<pricing> {
+class _pricingState extends State<pricing>{
   bool _loading = false;
   final _controller = Get.put(Controller());
-
+  //iniState is used to get the price of the subscription on the start of the page in connection with setState
+  @override
+  void initState() {
+    getPrice();
+  }
+  String price = "s";
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     bool pop = arguments['pop'];
     print("after POP");
-    print(_controller.hasSubscription.value);
+    print(pop);
     return _loading
         ? Loading() : Scaffold(
       body: Container(
@@ -180,25 +185,19 @@ class _pricingState extends State<pricing> {
                           color: Themes.darkButton1Color
                         ),
                       ),
-                        //adds padding to the left of the text
-                        //SizedBox(width: 20,),
-                        //TODO: remove wrap since the icon is not used
-                        //Icon(Icons.check, color: Colors.green, size: 50,),
-                        //Icon(Icons.check_circle, color: Colors.green, size: 30,),
-                        //SizedBox(width: 20,),
                       SizedBox(height: 5,),
                         Padding(
                           padding: EdgeInsets.only(left: 20, right: 20),
                           child: Column(
                             children: [
-                              Text('1.99 / Month',
+                              Text(price + ' / Month',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 17,
                                     fontFamily: 'Montserrat-Regular',
                                     letterSpacing: 0.2
                                 ),),
-                              Text(_controller.subscriptionPrice,
+                              Text(price + ' billed annually as a recurring payment',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 12,
@@ -321,17 +320,18 @@ subscriptionProccess(bool pop) async {
       }
     }
   } on PlatformException catch (e) {
-    // optional error handling
-    //print("ERROR pricing.dart: " + e);
-    //change state to not show loading screen
+    print(e);
     setState(() => _loading = false);
   }
 }
+//setState is used to update the view which uses the variable price
 getPrice() async {
   Offerings offerings = await Purchases.getOfferings();
   Package package = offerings.current.monthly;
-  print("HERE IS THE PRICE " + package.product.priceString);
-  return package.product.priceString.toString();
+  setState(() {
+    price = package.product.priceString;
+    return;
+  });
 }
 }
 

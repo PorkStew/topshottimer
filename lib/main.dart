@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:topshottimer/Themes.dart';
+import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart';
 import 'package:topshottimer/Views/Scores/Profile.dart';
 import 'package:topshottimer/Views/Settings/Settings.dart';
 import 'package:topshottimer/Views/Settings/editUserDetails.dart';
@@ -17,6 +18,8 @@ import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get/get.dart';
 import 'package:topshottimer/global.dart';
+
+
 
 void main() {
   runApp(MyApp());

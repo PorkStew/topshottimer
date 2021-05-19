@@ -5,13 +5,13 @@ class Controller extends GetxController{
   //.obs tells the system to observ the variable
   final btnState = true.obs;
   final hasSubscription = false.obs;
-  String subscriptionPrice = "";
   //set global revenueCAT listener
   revenueCatSetListener(String _id) async{
-    print("inside revenuecat, setting the key and listener");
+    print("STARTING REVENUECAT:");
     await Purchases.setDebugLogsEnabled(true);
     await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: _id);
-    subscriptionPrice = getSubscriptionPrice().obs;
+    Offerings offerings = await Purchases.getOfferings();
+    Package package = offerings.current.monthly;
     //an event listener that will auto update depending on the state of the users subscription
     Purchases.addPurchaserInfoUpdateListener((info) async{
       // handle any changes to purchaserInfo
@@ -29,12 +29,6 @@ class Controller extends GetxController{
         hasSubscription.value = false;
       }
     });
-  }
-  getSubscriptionPrice() async {
-    Offerings offerings = await Purchases.getOfferings();
-    Package package = offerings.current.monthly;
-    print("HERE IS THE PRICE " + package.product.priceString);
-    return(package.product.priceString.toString());
-
+    print("AT THE END OF REVENUECAT");
   }
 }

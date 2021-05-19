@@ -30,6 +30,7 @@ class SplitsState extends State<Splits> {
   //Controller decleration for checking internet connection
 
   final controller = Get.put(Controller());
+  final _controller = Get.put(Controller());
 
   //Variable initialisation
   String sEnteredName;
@@ -229,6 +230,9 @@ class SplitsState extends State<Splits> {
     final _StringName = TextEditingController();
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+    bool paidMember = false;
+
+
     Dialog dialog = new Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -315,7 +319,7 @@ class SplitsState extends State<Splits> {
                                 print("here is my input from the dialog");
                                 print(_StringName.text);
                                 sendData(_StringName.text, 10, 10.2);
-                                bool paidMember = false;
+                                paidMember = _controller.hasSubscription.value;
                                 if (paidMember == false){
                                   Get.to(() => pricing(), arguments: {'pop': true});
                                 }
