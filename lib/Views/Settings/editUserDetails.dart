@@ -301,7 +301,7 @@ class _editUserDetailsState extends State<editUserDetails> {
 
   resetPasswordDialog() {
     Dialog dialog = new Dialog(
-        backgroundColor: Themes.darkBackgoundColor,
+        backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
           overflow: Overflow.visible,
@@ -419,7 +419,7 @@ class _editUserDetailsState extends State<editUserDetails> {
 
   notUpdateDetailsDialog() {
     Dialog dialog = new Dialog(
-        backgroundColor: Themes.darkBackgoundColor,
+        backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
           overflow: Overflow.visible,
@@ -493,7 +493,7 @@ class _editUserDetailsState extends State<editUserDetails> {
 
   updateDetailsDialog() {
     Dialog dialog = new Dialog(
-        backgroundColor: Themes.darkBackgoundColor,
+        backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
           overflow: Overflow.visible,

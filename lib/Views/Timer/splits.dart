@@ -244,7 +244,7 @@ class SplitsState extends State<Splits> {
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
               child: Container(
-                color: Themes.darkBackgoundColor,
+                color: Themes.darkBackgroundColor,
                 //this will affect the height of the dialog
                 height: 215,
                 child: Padding(
@@ -358,7 +358,7 @@ class SplitsState extends State<Splits> {
                   radius: 40,
                   child: Icon(
                     Icons.add,
-                    color: Themes.darkBackgoundColor,
+                    color: Themes.darkBackgroundColor,
                     size: 50,
                   ),
                 )),
