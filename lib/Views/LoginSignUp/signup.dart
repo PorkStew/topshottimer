@@ -407,7 +407,7 @@ class SignUpState extends  State<SignUp> {
   //account email is already used
   accountInUseDialog(){
     Dialog dialog = new Dialog(
-        backgroundColor: Themes.darkBackgoundColor,
+        backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10)
         ),

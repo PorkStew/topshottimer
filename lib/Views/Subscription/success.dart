@@ -230,6 +230,7 @@ class _SuccessState extends State<Success> {
   //When Success button is clicked depending on where the user came from. go to page selector or pop view
   popView(bool pop) {
     if(pop == true) {
+      //when you go to pricing.dart and then to success.dart when in the app it must go back to original place the pricing page was called.
       Get.back();
       Get.back();
     } else if(pop == false) {
