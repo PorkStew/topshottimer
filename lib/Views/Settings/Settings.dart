@@ -24,6 +24,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   //Controller to check for internet
   final controller = Get.put(Controller());
+  final _controller = Get.put(Controller());
 
   //Variable decleration for all users info
   Future newSensitivityFuture;
@@ -442,7 +443,7 @@ class _SettingsState extends State<Settings> {
                                   value: isSwitched,
                                   onChanged: (value) {
                                     setState(() {
-
+                                      paidMember = _controller.hasSubscription.value;
                                       //Checks if it is a member and if a member then you are allowed to change sounds
                                       if (paidMember == false){
                                         Get.to(pricing(), arguments: {'pop': true});
@@ -519,6 +520,8 @@ class _SettingsState extends State<Settings> {
                                     ],
                                     onChanged: (value) {
                                       setState(() {
+
+                                        paidMember = _controller.hasSubscription.value;
                                         if (paidMember == false){
                                           Get.to(pricing(), arguments: {'pop': true});
                                         } else
