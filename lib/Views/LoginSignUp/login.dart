@@ -359,7 +359,7 @@ class LoginState extends State<Login> {
   //called when user details are incorrect
   incorrectDetailsDialog() {
     Dialog dialog = new Dialog(
-        backgroundColor: Themes.darkBackgoundColor,
+        backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
           clipBehavior: Clip.none,
@@ -440,7 +440,7 @@ class LoginState extends State<Login> {
   //shown after a certain number of attempts specified at the top of this code at variable declarations
   createAccountDialog() {
     Dialog dialog = new Dialog(
-        backgroundColor: Themes.darkBackgoundColor,
+        backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
           clipBehavior: Clip.none,

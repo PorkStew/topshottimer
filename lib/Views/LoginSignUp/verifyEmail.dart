@@ -312,7 +312,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   //dialog that is shown when resend email button is clicked
   emailSent() {
     Dialog dialog = new Dialog(
-        backgroundColor: Themes.darkBackgoundColor,
+        backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
           clipBehavior: Clip.none,
