@@ -1,11 +1,14 @@
 //import 'package:audioplayers/audio_cache.dart';
 //import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
+import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart';
 import 'package:topshottimer/main.dart';
 import 'package:http/http.dart';
 import 'package:basic_utils/basic_utils.dart';
+import 'package:get/get.dart';
 
 class editUserDetails extends StatefulWidget {
   @override
@@ -354,11 +357,17 @@ class _editUserDetailsState extends State<editUserDetails> {
                             onTap: () {
                               resetPassword(Email.toLowerCase());
                               clearDefaults();
+                              Get.off(() => ResetPasswordConfirm(), arguments: {'email': Email.toLowerCase()});
                               //Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
                               print("Signed Out");
+
                               //Navigator.pop(context);
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  '/LoginSignUp/login', (route) => false);
+
+
+                              // Navigator.pushNamedAndRemoveUntil(context,
+                              //     '/LoginSignUp/login', (route) => false);
+                              //
+
                               // Navigator.pop(context);
                               //Navigator.push(context,
                               // MaterialPageRoute(builder: (context) => SignUp(_email.text)));

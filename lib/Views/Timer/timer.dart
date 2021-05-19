@@ -29,6 +29,7 @@ import 'package:file/local.dart';
 //import 'package:audioplayers/audioplayers.dart';
 
 import '../../Themes.dart';
+import '../../global.dart';
 
 //import 'package:isolate/isolate.dart';
 //Pushing to Merge
@@ -71,6 +72,8 @@ class timerArea extends StatefulWidget {
 
 class _timerAreaState extends State<timerArea> {
   int iCountStart = 0;
+
+  final _controller = Get.put(Controller());
 
   bool paidMember = false;
   //Variable declerations for All flags and arrays
@@ -209,6 +212,8 @@ class _timerAreaState extends State<timerArea> {
     Admob.initialize();
     //Admob.initialize(testDeviceIds: ['3A8BB6BBCB816D25C3B3D23225A99ABF']);
     super.initState();
+    paidMember = _controller.hasSubscription.value;
+    print("PAID MEMBER STATUS INITSTATE = " + paidMember.toString());
     arrShots.add("00:00:00");
     // requestTracking();
     WidgetsFlutterBinding.ensureInitialized();
@@ -481,6 +486,8 @@ class _timerAreaState extends State<timerArea> {
       bResetOnStart = false;
     } else if (bstop == true) {
       //Displays pricing page if user is not premium
+      paidMember = _controller.hasSubscription.value;
+      print("PAID MEMBER BEFORE IF STATEMENTS = " + paidMember.toString());
 
       if (paidMember == false){
         SharedPreferences prefs = await SharedPreferences.getInstance();
