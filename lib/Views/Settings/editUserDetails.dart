@@ -357,16 +357,25 @@ class _editUserDetailsState extends State<editUserDetails> {
                             onTap: () {
                               resetPassword(Email.toLowerCase());
                               clearDefaults();
-                              Get.off(() => ResetPasswordConfirm(), arguments: {'email': Email.toLowerCase()});
+                              //Navigator.pop(context);
+                              //Get.off(() => ResetPasswordConfirm(), arguments: {'email': Email.toLowerCase()});
                               //Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
                               print("Signed Out");
 
-                              //Navigator.pop(context);
 
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  '/LoginSignUp/resetPasswordConfirm',
+                              (route) => false,
+                              arguments: {'email': Email.toLowerCase()});
 
+                              // Navigator.pushNamedAndRemoveUntil(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => Splits(arrShots.toString())));
                               // Navigator.pushNamedAndRemoveUntil(context,
                               //     '/LoginSignUp/login', (route) => false);
-                              //
+
 
                               // Navigator.pop(context);
                               //Navigator.push(context,
