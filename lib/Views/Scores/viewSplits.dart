@@ -230,7 +230,7 @@ class viewSplitsState extends State<viewSplits> {
   //Delete string confirmation dialog to confirm deleting a string
   deleteStringConfirmationDialog() {
     Dialog dialog = new Dialog(
-        backgroundColor: Themes.darkBackgoundColor,
+        backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
           overflow: Overflow.visible,
