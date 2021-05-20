@@ -238,7 +238,7 @@ class SplitsState extends State<Splits> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             ClipRRect(
@@ -316,14 +316,13 @@ class SplitsState extends State<Splits> {
                                   return;
                                 }
                                 _formKey.currentState.save();
-                                print("here is my input from the dialog");
-                                print(_StringName.text);
-                                sendData(_StringName.text, 10, 10.2);
                                 paidMember = _controller.hasSubscription.value;
                                 if (paidMember == false){
                                   Get.to(() => pricing(), arguments: {'pop': true});
                                 }
-                                else{
+                                else{print("here is my input from the dialog");
+                                print(_StringName.text);
+                                sendData(_StringName.text, 10, 10.2);
                                   Navigator.pushReplacementNamed(
                                       context, '/PageSelector');
                                 }

@@ -7,8 +7,6 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Themes.dart';
-import '../PageSelector.dart';
-
 String userGetID;
 
 class viewSplits extends StatefulWidget {
@@ -26,7 +24,7 @@ class viewSplits extends StatefulWidget {
 
 class viewSplitsState extends State<viewSplits> {
   //Variable decleration
-  List<String> arrSplits = List<String>();
+  List<String> arrSplits = [];
   String sID;
   Future fUSerID;
   String sStringID;
@@ -77,7 +75,7 @@ class viewSplitsState extends State<viewSplits> {
   Future<String> userID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.setDouble('userSensitivity', 50.00);
-    String sUserID = await prefs.getString('id');
+    String sUserID = prefs.getString('id');
 
     //print(dSensitivity.toString());
     return sUserID;
@@ -209,6 +207,9 @@ class viewSplitsState extends State<viewSplits> {
                   ),
                 ]);
               }
+              break;
+            default:
+              return Text("");
           }
         },
       ),
@@ -219,7 +220,7 @@ class viewSplitsState extends State<viewSplits> {
   //Delete statement if the user chooses to delete a specific string
   deleteStringSplits() async {
     var url = 'https://www.topshottimer.co.za/deleteStringSplits.php';
-    var res = await post(Uri.parse(url), headers: {
+    await post(Uri.parse(url), headers: {
       "Accept": "application/jason"
     }, body: {
       //get this information from user defaults
@@ -233,7 +234,7 @@ class viewSplitsState extends State<viewSplits> {
         backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(

@@ -9,7 +9,7 @@ class AdvanceCustomAlert extends State {
             borderRadius: BorderRadius.circular(10)
         ),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(
