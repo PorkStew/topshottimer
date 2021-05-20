@@ -7,9 +7,7 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/Subscription/pricing.dart';
 import 'package:topshottimer/global.dart';
-
 import '../../Themes.dart';
-import '../PageSelector.dart';
 
 String userGetID;
 
@@ -39,7 +37,7 @@ class SplitsState extends State<Splits> {
   SplitsState(this.sHelloWorld);
 
   List<String> strings;
-  List<String> arrShots = List<String>();
+  List<String> arrShots = [];
   final sUserInput = TextEditingController();
 
   @override
@@ -80,7 +78,7 @@ class SplitsState extends State<Splits> {
     print("Before Try");
     try {
       var url = 'https://www.topshottimer.co.za/insertTimes.php';
-      var res = await post(Uri.parse(url), headers: {
+      await post(Uri.parse(url), headers: {
         "Accept": "application/jason"
       }, body: {
         "stringName": stringName,
@@ -227,7 +225,7 @@ class SplitsState extends State<Splits> {
 
   //Dialog to enter a string name and save the string to the users account
   stringNameDialog() {
-    final _StringName = TextEditingController();
+    final _stringName = TextEditingController();
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
     bool paidMember = false;
@@ -270,7 +268,7 @@ class SplitsState extends State<Splits> {
 
                                 //labelText: 'Email',
                                 labelText: 'String Name'),
-                            controller: _StringName,
+                            controller: _stringName,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'String Name is required';
@@ -278,7 +276,7 @@ class SplitsState extends State<Splits> {
                               return null;
                             },
                             onSaved: (String value) {
-                              _StringName.text = value;
+                              _stringName.text = value;
                             },
                           ),
                         ),
@@ -321,8 +319,8 @@ class SplitsState extends State<Splits> {
                                   Get.to(() => pricing(), arguments: {'pop': true});
                                 }
                                 else{print("here is my input from the dialog");
-                                print(_StringName.text);
-                                sendData(_StringName.text, 10, 10.2);
+                                print(_stringName.text);
+                                sendData(_stringName.text, 10, 10.2);
                                   Navigator.pushReplacementNamed(
                                       context, '/PageSelector');
                                 }
