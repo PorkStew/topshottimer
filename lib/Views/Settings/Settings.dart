@@ -672,7 +672,11 @@ class _SettingsState extends State<Settings> {
                       ),
                     ],
                   );
+
                 }
+                break;
+              default:
+                return Text("");
             }
           },
         ),

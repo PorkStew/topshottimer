@@ -21,11 +21,11 @@ class _ProfileState extends State<Profile> {
   String sID;
 
   //Arrays of strings and shots
-  List<String> arrStringID = List<String>();
-  List<String> arrStringName = List<String>();
-  List<String> arrTotalShots = List<String>();
-  List<String> arrTotalTime = List<String>();
-  List<String> arrDates = List<String>();
+  List<String> arrStringID = [];
+  List<String> arrStringName = [];
+  List<String> arrTotalShots = [];
+  List<String> arrTotalTime = [];
+  List<String> arrDates = [];
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _ProfileState extends State<Profile> {
   Future<String> userID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.setDouble('userSensitivity', 50.00);
-    String sUserID = await prefs.getString('id');
+    String sUserID = prefs.getString('id');
 
     //print(dSensitivity.toString());
     return sUserID;
@@ -209,6 +209,9 @@ class _ProfileState extends State<Profile> {
                   ),
                 ]);
               }
+              break;
+            default:
+              return Text("");
           }
         },
       ),

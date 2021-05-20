@@ -1,22 +1,12 @@
 import 'dart:async';
-import 'dart:isolate';
 import 'dart:math';
 import 'dart:io' as io;
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:audio_session/audio_session.dart';
-//import 'package:firebase_admob/firebase_admob.dart';
-
-//import 'package:dartins/dartins.dart';
-//import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
-
-//import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-
-// import 'package:noise_meter/noise_meter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/Subscription/pricing.dart';
@@ -24,18 +14,9 @@ import 'package:topshottimer/Views/Timer/splits.dart';
 import 'dart:io' show Platform;
 import 'package:path_provider/path_provider.dart';
 import 'package:file/local.dart';
-
-//import 'package:firebase_admob/firebase_admob.dart';
-//import 'package:audioplayers/audioplayers.dart';
-
 import '../../Themes.dart';
 import '../../global.dart';
-
-//import 'package:isolate/isolate.dart';
-//Pushing to Merge
-
 const String testDevice = '';
-
 double timerSensitivity;
 int timerDelay;
 String timerTone;
@@ -84,12 +65,10 @@ class _timerAreaState extends State<timerArea> {
   bool bCanStart = false;
 
   bool bTest = true;
-  bool _isRecording = false;
-
-  List<String> arrShots = List<String>();
-  List<int> arrMinutes = List<int>();
-  List<int> arrSeconds = List<int>();
-  List<int> arrMilliseconds = List<int>();
+  List<String> arrShots = [];
+  List<int> arrMinutes = [];
+  List<int> arrSeconds = [];
+  List<int> arrMilliseconds = [];
 
   bool bResetOnStart = false;
   bool bstop = false;
@@ -157,7 +136,7 @@ class _timerAreaState extends State<timerArea> {
   }
 
   void showSnackBar(String content) {
-    scaffoldState.currentState.showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(content),
         duration: Duration(milliseconds: 1500),
@@ -168,9 +147,9 @@ class _timerAreaState extends State<timerArea> {
   void handleEvent(
       AdmobAdEvent event, Map<String, dynamic> args, String adType) {
     switch (event) {
-      case AdmobAdEvent.loaded:
-        showSnackBar('New Admob $adType Ad loaded!');
-        break;
+      // case AdmobAdEvent.loaded:
+      //   showSnackBar('New Admob $adType Ad loaded!');
+      //   break;
       case AdmobAdEvent.opened:
         showSnackBar('Admob $adType Ad opened!');
         break;
@@ -196,7 +175,7 @@ class _timerAreaState extends State<timerArea> {
                 ),
               ),
               onWillPop: () async {
-                scaffoldState.currentState.hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 return true;
               },
             );
@@ -343,58 +322,6 @@ class _timerAreaState extends State<timerArea> {
     //_handleInterruptions(session);
   }
 
-  void _handleInterruptions(AudioSession audioSession) {
-    // just_audio can handle interruptions for us, but we have disabled that in
-    // order to demonstrate manual configuration.
-    bool playInterrupted = false;
-    audioSession.becomingNoisyEventStream.listen((_) {
-      print('PAUSE');
-      player.pause();
-    });
-    player.playingStream.listen((playing) {
-      playInterrupted = false;
-      if (playing) {
-        audioSession.setActive(true);
-      }
-    });
-    audioSession.interruptionEventStream.listen((event) {
-      print('interruption begin: ${event.begin}');
-      print('interruption type: ${event.type}');
-      if (event.begin) {
-        switch (event.type) {
-          case AudioInterruptionType.duck:
-            if (audioSession.androidAudioAttributes.usage ==
-                AndroidAudioUsage.game) {
-              player.setVolume(player.volume / 2);
-            }
-            playInterrupted = false;
-            break;
-          case AudioInterruptionType.pause:
-          case AudioInterruptionType.unknown:
-            if (player.playing) {
-              player.pause();
-              playInterrupted = true;
-            }
-            break;
-        }
-      } else {
-        switch (event.type) {
-          case AudioInterruptionType.duck:
-            player.setVolume(min(1.0, player.volume * 2));
-            playInterrupted = false;
-            break;
-          case AudioInterruptionType.pause:
-            if (playInterrupted) player.play();
-            playInterrupted = false;
-            break;
-          case AudioInterruptionType.unknown:
-            playInterrupted = false;
-            break;
-        }
-      }
-    });
-  }
-
   //Starts stop watch and checks various flags have been reset and stopped
 
   Future<void> startstopwatch() async {
@@ -426,8 +353,7 @@ class _timerAreaState extends State<timerArea> {
 
       if (Platform.isIOS) {
         print("*************************THIS IS IOS***********************");
-        var duration =
-            await player.setAsset("assets/audios/" + timerTone + ".mp3");
+        player.setAsset("assets/audios/" + timerTone + ".mp3");
         player.setVolume(1.0);
       }
 
@@ -562,7 +488,7 @@ class _timerAreaState extends State<timerArea> {
           _currentStatus = current.status;
         });
       } else {
-        Scaffold.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
             new SnackBar(content: new Text("You must accept permissions")));
       }
     } catch (e) {
@@ -597,17 +523,16 @@ class _timerAreaState extends State<timerArea> {
           var current = await _recorder.current(channel: 0);
           if (!mounted) return;
           setState(() {
-            int iCount = 1;
             _current = current;
 
             _currentStatus = _current.status;
-            if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) > 50) {
+            if ((pow(10, _current.metering.peakPower / 20) * 120.0) > 50) {
               print("Search");
               print("***********************" +
-                  (pow(10, _current?.metering?.peakPower / 20) * 120.0)
+                  (pow(10, _current.metering.peakPower / 20) * 120.0)
                       .toString());
             }
-            if ((pow(10, _current?.metering?.peakPower / 20) * 120.0) >
+            if ((pow(10, _current.metering.peakPower / 20) * 120.0) >
                 timerSensitivity) {
               arrShots.add(stoptimetodisplay);
               arrMinutes.add(iMinutes);
@@ -615,10 +540,10 @@ class _timerAreaState extends State<timerArea> {
               arrMilliseconds.add(iMilliseconds);
 
               print("***********************Gun Shot Captured!!!!!!!!!!!!!!!!" +
-                  (pow(10, _current?.metering?.peakPower / 20) * 120.0)
+                  (pow(10, _current.metering.peakPower / 20) * 120.0)
                       .toString());
               iCountShots++;
-              print(pow(10, _current?.metering?.peakPower / 20) * 120.0);
+              print(pow(10, _current.metering.peakPower / 20) * 120.0);
 
               bCanStart = true;
               if (io.Platform.isIOS) {
@@ -665,7 +590,6 @@ class _timerAreaState extends State<timerArea> {
   //Actual Widgets
   @override
   Widget build(BuildContext context) {
-    var sliderValue = 0.0;
 
     return Scaffold(
         body: Column(
@@ -808,7 +732,7 @@ class _timerAreaState extends State<timerArea> {
         backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(
@@ -877,14 +801,14 @@ class _timerAreaState extends State<timerArea> {
 //Gets user defaults for saving strings etc
 obtainUserDefaults() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  double dDelay = await prefs.getDouble('userDelay');
-  bool bRandom = await prefs.getBool('randomDelay');
-  double dSensitivity = await prefs.getDouble('userSensitivity');
-  String sTone = await prefs.getString('userTone');
+  double dDelay = prefs.getDouble('userDelay');
+  bool bRandom = prefs.getBool('randomDelay');
+  double dSensitivity = prefs.getDouble('userSensitivity');
+  String sTone = prefs.getString('userTone');
 
   if (dDelay == null) {
     await prefs.setDouble('userDelay', 3);
-    dDelay = await prefs.getDouble('userDelay');
+    dDelay = prefs.getDouble('userDelay');
   }
 
   if (bRandom == null) {
@@ -894,13 +818,13 @@ obtainUserDefaults() async {
 
   if (dSensitivity == null) {
     await prefs.setDouble('userSensitivity', 50.0);
-    dSensitivity = await prefs.getDouble('userSensitivity');
+    dSensitivity = prefs.getDouble('userSensitivity');
   }
 
   if (sTone == null) {
     print("*******************************NO TONE SET");
     await prefs.setString('userTone', "2100");
-    sTone = await prefs.getString('userTone');
+    sTone = prefs.getString('userTone');
   }
 
   if (Platform.isIOS) {
@@ -934,7 +858,7 @@ obtainUserDefaults() async {
     }
   }
   double dTime;
-  dTime = await double.parse(dDelay.toStringAsFixed(0));
+  dTime =  double.parse(dDelay.toStringAsFixed(0));
   timerDelay = dDelay.round();
   timerTone = sTone;
   bRandomDelay = bRandom;

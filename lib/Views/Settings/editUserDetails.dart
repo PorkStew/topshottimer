@@ -1,14 +1,8 @@
-//import 'package:audioplayers/audio_cache.dart';
-//import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
-import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart';
-import 'package:topshottimer/main.dart';
 import 'package:http/http.dart';
 import 'package:basic_utils/basic_utils.dart';
-import 'package:get/get.dart';
 
 class editUserDetails extends StatefulWidget {
   @override
@@ -292,6 +286,9 @@ class _editUserDetailsState extends State<editUserDetails> {
                     ],
                   );
                 }
+                break;
+              default:
+                return Text("");
             }
           },
         ),
@@ -304,7 +301,7 @@ class _editUserDetailsState extends State<editUserDetails> {
         backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(
@@ -422,7 +419,7 @@ class _editUserDetailsState extends State<editUserDetails> {
         backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(
@@ -496,7 +493,7 @@ class _editUserDetailsState extends State<editUserDetails> {
         backgroundColor: Themes.darkBackgroundColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
             Container(
@@ -575,7 +572,7 @@ resetPassword(String email) async {
   try {
     var url =
         'https://authentication.topshottimer.co.za/authentication/resetPasswordMailer.php';
-    var res = await post(Uri.parse(url), headers: {
+    await post(Uri.parse(url), headers: {
       "Accept": "application/jason"
     }, body: {
       "emailAddress": email,
@@ -590,7 +587,7 @@ resetPassword(String email) async {
 updateDetails(String name, String surname, String email) async {
   try {
     var url = 'https://www.topshottimer.co.za/updateUserDetails.php';
-    var res = await post(Uri.parse(url), headers: {
+    await post(Uri.parse(url), headers: {
       "Accept": "application/jason"
     }, body: {
       "firstName": name,
@@ -616,26 +613,26 @@ clearDefaults() async {
 
 Future<String> userFirstName() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String sFirstName = await prefs.getString('firstName');
+  String sFirstName = prefs.getString('firstName');
 
   return sFirstName;
 }
 
 Future<String> userLastName() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String sLastName = await prefs.getString('lastName');
+  String sLastName = prefs.getString('lastName');
   return sLastName;
 }
 
 Future<String> userEmail() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String sEmail = await prefs.getString('email');
+  String sEmail = prefs.getString('email');
   return sEmail;
 }
 
 Future<double> userSensitivity() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  double dSensitivity = await prefs.getDouble('userSensitivity');
+  double dSensitivity = prefs.getDouble('userSensitivity');
   if (dSensitivity == null) {
     await prefs.setDouble('userSensitivity', 50.0);
   }
@@ -649,7 +646,7 @@ setDefaultSensitivity(double newValue) async {
 
 Future<double> userDelay() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  double dDelay = await prefs.getDouble('userDelay');
+  double dDelay = prefs.getDouble('userDelay');
   if (dDelay == null) {
     await prefs.setDouble('userDelay', 3);
   }
@@ -664,7 +661,7 @@ setDefaultDelay(double newValue) async {
 Future<String> userTone() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //await prefs.setDouble('userSensitivity', 50.00);
-  String sTone = await prefs.getString('userTone');
+  String sTone = prefs.getString('userTone');
   if (sTone == null) {
     await prefs.setString('userTone', "1500");
   }
