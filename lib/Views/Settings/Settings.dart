@@ -587,11 +587,13 @@ class _SettingsState extends State<Settings> {
                                   child: Obx(() => ElevatedButton(
                                         onPressed: controller.btnState.value
                                             ? () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            editUserDetails()));
+                                          Get.to(() => editUserDetails());
+
+                                          // Navigator.push(
+                                                //     context,
+                                                //     MaterialPageRoute(
+                                                //         builder: (context) =>
+                                                //             editUserDetails()));
                                               }
                                             : null,
                                         child: Text(
@@ -670,7 +672,11 @@ class _SettingsState extends State<Settings> {
                       ),
                     ],
                   );
+
                 }
+                break;
+              default:
+                return Text("");
             }
           },
         ),
