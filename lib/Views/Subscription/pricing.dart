@@ -22,7 +22,7 @@ class _pricingState extends State<pricing>{
   void initState() {
     getPrice();
   }
-  String price = "s";
+  String price = "";
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
@@ -299,11 +299,11 @@ subscriptionProccess(bool pop) async {
             setState(() => _loading = true);
             print("SHOW SUCCESS with true");
            Get.back();
-           Get.to(() => Success(), arguments: {'pop': true});
+           Get.to(() => Success(), arguments: {'pop': true, 'price': price});
           } else if(pop == false) {
             //setState(() => _loading = true);
             print("SHOW SUCCESS with false");
-            Get.off(() => Success(), arguments: {'pop': false});
+            Get.off(() => Success(), arguments: {'pop': false, 'price': price});
           }
         }
       } on PlatformException catch (e) {

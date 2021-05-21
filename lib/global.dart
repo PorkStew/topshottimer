@@ -13,12 +13,16 @@ class Controller extends GetxController{
     //Offerings offerings = await Purchases.getOfferings();
     //Package package = offerings.current.monthly;
     PurchaserInfo purchaserInfo = await Purchases.getPurchaserInfo();
-    if (purchaserInfo.entitlements.all["premium_features"].isActive) {
-      print("USER IS SUBSCRIBED ******************");
-      hasSubscription.value = true;
-    } else {
-      print("USER IS NOT SUBSCRIBED *****************");
-      hasSubscription.value = false;
+    try {
+      if (purchaserInfo.entitlements.all["premium_features"].isActive) {
+        print("USER IS SUBSCRIBED ******************");
+        hasSubscription.value = true;
+      } else {
+        print("USER IS NOT SUBSCRIBED *****************");
+        hasSubscription.value = false;
+      }
+    } catch (e){
+      print(e);
     }
     //an event listener that will auto update depending on the state of the users subscription
     Purchases.addPurchaserInfoUpdateListener((info) async{

@@ -19,7 +19,7 @@ class _SuccessState extends State<Success> {
     //get passed argument and set it to variable
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     bool pop = arguments['pop'];
-
+    String price = arguments['price'];
     return _loading
         ? Loading() : Scaffold(
       body: Container(
@@ -179,14 +179,14 @@ class _SuccessState extends State<Success> {
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                       children: [
-                        Text('1.99 / Month',
+                        Text(price + ' / Month',
                           style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 17,
                               fontFamily: 'Montserrat-Regular',
                               letterSpacing: 0.2
                           ),),
-                        Text('1.99 billed annually as recurring payment',
+                        Text(price + ' billed annually as recurring payment',
                           style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 12,
@@ -236,5 +236,6 @@ class _SuccessState extends State<Success> {
     } else if(pop == false) {
       Get.off(() => pageSelector());
     }
-  }}
+  }
+}
 
