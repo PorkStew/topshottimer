@@ -14,7 +14,6 @@ import 'package:http/http.dart';
 import 'package:topshottimer/Views/PageSelector.dart';
 import 'package:topshottimer/Views/LoginSignUp/login.dart';
 import 'package:topshottimer/Views/LoginSignUp/resetPasswordConfirm.dart';
-import 'package:topshottimer/Views/LoginSignUp/verifyEmail.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get/get.dart';
 import 'package:topshottimer/global.dart';

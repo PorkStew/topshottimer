@@ -20,6 +20,7 @@ class _SuccessState extends State<Success> {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     bool pop = arguments['pop'];
     String price = arguments['price'];
+    //print("PRICE: " + price);
     return _loading
         ? Loading() : Scaffold(
       body: Container(
@@ -148,7 +149,7 @@ class _SuccessState extends State<Success> {
             SizedBox(height: 20,),
             Container(
                 width: 268,
-                height: 90,
+                height: 100,
                 //margin: const EdgeInsets.all(15.0),
                 //padding: const EdgeInsets.all(3.0),
                 decoration: BoxDecoration(
@@ -186,7 +187,7 @@ class _SuccessState extends State<Success> {
                               fontFamily: 'Montserrat-Regular',
                               letterSpacing: 0.2
                           ),),
-                        Text(price + ' billed annually as recurring payment',
+                        Text(price + ' billed monthly as recurring payment',
                           style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 12,
