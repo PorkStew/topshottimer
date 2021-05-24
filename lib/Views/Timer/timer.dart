@@ -614,14 +614,17 @@ class _timerAreaState extends State<timerArea> {
             },
           ),
         ),
-        Container(
-            //padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
-            child: FlatButton(
-              //color: btnColor,
 
-              minWidth: 250,
-              height: 250,
-              shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
+        SizedBox(
+
+            width: 250,
+            height: 250,
+            child: ElevatedButton(
+              child: Text(
+                buttonText,
+                style: TextStyle(color: Colors.white, fontSize: 80, fontFamily: 'Digital-7')
+
+              ),
               onPressed: () {
                 obtainUserDefaults();
                 if (bStopable == true) {
@@ -674,9 +677,73 @@ class _timerAreaState extends State<timerArea> {
 
                 //startispressed ? startstopwatch: null;
               },
-              child: Text(buttonText,
-                  style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
+              style: ElevatedButton.styleFrom(
+                  primary: Themes.darkBackgroundColor,
+                  shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),),
             )),
+        // Container(
+        //     //padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
+        //     child: FlatButton(
+        //       //color: btnColor,
+        //
+        //       minWidth: 250,
+        //       height: 250,
+        //       shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
+        //       onPressed: () {
+        //         obtainUserDefaults();
+        //         if (bStopable == true) {
+        //           if (bResetOnStart == true) {
+        //             arrShots.clear();
+        //             arrShots.add("00:00:00");
+        //             iCountShots = 0;
+        //             swatch.reset();
+        //             //stoptimer();
+        //             //stopRecorder();
+        //             //stoptimer();
+        //             reset();
+        //             //startstopwatch();
+        //             didReset = true;
+        //           }
+        //           if (didReset == true) {
+        //             print("Got into pressed method");
+        //             if (startispressed == true) {
+        //               startstopwatch();
+        //               isChanged = !isChanged;
+        //               colorisChanged = !colorisChanged;
+        //               if (!mounted) return;
+        //               setState(() {
+        //                 colorisChanged == true
+        //                     ? btnColor = Color(0xFFA2C11C)
+        //                     : btnColor = Color(0xFF2C5D63);
+        //                 isChanged == true
+        //                     ? buttonText = "Start"
+        //                     : buttonText = "Stop";
+        //               });
+        //             }
+        //           }
+        //           // else
+        //           // {
+        //           //   Fluttertoast.showToast(
+        //           //       msg: "Please reset before starting another string",
+        //           //
+        //           //       toastLength: Toast.LENGTH_SHORT,
+        //           //       gravity: ToastGravity.BOTTOM,
+        //           //       timeInSecForIosWeb: 3,
+        //           //       backgroundColor: Colors.red,
+        //           //
+        //           //       textColor: Colors.black,
+        //           //       fontSize: 24.0
+        //           //   );
+        //           //   print("You need to reset");
+        //           // }
+        //
+        //         }
+        //
+        //         //startispressed ? startstopwatch: null;
+        //       },
+        //       child: Text(buttonText,
+        //           style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
+        //     )),
         Container(
             padding: EdgeInsets.only(top: 20, bottom: 0, left: 0, right: 0),
             child: Text(
@@ -697,28 +764,58 @@ class _timerAreaState extends State<timerArea> {
             )),
         Row(children: <Widget>[
           Spacer(),
-          FlatButton(
-              //color: Colors.blue,
-              minWidth: 200,
+
+          SizedBox(
+              width: 200,
               height: 50,
-              color: Color(0xFF2C5D63),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                side: BorderSide(width: 2, color: Color(0xFF2C5D63)),
-              ),
-              child: Text("View String",
+              child: ElevatedButton(
+                child: Text(
+                  'View String',
                   style: TextStyle(
-                      fontSize: 25, color: Theme.of(context).buttonColor)),
-              onPressed: () {
-                if (arrShots.length <= 1) {
-                  print("Should get into alert");
-                  errorViewingStringDialog();
-                } else
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Splits(arrShots.toString())));
-              }),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    fontFamily: 'Montserrat-Regular',
+                    letterSpacing: 0.2,
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  if (arrShots.length <= 1) {
+                    print("Should get into alert");
+                    errorViewingStringDialog();
+                  } else
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Splits(arrShots.toString())));
+                },
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF2C5D63),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              )),
+          // FlatButton(
+          //     //color: Colors.blue,
+          //     minWidth: 200,
+          //     height: 50,
+          //     color: Color(0xFF2C5D63),
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(10.0),
+          //       side: BorderSide(width: 2, color: Color(0xFF2C5D63)),
+          //     ),
+          //     child: Text("View String",
+          //         style: TextStyle(
+          //             fontSize: 25, color: Theme.of(context).buttonColor)),
+          //     onPressed: () {
+          //       if (arrShots.length <= 1) {
+          //         print("Should get into alert");
+          //         errorViewingStringDialog();
+          //       } else
+          //         Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //                 builder: (context) => Splits(arrShots.toString())));
+          //     }),
           Spacer(),
         ]),
         //Text(sTestingEar),

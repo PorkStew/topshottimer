@@ -612,28 +612,56 @@ class _SettingsState extends State<Settings> {
                                 padding: EdgeInsets.only(
                                     top: 15, bottom: 0, left: 0, right: 0),
                               ),
-                              FlatButton(
-                                color: Themes.darkButton1Color,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    side: BorderSide(
-                                        color: Themes.darkButton1Color)),
-                                height: 50,
-                                minWidth: 150,
-                                child: Text("Sign Out",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                    )),
-                                onPressed: () async {
-                                  SharedPreferences preferences =
+
+                              SizedBox(
+                                  width: 150,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    child: Text(
+                                      'Sign Out',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20,
+                                        fontFamily: 'Montserrat-Regular',
+                                        letterSpacing: 0.2,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      SharedPreferences preferences =
                                       await SharedPreferences.getInstance();
-                                  await preferences.clear();
-                                  Navigator.pushReplacementNamed(
-                                      context, '/LoginSignUp/login');
-                                  print("Signed Out");
-                                },
-                              ),
+                                      await preferences.clear();
+                                      Navigator.pushReplacementNamed(
+                                          context, '/LoginSignUp/login');
+                                      print("Signed Out");
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Themes.darkButton1Color,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10))),
+                                  )),
+                              // FlatButton(
+                              //   color: Themes.darkButton1Color,
+                              //   shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.circular(10.0),
+                              //       side: BorderSide(
+                              //           color: Themes.darkButton1Color)),
+                              //   height: 50,
+                              //   minWidth: 150,
+                              //   child: Text("Sign Out",
+                              //       style: TextStyle(
+                              //         fontSize: 20,
+                              //         color: Colors.white,
+                              //       )),
+                              //   onPressed: () async {
+                              //     SharedPreferences preferences =
+                              //         await SharedPreferences.getInstance();
+                              //     await preferences.clear();
+                              //     Navigator.pushReplacementNamed(
+                              //         context, '/LoginSignUp/login');
+                              //     print("Signed Out");
+                              //   },
+                              // ),
                             ],
                           ),
                         ),

@@ -162,41 +162,85 @@ class viewSplitsState extends State<viewSplits> {
                   Row(
                     children: [
                       Spacer(),
-                      FlatButton(
-                        color: Color(0xFF2C5D63),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(color: Color(0xFF2C5D63))),
-                        height: 50,
-                        minWidth: 35,
-                        child: Text(
-                          "Close String",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Theme.of(context).buttonColor),
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
+
+                      SizedBox(
+                          width: 170,
+                          height: 50,
+                          child: ElevatedButton(
+                            child: Text(
+                              'Close String',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                fontFamily: 'Montserrat-Regular',
+                                letterSpacing: 0.2,
+                                color: Colors.white,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);                            },
+                            style: ElevatedButton.styleFrom(
+                                primary: Color(0xFF2C5D63),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                          )),
+                      // FlatButton(
+                      //   color: Color(0xFF2C5D63),
+                      //   shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(10.0),
+                      //       side: BorderSide(color: Color(0xFF2C5D63))),
+                      //   height: 50,
+                      //   minWidth: 35,
+                      //   child: Text(
+                      //     "Close String",
+                      //     style: TextStyle(
+                      //         fontSize: 20,
+                      //         color: Theme.of(context).buttonColor),
+                      //   ),
+                      //   onPressed: () {
+                      //     Navigator.pop(context);
+                      //   },
+                      // ),
                       Spacer(),
-                      FlatButton(
-                        color: Color(0xFFA2C11C),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(color: Color(0xFFA2C11C))),
-                        height: 50,
-                        minWidth: 35,
-                        child: Text(
-                          "Delete String",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Theme.of(context).buttonColor),
-                        ),
-                        onPressed: () {
-                          deleteStringConfirmationDialog();
-                        },
-                      ),
+
+                      SizedBox(
+                          width: 170,
+                          height: 50,
+                          child: ElevatedButton(
+                            child: Text(
+                              'Delete String',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                fontFamily: 'Montserrat-Regular',
+                                letterSpacing: 0.2,
+                                color: Colors.white,
+                              ),
+                            ),
+                            onPressed: () {
+                              deleteStringConfirmationDialog();                            },
+                            style: ElevatedButton.styleFrom(
+                                primary: Color(0xFFA2C11C),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                          )),
+                      // FlatButton(
+                      //   color: Color(0xFFA2C11C),
+                      //   shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(10.0),
+                      //       side: BorderSide(color: Color(0xFFA2C11C))),
+                      //   height: 50,
+                      //   minWidth: 35,
+                      //   child: Text(
+                      //     "Delete String",
+                      //     style: TextStyle(
+                      //         fontSize: 20,
+                      //         color: Theme.of(context).buttonColor),
+                      //   ),
+                      //   onPressed: () {
+                      //     deleteStringConfirmationDialog();
+                      //   },
+                      // ),
                       Spacer(),
                     ],
                   ),
