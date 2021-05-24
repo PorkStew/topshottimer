@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart';
 import 'package:topshottimer/Views/Scores/viewSplits.dart';
@@ -30,6 +31,7 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
+    Purchases.getPurchaserInfo();
     fUSerID = _getID();
   }
 

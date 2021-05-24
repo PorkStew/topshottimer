@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/Subscription/pricing.dart';
 import 'package:topshottimer/global.dart';
@@ -42,6 +43,7 @@ class SplitsState extends State<Splits> {
 
   @override
   void initState() {
+    Purchases.getPurchaserInfo();
     obtainUserDefaults();
     //Replaces commas in data recieved from database
     sHelloWorld.replaceAll(' ', '');
@@ -123,29 +125,53 @@ class SplitsState extends State<Splits> {
                           Spacer(),
                           Text(sShot, style: TextStyle(fontSize: 30)),
                           Spacer(),
-                          FlatButton(
-                            //color: Colors.red,
-                            height: 35,
-                            minWidth: 35,
-                            shape: CircleBorder(
-                                side: BorderSide(
-                                    color: Color(0xFFDE561C), width: 2)),
-                            child: Text(
-                              "X",
-                              style: TextStyle(
-                                  fontSize: 20, color: Color(0xFFDE561C)),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                if (arrShots.length > 1) {
-                                  arrShots.remove(sShot);
-                                } else
-                                  Navigator.pop(context);
+                          SizedBox(
+                              height: 35,
+                              child: ElevatedButton(
 
-                                print("Hello World");
-                              });
-                            },
-                          ),
+                                child: Text(
+                                  "X",
+                                  style: TextStyle(
+                                      fontSize: 20, color: Color(0xFFDE561C)),
+                                ),
+                                onPressed: () {
+                                  if (arrShots.length > 1) {
+                                    arrShots.remove(sShot);
+                                  } else
+                                    Navigator.pop(context);
+
+                                  print("Hello World");
+                                },
+
+                                style: ElevatedButton.styleFrom(
+                                    primary: Themes.darkBackgroundColor,
+                                  shape: CircleBorder(
+                                      side: BorderSide(
+                                          color: Color(0xFFDE561C), width: 2)),),
+                              )),
+                          // FlatButton(
+                          //   //color: Colors.red,
+                          //   height: 35,
+                          //   minWidth: 35,
+                          //   shape: CircleBorder(
+                          //       side: BorderSide(
+                          //           color: Color(0xFFDE561C), width: 2)),
+                          //   child: Text(
+                          //     "X",
+                          //     style: TextStyle(
+                          //         fontSize: 20, color: Color(0xFFDE561C)),
+                          //   ),
+                          //   onPressed: () {
+                          //     setState(() {
+                          //       if (arrShots.length > 1) {
+                          //         arrShots.remove(sShot);
+                          //       } else
+                          //         Navigator.pop(context);
+                          //
+                          //       print("Hello World");
+                          //     });
+                          //   },
+                          // ),
                         ],
                       ),
                     ),
@@ -154,7 +180,9 @@ class SplitsState extends State<Splits> {
               },
             ),
           ),
-
+          Container(
+            padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
+          ),
           Text(
             "Total Time: " + arrShots[arrShots.length - 1],
             style: TextStyle(
@@ -177,26 +205,35 @@ class SplitsState extends State<Splits> {
           Row(
             children: [
               Spacer(),
-              FlatButton(
-                color: Color(0xFF2C5D63),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    side: BorderSide(color: Color(0xFF2C5D63))),
-                height: 50,
-                minWidth: 35,
-                child: Text(
-                  "Close String",
-                  style: TextStyle(
-                      fontSize: 20, color: Theme.of(context).buttonColor),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+
+              SizedBox(
+                  width: 160,
+                  height: 50,
+                  child: ElevatedButton(
+                    child: Text(
+                      'Close String',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                        fontFamily: 'Montserrat-Regular',
+                        letterSpacing: 0.2,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: Color(0xFF2C5D63),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                  )),
+
               Spacer(),
               SizedBox(
                   //minwidth: 100,
                   height: 50,
+                  width: 160,
                   child: Obx(() => ElevatedButton(
                         onPressed: controller.btnState.value
                             ? () => stringNameDialog()
