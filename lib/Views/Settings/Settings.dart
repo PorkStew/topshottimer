@@ -8,6 +8,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/Settings/editUserDetails.dart';
@@ -41,6 +42,8 @@ class _SettingsState extends State<Settings> {
   @override
   void initState() {
     super.initState();
+    Purchases.getPurchaserInfo();
+
     //initPlayer();
 
     //sets the session to play the sound

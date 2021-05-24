@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:http/http.dart';
@@ -22,6 +23,7 @@ class _editUserDetailsState extends State<editUserDetails> {
   @override
   void initState() {
     super.initState();
+    Purchases.getPurchaserInfo();
     fFirstName = _getFirstName();
     fLastName = _getLastName();
     fEmail = _getEmail();

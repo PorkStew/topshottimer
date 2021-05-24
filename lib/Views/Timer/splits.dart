@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/Subscription/pricing.dart';
 import 'package:topshottimer/global.dart';
@@ -42,6 +43,7 @@ class SplitsState extends State<Splits> {
 
   @override
   void initState() {
+    Purchases.getPurchaserInfo();
     obtainUserDefaults();
     //Replaces commas in data recieved from database
     sHelloWorld.replaceAll(' ', '');

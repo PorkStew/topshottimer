@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Themes.dart';
@@ -34,6 +35,7 @@ class viewSplitsState extends State<viewSplits> {
   @override
   void initState() {
     super.initState();
+    Purchases.getPurchaserInfo();
     fUSerID = _getID();
   }
 

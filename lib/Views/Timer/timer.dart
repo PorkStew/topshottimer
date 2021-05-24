@@ -8,6 +8,7 @@ import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Views/Subscription/pricing.dart';
 import 'package:topshottimer/Views/Timer/splits.dart';
@@ -191,6 +192,7 @@ class _timerAreaState extends State<timerArea> {
     Admob.initialize();
     //Admob.initialize(testDeviceIds: ['3A8BB6BBCB816D25C3B3D23225A99ABF']);
     super.initState();
+    Purchases.getPurchaserInfo();
     paidMember = _controller.hasSubscription.value;
     print("PAID MEMBER STATUS INITSTATE = " + paidMember.toString());
     arrShots.add("00:00:00");
