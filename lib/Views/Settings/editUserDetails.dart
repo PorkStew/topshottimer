@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:http/http.dart';
@@ -22,6 +23,7 @@ class _editUserDetailsState extends State<editUserDetails> {
   @override
   void initState() {
     super.initState();
+    Purchases.getPurchaserInfo();
     fFirstName = _getFirstName();
     fLastName = _getLastName();
     fEmail = _getEmail();
@@ -200,86 +202,132 @@ class _editUserDetailsState extends State<editUserDetails> {
                             SizedBox(
                               height: 15,
                             ),
-                            FlatButton(
-                              color: Themes.darkButton1Color,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  side: BorderSide(
-                                      color: Themes.darkButton1Color)),
-                              height: 50,
-                              minWidth: 220,
-                              child: Text(
-                                "Reset Password",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: Theme.of(context).buttonColor),
-                              ),
-                              onPressed: () async {
-                                resetPasswordDialog();
-                              },
-                            ),
+
+                            SizedBox(
+                                width: 220,
+                                height: 50,
+                                child: ElevatedButton(
+                                  child: Text(
+                                    'Reset Password',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20,
+                                      fontFamily: 'Montserrat-Regular',
+                                      letterSpacing: 0.2,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    resetPasswordDialog();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Themes.darkButton1Color,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10))),
+                                )),
+                            // FlatButton(
+                            //   color: Themes.darkButton1Color,
+                            //   shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(10.0),
+                            //       side: BorderSide(
+                            //           color: Themes.darkButton1Color)),
+                            //   height: 50,
+                            //   minWidth: 220,
+                            //   child: Text(
+                            //     "Reset Password",
+                            //     style: TextStyle(
+                            //         fontSize: 20,
+                            //         color: Theme.of(context).buttonColor),
+                            //   ),
+                            //   onPressed: () async {
+                            //     resetPasswordDialog();
+                            //   },
+                            // ),
                             Container(
                               padding: EdgeInsets.only(
                                   top: 10, bottom: 0, left: 0, right: 0),
                               //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
                             ),
-                            FlatButton(
-                              color: Themes.darkButton2Color,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  side: BorderSide(color: Color(0xFFA2C11C))),
-                              height: 50,
-                              minWidth: 180,
-                              child: Text(
-                                "Update",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: Theme.of(context).buttonColor),
-                              ),
-                              onPressed: () {
-                                print("**FirstName: " + FirstName);
-                                print("**LastName: " + LastName);
-                                print("**NewFirstName: " + newFirstName);
-                                print("**NewLastName: " + newLastName);
 
-                                //print("Hello world");
-                                print(newFirstName);
+                            SizedBox(
+                                width: 180,
+                                height: 50,
+                                child: ElevatedButton(
+                                  child: Text(
+                                    'Update',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20,
+                                      fontFamily: 'Montserrat-Regular',
+                                      letterSpacing: 0.2,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    print("**FirstName: " + FirstName);
+                                    print("**LastName: " + LastName);
+                                    print("**NewFirstName: " + newFirstName);
+                                    print("**NewLastName: " + newLastName);
 
-                                if (!_formKey.currentState.validate()) {
-                                  return;
-                                }
-                                _formKey.currentState.save();
+                                    //print("Hello world");
+                                    print(newFirstName);
 
-                                if (newFirstName == FirstName &&
-                                    newLastName == LastName) {
-                                  print("***********No Details Were Edited");
-                                  print("**NewFirstName: " + newFirstName);
-                                  print("**NewLastName: " + newLastName);
-                                  //_formKey.currentState.save();
-                                  notUpdateDetailsDialog();
-                                } else {
-                                  print("***********Details Were Edited");
-                                  print("**NewFirstName: " + newFirstName);
-                                  print("**NewLastName: " + newLastName);
-                                  // _formKey.currentState.save();
-                                  newFirstName =
-                                      StringUtils.capitalize(newFirstName);
-                                  newLastName =
-                                      StringUtils.capitalize(newLastName);
+                                    if (!_formKey.currentState.validate()) {
+                                      return;
+                                    }
+                                    _formKey.currentState.save();
 
-                                  print(newFirstName.replaceAll(
-                                      new RegExp(r"\s+"), ""));
-                                  print(newLastName);
-                                  print(Email.toLowerCase());
-                                  updateUserDefaults(newFirstName, newLastName);
-                                  updateDetails(
-                                      newFirstName, newLastName, Email);
-                                  updateDetailsDialog();
-                                }
+                                    if (newFirstName == FirstName &&
+                                        newLastName == LastName) {
+                                      print("***********No Details Were Edited");
+                                      print("**NewFirstName: " + newFirstName);
+                                      print("**NewLastName: " + newLastName);
+                                      //_formKey.currentState.save();
+                                      notUpdateDetailsDialog();
+                                    } else {
+                                      print("***********Details Were Edited");
+                                      print("**NewFirstName: " + newFirstName);
+                                      print("**NewLastName: " + newLastName);
+                                      // _formKey.currentState.save();
+                                      newFirstName =
+                                          StringUtils.capitalize(newFirstName);
+                                      newLastName =
+                                          StringUtils.capitalize(newLastName);
 
-                                //TODO Needs to navigate to Page selector and have a popup dialog
-                              },
-                            ),
+                                      print(newFirstName.replaceAll(
+                                          new RegExp(r"\s+"), ""));
+                                      print(newLastName);
+                                      print(Email.toLowerCase());
+                                      updateUserDefaults(newFirstName, newLastName);
+                                      updateDetails(
+                                          newFirstName, newLastName, Email);
+                                      updateDetailsDialog();
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Themes.darkButton2Color,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10))),
+                                )),
+
+                            // FlatButton(
+                            //   color: Themes.darkButton2Color,
+                            //   shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(10.0),
+                            //       side: BorderSide(color: Color(0xFFA2C11C))),
+                            //   height: 50,
+                            //   minWidth: 180,
+                            //   child: Text(
+                            //     "Update",
+                            //     style: TextStyle(
+                            //         fontSize: 20,
+                            //         color: Theme.of(context).buttonColor),
+                            //   ),
+                            //   onPressed: () {
+                            //
+                            //     //TODO Needs to navigate to Page selector and have a popup dialog
+                            //   },
+                            // ),
                           ],
                         ),
                       ),
