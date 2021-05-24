@@ -764,6 +764,7 @@ class _timerAreaState extends State<timerArea> {
                   fontWeight: FontWeight.w700,
                   fontFamily: 'Digital-7'),
             )),
+        SizedBox(height: 10,),
         Row(children: <Widget>[
           Spacer(),
 
