@@ -7,25 +7,27 @@ class Controller extends GetxController{
   final hasSubscription = false.obs;
   //set global revenueCAT listener
   Future revenueCatSetListener(String _id) async{
-    print("STARTING REVENUECAT: GLOBAL.dart");
+    //print("STARTING REVENUECAT: GLOBAL.dart");
     await Purchases.setDebugLogsEnabled(true);
     await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: _id);
-    //Offerings offerings = await Purchases.getOfferings();
-    //Package package = offerings.current.monthly;
     PurchaserInfo purchaserInfo = await Purchases.getPurchaserInfo();
-    if (purchaserInfo.entitlements.all["premium_features"].isActive) {
-      print("USER IS SUBSCRIBED ******************");
-      hasSubscription.value = true;
-    } else {
-      print("USER IS NOT SUBSCRIBED *****************");
-      hasSubscription.value = false;
+    try {
+      if (purchaserInfo.entitlements.all["premium_features"].isActive) {
+        print("USER IS SUBSCRIBED ******************");
+        hasSubscription.value = true;
+      } else {
+        print("USER IS NOT SUBSCRIBED *****************");
+        hasSubscription.value = false;
+      }
+    } catch (e){
+      print(e);
     }
     //an event listener that will auto update depending on the state of the users subscription
     Purchases.addPurchaserInfoUpdateListener((info) async{
       // handle any changes to purchaserInfo
-      print("*******LISTENING TO SUBSCRIPTION CHECKER********");
-      print("REVENUECAT: Loading subscription");
-      print(info.activeSubscriptions);
+      //print("*******LISTENING TO SUBSCRIPTION CHECKER********");
+      //print("REVENUECAT: Loading subscription");
+      //print(info.activeSubscriptions);
       //if purchase information chnages at any point then react
       if (purchaserInfo.entitlements.all["premium_features"].isActive) {
         print("***************************************************** ACTIVE SUBSCRIBER");
@@ -35,6 +37,6 @@ class Controller extends GetxController{
         hasSubscription.value = false;
       }
     });
-    print("REVENUECAT: GLOBAL.dart END");
+    //print("REVENUECAT: GLOBAL.dart END");
   }
 }

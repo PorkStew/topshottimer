@@ -22,7 +22,7 @@ class _pricingState extends State<pricing>{
   void initState() {
     getPrice();
   }
-  String price = "s";
+  String price = "";
   @override
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
@@ -158,7 +158,7 @@ class _pricingState extends State<pricing>{
             SizedBox(height: 20,),
             Container(
                 width: 268,
-                height: 90,
+                height: 100,
                 //margin: const EdgeInsets.all(15.0),
                 //padding: const EdgeInsets.all(3.0),
                 decoration: BoxDecoration(
@@ -166,7 +166,6 @@ class _pricingState extends State<pricing>{
                   borderRadius: BorderRadius.circular(10),
 
                 ),
-
                 child:
                     Column(children: [
                       Container(
@@ -197,7 +196,7 @@ class _pricingState extends State<pricing>{
                                     fontFamily: 'Montserrat-Regular',
                                     letterSpacing: 0.2
                                 ),),
-                              Text(price + ' billed annually as a recurring payment',
+                              Text(price + ' billed monthly as a recurring payment',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 12,
@@ -216,7 +215,7 @@ class _pricingState extends State<pricing>{
                 height: 60,
                 child: Obx(() => ElevatedButton(
                   onPressed: _controller.btnState.value
-                      ? () => subscriptionProccess(pop) //proccess when bbutton is clicked here!
+                      ? () => subscriptionProcess(pop) //process when button is clicked here!
                       : null,
                   child: Text(
                     'Go Premium',
@@ -259,29 +258,20 @@ class _pricingState extends State<pricing>{
       ),
     );
   }
-
-
-subscriptionProccess(bool pop) async {
-  //change state to show loading screen
-  //TODO should add this back
-  //setState(() => _loading = true);
-  //await Purchases.setDebugLogsEnabled(true);
-  //TODO: change the id to be dynamic
-  // await Purchases.setup("nCjcXQocpiwSHbFXJKjxASIFgDALbjwA", appUserId: '50');
-  print("inside subscription proccess");
+  //When clicking GO PREMIUM button this will start the proccess for subscribing
+subscriptionProcess(bool pop) async {
   try {
     Offerings offerings = await Purchases.getOfferings();
-    print("walk to the bosss");
+    setState(() => _loading = true);
     if (offerings.current != null) {
       // Display current offering with offerings.current
-      print("above package package");
       Package package = offerings.current.monthly;
-      //print("PRICE: " + package.product.priceString);
+
       try {
         PurchaserInfo purchaserInfo = await Purchases.purchasePackage(package);
         var isPro = purchaserInfo.entitlements.all["premium_features"].isActive;
-        print("SHOW ISPRO");
         if (isPro) {
+          //get user data from user preferences
           SharedPreferences prefs = await SharedPreferences.getInstance();
           String _email = prefs.getString('email');
           String _lastName = prefs.getString('lastName');
@@ -291,31 +281,24 @@ subscriptionProccess(bool pop) async {
             "\$displayName": _lastName + " " + _firstName
           });
           // Unlock that great "pro" content
-          print("REVENUCAT: unlock pro content");
-          //Get.off(success(), arguments: {'whereTo': whereTo});
+          print("REVENUCAT: user is now subscribed");
           //When Success button is clicked depending on where the user came from. go to page selector or pop view
           _controller.hasSubscription.value = true;
           if(pop == true) {
-            setState(() => _loading = true);
-            print("SHOW SUCCESS with true");
            Get.back();
-           Get.to(() => Success(), arguments: {'pop': true});
+           Get.to(() => Success(), arguments: {'pop': true, 'price': price});
           } else if(pop == false) {
-            //setState(() => _loading = true);
-            print("SHOW SUCCESS with false");
-            Get.off(() => Success(), arguments: {'pop': false});
+            Get.off(() => Success(), arguments: {'pop': false, 'price': price});
           }
         }
-      } on PlatformException catch (e) {
-        var errorCode = PurchasesErrorHelper.getErrorCode(e);
-        print("PLATFORM ERROR");
-        print(e);
+      } on PlatformException catch (error) {
+        setState(() => _loading = false);
+        var errorCode = PurchasesErrorHelper.getErrorCode(error);
+        print("REVENUCAT: PLATFORM ERROR - $error");
         if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
           //showError(e);
-          print(e);
-          print("REVENUCAT: error");
-          //change state to not show loading screen
           setState(() => _loading = false);
+          print("REVENUCAT: PURCHASE ERROR - $error");
         }
       }
     }

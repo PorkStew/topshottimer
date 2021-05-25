@@ -65,7 +65,6 @@ class LoginState extends State<Login> {
       },
     );
   }
-
   //password widget
   Widget _buildPassword(BuildContext context) {
     final node = FocusScope.of(context);
@@ -282,7 +281,7 @@ class LoginState extends State<Login> {
     var _bytes = utf8.encode(_password);
     var _digest = sha256.convert(_bytes);
     _hashedPassword = _digest.toString();
-
+    //call php file from server
     var url = 'https://www.topshottimer.co.za/login.php';
     try {
       var res = await post(Uri.parse(url), headers: {
@@ -326,8 +325,6 @@ class LoginState extends State<Login> {
         _controller.revenueCatSetListener(_id);
         saveUserInformation(
             _id, _email, _hashedPassword, "verified", _firstName, _lastName);
-        print("where do i go from here");
-        //Navigator.pushReplacementNamed(context, '/PageSelector');
         _controller.revenueCatSetListener(_id);
         Get.off(pageSelector());
         //if details are not correct then remove loading and stay at loading screen
