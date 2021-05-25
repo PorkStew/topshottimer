@@ -616,81 +616,77 @@ class _timerAreaState extends State<timerArea> {
             },
           ),
         ),
-
-        SizedBox(
-
-            width: 250,
-            height: 250,
-            child: ElevatedButton(
-              child: Text(
-                buttonText,
-                style: TextStyle(color: Colors.white, fontSize: 80, fontFamily: 'Digital-7')
-
-              ),
-              onPressed: () {
-                obtainUserDefaults();
-                if (bStopable == true) {
-                  if (bResetOnStart == true) {
-                    arrShots.clear();
-                    arrShots.add("00:00:00");
-                    iCountShots = 0;
-                    swatch.reset();
-                    //stoptimer();
-                    //stopRecorder();
-                    //stoptimer();
-                    reset();
-                    //startstopwatch();
-                    didReset = true;
-                  }
-                  if (didReset == true) {
-                    print("Got into pressed method");
-                    if (startispressed == true) {
-                      startstopwatch();
-                      isChanged = !isChanged;
-                      colorisChanged = !colorisChanged;
-                      if (!mounted) return;
-                      setState(() {
-                        colorisChanged == true
-                            ? btnColor = Color(0xFFA2C11C)
-                            : btnColor = Color(0xFF2C5D63);
-                        isChanged == true
-                            ? buttonText = "Start"
-                            : buttonText = "Stop";
-                      });
-                    }
-                  }
-                  // else
-                  // {
-                  //   Fluttertoast.showToast(
-                  //       msg: "Please reset before starting another string",
-                  //
-                  //       toastLength: Toast.LENGTH_SHORT,
-                  //       gravity: ToastGravity.BOTTOM,
-                  //       timeInSecForIosWeb: 3,
-                  //       backgroundColor: Colors.red,
-                  //
-                  //       textColor: Colors.black,
-                  //       fontSize: 24.0
-                  //   );
-                  //   print("You need to reset");
-                  // }
-
-                }
-
-                //startispressed ? startstopwatch: null;
-              },
-              style: ElevatedButton.styleFrom(
-                  primary: Themes.darkBackgroundColor,
-                  shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),),
-            )),
-        // Container(
-        //     //padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
-        //     child: FlatButton(
-        //       //color: btnColor,
+        // TextButton(
+        //   child: Text(buttonText,
+        //       style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
+        //   onPressed: () {
+        //     obtainUserDefaults();
+        //     if (bStopable == true) {
+        //       if (bResetOnStart == true) {
+        //         arrShots.clear();
+        //         arrShots.add("00:00:00");
+        //         iCountShots = 0;
+        //         swatch.reset();
+        //         //stoptimer();
+        //         //stopRecorder();
+        //         //stoptimer();
+        //         reset();
+        //         //startstopwatch();
+        //         didReset = true;
+        //       }
+        //       if (didReset == true) {
+        //         print("Got into pressed method");
+        //         if (startispressed == true) {
+        //           startstopwatch();
+        //           isChanged = !isChanged;
+        //           colorisChanged = !colorisChanged;
+        //           if (!mounted) return;
+        //           setState(() {
+        //             colorisChanged == true
+        //                 ? btnColor = Color(0xFFA2C11C)
+        //                 : btnColor = Color(0xFF2C5D63);
+        //             isChanged == true
+        //                 ? buttonText = "Start"
+        //                 : buttonText = "Stop";
+        //           });
+        //         }
+        //       }
+        //       // else
+        //       // {
+        //       //   Fluttertoast.showToast(
+        //       //       msg: "Please reset before starting another string",
+        //       //
+        //       //       toastLength: Toast.LENGTH_SHORT,
+        //       //       gravity: ToastGravity.BOTTOM,
+        //       //       timeInSecForIosWeb: 3,
+        //       //       backgroundColor: Colors.red,
+        //       //
+        //       //       textColor: Colors.black,
+        //       //       fontSize: 24.0
+        //       //   );
+        //       //   print("You need to reset");
+        //       // }
         //
-        //       minWidth: 250,
-        //       height: 250,
-        //       shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
+        //     }
+        //
+        //     //startispressed ? startstopwatch: null;
+        //   },
+        //   style: TextButton.styleFrom(
+        //     minimumSize: Size(250,250),
+        //     shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),),
+        //
+        //   ),
+        //
+
+        // SizedBox(
+        //     width: 250,
+        //     height: 250,
+        //     child: ElevatedButton(
+        //       child: Text(
+        //         buttonText,
+        //         style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')
+        //
+        //       ),
         //       onPressed: () {
         //         obtainUserDefaults();
         //         if (bStopable == true) {
@@ -743,9 +739,73 @@ class _timerAreaState extends State<timerArea> {
         //
         //         //startispressed ? startstopwatch: null;
         //       },
-        //       child: Text(buttonText,
-        //           style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
+        //       style: ElevatedButton.styleFrom(
+        //           //primary: Colors.black.with,
+        //           shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),),
         //     )),
+        Container(
+            //padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
+            child: FlatButton(
+              //color: btnColor,
+
+              minWidth: 250,
+              height: 250,
+              shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
+              onPressed: () {
+                obtainUserDefaults();
+                if (bStopable == true) {
+                  if (bResetOnStart == true) {
+                    arrShots.clear();
+                    arrShots.add("00:00:00");
+                    iCountShots = 0;
+                    swatch.reset();
+                    //stoptimer();
+                    //stopRecorder();
+                    //stoptimer();
+                    reset();
+                    //startstopwatch();
+                    didReset = true;
+                  }
+                  if (didReset == true) {
+                    print("Got into pressed method");
+                    if (startispressed == true) {
+                      startstopwatch();
+                      isChanged = !isChanged;
+                      colorisChanged = !colorisChanged;
+                      if (!mounted) return;
+                      setState(() {
+                        colorisChanged == true
+                            ? btnColor = Color(0xFFA2C11C)
+                            : btnColor = Color(0xFF2C5D63);
+                        isChanged == true
+                            ? buttonText = "Start"
+                            : buttonText = "Stop";
+                      });
+                    }
+                  }
+                  // else
+                  // {
+                  //   Fluttertoast.showToast(
+                  //       msg: "Please reset before starting another string",
+                  //
+                  //       toastLength: Toast.LENGTH_SHORT,
+                  //       gravity: ToastGravity.BOTTOM,
+                  //       timeInSecForIosWeb: 3,
+                  //       backgroundColor: Colors.red,
+                  //
+                  //       textColor: Colors.black,
+                  //       fontSize: 24.0
+                  //   );
+                  //   print("You need to reset");
+                  // }
+
+                }
+
+                //startispressed ? startstopwatch: null;
+              },
+              child: Text(buttonText,
+                  style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
+            )),
         Container(
             padding: EdgeInsets.only(top: 20, bottom: 0, left: 0, right: 0),
             child: Text(
