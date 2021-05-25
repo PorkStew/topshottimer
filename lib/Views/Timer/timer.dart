@@ -148,9 +148,9 @@ class _timerAreaState extends State<timerArea> {
   void handleEvent(
       AdmobAdEvent event, Map<String, dynamic> args, String adType) {
     switch (event) {
-      // case AdmobAdEvent.loaded:
-      //   showSnackBar('New Admob $adType Ad loaded!');
-      //   break;
+    // case AdmobAdEvent.loaded:
+    //   showSnackBar('New Admob $adType Ad loaded!');
+    //   break;
       case AdmobAdEvent.opened:
         showSnackBar('Admob $adType Ad opened!');
         break;
@@ -310,7 +310,7 @@ class _timerAreaState extends State<timerArea> {
     await session.configure(AudioSessionConfiguration(
       avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
       avAudioSessionCategoryOptions:
-          AVAudioSessionCategoryOptions.defaultToSpeaker,
+      AVAudioSessionCategoryOptions.defaultToSpeaker,
       // androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
       // androidWillPauseWhenDucked: true,
       androidAudioAttributes: const AndroidAudioAttributes(
@@ -595,295 +595,300 @@ class _timerAreaState extends State<timerArea> {
 
     return Scaffold(
         body: Column(
-      children: [
-        Container(
-          padding: EdgeInsets.only(top: 35, bottom: 15, left: 0, right: 0),
-        ),
-        Container(
-          margin: EdgeInsets.only(bottom: 20.0),
-          child: AdmobBanner(
-            nonPersonalizedAds: true,
-            adUnitId: 'ca-app-pub-3940256099942544/2934735716',
-            adSize: bannerSize,
-            listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-              handleEvent(event, args, 'Banner');
-            },
-            onBannerCreated: (AdmobBannerController controller) {
-              // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-              // Normally you don't need to worry about disposing this yourself, it's handled.
-              // If you need direct access to dispose, this is your guy!
-              // controller.dispose();
-            },
-          ),
-        ),
-        // TextButton(
-        //   child: Text(buttonText,
-        //       style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
-        //   onPressed: () {
-        //     obtainUserDefaults();
-        //     if (bStopable == true) {
-        //       if (bResetOnStart == true) {
-        //         arrShots.clear();
-        //         arrShots.add("00:00:00");
-        //         iCountShots = 0;
-        //         swatch.reset();
-        //         //stoptimer();
-        //         //stopRecorder();
-        //         //stoptimer();
-        //         reset();
-        //         //startstopwatch();
-        //         didReset = true;
-        //       }
-        //       if (didReset == true) {
-        //         print("Got into pressed method");
-        //         if (startispressed == true) {
-        //           startstopwatch();
-        //           isChanged = !isChanged;
-        //           colorisChanged = !colorisChanged;
-        //           if (!mounted) return;
-        //           setState(() {
-        //             colorisChanged == true
-        //                 ? btnColor = Color(0xFFA2C11C)
-        //                 : btnColor = Color(0xFF2C5D63);
-        //             isChanged == true
-        //                 ? buttonText = "Start"
-        //                 : buttonText = "Stop";
-        //           });
-        //         }
-        //       }
-        //       // else
-        //       // {
-        //       //   Fluttertoast.showToast(
-        //       //       msg: "Please reset before starting another string",
-        //       //
-        //       //       toastLength: Toast.LENGTH_SHORT,
-        //       //       gravity: ToastGravity.BOTTOM,
-        //       //       timeInSecForIosWeb: 3,
-        //       //       backgroundColor: Colors.red,
-        //       //
-        //       //       textColor: Colors.black,
-        //       //       fontSize: 24.0
-        //       //   );
-        //       //   print("You need to reset");
-        //       // }
-        //
-        //     }
-        //
-        //     //startispressed ? startstopwatch: null;
-        //   },
-        //   style: TextButton.styleFrom(
-        //     minimumSize: Size(250,250),
-        //     shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),),
-        //
-        //   ),
-        //
-
-        // SizedBox(
-        //     width: 250,
-        //     height: 250,
-        //     child: ElevatedButton(
-        //       child: Text(
-        //         buttonText,
-        //         style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')
-        //
-        //       ),
-        //       onPressed: () {
-        //         obtainUserDefaults();
-        //         if (bStopable == true) {
-        //           if (bResetOnStart == true) {
-        //             arrShots.clear();
-        //             arrShots.add("00:00:00");
-        //             iCountShots = 0;
-        //             swatch.reset();
-        //             //stoptimer();
-        //             //stopRecorder();
-        //             //stoptimer();
-        //             reset();
-        //             //startstopwatch();
-        //             didReset = true;
-        //           }
-        //           if (didReset == true) {
-        //             print("Got into pressed method");
-        //             if (startispressed == true) {
-        //               startstopwatch();
-        //               isChanged = !isChanged;
-        //               colorisChanged = !colorisChanged;
-        //               if (!mounted) return;
-        //               setState(() {
-        //                 colorisChanged == true
-        //                     ? btnColor = Color(0xFFA2C11C)
-        //                     : btnColor = Color(0xFF2C5D63);
-        //                 isChanged == true
-        //                     ? buttonText = "Start"
-        //                     : buttonText = "Stop";
-        //               });
-        //             }
-        //           }
-        //           // else
-        //           // {
-        //           //   Fluttertoast.showToast(
-        //           //       msg: "Please reset before starting another string",
-        //           //
-        //           //       toastLength: Toast.LENGTH_SHORT,
-        //           //       gravity: ToastGravity.BOTTOM,
-        //           //       timeInSecForIosWeb: 3,
-        //           //       backgroundColor: Colors.red,
-        //           //
-        //           //       textColor: Colors.black,
-        //           //       fontSize: 24.0
-        //           //   );
-        //           //   print("You need to reset");
-        //           // }
-        //
-        //         }
-        //
-        //         //startispressed ? startstopwatch: null;
-        //       },
-        //       style: ElevatedButton.styleFrom(
-        //           //primary: Colors.black.with,
-        //           shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),),
-        //     )),
-        Container(
-            //padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
-            child: FlatButton(
-              //color: btnColor,
-
-              minWidth: 250,
-              height: 250,
-              shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
-              onPressed: () {
-                obtainUserDefaults();
-                if (bStopable == true) {
-                  if (bResetOnStart == true) {
-                    arrShots.clear();
-                    arrShots.add("00:00:00");
-                    iCountShots = 0;
-                    swatch.reset();
-                    //stoptimer();
-                    //stopRecorder();
-                    //stoptimer();
-                    reset();
-                    //startstopwatch();
-                    didReset = true;
-                  }
-                  if (didReset == true) {
-                    print("Got into pressed method");
-                    if (startispressed == true) {
-                      startstopwatch();
-                      isChanged = !isChanged;
-                      colorisChanged = !colorisChanged;
-                      if (!mounted) return;
-                      setState(() {
-                        colorisChanged == true
-                            ? btnColor = Color(0xFFA2C11C)
-                            : btnColor = Color(0xFF2C5D63);
-                        isChanged == true
-                            ? buttonText = "Start"
-                            : buttonText = "Stop";
-                      });
-                    }
-                  }
-                  // else
-                  // {
-                  //   Fluttertoast.showToast(
-                  //       msg: "Please reset before starting another string",
-                  //
-                  //       toastLength: Toast.LENGTH_SHORT,
-                  //       gravity: ToastGravity.BOTTOM,
-                  //       timeInSecForIosWeb: 3,
-                  //       backgroundColor: Colors.red,
-                  //
-                  //       textColor: Colors.black,
-                  //       fontSize: 24.0
-                  //   );
-                  //   print("You need to reset");
-                  // }
-
-                }
-
-                //startispressed ? startstopwatch: null;
-              },
-              child: Text(buttonText,
-                  style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
-            )),
-        Container(
-            padding: EdgeInsets.only(top: 20, bottom: 0, left: 0, right: 0),
-            child: Text(
-              arrShots[arrShots.length - 1],
-              style: TextStyle(
-                  fontSize: 80,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Digital-7'),
-            )),
-        Container(
-            padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
-            child: Text(
-              (iCountShots).toString(),
-              style: TextStyle(
-                  fontSize: 80,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Digital-7'),
-            )),
-        SizedBox(height: 10,),
-        Row(children: <Widget>[
-          Spacer(),
-
-          SizedBox(
-              width: 200,
-              height: 50,
-              child: ElevatedButton(
-                child: Text(
-                  'View String',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
-                    fontFamily: 'Montserrat-Regular',
-                    letterSpacing: 0.2,
-                    color: Colors.white,
-                  ),
-                ),
-                onPressed: () {
-                  if (arrShots.length <= 1) {
-                    print("Should get into alert");
-                    errorViewingStringDialog();
-                  } else
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Splits(arrShots.toString())));
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 35, bottom: 15, left: 0, right: 0),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20.0),
+              child: AdmobBanner(
+                nonPersonalizedAds: true,
+                adUnitId: 'ca-app-pub-3940256099942544/2934735716',
+                adSize: bannerSize,
+                listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+                  handleEvent(event, args, 'Banner');
                 },
-                style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF2C5D63),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              )),
-          // FlatButton(
-          //     //color: Colors.blue,
-          //     minWidth: 200,
-          //     height: 50,
-          //     color: Color(0xFF2C5D63),
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(10.0),
-          //       side: BorderSide(width: 2, color: Color(0xFF2C5D63)),
-          //     ),
-          //     child: Text("View String",
-          //         style: TextStyle(
-          //             fontSize: 25, color: Theme.of(context).buttonColor)),
-          //     onPressed: () {
-          //       if (arrShots.length <= 1) {
-          //         print("Should get into alert");
-          //         errorViewingStringDialog();
-          //       } else
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) => Splits(arrShots.toString())));
-          //     }),
-          Spacer(),
-        ]),
-        //Text(sTestingEar),
-      ],
-    ));
+                onBannerCreated: (AdmobBannerController controller) {
+                  // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+                  // Normally you don't need to worry about disposing this yourself, it's handled.
+                  // If you need direct access to dispose, this is your guy!
+                  // controller.dispose();
+                },
+              ),
+            ),
+            // TextButton(
+            //   child: Text(buttonText,
+            //       style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
+            //   onPressed: () {
+            //     obtainUserDefaults();
+            //     if (bStopable == true) {
+            //       if (bResetOnStart == true) {
+            //         arrShots.clear();
+            //         arrShots.add("00:00:00");
+            //         iCountShots = 0;
+            //         swatch.reset();
+            //         //stoptimer();
+            //         //stopRecorder();
+            //         //stoptimer();
+            //         reset();
+            //         //startstopwatch();
+            //         didReset = true;
+            //       }
+            //       if (didReset == true) {
+            //         print("Got into pressed method");
+            //         if (startispressed == true) {
+            //           startstopwatch();
+            //           isChanged = !isChanged;
+            //           colorisChanged = !colorisChanged;
+            //           if (!mounted) return;
+            //           setState(() {
+            //             colorisChanged == true
+            //                 ? btnColor = Color(0xFFA2C11C)
+            //                 : btnColor = Color(0xFF2C5D63);
+            //             isChanged == true
+            //                 ? buttonText = "Start"
+            //                 : buttonText = "Stop";
+            //           });
+            //         }
+            //       }
+            //       // else
+            //       // {
+            //       //   Fluttertoast.showToast(
+            //       //       msg: "Please reset before starting another string",
+            //       //
+            //       //       toastLength: Toast.LENGTH_SHORT,
+            //       //       gravity: ToastGravity.BOTTOM,
+            //       //       timeInSecForIosWeb: 3,
+            //       //       backgroundColor: Colors.red,
+            //       //
+            //       //       textColor: Colors.black,
+            //       //       fontSize: 24.0
+            //       //   );
+            //       //   print("You need to reset");
+            //       // }
+            //
+            //     }
+            //
+            //     //startispressed ? startstopwatch: null;
+            //   },
+            //   style: TextButton.styleFrom(
+            //     minimumSize: Size(250,250),
+            //     shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),),
+            //
+            //   ),
+            //
+
+            // SizedBox(
+            //     width: 250,
+            //     height: 250,
+            //     child: ElevatedButton(
+            //       child: Text(
+            //         buttonText,
+            //         style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')
+            //
+            //       ),
+            //       onPressed: () {
+            //         obtainUserDefaults();
+            //         if (bStopable == true) {
+            //           if (bResetOnStart == true) {
+            //             arrShots.clear();
+            //             arrShots.add("00:00:00");
+            //             iCountShots = 0;
+            //             swatch.reset();
+            //             //stoptimer();
+            //             //stopRecorder();
+            //             //stoptimer();
+            //             reset();
+            //             //startstopwatch();
+            //             didReset = true;
+            //           }
+            //           if (didReset == true) {
+            //             print("Got into pressed method");
+            //             if (startispressed == true) {
+            //               startstopwatch();
+            //               isChanged = !isChanged;
+            //               colorisChanged = !colorisChanged;
+            //               if (!mounted) return;
+            //               setState(() {
+            //                 colorisChanged == true
+            //                     ? btnColor = Color(0xFFA2C11C)
+            //                     : btnColor = Color(0xFF2C5D63);
+            //                 isChanged == true
+            //                     ? buttonText = "Start"
+            //                     : buttonText = "Stop";
+            //               });
+            //             }
+            //           }
+            //           // else
+            //           // {
+            //           //   Fluttertoast.showToast(
+            //           //       msg: "Please reset before starting another string",
+            //           //
+            //           //       toastLength: Toast.LENGTH_SHORT,
+            //           //       gravity: ToastGravity.BOTTOM,
+            //           //       timeInSecForIosWeb: 3,
+            //           //       backgroundColor: Colors.red,
+            //           //
+            //           //       textColor: Colors.black,
+            //           //       fontSize: 24.0
+            //           //   );
+            //           //   print("You need to reset");
+            //           // }
+            //
+            //         }
+            //
+            //         //startispressed ? startstopwatch: null;
+            //       },
+            //       style: ElevatedButton.styleFrom(
+            //           //primary: Colors.black.with,
+            //           shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),),
+            //     )),
+            Container(
+              //padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
+                child: FlatButton(
+                  //color: btnColor,
+
+                  minWidth: 250,
+                  height: 250,
+                  shape: CircleBorder(side: BorderSide(color: btnColor, width: 4)),
+                  onPressed: () {
+                    obtainUserDefaults();
+                    if (bStopable == true) {
+                      if (bResetOnStart == true) {
+                        arrShots.clear();
+                        arrShots.add("00:00:00");
+                        iCountShots = 0;
+                        swatch.reset();
+                        //stoptimer();
+                        //stopRecorder();
+                        //stoptimer();
+                        reset();
+                        //startstopwatch();
+                        didReset = true;
+                      }
+                      if (didReset == true) {
+                        print("Got into pressed method");
+                        if (startispressed == true) {
+                          startstopwatch();
+                          isChanged = !isChanged;
+                          colorisChanged = !colorisChanged;
+                          if (!mounted) return;
+                          setState(() {
+                            colorisChanged == true
+                                ? btnColor = Color(0xFFA2C11C)
+                                : btnColor = Color(0xFF2C5D63);
+                            isChanged == true
+                                ? buttonText = "Start"
+                                : buttonText = "Stop";
+                          });
+                        }
+                      }
+                      // else
+                      // {
+                      //   Fluttertoast.showToast(
+                      //       msg: "Please reset before starting another string",
+                      //
+                      //       toastLength: Toast.LENGTH_SHORT,
+                      //       gravity: ToastGravity.BOTTOM,
+                      //       timeInSecForIosWeb: 3,
+                      //       backgroundColor: Colors.red,
+                      //
+                      //       textColor: Colors.black,
+                      //       fontSize: 24.0
+                      //   );
+                      //   print("You need to reset");
+                      // }
+
+                    }
+
+                    //startispressed ? startstopwatch: null;
+                  },
+                  child: Text(buttonText,
+                      style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
+                )),
+            Container(
+                padding: EdgeInsets.only(top: 20, bottom: 0, left: 0, right: 0),
+                child: Text(
+                  arrShots[arrShots.length - 1],
+                  style: TextStyle(
+                      fontSize: 80,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Digital-7'),
+                )),
+            Container(
+                padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
+                child: Text(
+                  (iCountShots).toString(),
+                  style: TextStyle(
+                      fontSize: 80,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Digital-7'),
+                )),
+            SizedBox(height: 10,),
+            Row(children: <Widget>[
+              Spacer(),
+
+              SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                    child: Text(
+                      'View String',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                        fontFamily: 'Montserrat-Regular',
+                        letterSpacing: 0.2,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      if (arrShots.length <= 1) {
+                        print("Should get into alert");
+                        errorViewingStringDialog();
+                      } else {
+                        if(bstop == true){
+                          print("Cant view strings as it is still running");
+                        }else
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    Splits(arrShots.toString())));
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: Color(0xFF2C5D63),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                  )),
+              // FlatButton(
+              //     //color: Colors.blue,
+              //     minWidth: 200,
+              //     height: 50,
+              //     color: Color(0xFF2C5D63),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(10.0),
+              //       side: BorderSide(width: 2, color: Color(0xFF2C5D63)),
+              //     ),
+              //     child: Text("View String",
+              //         style: TextStyle(
+              //             fontSize: 25, color: Theme.of(context).buttonColor)),
+              //     onPressed: () {
+              //       if (arrShots.length <= 1) {
+              //         print("Should get into alert");
+              //         errorViewingStringDialog();
+              //       } else
+              //         Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => Splits(arrShots.toString())));
+              //     }),
+              Spacer(),
+            ]),
+            //Text(sTestingEar),
+          ],
+        ));
   }
 
   //No strings shot dialog
