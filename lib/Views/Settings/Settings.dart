@@ -8,6 +8,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
@@ -123,15 +124,24 @@ class _SettingsState extends State<Settings> {
 
   //Gets current user sensitivity
   _getSensitivity() async {
-    sliderValue1 = await userSensitivity();
-    if (sliderValue1 == null) {
-      sliderValue1 = 50.0;
+    newSense = await userSensitivity();
+    if (newSense == null) {
+      newSense = 80;
     }
 
     return userSensitivity();
   }
 
+  int newSenseGlobal;
+  updateSensText() async{
+    setState(() {
+      newSenseGlobal = newSense;
+
+    });
+  }
+
   //Variable initialisation
+  int newSense = 0;
   double sliderValue1 = 0;
   double sliderValue2 = 1;
   String FirstName = "";
@@ -151,6 +161,7 @@ class _SettingsState extends State<Settings> {
   String timerSensitivity = 'Normal';
   bool isSwitched = false;
   bool paidMember = false;
+  Timer _timer;
 
 
   //Set Session method to set the session to play sounds
@@ -243,85 +254,162 @@ class _SettingsState extends State<Settings> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Container(
+                                        SizedBox(
                                           height: 50,
                                           width: 50,
                                           //width: 50,
                                           //color: Themes.darkButton2Color,
-                                          decoration: BoxDecoration(
-                                            color: Themes.darkButton2Color,
-                                            shape: BoxShape.circle,
-                                            //borderRadius: BorderRadius.all(Radius.circular(20))
-                                          ),
+                                          // decoration: BoxDecoration(
+                                          //   color: Themes.darkButton2Color,
+                                          //   shape: BoxShape.circle,
+                                          //   //borderRadius: BorderRadius.all(Radius.circular(20))
+                                          // ),
+                                        child: ElevatedButton(
+                                          child: Text("-",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.white, fontSize: 25)),
 
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Text("Live",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.white)),
-                                          ),
+
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Themes.darkButton2Color,
+                                            shape: CircleBorder(), ),
+
+                                        onPressed: (){
+                                            setState(() {
+                                              if (newSense>=1){
+                                                newSense = newSense -1;
+                                                newSenseGlobal = newSense;
+                                                setDefaultSensitivity(newSense);
+                                                print("**** Minus Clicked****");
+                                              }
+
+                                            });
+
+                                        },
+                                        ),
+
+
+
+                                          // child: Align(
+                                          //   alignment: Alignment.center,
+                                          //   child: Text("Live",
+                                          //       textAlign: TextAlign.center,
+                                          //       style: TextStyle(
+                                          //           color: Colors.white)),
+                                          // ),
                                         ),
                                         Expanded(
-                                          child: Slider(
-                                            value: sliderValue1,
-                                            min: 0,
-                                            max: 100,
-                                            activeColor: Color(0xFFA2C11C),
-                                            inactiveColor: Color(0xFF2C5D63),
-                                            divisions: 4,
-                                            label: sliderValue1.toString(),
-                                            onChanged: (double newValue) {
-                                              setState(() {
-                                                sliderValue1 = newValue;
-
-                                                if (newValue == 0.0) {
-                                                  timerSensitivity =
-                                                      arrSensititvity[0]
-                                                          .toString();
-                                                }
-                                                if (newValue == 25.0) {
-                                                  timerSensitivity =
-                                                      arrSensititvity[1]
-                                                          .toString();
-                                                }
-                                                if (newValue == 50.0) {
-                                                  timerSensitivity =
-                                                      arrSensititvity[2]
-                                                          .toString();
-                                                }
-                                                if (newValue == 75.0) {
-                                                  timerSensitivity =
-                                                      arrSensititvity[3]
-                                                          .toString();
-                                                }
-                                                if (newValue == 100.0) {
-                                                  timerSensitivity =
-                                                      arrSensititvity[4]
-                                                          .toString();
-                                                }
-                                                return sliderValue1;
-                                              });
-                                              setDefaultSensitivity(newValue);
-                                              print('Start: ${newValue}');
-                                            },
-                                          ),
+                                          child: Text( newSense.toString() + "%", textAlign: TextAlign.center, style: TextStyle(fontSize: 25,
+                                            ),),
+                                        //   Slider(
+                                        //   value: sliderValue1,
+                                        //   min: 0,
+                                        //   max: 100,
+                                        //   activeColor: Color(0xFFA2C11C),
+                                        //   inactiveColor: Color(0xFF2C5D63),
+                                        //   divisions: 4,
+                                        //   label: sliderValue1.toString(),
+                                        //   onChanged: (double newValue) {
+                                        //     setState(() {
+                                        //       sliderValue1 = newValue;
+                                        //
+                                        //       if (newValue == 0.0) {
+                                        //         timerSensitivity =
+                                        //             arrSensititvity[0]
+                                        //                 .toString();
+                                        //       }
+                                        //       if (newValue == 25.0) {
+                                        //         timerSensitivity =
+                                        //             arrSensititvity[1]
+                                        //                 .toString();
+                                        //       }
+                                        //       if (newValue == 50.0) {
+                                        //         timerSensitivity =
+                                        //             arrSensititvity[2]
+                                        //                 .toString();
+                                        //       }
+                                        //       if (newValue == 75.0) {
+                                        //         timerSensitivity =
+                                        //             arrSensititvity[3]
+                                        //                 .toString();
+                                        //       }
+                                        //       if (newValue == 100.0) {
+                                        //         timerSensitivity =
+                                        //             arrSensititvity[4]
+                                        //                 .toString();
+                                        //       }
+                                        //       return sliderValue1;
+                                        //     });
+                                        //     setDefaultSensitivity(newValue);
+                                        //     print('Start: ${newValue}');
+                                        //   },
+                                        // ),
                                         ),
-                                        Container(
+                                        SizedBox(
                                           height: 50,
                                           width: 50,
-                                          decoration: BoxDecoration(
-                                            color: Themes.darkButton2Color,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Text("Dry",
+                                          //width: 50,
+                                          //color: Themes.darkButton2Color,
+                                          // decoration: BoxDecoration(
+                                          //   color: Themes.darkButton2Color,
+                                          //   shape: BoxShape.circle,
+                                          //   //borderRadius: BorderRadius.all(Radius.circular(20))
+                                          // ),
+                                          child: ElevatedButton(
+                                            child: Text("+",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                    color: Colors.white)),
+                                                    color: Colors.white, fontSize: 25)),
+
+
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Themes.darkButton2Color,
+                                              shape: CircleBorder(), ),
+
+
+                                            onPressed: (){
+                                              print("**** Plus Clicked****");
+                                              setState(() {
+                                                if (newSense<=99){
+                                                  newSense = newSense + 1;
+                                                  newSenseGlobal = newSense;
+                                                  setDefaultSensitivity(newSense);
+                                                  print("**** Minus Clicked****");
+                                                }
+
+                                              });
+                                            },
+
+
+
                                           ),
+
+
+
+                                          // child: Align(
+                                          //   alignment: Alignment.center,
+                                          //   child: Text("Live",
+                                          //       textAlign: TextAlign.center,
+                                          //       style: TextStyle(
+                                          //           color: Colors.white)),
+                                          // ),
                                         ),
+                                        // Container(
+                                        //   height: 50,
+                                        //   width: 50,
+                                        //   decoration: BoxDecoration(
+                                        //     color: Themes.darkButton2Color,
+                                        //     shape: BoxShape.circle,
+                                        //   ),
+                                        //   child: Align(
+                                        //     alignment: Alignment.center,
+                                        //     child: Text("Dry",
+                                        //         textAlign: TextAlign.center,
+                                        //         style: TextStyle(
+                                        //             color: Colors.white)),
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ),
@@ -330,6 +418,17 @@ class _SettingsState extends State<Settings> {
                               Container(
                                 padding: EdgeInsets.only(
                                     top: 5, bottom: 0, left: 0, right: 0),
+                              ),
+                              Text(
+                                'If the % value is set too low it will record multiple shots after shooting a single shot. Ensure the timer is recording shots as you increase the % to achieve optimal sensitivity.',
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(
+                                    top: 5, bottom: 0, left: 0, right: 0),
+                                //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
                               ),
                               Text(
                                 'Timer Delay',
@@ -737,18 +836,19 @@ Future<String> userEmail() async {
   return sEmail;
 }
 
-Future<double> userSensitivity() async {
+Future<int> userSensitivity() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  double dSensitivity = await prefs.getDouble('userSensitivity');
-  if (dSensitivity == null) {
-    await prefs.setDouble('userSensitivity', 50.0);
+  int iSensitivity = await prefs.getInt('userSensitivity');
+  if (iSensitivity == null) {
+    await prefs.setInt('userSensitivity', 80);
   }
-  return dSensitivity;
+  return iSensitivity;
 }
 
-setDefaultSensitivity(double newValue) async {
+setDefaultSensitivity(int newValue) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setDouble('userSensitivity', newValue);
+  await prefs.setInt('userSensitivity', newValue);
+  print(newValue);
 }
 
 setRandomDelay(bool newRandom) async {

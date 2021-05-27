@@ -19,6 +19,11 @@ import '../../Themes.dart';
 import '../../global.dart';
 const String testDevice = '';
 double timerSensitivity;
+
+//User PCM Value
+double userPCM = 0;
+double PCMchange = 0.01;
+
 int timerDelay;
 String timerTone;
 bool bRandomDelay;
@@ -95,6 +100,8 @@ class _timerAreaState extends State<timerArea> {
   bool isRunning = false;
   bool bClicked = false;
   double dTime = 0.00;
+
+
 
   String localPathFile;
   final startStop = TextEditingController();
@@ -417,6 +424,21 @@ class _timerAreaState extends State<timerArea> {
       paidMember = _controller.hasSubscription.value;
       print("PAID MEMBER BEFORE IF STATEMENTS = " + paidMember.toString());
 
+      startispressed = true;
+      isRunning = false;
+      didReset = false;
+      stoptimer();
+      reset();
+      bResetOnStart = true;
+      if (Platform.isIOS) {
+        _setSession();
+      }
+      // if (Platform.isAndroid) {
+      //   _setSession();
+      // }
+      print("*********************" + arrShots[arrShots.length - 1]);
+      bstop = false;
+
       if (paidMember == false){
         SharedPreferences prefs = await SharedPreferences.getInstance();
         int getCounter = prefs.getInt('stopCounter');
@@ -434,20 +456,7 @@ class _timerAreaState extends State<timerArea> {
         }
       }
 
-      startispressed = true;
-      isRunning = false;
-      didReset = false;
-      stoptimer();
-      reset();
-      bResetOnStart = true;
-      if (Platform.isIOS) {
-        _setSession();
-      }
-      // if (Platform.isAndroid) {
-      //   _setSession();
-      // }
-      print("*********************" + arrShots[arrShots.length - 1]);
-      bstop = false;
+
     }
   }
 
@@ -499,6 +508,7 @@ class _timerAreaState extends State<timerArea> {
   }
 
   _start() async {
+    double dRecordedShot;
     bTest = false;
     print("Got into start method");
     starttimer();
@@ -528,14 +538,21 @@ class _timerAreaState extends State<timerArea> {
             _current = current;
 
             _currentStatus = _current.status;
-            if ((pow(10, _current.metering.peakPower / 20) * 120.0) > 50) {
-              print("Search");
-              print("***********************" +
-                  (pow(10, _current.metering.peakPower / 20) * 120.0)
-                      .toString());
-            }
-            if ((pow(10, _current.metering.peakPower / 20) * 120.0) >
-                timerSensitivity) {
+
+            double dLevel1 = _current.metering.peakPower;
+            print("PEAK POWER: " + (_current.metering.peakPower.toString()));
+            double PCM = _current.metering.peakPower;
+
+            if(dRecordedShot != dLevel1 && PCM > userPCM){
+              //counter++;
+              print("******* Shot Captured " + dLevel1.toString()); // + " @ Time: "+ (_current?.duration).toString());
+              print("*****PCM Value: " + (_current.metering.peakPower).toString());
+              dRecordedShot = dLevel1;
+              //PCM = -2;
+              //_recording.metering.peakPower = -50.0;
+              dLevel1 = 0;
+              print("PEAK POWER AFTER RESET: " + (_current.metering.peakPower.toString()));
+
               arrShots.add(stoptimetodisplay);
               arrMinutes.add(iMinutes);
               arrSeconds.add(iSeconds);
@@ -545,16 +562,60 @@ class _timerAreaState extends State<timerArea> {
                   (pow(10, _current.metering.peakPower / 20) * 120.0)
                       .toString());
               iCountShots++;
-              print(pow(10, _current.metering.peakPower / 20) * 120.0);
+              //print(pow(10, _current.metering.peakPower / 20) * 120.0);
 
               bCanStart = true;
-              if (io.Platform.isIOS) {
-                _pause();
-                _resume();
-              }
+              // if (io.Platform.isIOS) {
+              //   _pause();
+              //   Future.delayed(const Duration(milliseconds: 5));
+              //   _resume();
+              // }
 
-              return;
+              //print("NUMBER OF SHOTS: " + counter.toString());
+              // _pause();
+              // _resume();
+              //_recorder.stop();
+              //_recorder.start();
+              //var current = await _recorder.current();
+              //_opt();
+              //_startRecording();
+              //setState(() {
+              //_recording = current;
+              //});
             }
+
+
+            // if ((pow(10, _current.metering.peakPower / 20) * 120.0) > 50) {
+            //   print("Search");
+            //
+            //   print("***********************" +
+            //       (pow(10, _current.metering.peakPower / 20) * 120.0)
+            //           .toString());
+            // }
+
+
+            // if ((pow(10, _current.metering.peakPower / 20) * 120.0) >
+            //     timerSensitivity) {
+            //   arrShots.add(stoptimetodisplay);
+            //   arrMinutes.add(iMinutes);
+            //   arrSeconds.add(iSeconds);
+            //   arrMilliseconds.add(iMilliseconds);
+            //
+            //   print("***********************Gun Shot Captured!!!!!!!!!!!!!!!!" +
+            //       (pow(10, _current.metering.peakPower / 20) * 120.0)
+            //           .toString());
+            //   iCountShots++;
+            //   //print(pow(10, _current.metering.peakPower / 20) * 120.0);
+            //
+            //   bCanStart = true;
+            //   if (io.Platform.isIOS) {
+            //     _pause();
+            //     Future.delayed(const Duration(milliseconds: 5));
+            //     _resume();
+            //   }
+            //
+            //   return;
+            // }
           });
         });
       } catch (e) {
@@ -968,8 +1029,9 @@ obtainUserDefaults() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   double dDelay = prefs.getDouble('userDelay');
   bool bRandom = prefs.getBool('randomDelay');
-  double dSensitivity = prefs.getDouble('userSensitivity');
+  int iSensitivity = prefs.getInt('userSensitivity');
   String sTone = prefs.getString('userTone');
+
 
   if (dDelay == null) {
     await prefs.setDouble('userDelay', 3);
@@ -981,9 +1043,9 @@ obtainUserDefaults() async {
     bRandom = false;
   }
 
-  if (dSensitivity == null) {
-    await prefs.setDouble('userSensitivity', 50.0);
-    dSensitivity = prefs.getDouble('userSensitivity');
+  if (iSensitivity == null) {
+    await prefs.setInt('userSensitivity', 80);
+    iSensitivity = prefs.getInt('userSensitivity');
   }
 
   if (sTone == null) {
@@ -993,30 +1055,234 @@ obtainUserDefaults() async {
   }
 
   if (Platform.isIOS) {
-    if (dSensitivity == 0.0) {
-      timerSensitivity = 90;
-    } else if (dSensitivity == 25.0) {
-      timerSensitivity = 85;
-    } else if (dSensitivity == 50.0) {
+    switch(iSensitivity){
+      case 100:userPCM = -0.05;
+      break;
+      case 99:userPCM = -0.065;
+      break;
+      case 98:userPCM = -0.08;
+      break;
+      case 97:userPCM = -0.095;
+      break;
+      case 96:userPCM = -0.11;
+      break;
+      case 95:userPCM = -0.125;
+      break;
+      case 94:userPCM = -0.14;
+      break;
+      case 93:userPCM = -0.155;
+      break;
+      case 92:userPCM = -0.17;
+      break;
+      case 91:userPCM = -0.185;
+      break;
+      case 90:userPCM = -0.2;
+      break;
+      case 89:userPCM = -0.215;
+      break;
+      case 88:userPCM = -0.23;
+      break;
+      case 87:userPCM = -0.245;
+      break;
+      case 86:userPCM = -0.26;
+      break;
+      case 85:userPCM = -0.275;
+      break;
+      case 84:userPCM = -0.29;
+      break;
+      case 83:userPCM = -0.305;
+      break;
+      case 82:userPCM = -0.32;
+      break;
+      case 81:userPCM = -0.335;
+      break;
+      case 80:userPCM = -0.35;
+      break;
+      case 79:userPCM = -0.365;
+      break;
+      case 78:userPCM = -0.38;
+      break;
+      case 77:userPCM = -0.395;
+      break;
+      case 76:userPCM = -0.41;
+      break;
+      case 75:userPCM = -0.425;
+      break;
+      case 74:userPCM = -0.44;
+      break;
+      case 73:userPCM = -0.455;
+      break;
+      case 72:userPCM = -0.47;
+      break;
+      case 71:userPCM = -0.485;
+      break;
+      case 70:userPCM = -0.5;
+      break;
+      case 69:userPCM = -0.515;
+      break;
+      case 68:userPCM = -0.53;
+      break;
+      case 67:userPCM = -0.545;
+      break;
+      case 66:userPCM = -0.56;
+      break;
+      case 65:userPCM = -0.575;
+      break;
+      case 64:userPCM = -0.59;
+      break;
+      case 63:userPCM = -0.605;
+      break;
+      case 62:userPCM = -0.62;
+      break;
+      case 61:userPCM = -0.635;
+      break;
+      case 60:userPCM = -0.65;
+      break;
+      case 59:userPCM = -0.665;
+      break;
+      case 58:userPCM = -0.68;
+      break;
+      case 57:userPCM = -0.695;
+      break;
+      case 56:userPCM = -0.71;
+      break;
+      case 55:userPCM = -0.725;
+      break;
+      case 54:userPCM = -0.74;
+      break;
+      case 53:userPCM = -0.755;
+      break;
+      case 52:userPCM = -0.77;
+      break;
+      case 51:userPCM = -0.785;
+      break;
+      case 50:userPCM = -0.80;
+      break;
+      case 49:userPCM = -0.815;
+      break;
+      case 48:userPCM = -0.83;
+      break;
+      case 47:userPCM = -0.845;
+      break;
+      case 46:userPCM = -0.86;
+      break;
+      case 45:userPCM = -0.875;
+      break;
+      case 44:userPCM = -0.89;
+      break;
+      case 43:userPCM = -0.905;
+      break;
+      case 42:userPCM = -0.92;
+      break;
+      case 41:userPCM = -0.935;
+      break;
+      case 40:userPCM = -0.95;
+      break;
+      case 39:userPCM = -0.965;
+      break;
+      case 38:userPCM = -0.98;
+      break;
+      case 37:userPCM = -0.995;
+      break;
+      case 36:userPCM = -1.01;
+      break;
+      case 35:userPCM = -1.025;
+      break;
+      case 34:userPCM = -1.04;
+      break;
+      case 33:userPCM = 1.055;
+      break;
+      case 32:userPCM = -1.07;
+      break;
+      case 31:userPCM = -1.085;
+      break;
+      case 30:userPCM = -1.1;
+      break;
+      case 29:userPCM = -1.115;
+      break;
+      case 28:userPCM = -1.3;
+      break;
+      case 27:userPCM = -1.145;
+      break;
+      case 26:userPCM = -1.16;
+      break;
+      case 25:userPCM = -1.175;
+      break;
+      case 24:userPCM = -1.19;
+      break;
+      case 23:userPCM = -1.205;
+      break;
+      case 22:userPCM = -1.22;
+      break;
+      case 21:userPCM = -1.235;
+      break;
+      case 20:userPCM = -1.25;
+      break;
+      case 19:userPCM = -1.265;
+      break;
+      case 18:userPCM = -1.28;
+      break;
+      case 17:userPCM = -1.295;
+      break;
+      case 16:userPCM = -1.31;
+      break;
+      case 15:userPCM = -1.325;
+      break;
+      case 14:userPCM = -1.34;
+      break;
+      case 13:userPCM = -1.355;
+      break;
+      case 12:userPCM = -1.37;
+      break;
+      case 11:userPCM = -1.385;
+      break;
+      case 10:userPCM = -1.4;
+      break;
+      case 9:userPCM = -1.415;
+      break;
+      case 8:userPCM = -1.43;
+      break;
+      case 7:userPCM = -1.445;
+      break;
+      case 6:userPCM = -1.46;
+      break;
+      case 5:userPCM = -1.475;
+      break;
+      case 4:userPCM = -1.9;
+      break;
+      case 3:userPCM = -1.505;
+      break;
+      case 2:userPCM = -1.52;
+      break;
+      case 1:userPCM = -1.51;
+      break;
+      case 0:userPCM = -1.535;
+      break;
+    }
+    if (iSensitivity == 100) {
+       userPCM= 90;
+    } else if (iSensitivity == 25.0) {
+      timerSensitivity = 84;
+    } else if (iSensitivity == 50.0) {
       timerSensitivity = 80;
-    } else if (dSensitivity == 75.0) {
+    } else if (iSensitivity == 75.0) {
       timerSensitivity = 75;
-    } else if (dSensitivity == 100.0) {
+    } else if (iSensitivity == 100.0) {
       timerSensitivity = 70.0;
     } else {
       print("No IOS User Defaults set");
     }
   }
   if (Platform.isAndroid) {
-    if (dSensitivity == 0.0) {
+    if (iSensitivity == 0.0) {
       timerSensitivity = 75;
-    } else if (dSensitivity == 25.0) {
+    } else if (iSensitivity == 25.0) {
       timerSensitivity = 70;
-    } else if (dSensitivity == 50.0) {
+    } else if (iSensitivity == 50.0) {
       timerSensitivity = 65;
-    } else if (dSensitivity == 75.0) {
+    } else if (iSensitivity == 75.0) {
       timerSensitivity = 60;
-    } else if (dSensitivity == 100.0) {
+    } else if (iSensitivity == 100.0) {
       timerSensitivity = 55.0;
     } else {
       print("No ANDROID User Defaults set");
