@@ -135,12 +135,15 @@ class SplitsState extends State<Splits> {
                                       fontSize: 20, color: Color(0xFFDE561C)),
                                 ),
                                 onPressed: () {
-                                  if (arrShots.length > 1) {
-                                    arrShots.remove(sShot);
-                                  } else
-                                    Navigator.pop(context);
+                                  setState((){
+                                    if (arrShots.length > 1) {
+                                      arrShots.remove(sShot);
+                                    } else
+                                      Navigator.pop(context);
 
-                                  print("Hello World");
+                                    print("Hello World");
+                                  });
+
                                 },
 
                                 style: ElevatedButton.styleFrom(
