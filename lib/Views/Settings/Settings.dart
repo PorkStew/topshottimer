@@ -126,7 +126,7 @@ class _SettingsState extends State<Settings> {
   _getSensitivity() async {
     newSense = await userSensitivity();
     if (newSense == null) {
-      newSense = 80;
+      newSense = 30;
     }
 
     return userSensitivity();
@@ -840,7 +840,7 @@ Future<int> userSensitivity() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int iSensitivity = await prefs.getInt('userSensitivity');
   if (iSensitivity == null) {
-    await prefs.setInt('userSensitivity', 80);
+    await prefs.setInt('userSensitivity', 30);
   }
   return iSensitivity;
 }
