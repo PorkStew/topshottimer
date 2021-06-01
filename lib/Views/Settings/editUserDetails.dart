@@ -57,7 +57,7 @@ class _editUserDetailsState extends State<editUserDetails> {
   _getSensitivity() async {
     sliderValue1 = await userSensitivity();
     if (sliderValue1 == null) {
-      sliderValue1 = 50.0;
+      sliderValue1 = 30;
     }
 
     return userSensitivity();
@@ -65,7 +65,7 @@ class _editUserDetailsState extends State<editUserDetails> {
 
   getDetails() async {}
 
-  double sliderValue1 = 0;
+  int sliderValue1 = 0;
   double sliderValue2 = 1;
   String FirstName = "";
   String newFirstName = "";
@@ -678,11 +678,11 @@ Future<String> userEmail() async {
   return sEmail;
 }
 
-Future<double> userSensitivity() async {
+Future<int> userSensitivity() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  double dSensitivity = prefs.getDouble('userSensitivity');
+  int dSensitivity = prefs.getInt('userSensitivity');
   if (dSensitivity == null) {
-    await prefs.setDouble('userSensitivity', 50.0);
+    await prefs.setInt('userSensitivity', 30);
   }
   return dSensitivity;
 }

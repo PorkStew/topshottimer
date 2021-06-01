@@ -420,7 +420,7 @@ class _SettingsState extends State<Settings> {
                                     top: 5, bottom: 0, left: 0, right: 0),
                               ),
                               Text(
-                                'If the % value is set too low it will record multiple shots after shooting a single shot. Ensure the timer is recording shots as you increase the % to achieve optimal sensitivity.',
+                                'If the % value is set too low it will record multiple shots after shooting a single shot. Ensure the timer is accurately recording shots as you increase the % to achieve optimal sensitivity.',
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     ),
@@ -692,10 +692,10 @@ class _SettingsState extends State<Settings> {
                                           Get.to(() => editUserDetails());
 
                                           // Navigator.push(
-                                                //     context,
-                                                //     MaterialPageRoute(
-                                                //         builder: (context) =>
-                                                //             editUserDetails()));
+                                          //           context,
+                                          //           MaterialPageRoute(
+                                          //               builder: (context) =>
+                                          //                   editUserDetails()));
                                               }
                                             : null,
                                         child: Text(

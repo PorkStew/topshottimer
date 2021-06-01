@@ -70,7 +70,7 @@ class _SuccessState extends State<Success> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Icon(Icons.check, color: Themes.darkButton2Color, size: 34,),
-                    Text('Customisable Timer Tone',
+                    Text('Customizable Start Tone',
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 17,
@@ -79,19 +79,19 @@ class _SuccessState extends State<Success> {
                       ),),
                   ],
                 ),
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Icon(Icons.check, color: Themes.darkButton2Color, size: 34,),
-                    Text('Changeable Timer Delay',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 17,
-                          fontFamily: 'Montserrat-Regular',
-                          letterSpacing: 0.2
-                      ),),
-                  ],
-                ),
+                // Wrap(
+                //   crossAxisAlignment: WrapCrossAlignment.center,
+                //   children: [
+                //     Icon(Icons.check, color: Themes.darkButton2Color, size: 34,),
+                //     Text('Changeable Timer Delay',
+                //       style: TextStyle(
+                //           fontWeight: FontWeight.w400,
+                //           fontSize: 17,
+                //           fontFamily: 'Montserrat-Regular',
+                //           letterSpacing: 0.2
+                //       ),),
+                //   ],
+                // ),
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
