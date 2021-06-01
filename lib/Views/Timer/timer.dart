@@ -546,7 +546,7 @@ class _timerAreaState extends State<timerArea> {
 
             if(dRecordedShot != dLevel1 && PCM > userPCM){
               //counter++;
-              if((swatch.elapsed.inMilliseconds - iShotTime)>=80){
+              if((swatch.elapsed.inMilliseconds - iShotTime)>=100){
                 print("Can record 2nd shot");
                 iShotTime = swatch.elapsed.inMilliseconds;
                 print("****Shot Time: "+iShotTime.toString());
