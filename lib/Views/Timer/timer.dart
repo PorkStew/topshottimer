@@ -531,6 +531,7 @@ class _timerAreaState extends State<timerArea> {
         new Timer.periodic(tick, (Timer t) async {
           if (_currentStatus == RecordingStatus.Stopped) {
             t.cancel();
+            return;
           }
 
           var current = await _recorder.current(channel: 0);
@@ -540,13 +541,26 @@ class _timerAreaState extends State<timerArea> {
 
             _currentStatus = _current.status;
 
+            if (_currentStatus == RecordingStatus.Stopped) {
+              t.cancel();
+              return;
+            }
+
             double dLevel1 = _current.metering.peakPower;
-            print("PEAK POWER: " + (_current.metering.peakPower.toString()));
+            print("PEAK POWER ***: " + (_current.metering.peakPower.toString()));
             double PCM = _current.metering.peakPower;
 
+            // print("ELAPSED TIME IN MS: "+ swatch.elapsed.inMilliseconds.toString());
+
+            //if(1==1){
+
+            // print("CURRENT PCM"+PCM.toString());
+            // print("USER PCM"+userPCM.toString());
             if(dRecordedShot != dLevel1 && PCM > userPCM){
+
+                  print("**********GOT INTO 1ST IF STATEMENT**********");
               //counter++;
-              if((swatch.elapsed.inMilliseconds - iShotTime)>=100){
+              if((swatch.elapsed.inMilliseconds - iShotTime)>=80){
                 print("Can record 2nd shot");
                 iShotTime = swatch.elapsed.inMilliseconds;
                 print("****Shot Time: "+iShotTime.toString());
@@ -878,6 +892,7 @@ class _timerAreaState extends State<timerArea> {
                   child: Text(buttonText,
                       style: TextStyle(fontSize: 80, fontFamily: 'Digital-7')),
                 )),
+
             Container(
                 padding: EdgeInsets.only(top: 20, bottom: 0, left: 0, right: 0),
                 child: Text(
@@ -887,6 +902,7 @@ class _timerAreaState extends State<timerArea> {
                       fontWeight: FontWeight.w700,
                       fontFamily: 'Digital-7'),
                 )),
+            SizedBox(height: 20,),
             Container(
                 padding: EdgeInsets.only(top: 10, bottom: 0, left: 0, right: 0),
                 child: Text(
@@ -896,7 +912,7 @@ class _timerAreaState extends State<timerArea> {
                       fontWeight: FontWeight.w700,
                       fontFamily: 'Digital-7'),
                 )),
-            SizedBox(height: 10,),
+            SizedBox(height: 20,),
             Row(children: <Widget>[
               Spacer(),
 
@@ -1065,239 +1081,621 @@ obtainUserDefaults() async {
     sTone = prefs.getString('userTone');
   }
 
-  if (Platform.isIOS) {
-    switch(iSensitivity){
-      case 100:userPCM = -0.50;
-      break;
-      case 99:userPCM = -0.56;
-      break;
-      case 98:userPCM = -0.62;
-      break;
-      case 97:userPCM = -0.68;
-      break;
-      case 96:userPCM = -0.74;
-      break;
-      case 95:userPCM = -0.80;
-      break;
-      case 94:userPCM = -0.86;
-      break;
-      case 93:userPCM = -0.92;
-      break;
-      case 92:userPCM = -0.98;
-      break;
-      case 91:userPCM = -1.04;
-      break;
-      case 90:userPCM = -1.10;
-      break;
-      case 89:userPCM = -1.16;
-      break;
-      case 88:userPCM = -1.22;
-      break;
-      case 87:userPCM = -1.28;
-      break;
-      case 86:userPCM = -1.34;
-      break;
-      case 85:userPCM = -1.4;
-      break;
-      case 84:userPCM = -1.46;
-      break;
-      case 83:userPCM = -1.52;
-      break;
-      case 82:userPCM = -1.58;
-      break;
-      case 81:userPCM = -1.64;
-      break;
-      case 80:userPCM = -1.70;
-      break;
-      case 79:userPCM = -1.76;
-      break;
-      case 78:userPCM = -1.82;
-      break;
-      case 77:userPCM = -1.88;
-      break;
-      case 76:userPCM = -1.94;
-      break;
-      case 75:userPCM = -2.0;
-      break;
-      case 74:userPCM = -2.06;
-      break;
-      case 73:userPCM = -2.12;
-      break;
-      case 72:userPCM = -2.18;
-      break;
-      case 71:userPCM = -2.24;
-      break;
-      case 70:userPCM = -2.30;
-      break;
-      case 69:userPCM = -2.36;
-      break;
-      case 68:userPCM = -2.42;
-      break;
-      case 67:userPCM = -2.48;
-      break;
-      case 66:userPCM = -2.54;
-      break;
-      case 65:userPCM = -2.60;
-      break;
-      case 64:userPCM = -2.66;
-      break;
-      case 63:userPCM = -2.72;
-      break;
-      case 62:userPCM = -2.78;
-      break;
-      case 61:userPCM = -2.84;
-      break;
-      case 60:userPCM = -2.90;
-      break;
-      case 59:userPCM = -2.96;
-      break;
-      case 58:userPCM = -3.02;
-      break;
-      case 57:userPCM = -3.08;
-      break;
-      case 56:userPCM = -3.14;
-      break;
-      case 55:userPCM = -3.20;
-      break;
-      case 54:userPCM = -3.26;
-      break;
-      case 53:userPCM = -3.32;
-      break;
-      case 52:userPCM = -3.38;
-      break;
-      case 51:userPCM = -3.44;
-      break;
-      case 50:userPCM = -3.50;
-      break;
-      case 49:userPCM = -3.56;
-      break;
-      case 48:userPCM = -3.62;
-      break;
-      case 47:userPCM = -3.68;
-      break;
-      case 46:userPCM = -3.74;
-      break;
-      case 45:userPCM = -3.80;
-      break;
-      case 44:userPCM = -3.86;
-      break;
-      case 43:userPCM = -3.92;
-      break;
-      case 42:userPCM = -3.98;
-      break;
-      case 41:userPCM = -4.04;
-      break;
-      case 40:userPCM = -4.10;
-      break;
-      case 39:userPCM = -4.16;
-      break;
-      case 38:userPCM = -4.22;
-      break;
-      case 37:userPCM = -4.28;
-      break;
-      case 36:userPCM = -4.34;
-      break;
-      case 35:userPCM = -4.40;
-      break;
-      case 34:userPCM = -4.46;
-      break;
-      case 33:userPCM = -4.52;
-      break;
-      case 32:userPCM = -4.58;
-      break;
-      case 31:userPCM = -4.64;
-      break;
-      case 30:userPCM = -4.70;
-      break;
-      case 29:userPCM = -4.76;
-      break;
-      case 28:userPCM = -4.82;
-      break;
-      case 27:userPCM = -4.88;
-      break;
-      case 26:userPCM = -4.94;
-      break;
-      case 25:userPCM = -5.00;
-      break;
-      case 24:userPCM = -5.06;
-      break;
-      case 23:userPCM = -5.12;
-      break;
-      case 22:userPCM = -5.18;
-      break;
-      case 21:userPCM = -5.24;
-      break;
-      case 20:userPCM = -5.30;
-      break;
-      case 19:userPCM = -5.36;
-      break;
-      case 18:userPCM = -5.42;
-      break;
-      case 17:userPCM = -5.48;
-      break;
-      case 16:userPCM = -5.54;
-      break;
-      case 15:userPCM = -5.6;
-      break;
-      case 14:userPCM = -5.66;
-      break;
-      case 13:userPCM = -5.72;
-      break;
-      case 12:userPCM = -5.78;
-      break;
-      case 11:userPCM = -5.84;
-      break;
-      case 10:userPCM = -5.90;
-      break;
-      case 9:userPCM = -5.96;
-      break;
-      case 8:userPCM = -6.02;
-      break;
-      case 7:userPCM = -6.08;
-      break;
-      case 6:userPCM = -6.14;
-      break;
-      case 5:userPCM = -6.2;
-      break;
-      case 4:userPCM = -6.26;
-      break;
-      case 3:userPCM = -6.31;
-      break;
-      case 2:userPCM = -6.8;
-      break;
-      case 1:userPCM = -6.44;
-      break;
-      case 0:userPCM = -6.50;
-      break;
+    if(Platform.isIOS) {
+      switch (iSensitivity) {
+        case 100:
+          userPCM = -0.50;
+          break;
+        case 99:
+          userPCM = -0.56;
+          break;
+        case 98:
+          userPCM = -0.62;
+          break;
+        case 97:
+          userPCM = -0.68;
+          break;
+        case 96:
+          userPCM = -0.74;
+          break;
+        case 95:
+          userPCM = -0.80;
+          break;
+        case 94:
+          userPCM = -0.86;
+          break;
+        case 93:
+          userPCM = -0.92;
+          break;
+        case 92:
+          userPCM = -0.98;
+          break;
+        case 91:
+          userPCM = -1.04;
+          break;
+        case 90:
+          userPCM = -1.10;
+          break;
+        case 89:
+          userPCM = -1.16;
+          break;
+        case 88:
+          userPCM = -1.22;
+          break;
+        case 87:
+          userPCM = -1.28;
+          break;
+        case 86:
+          userPCM = -1.34;
+          break;
+        case 85:
+          userPCM = -1.4;
+          break;
+        case 84:
+          userPCM = -1.46;
+          break;
+        case 83:
+          userPCM = -1.52;
+          break;
+        case 82:
+          userPCM = -1.58;
+          break;
+        case 81:
+          userPCM = -1.64;
+          break;
+        case 80:
+          userPCM = -1.70;
+          break;
+        case 79:
+          userPCM = -1.76;
+          break;
+        case 78:
+          userPCM = -1.82;
+          break;
+        case 77:
+          userPCM = -1.88;
+          break;
+        case 76:
+          userPCM = -1.94;
+          break;
+        case 75:
+          userPCM = -2.0;
+          break;
+        case 74:
+          userPCM = -2.06;
+          break;
+        case 73:
+          userPCM = -2.12;
+          break;
+        case 72:
+          userPCM = -2.18;
+          break;
+        case 71:
+          userPCM = -2.24;
+          break;
+        case 70:
+          userPCM = -2.30;
+          break;
+        case 69:
+          userPCM = -2.36;
+          break;
+        case 68:
+          userPCM = -2.42;
+          break;
+        case 67:
+          userPCM = -2.48;
+          break;
+        case 66:
+          userPCM = -2.54;
+          break;
+        case 65:
+          userPCM = -2.60;
+          break;
+        case 64:
+          userPCM = -2.66;
+          break;
+        case 63:
+          userPCM = -2.72;
+          break;
+        case 62:
+          userPCM = -2.78;
+          break;
+        case 61:
+          userPCM = -2.84;
+          break;
+        case 60:
+          userPCM = -2.90;
+          break;
+        case 59:
+          userPCM = -2.96;
+          break;
+        case 58:
+          userPCM = -3.02;
+          break;
+        case 57:
+          userPCM = -3.08;
+          break;
+        case 56:
+          userPCM = -3.14;
+          break;
+        case 55:
+          userPCM = -3.20;
+          break;
+        case 54:
+          userPCM = -3.26;
+          break;
+        case 53:
+          userPCM = -3.32;
+          break;
+        case 52:
+          userPCM = -3.38;
+          break;
+        case 51:
+          userPCM = -3.44;
+          break;
+        case 50:
+          userPCM = -3.50;
+          break;
+        case 49:
+          userPCM = -3.56;
+          break;
+        case 48:
+          userPCM = -3.62;
+          break;
+        case 47:
+          userPCM = -3.68;
+          break;
+        case 46:
+          userPCM = -3.74;
+          break;
+        case 45:
+          userPCM = -3.80;
+          break;
+        case 44:
+          userPCM = -3.86;
+          break;
+        case 43:
+          userPCM = -3.92;
+          break;
+        case 42:
+          userPCM = -3.98;
+          break;
+        case 41:
+          userPCM = -4.04;
+          break;
+        case 40:
+          userPCM = -4.10;
+          break;
+        case 39:
+          userPCM = -4.16;
+          break;
+        case 38:
+          userPCM = -4.22;
+          break;
+        case 37:
+          userPCM = -4.28;
+          break;
+        case 36:
+          userPCM = -4.34;
+          break;
+        case 35:
+          userPCM = -4.40;
+          break;
+        case 34:
+          userPCM = -4.46;
+          break;
+        case 33:
+          userPCM = -4.52;
+          break;
+        case 32:
+          userPCM = -4.58;
+          break;
+        case 31:
+          userPCM = -4.64;
+          break;
+        case 30:
+          userPCM = -4.70;
+          break;
+        case 29:
+          userPCM = -4.76;
+          break;
+        case 28:
+          userPCM = -4.82;
+          break;
+        case 27:
+          userPCM = -4.88;
+          break;
+        case 26:
+          userPCM = -4.94;
+          break;
+        case 25:
+          userPCM = -5.00;
+          break;
+        case 24:
+          userPCM = -5.06;
+          break;
+        case 23:
+          userPCM = -5.12;
+          break;
+        case 22:
+          userPCM = -5.18;
+          break;
+        case 21:
+          userPCM = -5.24;
+          break;
+        case 20:
+          userPCM = -5.30;
+          break;
+        case 19:
+          userPCM = -5.36;
+          break;
+        case 18:
+          userPCM = -5.42;
+          break;
+        case 17:
+          userPCM = -5.48;
+          break;
+        case 16:
+          userPCM = -5.54;
+          break;
+        case 15:
+          userPCM = -5.6;
+          break;
+        case 14:
+          userPCM = -5.66;
+          break;
+        case 13:
+          userPCM = -5.72;
+          break;
+        case 12:
+          userPCM = -5.78;
+          break;
+        case 11:
+          userPCM = -5.84;
+          break;
+        case 10:
+          userPCM = -5.90;
+          break;
+        case 9:
+          userPCM = -5.96;
+          break;
+        case 8:
+          userPCM = -6.02;
+          break;
+        case 7:
+          userPCM = -6.08;
+          break;
+        case 6:
+          userPCM = -6.14;
+          break;
+        case 5:
+          userPCM = -6.2;
+          break;
+        case 4:
+          userPCM = -6.26;
+          break;
+        case 3:
+          userPCM = -6.32;
+          break;
+        case 2:
+          userPCM = -6.4;
+          break;
+        case 1:
+          userPCM = -6.46;
+          break;
+        case 0:
+          userPCM = -6.52;
+          break;
       //-4.5 is nearly perfect but needs to start at -6.5
+      }
     }
-    if (iSensitivity == 100) {
-       userPCM= 90;
-    } else if (iSensitivity == 25.0) {
-      timerSensitivity = 84;
-    } else if (iSensitivity == 50.0) {
-      timerSensitivity = 80;
-    } else if (iSensitivity == 75.0) {
-      timerSensitivity = 75;
-    } else if (iSensitivity == 100.0) {
-      timerSensitivity = 70.0;
-    } else {
-      print("No IOS User Defaults set");
-    }
-  }
+
   if (Platform.isAndroid) {
-    if (iSensitivity == 0.0) {
-      timerSensitivity = 75;
-    } else if (iSensitivity == 25.0) {
-      timerSensitivity = 70;
-    } else if (iSensitivity == 50.0) {
-      timerSensitivity = 65;
-    } else if (iSensitivity == 75.0) {
-      timerSensitivity = 60;
-    } else if (iSensitivity == 100.0) {
-      timerSensitivity = 55.0;
-    } else {
-      print("No ANDROID User Defaults set");
+    switch (iSensitivity) {
+      case 100:
+        userPCM = -0.4;
+        break;
+      case 99:
+        userPCM = -0.5;
+        break;
+      case 98:
+        userPCM = -0.6;
+        break;
+      case 97:
+        userPCM = -0.7;
+        break;
+      case 96:
+        userPCM = -0.8;
+        break;
+      case 95:
+        userPCM = -1.0;
+        break;
+      case 94:
+        userPCM = -1.2;
+        break;
+      case 93:
+        userPCM = -1.4;
+        break;
+      case 92:
+        userPCM = -1.6;
+        break;
+      case 91:
+        userPCM = -1.8;
+        break;
+      case 90:
+        userPCM = -2.0;
+        break;
+      case 89:
+        userPCM = -2.2;
+        break;
+      case 88:
+        userPCM = -2.4;
+        break;
+      case 87:
+        userPCM = -2.6;
+        break;
+      case 86:
+        userPCM = -2.8;
+        break;
+      case 85:
+        userPCM = -3.0;
+        break;
+      case 84:
+        userPCM = -3.2;
+        break;
+      case 83:
+        userPCM = -3.4;
+        break;
+      case 82:
+        userPCM = -3.6;
+        break;
+      case 81:
+        userPCM = -3.8;
+        break;
+      case 80:
+        userPCM = -4.0;
+        break;
+      case 79:
+        userPCM = -4.2;
+        break;
+      case 78:
+        userPCM = -4.4;
+        break;
+      case 77:
+        userPCM = -4.6;
+        break;
+      case 76:
+        userPCM = -4.8;
+        break;
+      case 75:
+        userPCM = -5.0;
+        break;
+      case 74:
+        userPCM = -5.2;
+        break;
+      case 73:
+        userPCM = -5.4;
+        break;
+      case 72:
+        userPCM = -5.6;
+        break;
+      case 71:
+        userPCM = -5.8;
+        break;
+      case 70:
+        userPCM = -6.0;
+        break;
+      case 69:
+        userPCM = -6.2;
+        break;
+      case 68:
+        userPCM = -6.4;
+        break;
+      case 67:
+        userPCM = -6.6;
+        break;
+      case 66:
+        userPCM = -6.8;
+        break;
+      case 65:
+        userPCM = -7.0;
+        break;
+      case 64:
+        userPCM = -7.2;
+        break;
+      case 63:
+        userPCM = -7.4;
+        break;
+      case 62:
+        userPCM = -7.6;
+        break;
+      case 61:
+        userPCM = -7.8;
+        break;
+      case 60:
+        userPCM = -8;
+        break;
+      case 59:
+        userPCM = -8.2;
+        break;
+      case 58:
+        userPCM = -8.4;
+        break;
+      case 57:
+        userPCM = -8.6;
+        break;
+      case 56:
+        userPCM = -8.8;
+        break;
+      case 55:
+        userPCM = -9.0;
+        break;
+      case 54:
+        userPCM = -9.2;
+        break;
+      case 53:
+        userPCM = -9.4;
+        break;
+      case 52:
+        userPCM = -9.6;
+        break;
+      case 51:
+        userPCM = -9.8;
+        break;
+      case 50:
+        userPCM = -10.0;
+        break;
+      case 49:
+        userPCM = -10.2;
+        break;
+      case 48:
+        userPCM = -10.4;
+        break;
+      case 47:
+        userPCM = -10.6;
+        break;
+      case 46:
+        userPCM = -10.8;
+        break;
+      case 45:
+        userPCM = -11.0;
+        break;
+      case 44:
+        userPCM = -11.2;
+        break;
+      case 43:
+        userPCM = -11.4;
+        break;
+      case 42:
+        userPCM = -11.6;
+        break;
+      case 41:
+        userPCM = -11.8;
+        break;
+      case 40:
+        userPCM = -12.0;
+        break;
+      case 39:
+        userPCM = -12.2;
+        break;
+      case 38:
+        userPCM = -12.4;
+        break;
+      case 37:
+        userPCM = -12.6;
+        break;
+      case 36:
+        userPCM = -12.8;
+        break;
+      case 35:
+        userPCM = -13.0;
+        break;
+      case 34:
+        userPCM = -13.2;
+        break;
+      case 33:
+        userPCM = -13.4;
+        break;
+      case 32:
+        userPCM = -13.6;
+        break;
+      case 31:
+        userPCM = -13.8;
+        break;
+      case 30:
+        userPCM = -14.0;
+        break;
+      case 29:
+        userPCM = -14.2;
+        break;
+      case 28:
+        userPCM = -14.4;
+        break;
+      case 27:
+        userPCM = -14.6;
+        break;
+      case 26:
+        userPCM = -14.8;
+        break;
+      case 25:
+        userPCM = -15.0;
+        break;
+      case 24:
+        userPCM = -15.2;
+        break;
+      case 23:
+        userPCM = -15.4;
+        break;
+      case 22:
+        userPCM = -15.6;
+        break;
+      case 21:
+        userPCM = -15.8;
+        break;
+      case 20:
+        userPCM = -16;
+        break;
+      case 19:
+        userPCM = -16.2;
+        break;
+      case 18:
+        userPCM = -16.4;
+        break;
+      case 17:
+        userPCM = -16.6;
+        break;
+      case 16:
+        userPCM = -16.8;
+        break;
+      case 15:
+        userPCM = -17;
+        break;
+      case 14:
+        userPCM = -17.2;
+        break;
+      case 13:
+        userPCM = -17.4;
+        break;
+      case 12:
+        userPCM = -17.6;
+        break;
+      case 11:
+        userPCM = -17.8;
+        break;
+      case 10:
+        userPCM = -18.0;
+        break;
+      case 9:
+        userPCM = -18.2;
+        break;
+      case 8:
+        userPCM = -18.4;
+        break;
+      case 7:
+        userPCM = -18.6;
+        break;
+      case 6:
+        userPCM = -18.8;
+        break;
+      case 5:
+        userPCM = -19;
+        break;
+      case 4:
+        userPCM = -19.2;
+        break;
+      case 3:
+        userPCM = -19.4;
+        break;
+      case 2:
+        userPCM = -19.6;
+        break;
+      case 1:
+        userPCM = -19.8;
+        break;
+      case 0:
+        userPCM = -20;
+        break;
+    //-4.5 is nearly perfect but needs to start at -6.5
     }
   }
   double dTime;
