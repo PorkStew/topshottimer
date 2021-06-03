@@ -23,6 +23,7 @@ double timerSensitivity;
 //User PCM Value
 double userPCM = 0;
 double PCMchange = 0.01;
+double parTime = 0.00;
 
 int timerDelay;
 String timerTone;
@@ -410,12 +411,54 @@ class _timerAreaState extends State<timerArea> {
       player.play();
       //player.seek(Duration(milliseconds: 0));
 
+
       print("After Play");
 
       Timer(Duration(milliseconds: 700), () {
         print("About to start recording");
         _start();
+        player.stop();
+
+        if(parTime>0.0){
+          double parTimeMilliseconds = parTime * 1000;
+          int parTimeMillisecondsInt = parTimeMilliseconds.toInt();
+          Timer(Duration(milliseconds: parTimeMillisecondsInt), () {
+            //print("PAR TIME IN MILLISECONDS AFTER DELAY "+parTimeMillisecondsInt.toString());
+            if (Platform.isIOS) {
+              _setSession();
+            }
+            btnColor = Color(0xFFA2C11C);
+            buttonText = "Start";
+
+            // ? btnColor = Color(0xFFA2C11C)
+            //     : btnColor = Color(0xFF2C5D63);
+            // isChanged == true
+            // ? buttonText = "Start"
+            //     : buttonText = "Stop";
+            player.play();
+            isChanged = true;
+            colorisChanged = true;
+            startispressed = true;
+            isRunning = false;
+            didReset = false;
+            stoptimer();
+            reset();
+            bResetOnStart = true;
+            if (Platform.isIOS) {
+              _setSession();
+            }
+            // if (Platform.isAndroid) {
+            //   _setSession();
+            // }
+            print("*********************" + arrShots[arrShots.length - 1]);
+            bstop = false;
+
+
+          });
+          //Future.delayed(Duration(milliseconds: parTimeMillisecondsInt));
+        }
       });
+
       //player.dispose();
       iCountStart++;
       bResetOnStart = false;
@@ -545,7 +588,7 @@ class _timerAreaState extends State<timerArea> {
               t.cancel();
               return;
             }
-
+            //print("****User Par Time- "+ parTime.toString());
             double dLevel1 = _current.metering.peakPower;
             print("PEAK POWER ***: " + (_current.metering.peakPower.toString()));
             double PCM = _current.metering.peakPower;
@@ -1058,8 +1101,16 @@ obtainUserDefaults() async {
   bool bRandom = prefs.getBool('randomDelay');
   int iSensitivity = prefs.getInt('userSensitivity');
   String sTone = prefs.getString('userTone');
+  double dParTime = prefs.getDouble('parTime');
+
+  print("DEFAULT PAR TIME ON OBTAIN USER DEFAULTS: "+ dParTime.toString());
 
 
+  if (dParTime == null){
+    await prefs.setDouble('parTime', 0.0);
+    dParTime = prefs.getDouble('parTime');
+    parTime = dParTime;
+  }
   if (dDelay == null) {
     await prefs.setDouble('userDelay', 3);
     dDelay = prefs.getDouble('userDelay');
@@ -1703,6 +1754,7 @@ obtainUserDefaults() async {
   timerDelay = dDelay.round();
   timerTone = sTone;
   bRandomDelay = bRandom;
+  parTime = dParTime;
 }
 
 
