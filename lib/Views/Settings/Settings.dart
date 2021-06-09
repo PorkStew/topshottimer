@@ -1,20 +1,14 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:audio_session/audio_session.dart';
-
-// import 'package:audioplayers/audio_cache.dart';
-//import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:topshottimer/Themes.dart';
 import 'package:topshottimer/Views/Settings/editUserDetails.dart';
 import 'package:topshottimer/Views/Subscription/pricing.dart';
-import 'package:topshottimer/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:topshottimer/global.dart';
 
@@ -45,14 +39,8 @@ class _SettingsState extends State<Settings> {
   void initState() {
     super.initState();
     Purchases.getPurchaserInfo();
-
-    //initPlayer();
-
     //sets the session to play the sound
     _setSession();
-
-    //Assigns future variables to methods that return values
-
     fFirstName = _getFirstName();
     fLastName = _getLastName();
     fEmail = _getEmail();
@@ -268,13 +256,6 @@ class _SettingsState extends State<Settings> {
                                   SizedBox(
                                     height: 50,
                                     width: 50,
-                                    //width: 50,
-                                    //color: Themes.darkButton2Color,
-                                    // decoration: BoxDecoration(
-                                    //   color: Themes.darkButton2Color,
-                                    //   shape: BoxShape.circle,
-                                    //   //borderRadius: BorderRadius.all(Radius.circular(20))
-                                    // ),
                                     child: ElevatedButton(
                                       child: Text("-",
                                           textAlign: TextAlign.center,
@@ -299,74 +280,14 @@ class _SettingsState extends State<Settings> {
 
                                       },
                                     ),
-
-
-
-                                    // child: Align(
-                                    //   alignment: Alignment.center,
-                                    //   child: Text("Live",
-                                    //       textAlign: TextAlign.center,
-                                    //       style: TextStyle(
-                                    //           color: Colors.white)),
-                                    // ),
                                   ),
                                   Expanded(
                                     child: Text( newSense.toString() + "%", textAlign: TextAlign.center, style: TextStyle(fontSize: 25,
                                     ),),
-                                    //   Slider(
-                                    //   value: sliderValue1,
-                                    //   min: 0,
-                                    //   max: 100,
-                                    //   activeColor: Color(0xFFA2C11C),
-                                    //   inactiveColor: Color(0xFF2C5D63),
-                                    //   divisions: 4,
-                                    //   label: sliderValue1.toString(),
-                                    //   onChanged: (double newValue) {
-                                    //     setState(() {
-                                    //       sliderValue1 = newValue;
-                                    //
-                                    //       if (newValue == 0.0) {
-                                    //         timerSensitivity =
-                                    //             arrSensititvity[0]
-                                    //                 .toString();
-                                    //       }
-                                    //       if (newValue == 25.0) {
-                                    //         timerSensitivity =
-                                    //             arrSensititvity[1]
-                                    //                 .toString();
-                                    //       }
-                                    //       if (newValue == 50.0) {
-                                    //         timerSensitivity =
-                                    //             arrSensititvity[2]
-                                    //                 .toString();
-                                    //       }
-                                    //       if (newValue == 75.0) {
-                                    //         timerSensitivity =
-                                    //             arrSensititvity[3]
-                                    //                 .toString();
-                                    //       }
-                                    //       if (newValue == 100.0) {
-                                    //         timerSensitivity =
-                                    //             arrSensititvity[4]
-                                    //                 .toString();
-                                    //       }
-                                    //       return sliderValue1;
-                                    //     });
-                                    //     setDefaultSensitivity(newValue);
-                                    //     print('Start: ${newValue}');
-                                    //   },
-                                    // ),
                                   ),
                                   SizedBox(
                                     height: 50,
                                     width: 50,
-                                    //width: 50,
-                                    //color: Themes.darkButton2Color,
-                                    // decoration: BoxDecoration(
-                                    //   color: Themes.darkButton2Color,
-                                    //   shape: BoxShape.circle,
-                                    //   //borderRadius: BorderRadius.all(Radius.circular(20))
-                                    // ),
                                     child: ElevatedButton(
                                       child: Text("+",
                                           textAlign: TextAlign.center,
@@ -391,36 +312,8 @@ class _SettingsState extends State<Settings> {
 
                                         });
                                       },
-
-
-
                                     ),
-
-
-
-                                    // child: Align(
-                                    //   alignment: Alignment.center,
-                                    //   child: Text("Live",
-                                    //       textAlign: TextAlign.center,
-                                    //       style: TextStyle(
-                                    //           color: Colors.white)),
-                                    // ),
                                   ),
-                                  // Container(
-                                  //   height: 50,
-                                  //   width: 50,
-                                  //   decoration: BoxDecoration(
-                                  //     color: Themes.darkButton2Color,
-                                  //     shape: BoxShape.circle,
-                                  //   ),
-                                  //   child: Align(
-                                  //     alignment: Alignment.center,
-                                  //     child: Text("Dry",
-                                  //         textAlign: TextAlign.center,
-                                  //         style: TextStyle(
-                                  //             color: Colors.white)),
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),
@@ -446,7 +339,6 @@ class _SettingsState extends State<Settings> {
                         Container(
                           padding: EdgeInsets.only(
                               top: 5, bottom: 0, left: 0, right: 0),
-                          //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -455,27 +347,17 @@ class _SettingsState extends State<Settings> {
                             Align(
                               alignment: Alignment.center,
                               child: Row(
-                                //mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment:
                                 CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
                                     height: 50,
                                     width: 50,
-                                    //width: 50,
-                                    //color: Themes.darkButton2Color,
-                                    // decoration: BoxDecoration(
-                                    //   color: Themes.darkButton2Color,
-                                    //   shape: BoxShape.circle,
-                                    //   //borderRadius: BorderRadius.all(Radius.circular(20))
-                                    // ),
                                     child: ElevatedButton(
                                       child: Text("-",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Colors.white, fontSize: 25)),
-
-
                                       style: ElevatedButton.styleFrom(
                                         primary: Themes.darkButton2Color,
                                         shape: CircleBorder(), ),
@@ -494,74 +376,16 @@ class _SettingsState extends State<Settings> {
 
                                       },
                                     ),
-
-
-
-                                    // child: Align(
-                                    //   alignment: Alignment.center,
-                                    //   child: Text("Live",
-                                    //       textAlign: TextAlign.center,
-                                    //       style: TextStyle(
-                                    //           color: Colors.white)),
-                                    // ),
                                   ),
                                   Expanded(
                                     child: Text( double.parse((ParTime).toStringAsFixed(2)).toString() + "s", textAlign: TextAlign.center, style: TextStyle(fontSize: 25,
                                     ),),
-                                    //   Slider(
-                                    //   value: sliderValue1,
-                                    //   min: 0,
-                                    //   max: 100,
-                                    //   activeColor: Color(0xFFA2C11C),
-                                    //   inactiveColor: Color(0xFF2C5D63),
-                                    //   divisions: 4,
-                                    //   label: sliderValue1.toString(),
-                                    //   onChanged: (double newValue) {
-                                    //     setState(() {
-                                    //       sliderValue1 = newValue;
-                                    //
-                                    //       if (newValue == 0.0) {
-                                    //         timerSensitivity =
-                                    //             arrSensititvity[0]
-                                    //                 .toString();
-                                    //       }
-                                    //       if (newValue == 25.0) {
-                                    //         timerSensitivity =
-                                    //             arrSensititvity[1]
-                                    //                 .toString();
-                                    //       }
-                                    //       if (newValue == 50.0) {
-                                    //         timerSensitivity =
-                                    //             arrSensititvity[2]
-                                    //                 .toString();
-                                    //       }
-                                    //       if (newValue == 75.0) {
-                                    //         timerSensitivity =
-                                    //             arrSensititvity[3]
-                                    //                 .toString();
-                                    //       }
-                                    //       if (newValue == 100.0) {
-                                    //         timerSensitivity =
-                                    //             arrSensititvity[4]
-                                    //                 .toString();
-                                    //       }
-                                    //       return sliderValue1;
-                                    //     });
-                                    //     setDefaultSensitivity(newValue);
-                                    //     print('Start: ${newValue}');
-                                    //   },
-                                    // ),
+
                                   ),
                                   SizedBox(
                                     height: 50,
                                     width: 50,
-                                    //width: 50,
-                                    //color: Themes.darkButton2Color,
-                                    // decoration: BoxDecoration(
-                                    //   color: Themes.darkButton2Color,
-                                    //   shape: BoxShape.circle,
-                                    //   //borderRadius: BorderRadius.all(Radius.circular(20))
-                                    // ),
+
                                     child: ElevatedButton(
                                       child: Text("+",
                                           textAlign: TextAlign.center,
@@ -584,39 +408,10 @@ class _SettingsState extends State<Settings> {
                                             setDefaultParTime(ParTime);
                                             print("**** Minus Clicked****");
                                           }
-
                                         });
                                       },
-
-
-
                                     ),
-
-
-
-                                    // child: Align(
-                                    //   alignment: Alignment.center,
-                                    //   child: Text("Live",
-                                    //       textAlign: TextAlign.center,
-                                    //       style: TextStyle(
-                                    //           color: Colors.white)),
-                                    // ),
                                   ),
-                                  // Container(
-                                  //   height: 50,
-                                  //   width: 50,
-                                  //   decoration: BoxDecoration(
-                                  //     color: Themes.darkButton2Color,
-                                  //     shape: BoxShape.circle,
-                                  //   ),
-                                  //   child: Align(
-                                  //     alignment: Alignment.center,
-                                  //     child: Text("Dry",
-                                  //         textAlign: TextAlign.center,
-                                  //         style: TextStyle(
-                                  //             color: Colors.white)),
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),
@@ -636,7 +431,6 @@ class _SettingsState extends State<Settings> {
                         Container(
                           padding: EdgeInsets.only(
                               top: 5, bottom: 0, left: 0, right: 0),
-                          //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
                         ),
                         Text(
                           'Timer Delay',
@@ -647,7 +441,6 @@ class _SettingsState extends State<Settings> {
                         Container(
                           padding: EdgeInsets.only(
                               top: 5, bottom: 0, left: 0, right: 0),
-                          //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -716,12 +509,9 @@ class _SettingsState extends State<Settings> {
                                   Container(
                                     height: 50,
                                     width: 50,
-                                    //width: 50,
-                                    //color: Themes.darkButton2Color,
                                     decoration: BoxDecoration(
                                       color: Themes.darkButton2Color,
                                       shape: BoxShape.circle,
-                                      //borderRadius: BorderRadius.all(Radius.circular(20))
                                     ),
 
                                     child: Align(
@@ -780,7 +570,6 @@ class _SettingsState extends State<Settings> {
                         Container(
                           padding: EdgeInsets.only(
                               top: 5, bottom: 0, left: 0, right: 0),
-                          //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
                         ),
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -898,12 +687,6 @@ class _SettingsState extends State<Settings> {
                               onPressed: controller.btnState.value
                                   ? () {
                                 Get.to(() => editUserDetails());
-
-                                // Navigator.push(
-                                //           context,
-                                //           MaterialPageRoute(
-                                //               builder: (context) =>
-                                //                   editUserDetails()));
                               }
                                   : null,
                               child: Text(
@@ -950,64 +733,6 @@ class _SettingsState extends State<Settings> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10))),
                             )),
-
-
-
-                        //VERSION AND APP NAME START
-                        // Expanded(
-                        //     child: Align(
-                        //         alignment: Alignment.bottomCenter,
-                        //         child: Container(
-                        //           alignment: Alignment.bottomCenter,
-                        //           child: Column(
-                        //             crossAxisAlignment: CrossAxisAlignment.center,
-                        //             mainAxisSize: MainAxisSize.max,
-                        //             mainAxisAlignment: MainAxisAlignment.end,
-                        //             children: [
-                        //               Text(
-                        //                 "TopShot Timer 1.0.0",
-                        //               ),
-                        //               SizedBox(
-                        //                 height: 10,
-                        //               ),
-                        //               new GestureDetector(
-                        //                 onTap: () {
-                        //                   _launchURL();
-                        //                 },
-                        //                 child: Text(
-                        //                   "Privacy Policy",
-                        //                   style: TextStyle(
-                        //                       color: Themes.darkButton2Color),
-                        //                 ),
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         ))),
-
-                        //VERSION AND APP NAME START
-
-                        // FlatButton(
-                        //   color: Themes.darkButton1Color,
-                        //   shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(10.0),
-                        //       side: BorderSide(
-                        //           color: Themes.darkButton1Color)),
-                        //   height: 50,
-                        //   minWidth: 150,
-                        //   child: Text("Sign Out",
-                        //       style: TextStyle(
-                        //         fontSize: 20,
-                        //         color: Colors.white,
-                        //       )),
-                        //   onPressed: () async {
-                        //     SharedPreferences preferences =
-                        //         await SharedPreferences.getInstance();
-                        //     await preferences.clear();
-                        //     Navigator.pushReplacementNamed(
-                        //         context, '/LoginSignUp/login');
-                        //     print("Signed Out");
-                        //   },
-                        // ),
                       ],
                     ),
                   ),
@@ -1035,14 +760,12 @@ class _SettingsState extends State<Settings> {
 
 Future<double> userParTime() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
   double dParTime = await prefs.getDouble('parTime');
   return dParTime;
 }
 //The below methods obtain user details from the shared preferences
 Future<String> userFirstName() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
   String sFirstName = await prefs.getString('firstName');
   return sFirstName;
 }

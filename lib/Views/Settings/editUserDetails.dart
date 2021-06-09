@@ -118,7 +118,6 @@ class _editUserDetailsState extends State<editUserDetails> {
                   print(FirstName);
 
                   return Column(
-                    //mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Form(
@@ -128,7 +127,6 @@ class _editUserDetailsState extends State<editUserDetails> {
                             Container(
                               padding: EdgeInsets.only(
                                   top: 0, bottom: 0, left: 0, right: 0),
-                              //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
                             ),
                             TextFormField(
                               decoration: InputDecoration(
@@ -143,8 +141,6 @@ class _editUserDetailsState extends State<editUserDetails> {
                                 if (value.isEmpty) {
                                   return 'First Name is Required';
                                 }
-                                //regex
-
                                 return null;
                               },
                               onSaved: (String value) {
@@ -164,8 +160,6 @@ class _editUserDetailsState extends State<editUserDetails> {
                                 if (value.isEmpty) {
                                   return 'Last Name is Required';
                                 }
-                                //regex
-
                                 return null;
                               },
                               onSaved: (String value) {
@@ -186,8 +180,6 @@ class _editUserDetailsState extends State<editUserDetails> {
                                 if (value.isEmpty) {
                                   return 'Email is Required';
                                 }
-                                //regex
-
                                 return null;
                               },
                               onSaved: (String value) {
@@ -197,7 +189,6 @@ class _editUserDetailsState extends State<editUserDetails> {
                             Container(
                               padding: EdgeInsets.only(
                                   top: 10, bottom: 0, left: 0, right: 0),
-                              //child: Text('TopShot Timer', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600, ))
                             ),
                             SizedBox(
                               height: 15,
@@ -225,24 +216,6 @@ class _editUserDetailsState extends State<editUserDetails> {
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10))),
                                 )),
-                            // FlatButton(
-                            //   color: Themes.darkButton1Color,
-                            //   shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(10.0),
-                            //       side: BorderSide(
-                            //           color: Themes.darkButton1Color)),
-                            //   height: 50,
-                            //   minWidth: 220,
-                            //   child: Text(
-                            //     "Reset Password",
-                            //     style: TextStyle(
-                            //         fontSize: 20,
-                            //         color: Theme.of(context).buttonColor),
-                            //   ),
-                            //   onPressed: () async {
-                            //     resetPasswordDialog();
-                            //   },
-                            // ),
                             Container(
                               padding: EdgeInsets.only(
                                   top: 10, bottom: 0, left: 0, right: 0),
@@ -288,7 +261,6 @@ class _editUserDetailsState extends State<editUserDetails> {
                                       print("***********Details Were Edited");
                                       print("**NewFirstName: " + newFirstName);
                                       print("**NewLastName: " + newLastName);
-                                      // _formKey.currentState.save();
                                       newFirstName =
                                           StringUtils.capitalize(newFirstName);
                                       newLastName =
@@ -309,25 +281,6 @@ class _editUserDetailsState extends State<editUserDetails> {
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10))),
                                 )),
-
-                            // FlatButton(
-                            //   color: Themes.darkButton2Color,
-                            //   shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(10.0),
-                            //       side: BorderSide(color: Color(0xFFA2C11C))),
-                            //   height: 50,
-                            //   minWidth: 180,
-                            //   child: Text(
-                            //     "Update",
-                            //     style: TextStyle(
-                            //         fontSize: 20,
-                            //         color: Theme.of(context).buttonColor),
-                            //   ),
-                            //   onPressed: () {
-                            //
-                            //     //TODO Needs to navigate to Page selector and have a popup dialog
-                            //   },
-                            // ),
                           ],
                         ),
                       ),
@@ -402,35 +355,17 @@ class _editUserDetailsState extends State<editUserDetails> {
                             onTap: () {
                               resetPassword(Email.toLowerCase());
                               clearDefaults();
-                              //Navigator.pop(context);
-                              //Get.off(() => ResetPasswordConfirm(), arguments: {'email': Email.toLowerCase()});
-                              //Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
                               print("Signed Out");
-
-
                               Navigator.pushNamedAndRemoveUntil(
                                   context,
                                   '/LoginSignUp/resetPasswordConfirm',
                               (route) => false,
                               arguments: {'email': Email.toLowerCase()});
-
-                              // Navigator.pushNamedAndRemoveUntil(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => Splits(arrShots.toString())));
-                              // Navigator.pushNamedAndRemoveUntil(context,
-                              //     '/LoginSignUp/login', (route) => false);
-
-
-                              // Navigator.pop(context);
-                              //Navigator.push(context,
-                              // MaterialPageRoute(builder: (context) => SignUp(_email.text)));
                             },
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.only(
                                     bottomRight: Radius.circular(10)),
-                                //color: Themes.PrimaryColorRed,
                                 color: Themes.darkButton2Color,
                               ),
                               height: 45,
@@ -612,10 +547,6 @@ class _editUserDetailsState extends State<editUserDetails> {
   }
 }
 
-// doStuff() async{
-//   var x = await userSensitivity();
-//   return x;
-// }
 resetPassword(String email) async {
   try {
     var url =
@@ -628,7 +559,6 @@ resetPassword(String email) async {
     print("Password Reset Sent");
   } catch (error) {
     print(error.toString());
-    //setState(() => loading = false);
   }
 }
 
@@ -644,7 +574,6 @@ updateDetails(String name, String surname, String email) async {
     });
   } catch (error) {
     print(error.toString());
-    //setState(() => loading = false);
   }
 }
 
@@ -708,12 +637,10 @@ setDefaultDelay(double newValue) async {
 
 Future<String> userTone() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //await prefs.setDouble('userSensitivity', 50.00);
   String sTone = prefs.getString('userTone');
   if (sTone == null) {
     await prefs.setString('userTone', "1500");
   }
-  //print(dSensitivity.toString());
   return sTone;
 }
 
