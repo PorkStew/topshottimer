@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -59,10 +60,15 @@ class Themes {
 
     //theme colors for text
     textTheme: _lightTextTheme,
+
   );
 
   static final ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
+
+      // Text color
+        // ),
+
+
     canvasColor: const Color(0xFF283739),
     scaffoldBackgroundColor: darkBackgroundColor,
     //all values need to be defined to work
@@ -106,6 +112,7 @@ class Themes {
       ),
       labelStyle: TextStyle(color: Colors.grey),
     ),
+
     //changes selection color for highlighting text
     //textSelectionColor: Colors.grey, //DEPRECATED USE BELLOW
     textSelectionTheme: TextSelectionThemeData(
@@ -122,7 +129,7 @@ class Themes {
     subtitle1: TextStyle(color: Colors.black), // <-- that's the one
   );
   static final TextTheme _darkTextTheme = TextTheme(
-    bodyText2: TextStyle(color: darkTextColor),
+    bodyText2: TextStyle(color: Colors.white),
     //for text input color
     subtitle1: TextStyle(color: darkTextColor), // <-- that's the one
   );

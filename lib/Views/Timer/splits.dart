@@ -147,34 +147,12 @@ class SplitsState extends State<Splits> {
                                 },
 
                                 style: ElevatedButton.styleFrom(
-                                    primary: Themes.darkBackgroundColor,
+                                  elevation: 0,
+                                  primary: Colors.transparent,
                                   shape: CircleBorder(
                                       side: BorderSide(
                                           color: Color(0xFFDE561C), width: 2)),),
                               )),
-                          // FlatButton(
-                          //   //color: Colors.red,
-                          //   height: 35,
-                          //   minWidth: 35,
-                          //   shape: CircleBorder(
-                          //       side: BorderSide(
-                          //           color: Color(0xFFDE561C), width: 2)),
-                          //   child: Text(
-                          //     "X",
-                          //     style: TextStyle(
-                          //         fontSize: 20, color: Color(0xFFDE561C)),
-                          //   ),
-                          //   onPressed: () {
-                          //     setState(() {
-                          //       if (arrShots.length > 1) {
-                          //         arrShots.remove(sShot);
-                          //       } else
-                          //         Navigator.pop(context);
-                          //
-                          //       print("Hello World");
-                          //     });
-                          //   },
-                          // ),
                         ],
                       ),
                     ),

@@ -38,10 +38,7 @@ class _ProfileState extends State<Profile> {
   //Get user ID from user Defaults
   Future<String> userID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //await prefs.setDouble('userSensitivity', 50.00);
     String sUserID = prefs.getString('id');
-
-    //print(dSensitivity.toString());
     return sUserID;
   }
 
@@ -55,7 +52,6 @@ class _ProfileState extends State<Profile> {
       //get this information from user defaults
       "userID": sID,
     });
-    //print(json.decode(res.body));
 
     print("before res.body");
 

@@ -49,7 +49,6 @@ class viewSplitsState extends State<viewSplits> {
       //get this information from user defaults
       "stringId": sStringID,
     });
-    //print(json.decode(res.body));
 
     //Populating splits array with all shots from database
     print("before res.body");
@@ -64,7 +63,6 @@ class viewSplitsState extends State<viewSplits> {
       arrSplits.add(id[iPopulate]['stringSplits']);
     }
 
-    //print(arrStringName[0].toString());
     for (int iPrint = 0; iPrint <= iLength - 1; iPrint++) {
       //print(arrStringName[iPrint]);
       print("Split: " + arrSplits[iPrint]);
@@ -76,10 +74,8 @@ class viewSplitsState extends State<viewSplits> {
   //Get string ID when they select the string in the scores page
   Future<String> userID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //await prefs.setDouble('userSensitivity', 50.00);
-    String sUserID = prefs.getString('id');
 
-    //print(dSensitivity.toString());
+    String sUserID = prefs.getString('id');
     return sUserID;
   }
 
@@ -134,7 +130,6 @@ class viewSplitsState extends State<viewSplits> {
                               child: Container(
                                   padding: new EdgeInsets.only(left: 10.0),
                                   child: Column(
-                                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                                     children: <Widget>[
                                       Row(children: <Widget>[
@@ -186,23 +181,7 @@ class viewSplitsState extends State<viewSplits> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
                           )),
-                      // FlatButton(
-                      //   color: Color(0xFF2C5D63),
-                      //   shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(10.0),
-                      //       side: BorderSide(color: Color(0xFF2C5D63))),
-                      //   height: 50,
-                      //   minWidth: 35,
-                      //   child: Text(
-                      //     "Close String",
-                      //     style: TextStyle(
-                      //         fontSize: 20,
-                      //         color: Theme.of(context).buttonColor),
-                      //   ),
-                      //   onPressed: () {
-                      //     Navigator.pop(context);
-                      //   },
-                      // ),
+
                       Spacer(),
 
                       SizedBox(
@@ -226,23 +205,7 @@ class viewSplitsState extends State<viewSplits> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
                           )),
-                      // FlatButton(
-                      //   color: Color(0xFFA2C11C),
-                      //   shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(10.0),
-                      //       side: BorderSide(color: Color(0xFFA2C11C))),
-                      //   height: 50,
-                      //   minWidth: 35,
-                      //   child: Text(
-                      //     "Delete String",
-                      //     style: TextStyle(
-                      //         fontSize: 20,
-                      //         color: Theme.of(context).buttonColor),
-                      //   ),
-                      //   onPressed: () {
-                      //     deleteStringConfirmationDialog();
-                      //   },
-                      // ),
+
                       Spacer(),
                     ],
                   ),
@@ -332,9 +295,7 @@ class viewSplitsState extends State<viewSplits> {
                               deleteStringSplits();
                               Navigator.pushReplacementNamed(
                                   context, '/PageSelector');
-                              // Navigator.pop(context);
-                              //Navigator.push(context,
-                              // MaterialPageRoute(builder: (context) => SignUp(_email.text)));
+
                             },
                             child: Container(
                               decoration: BoxDecoration(
