@@ -24,7 +24,7 @@ basic_utils: ^3.0.2<br/>
 crypto: ^2.1.2<br/>
 flutter_session: ^0.1.1<br/>
 shared_preferences: ^0.5.12+4<br/>
-audio_session: ^0.0.11<br/><br/>
+audio_session: ^0.0.11<br/>
 just_audio: ^0.5.7<br/>
 flutter_launcher_name: ^0.0.1<br/>
 permission_handler: ^5.0.1+1<br/>
