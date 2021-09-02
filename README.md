@@ -19,5 +19,22 @@ Overall, the TopShot Timer application allows for accurate recordings of shooter
 Flutter and PHP
 
 ## Dart packages used?
-http: ^0.13.3
-basic_utils: ^3.0.2
+http: ^0.13.3<br/>
+basic_utils: ^3.0.2<br/>
+crypto: ^2.1.2<br/>
+flutter_session: ^0.1.1<br/>
+shared_preferences: ^0.5.12+4<br/>
+audio_session: ^0.0.11<br/><br/>
+just_audio: ^0.5.7<br/>
+flutter_launcher_name: ^0.0.1<br/>
+permission_handler: ^5.0.1+1<br/>
+cupertino_icons: ^1.0.0<br/>
+keyboard_dismisser: ^1.0.2<br/>
+connectivity: ^2.0.2<br/>
+data_connection_checker: ^0.3.4<br/>
+get: ^3.24.0<br/>
+rflutter_alert: ^1.0.3<br/>
+url_launcher: ^5.7.10<br/>
+purchases_flutter: ^3.2.2<br/>
+flutter_audio_recorder: 0.5.5<br/>
+admob_flutter: ^1.0.1<br/>
