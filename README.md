@@ -1,9 +1,9 @@
 # TopShot Timer Flutter
 <p align="center">
-<img src="https://github.com/PorkStew/topshottimer/blob/main/readme-documents/mock_up_design.png" width="100%">
+<img src="https://github.com/PorkStew/topshottimer/blob/main/readme-documents/mock_up_design.png" width="100%"/>
 </p>
-## What is it?
 
+## What is it?
 TopShot Timer is a shooting timer that can be used for various shooting disciplines. 
 
 The TopShot Timer application is aimed at those individuals that would like to monitor their shooting on a week to week, month to month or even year to year basis. 
@@ -15,7 +15,6 @@ Once the shooter shoots a string, the shooter can decide if they would like to v
 Overall, the TopShot Timer application allows for accurate recordings of shooters practicing their drills and having record of current and previous strings shot on their profile. The application is suitable for any skill level of shooter and is great to ensure improvement in any aspect of their shooting career.
 
 ## Language used?
-
 Flutter and PHP
 
 ## Dart packages used?
